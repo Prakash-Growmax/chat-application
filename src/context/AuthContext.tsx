@@ -4,7 +4,7 @@ import { loadingState } from "@/lib/loading-state";
 import { supabase } from "@/lib/supabase";
 import { clearAllTokens } from "@/lib/token-storage";
 import { User } from "@/types";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 interface AuthContextType {
@@ -22,13 +22,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const isInitialAuth = useRef(true);
 
   useEffect(() => {
     let mounted = true;
 
     const initAuth = async () => {
       try {
-        loadingState.startLoading("Initializing authentication...");
+        loadingState.startLoading("Initializing authentication...12");
         const {
           data: { session },
         } = await supabase.auth.getSession();
@@ -59,7 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!mounted) return;
-      if (event === "SIGNED_IN" && session?.user) {
+      if (event === "SIGNED_IN" && session?.user && isInitialAuth.current) {
         try {
           loadingState.startLoading("Loading your profile...");
           const userData = await buildUserProfile(session.user);
@@ -77,10 +78,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
     });
-
     initAuth();
 
     return () => {
+      isInitialAuth.current = false;
       mounted = false;
       subscription.unsubscribe();
     };
