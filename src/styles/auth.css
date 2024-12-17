@@ -1,0 +1,25 @@
+.auth-gradient {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--background)) 0%,
+    hsl(var(--primary) / 0.1) 100%
+  );
+}
+
+.auth-input {
+  letter-spacing: 0.5em;
+  font-variant-numeric: tabular-nums;
+}
+
+.auth-card {
+  backdrop-filter: blur(8px);
+  border: 1px solid hsl(var(--border) / 0.2);
+  background: hsl(var(--card) / 0.8);
+}
+
+.auth-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, hsl(var(--primary) / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(var(--primary) / 0.05) 1px, transparent 1px);
+}
