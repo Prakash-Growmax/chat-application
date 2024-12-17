@@ -1,0 +1,63 @@
+:root {
+  /* Base spacing units */
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Component-specific spacing */
+  --header-height: 64px;
+  --sidebar-width: 280px;
+  --card-padding: var(--spacing-md);
+  --section-spacing: var(--spacing-lg);
+  --form-spacing: var(--spacing-md);
+  --input-padding: var(--spacing-sm);
+}
+
+/* Layout utilities */
+.container {
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.card {
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.input-group {
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Grid and flex spacing */
+.grid {
+  gap: var(--spacing-md);
+}
+
+.flex-stack > * + * {
+  margin-top: var(--spacing-md);
+}
+
+.flex-row > * + * {
+  margin-left: var(--spacing-md);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  :root {
+    --spacing-md: 12px;
+    --spacing-lg: 20px;
+    --spacing-xl: 24px;
+  }
+}
