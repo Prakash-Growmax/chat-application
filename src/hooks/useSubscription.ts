@@ -1,69 +1,65 @@
-import { useState, useCallback } from 'react';
-import { useAuth } from './useAuth';
 import {
-  updateSubscription,
   getSubscriptionDetails,
-  checkTokenAvailability,
-  consumeTokens,
-  logTokenUsage,
-} from '@/lib/subscription';
-import { toast } from 'sonner';
+  subscribeToChanges,
+  updateSubscription,
+} from "@/lib/subscription";
+import { Subscription } from "@/types/subscriptions";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useAuth } from "./useAuth";
 
 export function useSubscription() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
 
-  const upgradePlan = useCallback(async (plan: 'single' | 'team' | 'pro') => {
-    if (!user) return;
+  const upgradePlan = useCallback(
+    async (planName: "Single" | "Team" | "Free") => {
+      if (!user) return;
+      setLoading(true);
+      try {
+        await updateSubscription(planName);
+        toast.success(`Successfully upgraded to ${planName} plan`);
+        await loadSubscription(); // Add immediate refresh
+      } catch (error) {
+        console.error("Failed to upgrade plan:", error);
+        toast.error("Failed to upgrade plan");
+      } finally {
+        setLoading(false);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [user]
+  );
 
-    setLoading(true);
+  const loadSubscription = async () => {
+    if (!user?.id) return;
+
     try {
-      await updateSubscription(user.id, plan);
-      toast.success(`Successfully upgraded to ${plan} plan`);
+      setLoading(true);
+      const data = await getSubscriptionDetails(user.id);
+      setSubscription(data);
     } catch (error) {
-      console.error('Failed to upgrade plan:', error);
-      toast.error('Failed to upgrade plan');
+      console.error("Failed to load subscription:", error);
     } finally {
       setLoading(false);
     }
-  }, [user]);
-
-  const checkTokens = useCallback(async (requiredTokens: number) => {
-    if (!user) return false;
-
-    try {
-      return await checkTokenAvailability(user, requiredTokens);
-    } catch (error) {
-      console.error('Failed to check token availability:', error);
-      return false;
-    }
-  }, [user]);
-
-  const useTokens = useCallback(async (tokens: number, action: string) => {
-    if (!user) return;
-
-    try {
-      const hasTokens = await checkTokens(tokens);
-      if (!hasTokens) {
-        toast.error('Insufficient tokens. Please upgrade your plan.');
-        return false;
-      }
-
-      await Promise.all([
-        consumeTokens(user.id, tokens),
-        logTokenUsage(user.id, tokens, action),
-      ]);
-      return true;
-    } catch (error) {
-      console.error('Failed to consume tokens:', error);
-      return false;
-    }
-  }, [user, checkTokens]);
+  };
+  useEffect(() => {
+    loadSubscription();
+    if (!user?.id) return;
+    const subscription = subscribeToChanges(user.id!, loadSubscription);
+    return () => {
+      subscription.unsubscribe();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
   return {
-    loading,
     upgradePlan,
-    checkTokens,
-    useTokens,
+    loading,
+    subscription,
+    isActive: subscription?.status === "active",
+    planId: subscription?.plan_id,
   };
 }

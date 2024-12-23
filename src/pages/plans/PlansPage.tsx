@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,29 +6,50 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Check, Loader2 } from 'lucide-react';
-import { plans } from '@/config/plans';
-import { useAuth } from '@/hooks/useAuth';
-import { cn } from '@/lib/utils';
-import { createSubscription } from '@/lib/subscription/subscription-service';
+} from "@/components/ui/card";
+import { useAuth } from "@/hooks/useAuth";
+import { useSubscription } from "@/hooks/useSubscription";
+import { getAvailablePlans } from "@/lib/plans/plans-service";
+import { cn } from "@/lib/utils";
+import { Plan } from "@/types/plans";
+import { Check, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export function PlansPage() {
-  const [loading, setLoading] = useState<string | null>(null);
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const { upgradePlan, planId } = useSubscription();
 
-  const handleSubscribe = async (planName: string) => {
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const [loading, setLoading] = useState<string | null>(null);
+
+  const handleSubscribe = async (planName: "Single" | "Team" | "Free") => {
     setLoading(planName);
     try {
-      const { url } = await createSubscription(planName);
-      window.location.href = url;
+      await upgradePlan(planName);
     } catch (error) {
-      console.error('Subscription error:', error);
+      console.error("Subscription error:", error);
     } finally {
       setLoading(null);
     }
   };
+
+  const loadOrganizations = async () => {
+    if (!user) return;
+
+    try {
+      const orgs = await getAvailablePlans();
+      setPlans(orgs);
+    } catch (error) {
+      toast.error("Failed to load organizations");
+    } finally {
+      setLoading(null);
+    }
+  };
+  useEffect(() => {
+    loadOrganizations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <div className="container py-10">
@@ -47,17 +66,19 @@ export function PlansPage() {
             <Card
               key={plan.name}
               className={cn(
-                'relative overflow-hidden',
-                plan.name === 'team' && 'border-primary shadow-lg'
+                "relative overflow-hidden",
+                plan.name === "team" && "border-primary shadow-lg"
               )}
             >
-              {plan.name === 'team' && (
+              {plan.name === "team" && (
                 <div className="absolute -right-20 top-7 rotate-45 bg-primary px-24 py-1 text-sm text-primary-foreground">
                   Popular
                 </div>
               )}
               <CardHeader>
-                <CardTitle className="text-xl capitalize">{plan.name}</CardTitle>
+                <CardTitle className="text-xl capitalize">
+                  {plan.name}
+                </CardTitle>
                 <CardDescription>
                   <span className="text-3xl font-bold">${plan.price}</span>
                   /month
@@ -76,16 +97,18 @@ export function PlansPage() {
               <CardFooter>
                 <Button
                   className="w-full"
-                  variant={plan.name === 'team' ? 'default' : 'outline'}
-                  disabled={loading === plan.name || user?.plan === plan.name}
-                  onClick={() => handleSubscribe(plan.name)}
+                  variant={plan.name === "team" ? "default" : "outline"}
+                  disabled={loading === plan.name || planId === plan.id}
+                  onClick={() =>
+                    handleSubscribe(plan.name as "Single" | "Team" | "Free")
+                  }
                 >
                   {loading === plan.name ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : user?.plan === plan.name ? (
-                    'Current Plan'
+                  ) : plan?.id === planId ? (
+                    "Current Plan"
                   ) : (
-                    'Subscribe'
+                    "Subscribe"
                   )}
                 </Button>
               </CardFooter>

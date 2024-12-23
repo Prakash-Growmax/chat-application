@@ -29,7 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const initAuth = async () => {
       try {
-        loadingState.startLoading("Initializing authentication...12");
+        loadingState.startLoading("Initializing authentication...");
         const {
           data: { session },
         } = await supabase.auth.getSession();
