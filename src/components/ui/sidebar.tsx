@@ -1,17 +1,20 @@
-import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
+import { useChatList } from '@/hooks/useChatList';
+import { cn } from '@/lib/utils';
+import AppsIcon from '@mui/icons-material/Apps';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { IconButton, useMediaQuery } from '@mui/material';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import AppsIcon from '@mui/icons-material/Apps';
+import { styled, useTheme } from '@mui/material/styles';
 import {
   Building2,
   CreditCard,
@@ -19,14 +22,8 @@ import {
   MessageCirclePlus,
   Settings,
 } from 'lucide-react';
-import { IconButton, useMediaQuery } from '@mui/material';
-import ChatIcon from '../ui/chat-icon';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import { useNavigate } from 'react-router-dom';
-import { useChatList } from '@/hooks/useChatList';
-import { Link, useLocation } from 'react-router-dom';
-import ListIcon from '@mui/icons-material/List';
-import { cn } from '@/lib/utils';
+import * as React from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const drawerWidth = 280;
 
@@ -80,7 +77,7 @@ interface SideBarProps {
 }
 
 const primaryNavItems = [
-  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { label: 'Chat', href: '/chat', icon: LayoutDashboard },
   { label: 'Organizations', href: '/organizations', icon: Building2 },
   { label: 'Plans', href: '/plans', icon: CreditCard },
   { label: 'Settings', href: '/settings', icon: Settings },

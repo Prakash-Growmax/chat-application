@@ -8,10 +8,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from "@/hooks/useAuth";
 import { useTokenUsage } from "@/hooks/useTokenUsage";
 import { cn } from "@/lib/utils";
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { IconButton } from "@mui/material";
 import {
   Bell,
@@ -26,16 +26,14 @@ import {
   Settings,
   User,
   Users,
-} from 'lucide-react';
-import { useContext } from 'react';
+} from "lucide-react";
+import { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-} from '@/components/ui/dropdown-menu';
-
-import AppContext from '../context/AppContext';
-import ChatControl from '../ui/chat-control';
-import Sidebar from '../ui/sidebar';
+import AppContext from "../context/AppContext";
+import ChatControl from "../ui/chat-control";
+import Sidebar from "../ui/sidebar";
 const primaryNavItems = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Chat", href: "/chat", icon: LayoutDashboard },
   { label: "Teams", href: "/teams", icon: LayoutDashboard },
   { label: "Plans", href: "/plans", icon: CreditCard },
   { label: "Settings", href: "/settings", icon: Settings },
@@ -45,18 +43,19 @@ export function Header() {
   const { user, signOut } = useAuth();
   const { data: tokens } = useTokenUsage();
   const location = useLocation();
-     const navigator = useNavigate();
-  const {open,setOpen,openRight,setOpenRight,state,setState}=useContext(AppContext);
-  const handleDrawerOpen = () =>{
-    setOpen(true)
-  }
-  const handleDrawerClose = () =>{
-    setOpen(false)
-  }
-  const handleChatControl=()=>{
-    setOpenRight(!openRight)
-   }
-   function createNewChat() {
+  const navigator = useNavigate();
+  const { open, setOpen, openRight, setOpenRight, state, setState } =
+    useContext(AppContext);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  const handleChatControl = () => {
+    setOpenRight(!openRight);
+  };
+  function createNewChat() {
     setState({
       messages: [],
       isLoading: false,
@@ -64,81 +63,86 @@ export function Header() {
       error: null,
       s3Key: null,
     });
-    navigator("/dashboard");
-    setOpen(false)
+    navigator("/chat");
+    setOpen(false);
   }
   return (
     <header className="sticky top-0 z-50 border-b bg-white">
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-8">
-         
-          {user && ( <div className='flex'>
-               {open ? (<IconButton
-  size="large"
-  edge="start"
-  aria-label="menu"
-  onClick={handleDrawerClose}
-  disableRipple // Removes ripple effect
-  disableFocusRipple // Removes focus ripple
-  sx={{
-    mr: 2,
-    color: 'black',
-    '&:focus': { outline: 'none' }, // Removes focus outline
-    '&:active': { outline: 'none' }, // Removes outline on click
-    
-  }}
->
-  <MenuOpenIcon style={{ color: 'black'}} />
-</IconButton>) : ( <IconButton
-          size="large"
-          edge="start"
-          aria-label="menu"
-          onClick={handleDrawerOpen}
-          disableFocusRipple // Removes focus ripple
-          sx={{
-            mr: 2,
-            color: 'black',
-            '&:focus': { outline: 'none' }, // Removes focus outline
-            '&:active': { outline: 'none' }, // Removes outline on click
-          }}
-          >
-  <MenuIcon style={{ color: 'black' }} /> {/* Ensures the MenuIcon is white */}
-</IconButton>)}
-              </div>)}
-       
+          {user && (
+            <div className="flex">
+              {open ? (
+                <IconButton
+                  size="large"
+                  edge="start"
+                  aria-label="menu"
+                  onClick={handleDrawerClose}
+                  disableRipple // Removes ripple effect
+                  disableFocusRipple // Removes focus ripple
+                  sx={{
+                    mr: 2,
+                    color: "black",
+                    "&:focus": { outline: "none" }, // Removes focus outline
+                    "&:active": { outline: "none" }, // Removes outline on click
+                  }}
+                >
+                  <MenuOpenIcon style={{ color: "black" }} />
+                </IconButton>
+              ) : (
+                <IconButton
+                  size="large"
+                  edge="start"
+                  aria-label="menu"
+                  onClick={handleDrawerOpen}
+                  disableFocusRipple // Removes focus ripple
+                  sx={{
+                    mr: 2,
+                    color: "black",
+                    "&:focus": { outline: "none" }, // Removes focus outline
+                    "&:active": { outline: "none" }, // Removes outline on click
+                  }}
+                >
+                  <MenuIcon style={{ color: "black" }} />{" "}
+                  {/* Ensures the MenuIcon is white */}
+                </IconButton>
+              )}
+            </div>
+          )}
+
           <Link to="/" className="flex items-center gap-2">
-            <Building2 className="h-6 w-6 -ml-12"/>
-            <span className="lg:text-xl  text-sm font-bold">CSV Insight AI</span>
+            <Building2 className="h-6 w-6 -ml-12" />
+            <span className="lg:text-xl  text-sm font-bold">
+              CSV Insight AI
+            </span>
           </Link>
 
           {user && (
             <>
-         
               <nav className="hidden lg:flex">
-              <ul className="flex items-center gap-1">
-                {primaryNavItems.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <li key={item.href}>
-                      <Link
-                        to={item.href}
-                        className={cn(
-                          "flex h-10 items-center gap-2 rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100",
-                          location.pathname === item.href
-                            ? "bg-gray-100 text-gray-900"
-                            : "text-gray-600"
-                        )}
-                      >
-                        <Icon className="h-4 w-4" />
-                        {item.label}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </nav>
+                <ul className="flex items-center gap-1">
+                  {primaryNavItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <li key={item.href}>
+                        <Link
+                          to={item.href}
+                          className={cn(
+                            "flex h-10 items-center gap-2 rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100",
+                            location.pathname === item.href
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-600"
+                          )}
+                        >
+                          <Icon className="h-4 w-4" />
+                          {item.label}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </nav>
             </>
-          
           )}
         </div>
 
@@ -208,25 +212,18 @@ export function Header() {
             </Button>
           )}
           {user && (
-          <>
-              <div className='flex' onClick={handleChatControl}>
-            <ChatControl/>
-            </div>
-            <div className='flex' onClick={createNewChat}>
-            <MessageCirclePlus
-            className="cursor-pointer w-5 h-5 text-black ml-4"
-          
-          />
-            </div>
-          </>
-          
-            
-          
+            <>
+              <div className="flex" onClick={handleChatControl}>
+                <ChatControl />
+              </div>
+              <div className="flex" onClick={createNewChat}>
+                <MessageCirclePlus className="cursor-pointer w-5 h-5 text-black ml-4" />
+              </div>
+            </>
           )}
         </div>
-        
       </div>
-      <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>
+      <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat} />
     </header>
   );
 }
