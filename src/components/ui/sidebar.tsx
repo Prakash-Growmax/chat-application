@@ -184,7 +184,9 @@ export default function Sidebar({ open, setOpen, createNewChat }: SideBarProps) 
                 <ListItem key={index} className="flex items-center">
                   <div
                     className="flex"
-                    onClick={() => navigate(`/chat/${chat.chat_id}`)}
+                    onClick={() => {navigate(`/chat/${chat.chat_id}`)
+                    setOpen(false)
+                  }}
                   >
                     <ListItemIcon className="min-w-[30px] mr-2 mt-2">
                       <ChatBubbleOutlineIcon />

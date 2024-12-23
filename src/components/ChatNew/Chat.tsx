@@ -9,6 +9,8 @@ import RightSideBar from "../ui/RightSideBar";
 import { useMessageQueue } from "@/lib/useMessageQuesue";
 import { getResponse } from "@/lib/pandas-api";
 import { Message } from "@/types";
+import Sidebar from "../ui/sidebar";
+import ChatHeader from "./ChatHeader";
 interface ChatProps{
   message:(chat:string)=>void
   
@@ -136,16 +138,47 @@ function Chat({message}:ChatProps) {
       processQueue(processMessage);
     }
   }, [processing, queue, processQueue, processMessage]);
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      // Get the width of the viewport
+      const viewportWidth = window.innerWidth;
+      
+      // Calculate the threshold (e.g., 20% of viewport width)
+      const threshold = viewportWidth * 0.2;
+      
+      // If mouse is within threshold from left edge, open sidebar
+      if (event.clientX <= threshold) {
+        setOpen(true);
+      } else {
+        setOpen(false);
+      }
+    };
+
+    // Add event listener
+    window.addEventListener('mousemove', handleMouseMove);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   return (
     <>
       <div className="relative flex flex-col h-screen max-h-[93vh] overflow-hidden">
+        {state.s3Key && (
+            <div className="fixed top-30 right-0  w-full flex justify-end items-center z-50 p-2 px-8">
+            <ChatHeader openRight={openRight} setOpenRight={setOpenRight} createNewChat={createNewChat} />
+            </div>
+        )}
+    
+      
         {!state.s3Key && (
           <div className={openRight ? "translate-x-[-200px]" : ""}>
             <GChatterIntro />
           </div>
         )}
-        {/* <Sidebar open={open} createNewChat={createNewChat}/> */}
+        <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>
         <RightSideBar openRight={openRight} setOpenRight={setOpenRight} />
         <div
           className={`flex-1 transition-transform duration-300 ease-in-out overflow-y-auto ${
@@ -168,7 +201,8 @@ function Chat({message}:ChatProps) {
           }`}
         >
           <div className="flex-1 w-full sm:pl-16 sm:pr-16 lg:pl-48 lg:pr-48 lg:py-2">
-            <ChatInput
+          <div className="max-w-[800px] mx-auto w-full">
+          <ChatInput
               onSend={handleSendMessage}
               disabled={state.isLoading || !state.s3Key}
               onError={handleError}
@@ -193,6 +227,8 @@ function Chat({message}:ChatProps) {
                 });
               }}
             />
+          </div>
+     
           </div>
         </div>
       </div>
