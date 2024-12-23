@@ -1,4 +1,4 @@
-import { TeamMember } from "@/types/team";
+import { Invitation, TeamData, TeamMember } from "@/types/team";
 import { supabase } from "../supabase";
 
 export const getTeamMembers = async (
@@ -27,69 +27,72 @@ export const getTeamMembers = async (
   return teamMembers as TeamMember[];
 };
 
-export async function inviteTeamMember(
-  inviterUserId: string,
+export async function getTeamData(organizationId: string): Promise<TeamData> {
+  const [membersResponse, invitesResponse] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("*")
+      .eq("organization_id", organizationId)
+      .order("created_at", { ascending: false }),
+
+    supabase
+      .from("invitations")
+      .select("*")
+      .eq("organization_id", organizationId)
+      .eq("status", "pending")
+      .order("created_at", { ascending: false }),
+  ]);
+
+  if (membersResponse.error) throw membersResponse.error;
+  if (invitesResponse.error) throw invitesResponse.error;
+
+  return {
+    members: membersResponse.data || [],
+    pendingInvites: invitesResponse.data || [],
+  };
+}
+
+export async function inviteMember(
   organizationId: string,
   email: string,
   role: "admin" | "member"
-) {
-  // Verify inviter has permission
-  const { data: inviter } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", inviterUserId)
-    .eq("organization_id", organizationId)
-    .single();
-
-  if (!inviter || inviter.role !== "admin") {
-    throw new Error("No permission to invite members");
-  }
-
-  // Check if user is already a member
-  const { data: existingMember } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("email", email)
-    .eq("organization_id", organizationId)
-    .single();
-
-  if (existingMember) {
-    throw new Error("User is already a member of this organization");
-  }
-
-  // Check for pending invitation
-  const { data: existingInvite } = await supabase
-    .from("invitations")
-    .select("*")
-    .eq("email", email)
-    .eq("organization_id", organizationId)
-    .eq("status", "pending")
-    .single();
-
-  if (existingInvite) {
-    throw new Error("User already has a pending invitation");
-  }
-
-  // Create new invitation
-  const token = crypto.randomUUID();
-  const expires_at = new Date();
-  expires_at.setDate(expires_at.getDate() + 7);
-
-  const { data: invitation, error } = await supabase
-    .from("invitations")
-    .insert({
-      organization_id: organizationId,
-      inviter_id: inviterUserId,
-      email,
-      role,
-      status: "pending",
-      expires_at: expires_at.toISOString(),
-      token,
-    })
-    .select()
-    .single();
+): Promise<Invitation> {
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + 7);
+  const { data, error } = await supabase.from("invitations").insert({
+    organization_id: organizationId,
+    email: email,
+    role: role,
+    status: "pending",
+    expires_at: expiresAt.toISOString(), // Add this line
+  });
 
   if (error) throw error;
+  return data;
+}
 
-  return invitation;
+export async function removeMember(
+  organizationId: string,
+  memberId: string
+): Promise<void> {
+  const { error } = await supabase
+    .from("profiles")
+    .delete()
+    .eq("id", memberId)
+    .eq("organization_id", organizationId);
+
+  if (error) throw error;
+}
+
+export async function cancelInvitation(
+  organizationId: string,
+  invitationId: string
+): Promise<void> {
+  const { error } = await supabase
+    .from("invitations")
+    .update({ status: "expired" })
+    .eq("id", invitationId)
+    .eq("organization_id", organizationId);
+
+  if (error) throw error;
 }
