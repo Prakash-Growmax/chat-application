@@ -61,7 +61,7 @@ function App() {
                         }
                       />
                       <Route
-                        path="/dashboard"
+                        path="/chat"
                         element={
                           <ProtectedRoute>
                             <Chat />
