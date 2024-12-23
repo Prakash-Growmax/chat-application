@@ -24,10 +24,22 @@ export interface TeamMember {
   organization_id: string;
 }
 
+export interface TeamData {
+  members: TeamMember[];
+  pendingInvites: Invitation[];
+}
+
 export interface UseTeamMembersReturn {
   teamMembers: TeamMember[];
+  teamData: TeamData | null;
   loading: boolean;
   error: string | null;
+  inviteMemberByEmail: (
+    email: string,
+    role: "admin" | "member"
+  ) => Promise<void>;
+  removeMemberByEmail: (memberId: string) => Promise<void>;
+  cancelInvitationByEmail: (invitationId: string) => Promise<void>;
   refetch: () => Promise<void>;
 }
 
