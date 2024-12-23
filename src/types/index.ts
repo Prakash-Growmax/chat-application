@@ -6,7 +6,15 @@ export interface User {
   plan: "single" | "team" | "pro";
   tokenUsage: number;
 }
-
+export interface Message {
+  id: string;
+  content: string;
+  role: 'user' | 'assistant';
+  timestamp: Date;
+  type: 'text' | 'chart' | 'table';
+  data?: any;
+  error?: boolean;
+}
 export interface Organization {
   id: string;
   name: string;
@@ -14,7 +22,13 @@ export interface Organization {
   tokenUsage: number;
   plan: "single" | "team" | "pro";
 }
-
+export interface ChatState {
+  messages: Message[];
+  isLoading: boolean;
+  csvData: any[] | null;
+  error: string | null;
+  s3Key: string | null;
+}
 export interface Chat {
   id: string;
   organizationId: string;
