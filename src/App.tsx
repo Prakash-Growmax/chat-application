@@ -9,11 +9,11 @@ import { LoginPage } from "@/pages/auth/LoginPage";
 import { DashboardPage } from "@/pages/dashboard/DashboardPage";
 import { NotFoundPage } from "@/pages/error/NotFoundPage";
 import { WelcomePage } from "@/pages/home/WelcomePage";
-import { OrganizationsPage } from "@/pages/organizations/OrganizationsPage";
 import { PlansPage } from "@/pages/plans/PlansPage";
 import { SettingsPage } from "@/pages/settings/SettingsPage";
 import { Suspense, lazy } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Team from "./components/Teams/Team";
 
 const AuthWrapper = lazy(() => import("@/components/auth/AuthWrapper"));
 const ProtectedRoute = lazy(() => import("@/components/auth/ProtectedRoute"));
@@ -46,10 +46,10 @@ function App() {
                       }
                     />
                     <Route
-                      path="/organizations"
+                      path="/teams"
                       element={
                         <ProtectedRoute>
-                          <OrganizationsPage />
+                          <Team />
                         </ProtectedRoute>
                       }
                     />

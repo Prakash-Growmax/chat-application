@@ -1,5 +1,4 @@
-import { supabase } from '../supabase';
-import { toast } from 'sonner';
+import { supabase } from "../supabase";
 
 export interface OTPResponse {
   success: boolean;
@@ -12,12 +11,12 @@ export async function sendOTP(email: string): Promise<OTPResponse> {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        shouldCreateUser: true,
       },
     });
 
     if (error) {
-      console.error('OTP Send Error:', error);
+      console.error("OTP Send Error:", error);
       return {
         success: false,
         error: error.message,
@@ -28,24 +27,27 @@ export async function sendOTP(email: string): Promise<OTPResponse> {
       success: true,
     };
   } catch (error) {
-    console.error('OTP Service Error:', error);
+    console.error("OTP Service Error:", error);
     return {
       success: false,
-      error: 'Failed to send OTP. Please try again.',
+      error: "Failed to send OTP. Please try again.",
     };
   }
 }
 
-export async function verifyOTP(email: string, token: string): Promise<OTPResponse> {
+export async function verifyOTP(
+  email: string,
+  token: string
+): Promise<OTPResponse> {
   try {
     const { data, error } = await supabase.auth.verifyOtp({
       email,
       token,
-      type: 'email',
+      type: "email",
     });
 
     if (error) {
-      console.error('OTP Verification Error:', error);
+      console.error("OTP Verification Error:", error);
       return {
         success: false,
         error: error.message,
@@ -57,10 +59,10 @@ export async function verifyOTP(email: string, token: string): Promise<OTPRespon
       session: data.session,
     };
   } catch (error) {
-    console.error('OTP Verification Service Error:', error);
+    console.error("OTP Verification Service Error:", error);
     return {
       success: false,
-      error: 'Failed to verify OTP. Please try again.',
+      error: "Failed to verify OTP. Please try again.",
     };
   }
 }

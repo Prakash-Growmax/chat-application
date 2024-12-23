@@ -1,17 +1,4 @@
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/hooks/useAuth';
-import {
-  LayoutDashboard,
-  Settings,
-  LogOut,
-  User,
-  Building2,
-  CreditCard,
-  Bell,
-  HelpCircle,
-  Users,
-  ChevronDown,
-} from 'lucide-react';
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,19 +7,34 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Link, useLocation } from 'react-router-dom';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/hooks/useAuth";
+import { useTokenUsage } from "@/hooks/useTokenUsage";
+import { cn } from "@/lib/utils";
+import {
+  Bell,
+  Building2,
+  ChevronDown,
+  CreditCard,
+  HelpCircle,
+  LayoutDashboard,
+  LogOut,
+  Settings,
+  User,
+  Users,
+} from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
 const primaryNavItems = [
-  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'Organizations', href: '/organizations', icon: Building2 },
-  { label: 'Plans', href: '/plans', icon: CreditCard },
-  { label: 'Settings', href: '/settings', icon: Settings },
+  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Teams", href: "/teams", icon: LayoutDashboard },
+  { label: "Plans", href: "/plans", icon: CreditCard },
+  { label: "Settings", href: "/settings", icon: Settings },
 ];
 
 export function Header() {
   const { user, signOut } = useAuth();
+  const { data: tokens } = useTokenUsage();
   const location = useLocation();
 
   return (
@@ -54,10 +56,10 @@ export function Header() {
                       <Link
                         to={item.href}
                         className={cn(
-                          'flex h-10 items-center gap-2 rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100',
+                          "flex h-10 items-center gap-2 rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100",
                           location.pathname === item.href
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-600'
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-600"
                         )}
                       >
                         <Icon className="h-4 w-4" />
@@ -75,7 +77,7 @@ export function Header() {
           {user ? (
             <>
               <span className="hidden text-sm text-gray-600 md:block">
-                {user.tokenUsage.toLocaleString()} tokens used
+                {tokens?.tokens_remaining.toLocaleString()} tokens left
               </span>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -101,7 +103,7 @@ export function Header() {
                         Plans & Billing
                       </Link>
                     </DropdownMenuItem>
-                    {user.plan !== 'single' && (
+                    {user.plan !== "single" && (
                       <DropdownMenuItem asChild>
                         <Link to="/organizations" className="w-full">
                           <Users className="mr-2 h-4 w-4" />
