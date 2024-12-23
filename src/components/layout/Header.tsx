@@ -11,6 +11,7 @@ import {
   HelpCircle,
   Users,
   ChevronDown,
+  MessageCirclePlus,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -21,9 +22,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useContext, useState } from 'react';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import { IconButton } from "@mui/material";
+import {MenuIcon} from "lucide-react";
 
+import AppContext from '../context/AppContext';
+import Sidebar from '../ui/sidebar';
+import ChatControl from '../ui/chat-control';
 const primaryNavItems = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { label: 'Organizations', href: '/organizations', icon: Building2 },
@@ -34,18 +42,76 @@ const primaryNavItems = [
 export function Header() {
   const { user, signOut } = useAuth();
   const location = useLocation();
-
+     const navigator = useNavigate();
+  const {open,setOpen,openRight,setOpenRight,state,setState}=useContext(AppContext);
+  const handleDrawerOpen = () =>{
+    setOpen(true)
+  }
+  const handleDrawerClose = () =>{
+    setOpen(false)
+  }
+  const handleChatControl=()=>{
+    setOpenRight(!openRight)
+   }
+   function createNewChat() {
+    setState({
+      messages: [],
+      isLoading: false,
+      csvData: null,
+      error: null,
+      s3Key: null,
+    });
+    navigator("/dashboard");
+    setOpen(false)
+  }
   return (
     <header className="sticky top-0 z-50 border-b bg-white">
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-8">
+         
+          {user && ( <div className='flex'>
+               {open ? (<IconButton
+  size="large"
+  edge="start"
+  aria-label="menu"
+  onClick={handleDrawerClose}
+  disableRipple // Removes ripple effect
+  disableFocusRipple // Removes focus ripple
+  sx={{
+    mr: 2,
+    color: 'black',
+    '&:focus': { outline: 'none' }, // Removes focus outline
+    '&:active': { outline: 'none' }, // Removes outline on click
+    
+  }}
+>
+  <MenuOpenIcon style={{ color: 'black'}} />
+</IconButton>) : ( <IconButton
+          size="large"
+          edge="start"
+          aria-label="menu"
+          onClick={handleDrawerOpen}
+          disableFocusRipple // Removes focus ripple
+          sx={{
+            mr: 2,
+            color: 'black',
+            '&:focus': { outline: 'none' }, // Removes focus outline
+            '&:active': { outline: 'none' }, // Removes outline on click
+          }}
+          >
+  <MenuIcon style={{ color: 'black' }} /> {/* Ensures the MenuIcon is white */}
+</IconButton>)}
+              </div>)}
+       
           <Link to="/" className="flex items-center gap-2">
-            <Building2 className="h-6 w-6" />
-            <span className="text-xl font-bold">CSV Insight AI</span>
+            <Building2 className="h-6 w-6 -ml-12"/>
+            <span className="lg:text-xl  text-sm font-bold">CSV Insight AI</span>
           </Link>
 
           {user && (
-            <nav className="hidden md:flex">
+            <>
+         
+              <nav className="hidden lg:flex">
               <ul className="flex items-center gap-1">
                 {primaryNavItems.map((item) => {
                   const Icon = item.icon;
@@ -68,6 +134,8 @@ export function Header() {
                 })}
               </ul>
             </nav>
+            </>
+          
           )}
         </div>
 
@@ -136,8 +204,26 @@ export function Header() {
               <Link to="/login">Login</Link>
             </Button>
           )}
+          {user && (
+          <>
+              <div className='flex' onClick={handleChatControl}>
+            <ChatControl/>
+            </div>
+            <div className='flex' onClick={createNewChat}>
+            <MessageCirclePlus
+            className="cursor-pointer w-5 h-5 text-black ml-4"
+          
+          />
+            </div>
+          </>
+          
+            
+          
+          )}
         </div>
+        
       </div>
+      <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>
     </header>
   );
 }
