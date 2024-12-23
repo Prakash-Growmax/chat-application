@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import * as React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 const drawerWidth = 280;
 
 const Main = styled('main', {
@@ -94,7 +94,7 @@ export default function Sidebar({ open, setOpen, createNewChat }: SideBarProps) 
 
   const handleMenuOpen = () => setMenu(true);
   const handleMenuClose = () => setMenu(false);
-
+  const handleDrawerClose=()=> setOpen(false)
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -113,6 +113,8 @@ export default function Sidebar({ open, setOpen, createNewChat }: SideBarProps) 
         anchor="left"
         open={open || menu}
       >
+    
+        
         {isTab && menu && (
           <>
             <DrawerHeader>
@@ -156,13 +158,24 @@ export default function Sidebar({ open, setOpen, createNewChat }: SideBarProps) 
           <>
             <List>
               <div
-                className="flex cursor-pointer px-4 py-4"
-                onClick={() => createNewChat('')}
-              >
-                <MessageCirclePlus className="w-6 h-6 text-black" />
-                <div className="ml-4">
+                className="flex flex-col cursor-pointer px-4"
+                onClick={() => {createNewChat()
+                navigate("/chat")
+                setOpen(false)
+                }}
+              >  
+               <div className="flex justify-end" onClick={handleDrawerClose}>
+  <KeyboardBackspaceIcon className="ml-auto" />
+</div>
+
+              <div className='flex'>
+                  <MessageCirclePlus className="w-6 h-6 text-black" />
+                <div className="ml-2">
                   <p className="text-lg">Start new chat</p>
                 </div>
+             
+              </div>
+              
               </div>
               {isTab && (
                 <div>

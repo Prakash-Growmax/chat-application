@@ -38,7 +38,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   
     return (
       <div
-        className="fixed inset-0 z-50 overflow-y-auto mt-16"
+        className="fixed inset-0 z-50 overflow-y-auto mt-28"
         aria-labelledby="modal-title"
         role="dialog"
         aria-modal="true"
