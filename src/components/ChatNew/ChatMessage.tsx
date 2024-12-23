@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import Typewriter from "typewriter-effect";
 import { motion } from "framer-motion";
 import Plot from "react-plotly.js";
-import { DataTable } from "./DataTable";
+
 import { Bot, User } from "lucide-react";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { DataChart } from "./DataChat";
+import SwitchButton from "../ui/Switchbutton";
+import DataTable from "./DataTable";
 interface ChatMessageProps {
     message: Message;
     recent:boolean;
@@ -18,7 +20,7 @@ export function ChatMessage({ message}: ChatMessageProps) {
       width: 500,
       height: 350,
   });
-  console.log(message);
+     const [isChecked, setIsChecked] = useState(false);
   useEffect(() => {
     const handleResize = () => {
         if (window.innerWidth < 768) {
@@ -41,6 +43,7 @@ export function ChatMessage({ message}: ChatMessageProps) {
     
   
     const renderContent = () => {
+  
       if (message.type === "text") {
         return (
           <div className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
@@ -82,11 +85,15 @@ export function ChatMessage({ message}: ChatMessageProps) {
             {/* <div style={{ width: '600px', height: '350px' }} className="flex flex-col"> */}
           
               <div 
-    className="flex flex-col  lg:w-[500px] lg:h-[350px] md:w-[500px] w-[200px] h-[300px] max-w-full" 
+    className="flex flex-col  lg:w-[700px] lg:h-[450px] md:w-[500px] w-[200px] h-[300px] max-w-full" 
   >
+    <div className="flex justify-end">
+    <SwitchButton isChecked={isChecked} setIsChecked={setIsChecked}/>
+    </div>
   <div >
-   
-  <Plot
+   {isChecked ? (
+    <>
+     <Plot
               data={[
                   {
                       type: "bar",
@@ -116,6 +123,11 @@ export function ChatMessage({ message}: ChatMessageProps) {
                   height: layoutDimensions.height,
               }}
           />
+    </>
+   ) : (<>
+     <DataTable/>
+   </>)}
+ 
     </div>
   
               {/* <DataChart data={message.data} /> */}
@@ -144,7 +156,8 @@ export function ChatMessage({ message}: ChatMessageProps) {
             transition={{ duration: 0.5 }}
             className="mt-4 overflow-x-auto"
           >
-            <DataTable data={message.data} />
+            <DataTable/>
+            {/* <DataTable data={message.data} /> */}
           </motion.div>
         );
       }

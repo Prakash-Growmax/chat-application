@@ -138,39 +138,19 @@ function Chat({message}:ChatProps) {
       processQueue(processMessage);
     }
   }, [processing, queue, processQueue, processMessage]);
-  useEffect(() => {
-    const handleMouseMove = (event) => {
-      // Get the width of the viewport
-      const viewportWidth = window.innerWidth;
-      
-      // Calculate the threshold (e.g., 20% of viewport width)
-      const threshold = viewportWidth * 0.2;
-      
-      // If mouse is within threshold from left edge, open sidebar
-      if (event.clientX <= threshold) {
-        setOpen(true);
-      } else {
-        setOpen(false);
-      }
-    };
-
-    // Add event listener
-    window.addEventListener('mousemove', handleMouseMove);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
+ 
 
   return (
     <>
       <div className="relative flex flex-col h-screen max-h-[93vh] overflow-hidden">
-        {state.s3Key && (
-            <div className="fixed top-30 right-0  w-full flex justify-end items-center z-50 p-2 px-8">
-            <ChatHeader openRight={openRight} setOpenRight={setOpenRight} createNewChat={createNewChat} />
+        <div className="mb-12 w-full">
+       
+            <div className="fixed top-30 right-0 w-full flex justify-end items-center z-50 p-2 px-8" style={{ backgroundColor: "#F6F8FA"}}>
+            <ChatHeader open={open} setOpen={setOpen} openRight={openRight} setOpenRight={setOpenRight} createNewChat={createNewChat} state={state} />
             </div>
-        )}
+      
+        </div>
+      
     
       
         {!state.s3Key && (
