@@ -4,6 +4,7 @@ import AppsIcon from "@mui/icons-material/Apps";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { IconButton, useMediaQuery } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -24,7 +25,6 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
 const drawerWidth = 280;
 
 const Main = styled("main", {
@@ -78,7 +78,7 @@ interface SideBarProps {
 
 const primaryNavItems = [
   { label: "Chat", href: "/chat", icon: LayoutDashboard },
-  { label: "Organizations", href: "/organizations", icon: Building2 },
+  { label: "Teams", href: "/teams", icon: Building2 },
   { label: "Plans", href: "/plans", icon: CreditCard },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
@@ -98,7 +98,7 @@ export default function Sidebar({
 
   const handleMenuOpen = () => setMenu(true);
   const handleMenuClose = () => setMenu(false);
-
+  const handleDrawerClose = () => setOpen(false);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -160,12 +160,22 @@ export default function Sidebar({
           <>
             <List>
               <div
-                className="flex cursor-pointer px-4 py-4"
-                onClick={() => createNewChat("")}
+                className="flex flex-col cursor-pointer px-4"
+                onClick={() => {
+                  createNewChat();
+                  navigate("/chat");
+                  setOpen(false);
+                }}
               >
-                <MessageCirclePlus className="w-6 h-6 text-black" />
-                <div className="ml-4">
-                  <p className="text-lg">Start new chat</p>
+                <div className="flex justify-end" onClick={handleDrawerClose}>
+                  <KeyboardBackspaceIcon className="ml-auto" />
+                </div>
+
+                <div className="flex">
+                  <MessageCirclePlus className="w-6 h-6 text-black" />
+                  <div className="ml-2">
+                    <p className="text-lg">Start new chat</p>
+                  </div>
                 </div>
               </div>
               {isTab && (
@@ -188,7 +198,10 @@ export default function Sidebar({
                 <ListItem key={index} className="flex items-center">
                   <div
                     className="flex"
-                    onClick={() => navigate(`/chat/${chat.chat_id}`)}
+                    onClick={() => {
+                      navigate(`/chat/${chat.chat_id}`);
+                      setOpen(false);
+                    }}
                   >
                     <ListItemIcon className="min-w-[30px] mr-2 mt-2">
                       <ChatBubbleOutlineIcon />

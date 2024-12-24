@@ -98,9 +98,9 @@ export default function RightSideBar({openRight,setOpenRight}) {
     flexShrink: 0,
     '& .MuiDrawer-paper': {
       width: isMobile ? "100%" : drawerWidth,
-      top: isMobile ? 0 : '90px', // Adjust top for mobile
+      top: isMobile ? 0 : '110px', // Adjust top for mobile
       right: isMobile ? 0 : '20px', // Adjust right for mobile
-      height: isMobile ? "100%" : "670px", // Adjust height for mobile
+      height: isMobile ? "100%" : "650px", // Adjust height for mobile
       backgroundColor: "#F6F8FA",
       borderRadius: isMobile ? 0 : "16px", // No rounded corners on mobile
       boxShadow: isMobile ? "none" : "0px 4px 10px rgba(0, 0, 0, 0.1)", // No shadow on mobile

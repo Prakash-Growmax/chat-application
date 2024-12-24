@@ -37,7 +37,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto mt-16"
+      className="fixed inset-0 z-50 overflow-y-auto mt-28"
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
@@ -65,13 +65,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                       <span className="font-normal text-gray-500">Size:</span>
                       {formatFileSize(metadata.size)}
                     </span>
-                    <span className="text-gray-300">•</span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="font-normal text-gray-500">
-                        Modified:
-                      </span>
-                      {formatDate(metadata.lastModified)}
-                    </span>
+                    {formatDate(metadata.lastModified)}
                     <span className="text-gray-300">•</span>
                     <span className="flex items-center gap-1.5">
                       <span className="font-normal text-gray-500">Rows:</span>

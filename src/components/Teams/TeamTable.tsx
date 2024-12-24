@@ -1,4 +1,4 @@
-import { TeamTableProps } from "@/types/team";
+import { Button } from "@/components/ui/button";
 import {
   Clock,
   Coins,
@@ -8,12 +8,40 @@ import {
   UserCircle,
   Users,
 } from "lucide-react";
+import React from "react";
 
-const TeamTable: React.FC<TeamTableProps> = ({
+interface TeamMember {
+  id: string;
+  email: string;
+  role: string;
+  last_login: string;
+  tokens_remaining: number;
+  current_token_usage: number;
+}
+
+interface Invitation {
+  id: string;
+  email: string;
+  role: string;
+  created_at: string;
+}
+
+interface EnhancedTeamTableProps {
+  teamMembers?: TeamMember[];
+  pendingInvites?: Invitation[];
+  loading?: boolean;
+  refetch?: () => void;
+  hasTeamAccess?: boolean;
+  onCancelInvite: (inviteId: string) => void;
+}
+
+const EnhancedTeamTable: React.FC<EnhancedTeamTableProps> = ({
   teamMembers = [],
+  pendingInvites = [],
   loading = false,
   refetch = () => {},
   hasTeamAccess = false,
+  onCancelInvite,
 }) => {
   if (!hasTeamAccess) {
     return (
@@ -44,20 +72,20 @@ const TeamTable: React.FC<TeamTableProps> = ({
     if (loading) {
       return (
         <tr>
-          <td colSpan={4} className="px-6 py-12 text-center">
+          <td colSpan={5} className="px-6 py-12 text-center">
             <div className="flex flex-col items-center justify-center space-y-3">
               <RotateCw className="h-8 w-8 animate-spin text-gray-400" />
-              <p className="text-sm text-gray-500">Loading team members...</p>
+              <p className="text-sm text-gray-500">Loading team data...</p>
             </div>
           </td>
         </tr>
       );
     }
 
-    if (!teamMembers || teamMembers.length === 0) {
+    if (!teamMembers?.length && !pendingInvites?.length) {
       return (
         <tr>
-          <td colSpan={4} className="px-6 py-12 text-center">
+          <td colSpan={5} className="px-6 py-12 text-center">
             <div className="flex flex-col items-center justify-center space-y-3">
               <Users className="h-8 w-8 text-gray-400" />
               <div>
@@ -74,52 +102,103 @@ const TeamTable: React.FC<TeamTableProps> = ({
       );
     }
 
-    return teamMembers.map((member) => (
-      <tr key={member?.id || Math.random()} className="hover:bg-gray-50">
-        <td className="px-6 py-4 whitespace-nowrap">
-          <div className="text-sm text-gray-900">{member?.email || "N/A"}</div>
-        </td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-            {member?.role || "N/A"}
-          </span>
-        </td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <div className="text-sm text-gray-500">
-            {member?.last_login
-              ? new Date(member.last_login).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
-              : "Never"}
-          </div>
-        </td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <div className="flex items-center">
-            <div className="flex-1 h-2 bg-gray-200 rounded-full">
-              <div
-                className="h-2 bg-blue-500 rounded-full"
-                style={{
-                  width: `${
-                    member?.tokens_remaining
-                      ? (member.current_token_usage / member.tokens_remaining) *
-                        100
-                      : 0
-                  }%`,
-                }}
-              />
-            </div>
-            <span className="ml-2 text-sm text-gray-500">
-              {member?.current_token_usage?.toLocaleString() || 0} /{" "}
-              {member?.tokens_remaining?.toLocaleString() || 0}
+    const rows: JSX.Element[] = [];
+
+    // Add active members
+    teamMembers.forEach((member: TeamMember) => {
+      rows.push(
+        <tr key={member.id} className="hover:bg-gray-50">
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm text-gray-900">{member.email}</div>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+              {member.role}
             </span>
-          </div>
-        </td>
-      </tr>
-    ));
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm text-gray-500">
+              {member.last_login
+                ? new Date(member.last_login).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "Never"}
+            </div>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="flex items-center">
+              <div className="flex-1 h-2 bg-gray-200 rounded-full">
+                <div
+                  className="h-2 bg-blue-500 rounded-full"
+                  style={{
+                    width: `${
+                      member.tokens_remaining
+                        ? (member.current_token_usage /
+                            member.tokens_remaining) *
+                          100
+                        : 0
+                    }%`,
+                  }}
+                />
+              </div>
+              <span className="ml-2 text-sm text-gray-500">
+                {member.current_token_usage.toLocaleString()} /{" "}
+                {member.tokens_remaining.toLocaleString()}
+              </span>
+            </div>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+              Active
+            </span>
+          </td>
+        </tr>
+      );
+    });
+
+    // Add pending invites
+    pendingInvites.forEach((invite: Invitation) => {
+      rows.push(
+        <tr key={invite.id} className="hover:bg-gray-50 bg-gray-50">
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm text-gray-900">{invite.email}</div>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+              {invite.role}
+            </span>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm text-gray-500">
+              Invited on {new Date(invite.created_at).toLocaleDateString()}
+            </div>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm text-gray-500">-</div>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="flex items-center gap-2">
+              <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                Pending
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onCancelInvite(invite.id)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </td>
+        </tr>
+      );
+    });
+
+    return rows;
   };
 
   return (
@@ -155,7 +234,7 @@ const TeamTable: React.FC<TeamTableProps> = ({
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4" />
-                  Last Login
+                  Last Activity
                 </div>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -163,6 +242,9 @@ const TeamTable: React.FC<TeamTableProps> = ({
                   <Coins className="h-4 w-4" />
                   Token Usage
                 </div>
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
               </th>
             </tr>
           </thead>
@@ -175,4 +257,4 @@ const TeamTable: React.FC<TeamTableProps> = ({
   );
 };
 
-export default TeamTable;
+export default EnhancedTeamTable;
