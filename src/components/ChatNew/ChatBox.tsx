@@ -1,11 +1,11 @@
 
-import { ChatState } from "@/types";
-import { useCallback, useEffect, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { ScrollArea } from "../ui/scroll-area";
-import { Alert, AlertDescription } from "../ui/alert";
-import { Bot } from "lucide-react";
 import { useMessageQueue } from "@/lib/useMessageQuesue";
+import { ChatState } from "@/types";
+import { AnimatePresence, motion } from "framer-motion";
+import { Bot } from "lucide-react";
+import { useCallback, useEffect, useRef } from "react";
+import { Alert, AlertDescription } from "../ui/alert";
+import { ScrollArea } from "../ui/scroll-area";
 
 import LinearIndeterminate from "../ui/LinearProgress";
 import { ChatMessage } from "./ChatMessage";
@@ -48,7 +48,6 @@ export default function ChatBox({
     const handleError = (error: string) => {
       setState((prev) => ({ ...prev, error, csvData: null }));
     };
-   console.log(state);
     return (
       <>
         <div className="min-h-screen">
