@@ -62,7 +62,7 @@ export function DashboardPage() {
       <div className="flex flex-col gap-4">
         <h1 className="text-3xl font-bold">Welcome back, {user?.name}!</h1>
         <p className="text-muted-foreground">
-          You have used {user?.tokenUsage.toLocaleString()} tokens this month
+          You have used {user?.tokenUsage?.toLocaleString()} tokens this month
         </p>
       </div>
 

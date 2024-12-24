@@ -150,7 +150,7 @@ export function Header() {
           {user ? (
             <>
               <span className="hidden text-sm text-gray-600 md:block">
-                {tokens?.tokens_remaining.toLocaleString()} tokens left
+                {tokens?.tokens_remaining?.toLocaleString()} tokens left
               </span>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

@@ -1,8 +1,8 @@
-import { useTokenUsage } from '@/hooks/useTokenUsage';
-import { Progress } from '@/components/ui/progress';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle } from 'lucide-react';
-import { format } from 'date-fns';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { useTokenUsage } from "@/hooks/useTokenUsage";
+import { format } from "date-fns";
+import { AlertCircle } from "lucide-react";
 
 export function TokenUsageDisplay() {
   const { loading, usage, history, isLow } = useTokenUsage();
@@ -40,9 +40,9 @@ export function TokenUsageDisplay() {
           <div className="flex justify-between text-sm text-muted-foreground">
             <span>{usage.used.toLocaleString()} used</span>
             <span>
-              {usage.limit === Infinity 
-                ? 'Unlimited' 
-                : `${usage.limit.toLocaleString()} total`}
+              {usage.limit === Infinity
+                ? "Unlimited"
+                : `${usage?.limit?.toLocaleString()} total`}
             </span>
           </div>
         </div>
@@ -59,7 +59,7 @@ export function TokenUsageDisplay() {
                   <span>{log.action}</span>
                   <div className="flex gap-2">
                     <span>{log.tokens} tokens</span>
-                    <span>{format(log.timestamp, 'HH:mm')}</span>
+                    <span>{format(log.timestamp, "HH:mm")}</span>
                   </div>
                 </div>
               ))}
@@ -69,7 +69,8 @@ export function TokenUsageDisplay() {
 
         {isLow && (
           <p className="text-sm text-yellow-500">
-            Warning: You are running low on tokens. Consider upgrading your plan.
+            Warning: You are running low on tokens. Consider upgrading your
+            plan.
           </p>
         )}
       </CardContent>

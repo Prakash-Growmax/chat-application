@@ -59,16 +59,42 @@ export async function inviteMember(
 ): Promise<Invitation> {
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + 7);
-  const { data, error } = await supabase.from("invitations").insert({
-    organization_id: organizationId,
+
+  // 1. Create invitation record
+  const { data: invitation, error: inviteError } = await supabase
+    .from("invitations")
+    .insert({
+      organization_id: organizationId,
+      email,
+      role,
+      status: "pending",
+      expires_at: expiresAt.toISOString(),
+    })
+    .select()
+    .single();
+
+  if (inviteError) throw inviteError;
+
+  // 2. Use Supabase's built-in invite functionality
+  const { error: emailError } = await supabase.auth.signInWithOtp({
     email: email,
-    role: role,
-    status: "pending",
-    expires_at: expiresAt.toISOString(), // Add this line
+    options: {
+      data: {
+        invitation_id: invitation.id,
+        organization_id: organizationId,
+        role: role,
+      },
+      emailRedirectTo: `${window.location.origin}/accept-invite`,
+    },
   });
 
-  if (error) throw error;
-  return data;
+  if (emailError) {
+    // Rollback invitation if email fails
+    await supabase.from("invitations").delete().eq("id", invitation.id);
+    throw emailError;
+  }
+
+  return invitation;
 }
 
 export async function removeMember(
