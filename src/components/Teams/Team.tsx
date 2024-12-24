@@ -13,8 +13,6 @@ const Team = () => {
     inviteMemberByEmail,
     cancelInvitationByEmail,
   } = useTeamMembers();
-  console.log("🚀 ~ Team ~ teamData:", teamData);
-  console.log("🚀 ~ Team ~ teamMembers:", teamMembers);
 
   if (error) {
     return (

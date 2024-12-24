@@ -12,11 +12,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTokenUsage } from "@/hooks/useTokenUsage";
 import { cn } from "@/lib/utils";
 import {
-  Bell,
   Building2,
   ChevronDown,
   CreditCard,
-  HelpCircle,
   LayoutDashboard,
   LogOut,
   Settings,
@@ -34,7 +32,6 @@ const primaryNavItems = [
 export function Header() {
   const { user, signOut } = useAuth();
   const { data: tokens } = useTokenUsage();
-  console.log("🚀 ~ Header ~ tokens:", tokens);
   const location = useLocation();
 
   return (
@@ -116,19 +113,6 @@ export function Header() {
                       </DropdownMenuItem>
                     )}
                   </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/notifications" className="w-full">
-                      <Bell className="mr-2 h-4 w-4" />
-                      Notifications
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/support" className="w-full">
-                      <HelpCircle className="mr-2 h-4 w-4" />
-                      Help & Support
-                    </Link>
-                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut} className="text-red-600">
                     <LogOut className="mr-2 h-4 w-4" />

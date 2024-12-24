@@ -84,7 +84,6 @@ export function subscribeToChanges(userId: string, onUpdate: () => void) {
         filter: `user_id=eq.${userId}`,
       },
       async (payload) => {
-        console.log("🚀 ~ payload:", payload);
         await onUpdate();
       }
     )

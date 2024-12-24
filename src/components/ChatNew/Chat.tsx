@@ -1,25 +1,24 @@
-
 import { useCallback, useContext, useEffect, useState } from "react";
-import GChatterIntro from "./GChatterIntro";
+import AppContext from "../context/AppContext";
 import ChatBox from "./ChatBox";
 import { ChatInput } from "./ChatInput";
-import AppContext from "../context/AppContext";
+import GChatterIntro from "./GChatterIntro";
 
-import RightSideBar from "../ui/RightSideBar";
-import { useMessageQueue } from "@/lib/useMessageQuesue";
 import { getResponse } from "@/lib/pandas-api";
+import { useMessageQueue } from "@/lib/useMessageQuesue";
 import { Message } from "@/types";
+import RightSideBar from "../ui/RightSideBar";
 import Sidebar from "../ui/sidebar";
 import ChatHeader from "./ChatHeader";
-interface ChatProps{
-  message:(chat:string)=>void
-  
+interface ChatProps {
+  message: (chat: string) => void;
 }
-function Chat({message}:ChatProps) {
+function Chat({ message }: ChatProps) {
   const [isUploading, setIsUploading] = useState(false);
 
   const { queue, processing, addToQueue, processQueue } = useMessageQueue();
-  const { open, setOpen,openRight,setOpenRight,state,setState } = useContext(AppContext);
+  const { open, setOpen, openRight, setOpenRight, state, setState } =
+    useContext(AppContext);
   // const [state, setState] = useState<ChatState>({
   //   messages: [],
   //   isLoading: false,
@@ -67,7 +66,6 @@ function Chat({message}:ChatProps) {
           csvData: data?.response,
         }));
       } catch (error) {
-        console.log("🚀 ~ error:", error);
         setState((prev) => ({
           ...prev,
           messages: [
@@ -115,15 +113,15 @@ function Chat({message}:ChatProps) {
       const mappedMessages = message.map((msg) => ({
         id: msg.id, // Example of mapping fields
         content: msg.content, // Assuming the structure of each message
-        timestamp: msg.timestamp || Date.now(), 
-        role:msg.role,
-        type:msg.type
+        timestamp: msg.timestamp || Date.now(),
+        role: msg.role,
+        type: msg.type,
       }));
-     const s3ky="Recents"
+      const s3ky = "Recents";
       setState((prev) => ({
         ...prev,
-        messages: mappedMessages,// Store the transformed messages
-        s3Key:s3ky,
+        messages: mappedMessages, // Store the transformed messages
+        s3Key: s3ky,
         isLoading: false, // Mark as done
         error: null, // Reset error state
       }));
@@ -138,27 +136,32 @@ function Chat({message}:ChatProps) {
       processQueue(processMessage);
     }
   }, [processing, queue, processQueue, processMessage]);
- 
 
   return (
     <>
       <div className="relative flex flex-col h-screen max-h-[93vh] overflow-hidden">
         <div className="mb-12 w-full">
-       
-            <div className="fixed top-30 right-0 w-full flex justify-end items-center z-50 p-2 px-8" style={{ backgroundColor: "#F6F8FA"}}>
-            <ChatHeader open={open} setOpen={setOpen} openRight={openRight} setOpenRight={setOpenRight} createNewChat={createNewChat} state={state} />
-            </div>
-      
+          <div
+            className="fixed top-30 right-0 w-full flex justify-end items-center z-50 p-2 px-8"
+            style={{ backgroundColor: "#F6F8FA" }}
+          >
+            <ChatHeader
+              open={open}
+              setOpen={setOpen}
+              openRight={openRight}
+              setOpenRight={setOpenRight}
+              createNewChat={createNewChat}
+              state={state}
+            />
+          </div>
         </div>
-      
-    
-      
+
         {!state.s3Key && (
           <div className={openRight ? "translate-x-[-200px]" : ""}>
             <GChatterIntro />
           </div>
         )}
-        <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>
+        <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat} />
         <RightSideBar openRight={openRight} setOpenRight={setOpenRight} />
         <div
           className={`flex-1 transition-transform duration-300 ease-in-out overflow-y-auto ${
@@ -177,38 +180,39 @@ function Chat({message}:ChatProps) {
         </div>
         <div
           className={`flex items-center px-4 bg-[#F6F8FA] sticky bottom-0 left-0 right-0 z-10 py-4 ${
-            openRight ? "lg:translate-x-[-200px] lg:w-[1350px] lg:px-16 lg:ml-8" : ""
+            openRight
+              ? "lg:translate-x-[-200px] lg:w-[1350px] lg:px-16 lg:ml-8"
+              : ""
           }`}
         >
           <div className="flex-1 w-full sm:pl-16 sm:pr-16 lg:pl-48 lg:pr-48 lg:py-2">
-          <div className="max-w-[800px] mx-auto w-full">
-          <ChatInput
-              onSend={handleSendMessage}
-              disabled={state.isLoading || !state.s3Key}
-              onError={handleError}
-              isUploading={isUploading}
-              setIsUploading={setIsUploading}
-              s3Key={state.s3Key || ""}
-              bucket={import.meta.env.VITE_S3_BUCKET_NAME}
-              onFileUploaded={(key: string) => {
-                setState({
-                  ...state,
-                  s3Key: key,
-                  messages: [
-                    {
-                      id: Date.now().toString(),
-                      content:
-                        'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
-                      role: "assistant",
-                      timestamp: new Date(),
-                      type: "text",
-                    },
-                  ],
-                });
-              }}
-            />
-          </div>
-     
+            <div className="max-w-[800px] mx-auto w-full">
+              <ChatInput
+                onSend={handleSendMessage}
+                disabled={state.isLoading || !state.s3Key}
+                onError={handleError}
+                isUploading={isUploading}
+                setIsUploading={setIsUploading}
+                s3Key={state.s3Key || ""}
+                bucket={import.meta.env.VITE_S3_BUCKET_NAME}
+                onFileUploaded={(key: string) => {
+                  setState({
+                    ...state,
+                    s3Key: key,
+                    messages: [
+                      {
+                        id: Date.now().toString(),
+                        content:
+                          'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
+                        role: "assistant",
+                        timestamp: new Date(),
+                        type: "text",
+                      },
+                    ],
+                  });
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
