@@ -13,7 +13,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
 
   useEffect(() => {
     if (!loading && user) {
-      navigate("/dashboard");
+      navigate("/chat");
     }
   }, [user, loading, navigate]);
 

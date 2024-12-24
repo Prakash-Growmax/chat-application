@@ -1,40 +1,40 @@
-import { useChatList } from '@/hooks/useChatList';
-import { cn } from '@/lib/utils';
-import AppsIcon from '@mui/icons-material/Apps';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { IconButton, useMediaQuery } from '@mui/material';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import { styled, useTheme } from '@mui/material/styles';
+import { useChatList } from "@/hooks/useChatList";
+import { cn } from "@/lib/utils";
+import AppsIcon from "@mui/icons-material/Apps";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { IconButton, useMediaQuery } from "@mui/material";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import { styled, useTheme } from "@mui/material/styles";
 import {
   Building2,
   CreditCard,
   LayoutDashboard,
   MessageCirclePlus,
   Settings,
-} from 'lucide-react';
-import * as React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+} from "lucide-react";
+import * as React from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const drawerWidth = 280;
 
-const Main = styled('main', {
-  shouldForwardProp: (prop) => prop !== 'open',
+const Main = styled("main", {
+  shouldForwardProp: (prop) => prop !== "open",
 })<{
   open?: boolean;
 }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  transition: theme.transitions.create('margin', {
+  transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
@@ -46,28 +46,28 @@ interface AppBarProps extends MuiAppBarProps {
 }
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== "open",
 })<AppBarProps>(({ theme, open }) => ({
-  transition: theme.transitions.create(['margin', 'width'], {
+  transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
   }),
 }));
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
+  justifyContent: "flex-end",
 }));
 
 interface SideBarProps {
@@ -77,16 +77,20 @@ interface SideBarProps {
 }
 
 const primaryNavItems = [
-  { label: 'Chat', href: '/chat', icon: LayoutDashboard },
-  { label: 'Organizations', href: '/organizations', icon: Building2 },
-  { label: 'Plans', href: '/plans', icon: CreditCard },
-  { label: 'Settings', href: '/settings', icon: Settings },
+  { label: "Chat", href: "/chat", icon: LayoutDashboard },
+  { label: "Organizations", href: "/organizations", icon: Building2 },
+  { label: "Plans", href: "/plans", icon: CreditCard },
+  { label: "Settings", href: "/settings", icon: Settings },
 ];
 
-export default function Sidebar({ open, setOpen, createNewChat }: SideBarProps) {
+export default function Sidebar({
+  open,
+  setOpen,
+  createNewChat,
+}: SideBarProps) {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTab = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
   const { data } = useChatList();
   const [menu, setMenu] = React.useState(false);
@@ -96,17 +100,17 @@ export default function Sidebar({ open, setOpen, createNewChat }: SideBarProps) 
   const handleMenuClose = () => setMenu(false);
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <Drawer
         sx={{
-          width: isMobile ? '100%' : drawerWidth,
+          width: isMobile ? "100%" : drawerWidth,
           flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: isMobile ? '100%' : drawerWidth,
-            boxSizing: 'border-box',
-            marginTop: '70px',
-            backgroundColor: '#F6F8FA',
+          "& .MuiDrawer-paper": {
+            width: isMobile ? "100%" : drawerWidth,
+            boxSizing: "border-box",
+            marginTop: "70px",
+            backgroundColor: "#F6F8FA",
           },
         }}
         variant="persistent"
@@ -132,10 +136,10 @@ export default function Sidebar({ open, setOpen, createNewChat }: SideBarProps) 
                     <Link
                       to={item.href}
                       className={cn(
-                        'flex h-10 items-center rounded-md px-4 py-8 text-xl font-medium transition-colors hover:bg-gray-100',
+                        "flex h-10 items-center rounded-md px-4 py-8 text-xl font-medium transition-colors hover:bg-gray-100",
                         location.pathname === item.href
-                          ? 'bg-gray-100 text-gray-900'
-                          : 'text-gray-600'
+                          ? "bg-gray-100 text-gray-900"
+                          : "text-gray-600"
                       )}
                       onClick={() => {
                         setOpen(false);
@@ -157,7 +161,7 @@ export default function Sidebar({ open, setOpen, createNewChat }: SideBarProps) 
             <List>
               <div
                 className="flex cursor-pointer px-4 py-4"
-                onClick={() => createNewChat('')}
+                onClick={() => createNewChat("")}
               >
                 <MessageCirclePlus className="w-6 h-6 text-black" />
                 <div className="ml-4">
@@ -170,7 +174,7 @@ export default function Sidebar({ open, setOpen, createNewChat }: SideBarProps) 
                   <div className="flex py-4" onClick={handleMenuOpen}>
                     <AppsIcon className="ml-4" />
                     <p className="text-lg ml-4">Menu</p>
-                    <div className="flex ml-auto" >
+                    <div className="flex ml-auto">
                       <ChevronRightIcon />
                     </div>
                   </div>

@@ -67,7 +67,7 @@ export function OrganizationList() {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
-                  <span>{org.tokenUsage.toLocaleString()} tokens used</span>
+                  <span>{org?.tokenUsage?.toLocaleString()} tokens used</span>
                 </div>
                 <div className="flex gap-2">
                   <Button
