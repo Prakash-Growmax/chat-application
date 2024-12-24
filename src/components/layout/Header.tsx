@@ -11,8 +11,6 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { useTokenUsage } from "@/hooks/useTokenUsage";
 import { cn } from "@/lib/utils";
-import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import { IconButton } from "@mui/material";
 import {
   Bell,
   Building2,
@@ -21,20 +19,14 @@ import {
   HelpCircle,
   LayoutDashboard,
   LogOut,
-  MenuIcon,
-  MessageCirclePlus,
   Settings,
   User,
   Users,
 } from "lucide-react";
-import { useContext } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import AppContext from "../context/AppContext";
-import ChatControl from "../ui/chat-control";
-import Sidebar from "../ui/sidebar";
+import { Link, useLocation } from "react-router-dom";
 const primaryNavItems = [
   { label: "Chat", href: "/chat", icon: LayoutDashboard },
-  { label: "Teams", href: "/teams", icon: LayoutDashboard },
+  { label: "Team", href: "/teams", icon: Building2 },
   { label: "Plans", href: "/plans", icon: CreditCard },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
@@ -42,74 +34,13 @@ const primaryNavItems = [
 export function Header() {
   const { user, signOut } = useAuth();
   const { data: tokens } = useTokenUsage();
+  console.log("🚀 ~ Header ~ tokens:", tokens);
   const location = useLocation();
-  const navigator = useNavigate();
-  const { open, setOpen, openRight, setOpenRight, state, setState } =
-    useContext(AppContext);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  const handleChatControl = () => {
-    setOpenRight(!openRight);
-  };
-  function createNewChat() {
-    setState({
-      messages: [],
-      isLoading: false,
-      csvData: null,
-      error: null,
-      s3Key: null,
-    });
-    navigator("/chat");
-    setOpen(false);
-  }
+
   return (
     <header className="sticky top-0 z-50 border-b bg-white">
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-8">
-          {user && (
-            <div className="flex">
-              {open ? (
-                <IconButton
-                  size="large"
-                  edge="start"
-                  aria-label="menu"
-                  onClick={handleDrawerClose}
-                  disableRipple // Removes ripple effect
-                  disableFocusRipple // Removes focus ripple
-                  sx={{
-                    mr: 2,
-                    color: "black",
-                    "&:focus": { outline: "none" }, // Removes focus outline
-                    "&:active": { outline: "none" }, // Removes outline on click
-                  }}
-                >
-                  <MenuOpenIcon style={{ color: "black" }} />
-                </IconButton>
-              ) : (
-                <IconButton
-                  size="large"
-                  edge="start"
-                  aria-label="menu"
-                  onClick={handleDrawerOpen}
-                  disableFocusRipple // Removes focus ripple
-                  sx={{
-                    mr: 2,
-                    color: "black",
-                    "&:focus": { outline: "none" }, // Removes focus outline
-                    "&:active": { outline: "none" }, // Removes outline on click
-                  }}
-                >
-                  <MenuIcon style={{ color: "black" }} />{" "}
-                  {/* Ensures the MenuIcon is white */}
-                </IconButton>
-              )}
-            </div>
-          )}
-
           <Link to="/" className="flex items-center gap-2">
             <Building2 className="h-6 w-6 -ml-12" />
             <span className="lg:text-xl  text-sm font-bold">
@@ -178,9 +109,9 @@ export function Header() {
                     </DropdownMenuItem>
                     {user.plan !== "single" && (
                       <DropdownMenuItem asChild>
-                        <Link to="/organizations" className="w-full">
+                        <Link to="/teams" className="w-full">
                           <Users className="mr-2 h-4 w-4" />
-                          Organizations
+                          Teams
                         </Link>
                       </DropdownMenuItem>
                     )}
@@ -211,19 +142,8 @@ export function Header() {
               <Link to="/login">Login</Link>
             </Button>
           )}
-          {user && (
-            <>
-              <div className="flex" onClick={handleChatControl}>
-                <ChatControl />
-              </div>
-              <div className="flex" onClick={createNewChat}>
-                <MessageCirclePlus className="cursor-pointer w-5 h-5 text-black ml-4" />
-              </div>
-            </>
-          )}
         </div>
       </div>
-      <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat} />
     </header>
   );
 }

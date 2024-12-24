@@ -1,8 +1,7 @@
 import { useTeamMembers } from "@/hooks/teams/useTeamMembers";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { InviteMemberDialog } from "./InviteMemberDialog";
-import { PendingInvites } from "./PendingInvites";
-import TeamTable from "./TeamTable";
+import EnhancedTeamTable from "./TeamTable";
 
 const Team = () => {
   const {
@@ -32,20 +31,14 @@ const Team = () => {
         <h1 className="text-3xl font-bold">Team Management</h1>
         <InviteMemberDialog onInvite={inviteMemberByEmail} />
       </div>
-      <TeamTable
+      <EnhancedTeamTable
         teamMembers={teamData?.members || []}
+        pendingInvites={teamData?.pendingInvites || []}
         loading={loading}
         refetch={refetch}
         hasTeamAccess
+        onCancelInvite={cancelInvitationByEmail}
       />
-      <div className="bg-white rounded-lg shadow mt-4">
-        {teamData?.pendingInvites.length ? (
-          <PendingInvites
-            invites={teamData.pendingInvites}
-            onCancel={cancelInvitationByEmail}
-          />
-        ) : null}
-      </div>
     </div>
   );
 };
