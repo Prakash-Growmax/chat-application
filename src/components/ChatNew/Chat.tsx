@@ -161,12 +161,10 @@ function Chat({ message }: ChatProps) {
             <GChatterIntro />
           </div>
         )}
-        <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat} />
+     
         <RightSideBar openRight={openRight} setOpenRight={setOpenRight} />
         <div
-          className={`flex-1 transition-transform duration-300 ease-in-out overflow-y-auto ${
-            openRight ? "lg:translate-x-[-300px] lg:px-24" : "translate-x-0"
-          }`}
+          className={`flex-1 items-center justify-center overflow-y-auto ${open ? "md:ml-44" : ""}`}
           style={{
             backgroundColor: "#F6F8FA",
           }}
@@ -179,43 +177,42 @@ function Chat({ message }: ChatProps) {
           />
         </div>
         <div
-          className={`flex items-center px-4 bg-[#F6F8FA] sticky bottom-0 left-0 right-0 z-10 py-4 ${
-            openRight
-              ? "lg:translate-x-[-200px] lg:w-[1350px] lg:px-16 lg:ml-8"
-              : ""
-          }`}
+          className={`flex items-center justify-center py-4 ${open ? "md:ml-44" : ""}`}
+          style={{
+            backgroundColor: "#F6F8FA",
+          }}
         >
-          <div className="flex-1 w-full sm:pl-16 sm:pr-16 lg:pl-48 lg:pr-48 lg:py-2">
-            <div className="max-w-[800px] mx-auto w-full">
-              <ChatInput
-                onSend={handleSendMessage}
-                disabled={state.isLoading || !state.s3Key}
-                onError={handleError}
-                isUploading={isUploading}
-                setIsUploading={setIsUploading}
-                s3Key={state.s3Key || ""}
-                bucket={import.meta.env.VITE_S3_BUCKET_NAME}
-                onFileUploaded={(key: string) => {
-                  setState({
-                    ...state,
-                    s3Key: key,
-                    messages: [
-                      {
-                        id: Date.now().toString(),
-                        content:
-                          'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
-                        role: "assistant",
-                        timestamp: new Date(),
-                        type: "text",
-                      },
-                    ],
-                  });
-                }}
-              />
-            </div>
+         <ChatInput
+              onSend={handleSendMessage}
+              disabled={state.isLoading || !state.s3Key}
+              onError={handleError}
+              isUploading={isUploading}
+              setIsUploading={setIsUploading}
+              s3Key={state.s3Key || ""}
+              bucket={import.meta.env.VITE_S3_BUCKET_NAME}
+              onFileUploaded={(key: string) => {
+                setState({
+                  ...state,
+                  s3Key: key,
+                  messages: [
+                    {
+                      id: Date.now().toString(),
+                      content:
+                        'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
+                      role: "assistant",
+                      timestamp: new Date(),
+                      type: "text",
+                    },
+                  ],
+                });
+              }}
+            />
+         </div>
+       
           </div>
-        </div>
-      </div>
+     
+       
+      <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>
     </>
   );
 }

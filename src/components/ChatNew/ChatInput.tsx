@@ -82,7 +82,7 @@ export function ChatInput({ onSend, disabled, onFileUploaded, onError,isUploadin
       <>
        <motion.form
         onSubmit={handleSubmit}
-        className="flex items-center gap-2 p-4 bg-white shadow-md hover:shadow-lg rounded-lg border border-gray-300 min-h-40"
+        className="flex sticky max-w-8xl items-center justify-center gap-2 p-4 bg-white shadow-md hover:shadow-lg rounded-lg border border-gray-300 min-h-40 w-[70%]"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}>
           <div className="flex flex-col w-full">

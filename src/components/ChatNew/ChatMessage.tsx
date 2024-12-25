@@ -133,95 +133,78 @@ export function ChatMessage({ message }: ChatMessageProps) {
         >
           Download Chart as PNG
         </button> */}
-        </motion.div>
-      );
-    }
-
-    if (message.type === "table") {
-      return (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mt-4 overflow-x-auto"
-        >
-          <DataTable />
-          {/* <DataTable data={message.data} /> */}
-        </motion.div>
-      );
-    }
-  };
-
-  return (
-    <>
-      {isUser ? (
-        <motion.div
+  
+            
+         
+          
+          </motion.div>
+        );
+      }
+  
+      if (message.type === "table") {
+        return (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mt-4 overflow-x-auto"
+          >
+            <DataTable/>
+            {/* <DataTable data={message.data} /> */}
+          </motion.div>
+        );
+      }
+    };
+  
+    return (
+      <>
+      {isUser ? ( <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className={`flex items-start gap-4 ${
-            isUser ? "w-full" : "justify-start"
-          }`}
-        >
-          <div className="flex flex-col items-center w-[100%] p-4 bg-white">
-            <div className="flex flex-col mr-auto lg:ml-60 -ml-2">
+          transition={{ duration: 0.3 }}>
+            <div className="flex items-center justify-center">
+              <div className="flex flex-col  bg-white w-[70%] px-4 py-2">
               <div className="flex">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-primary-foreground  ">
-                  <User className="w-5 h-5" />
-                </div>
-                <p className="font-bold text-sm ml-2">ajitha@apptino.com</p>
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-primary-foreground  ">
+              <User className="w-5 h-5" />
               </div>
-              <div className="w-full ml-10">{renderContent()}</div>
-            </div>
-          </div>
-          {/* <div
-            className={`flex items-center justify-center w-10 h-10 rounded-full ${
-              isUser
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary text-secondary-foreground"
-            }`}
-          >
-            {isUser ? <User className="w-6 h-6" /> : <Bot className="w-6 h-6" />}
-          </div>
-          <Card
-            className={`w-[100%] p-4 shadow-lg rounded-lg border ${
-              isUser
-                ? "bg-white text-primary-foreground "
-                : "bg-secondary/10 text-secondary-foreground border-secondary"
-            }`}
-          >
-            {renderContent()}
-          </Card> */}
-        </motion.div>
-      ) : (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className={`flex items-center gap-4 md:ml-8 `}
-        >
-          <div className="flex flex-col  mr-auto lg:ml-64 -ml-8">
-            <div className="flex">
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-secondary-foreground -mt-2">
-                <Bot className="w-6 h-6" />
+               <p className="font-bold text-sm ml-2">ajitha@apptino.com</p>
               </div>
-              <div className="font-bold text-sm ml-2">
-                <p>Assistant G-Chatter</p>
-              </div>
-            </div>
-
-            <div className="bg-white p-4 h-auto ml-10 rounded-lg mt-2 lg:w-full md:w-full w-80">
+              <div className="flex w-full ml-10">
               {renderContent()}
-            </div>
-          </div>
-        </motion.div>
-      )}
+              </div>
+              </div>
 
-      <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
-        <DialogContent className="max-w-[90vw] w-[90vw] h-[90vh] overflow-auto">
-          {message.type === "chart" && <DataChart data={message.data} />}
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-}
+            </div>
+          </motion.div>) : (<motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}>
+              <div className="flex items-center justify-center">
+                <div className="flex flex-col w-[70%]">
+                  <div className="flex">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-secondary-foreground -mt-2">
+            <Bot className="w-6 h-6" />
+            </div>
+            <div className="font-bold text-sm ml-2">
+              <p>Assistant G-Chatter</p>
+            </div>
+                  </div>
+                <div className="flex bg-white w-full px-4 py-2">
+                {renderContent()}
+                </div>
+                </div>
+
+              </div>
+            </motion.div>)}
+    
+      
+  
+        <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
+          <DialogContent className="max-w-[90vw] w-[90vw] h-[90vh] overflow-auto">
+            {message.type === "chart" && <DataChart data={message.data} />}
+          </DialogContent>
+        </Dialog>
+      </>
+    );
+  }
