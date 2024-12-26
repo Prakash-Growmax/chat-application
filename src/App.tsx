@@ -32,12 +32,12 @@ function App() {
     error: null,
     s3Key: null,
   });
+
   return (
     <ThemeProvider defaultTheme="light" storageKey="ui-theme">
       <ErrorBoundary>
         <AuthProvider>
           <Router>
-            {" "}
             <AppContext.Provider
               value={{
                 open,
@@ -48,79 +48,86 @@ function App() {
                 setState,
               }}
             >
-              <div className="min-h-screen bg-background">
-                <Header />
-                <Suspense fallback={<LoadingScreen />}>
-                  <main>
-                    <Routes>
-                      <Route
-                        path="/login"
-                        element={
-                          <AuthWrapper>
-                            <LoginPage />
-                          </AuthWrapper>
-                        }
-                      />
-                      <Route
-                        path="/chat"
-                        element={
-                          <ProtectedRoute>
-                            <Chat />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/chat/:id"
-                        element={
-                          <ProtectedRoute>
-                            <RecentChat />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/teams"
-                        element={
-                          <ProtectedRoute>
-                            <Team />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/plans"
-                        element={
-                          <ProtectedRoute>
-                            <PlansPage />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/settings"
-                        element={
-                          <ProtectedRoute>
-                            <SettingsPage />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/accept-invite"
-                        element={
-                          <ProtectedRoute>
-                            <InviteAcceptedPage />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/"
-                        element={
-                          <AuthWrapper>
-                            <WelcomePage />
-                          </AuthWrapper>
-                        }
-                      />
-                      <Route path="*" element={<NotFoundPage />} />
-                    </Routes>
-                  </main>
-                </Suspense>
+              <div className="min-h-screen flex flex-col bg-background">
+                {/* Fixed Header */}
+                <div className="fixed top-0 left-0 w-full z-50">
+                  <Header />
+                </div>
+
+                {/* Scrollable Content */}
+                <div className="flex-1 pt-[64px] overflow-y-auto">
+                  <Suspense fallback={<LoadingScreen />}>
+                    <main>
+                      <Routes>
+                        <Route
+                          path="/login"
+                          element={
+                            <AuthWrapper>
+                              <LoginPage />
+                            </AuthWrapper>
+                          }
+                        />
+                        <Route
+                          path="/chat"
+                          element={
+                            <ProtectedRoute>
+                              <Chat />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/accept-invite"
+                          element={
+                            <ProtectedRoute>
+                              <InviteAcceptedPage />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/chat/:id"
+                          element={
+                            <ProtectedRoute>
+                              <RecentChat />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/teams"
+                          element={
+                            <ProtectedRoute>
+                              <Team />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/plans"
+                          element={
+                            <ProtectedRoute>
+                              <PlansPage />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings"
+                          element={
+                            <ProtectedRoute>
+                              <SettingsPage />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/"
+                          element={
+                            <AuthWrapper>
+                              <WelcomePage />
+                            </AuthWrapper>
+                          }
+                        />
+                        <Route path="*" element={<NotFoundPage />} />
+                      </Routes>
+                    </main>
+                  </Suspense>
+                </div>
                 <Toaster />
                 <GlobalLoadingIndicator />
               </div>

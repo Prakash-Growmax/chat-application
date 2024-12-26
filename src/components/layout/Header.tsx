@@ -39,7 +39,7 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2">
-            <Building2 className="h-6 w-6 -ml-12" />
+            <Building2 className="h-6 w-6" />
             <span className="lg:text-xl  text-sm font-bold">
               CSV Insight AI
             </span>
