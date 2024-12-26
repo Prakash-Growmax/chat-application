@@ -139,7 +139,7 @@ function Chat({ message }: ChatProps) {
 
   return (
     <>
-      <div className="relative flex flex-col h-screen max-h-[93vh] overflow-hidden">
+      <div className="relative flex flex-col h-screen max-h-[93vh] overflow-hidden" style={{background:"#F6F8FA"}}>
         <div className="mb-12 w-full">
           <div
             className="fixed top-30 right-0 w-full flex justify-end items-center z-50 p-2 px-8"
@@ -157,30 +157,31 @@ function Chat({ message }: ChatProps) {
         </div>
 
         {!state.s3Key && (
-          <div className={openRight ? "translate-x-[-200px]" : ""}>
+          <div className={`${open ? "md:ml-44" : ""}`}>
             <GChatterIntro />
           </div>
         )}
      
-        <RightSideBar openRight={openRight} setOpenRight={setOpenRight} />
+     
         <div
-          className={`flex-1 items-center justify-center overflow-y-auto ${open ? "md:ml-44" : ""}`}
-          style={{
-            backgroundColor: "#F6F8FA",
-          }}
+          className={`flex-1 items-center justify-center overflow-y-auto ${open ? "md:ml-44" : ""} ${openRight ? "mr-80" : ""}`}
+          // style={{
+          //   backgroundColor: "#F6F8FA",
+          // }}
         >
           <ChatBox
             state={state}
             setState={setState}
             isUploading={isUploading}
             setIsUploading={setIsUploading}
+            openRight={openRight}
           />
         </div>
         <div
-          className={`flex items-center justify-center py-4 ${open ? "md:ml-44" : ""}`}
-          style={{
-            backgroundColor: "#F6F8FA",
-          }}
+          className={`flex items-center justify-center py-4 ${open ? "md:ml-44" : ""} ${openRight ? "mr-80" : ""}`}
+          // style={{
+          //   backgroundColor: "#F6F8FA",
+          // }}
         >
          <ChatInput
               onSend={handleSendMessage}
@@ -213,6 +214,10 @@ function Chat({ message }: ChatProps) {
      
        
       <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>
+    
+      <RightSideBar openRight={openRight} setOpenRight={setOpenRight} />
+     
+    
     </>
   );
 }

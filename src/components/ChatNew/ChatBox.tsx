@@ -15,7 +15,7 @@ interface ChatBoxProps {
     setState: (state: ChatState) => void;
     isUploading: boolean;
     setIsUploading: (state: boolean) => void;
-
+    openRight:boolean;
   
   }
 export default function ChatBox({
@@ -23,6 +23,7 @@ export default function ChatBox({
     setState,
     isUploading,
     setIsUploading,
+    openRight
   
   }: ChatBoxProps) {
     const { queue, processing, addToQueue, processQueue } = useMessageQueue();
@@ -48,6 +49,7 @@ export default function ChatBox({
     const handleError = (error: string) => {
       setState((prev) => ({ ...prev, error, csvData: null }));
     };
+   
     return (
       <>
         <div className="min-h-screen">
@@ -77,12 +79,12 @@ export default function ChatBox({
                                 key={message.id} 
                                 message={message} 
                                 state={state}
-                             
+                                openRight={openRight}
                               />
                             ))}
   
   {state.isLoading && (
-  <div className="flex items-center justify-center">
+  <div className="flex items-center justify-center -ml-16">
     <div className="flex flex-col w-[60%]">
       <div className="flex">
         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-secondary-foreground -mt-2">

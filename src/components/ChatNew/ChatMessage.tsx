@@ -12,8 +12,9 @@ import DataTable from "./DataTable";
 interface ChatMessageProps {
   message: Message;
   recent: boolean;
+  openRight:boolean;
 }
-export function ChatMessage({ message }: ChatMessageProps) {
+export function ChatMessage({ message,openRight }: ChatMessageProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const isUser = message.role === "user";
   const [layoutDimensions, setLayoutDimensions] = useState({
@@ -78,8 +79,8 @@ export function ChatMessage({ message }: ChatMessageProps) {
             </Button> */}
           {/* <div style={{ width: '600px', height: '350px' }} className="flex flex-col"> */}
 
-          <div className="flex flex-col  lg:w-[700px] lg:h-[450px] md:w-[500px] w-[200px] h-[300px] max-w-full">
-            <div className="flex justify-end">
+          <div className={`flex flex-col  lg:w-[800px] lg:h-[500px] md:w-[500px] w-[200px] md:h-[480px] max-w-full ${openRight ? "lg:w-[590px] lg:h-[450px]" : ""}`}>
+            <div className="flex justify-end md:mr-28 mb-2 ">
               <SwitchButton isChecked={isChecked} setIsChecked={setIsChecked} />
             </div>
             <div>
@@ -117,9 +118,9 @@ export function ChatMessage({ message }: ChatMessageProps) {
                   />
                 </>
               ) : (
-                <>
+                <div>
                   <DataTable />
-                </>
+                </div>
               )}
             </div>
 
