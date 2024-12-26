@@ -122,3 +122,26 @@ export async function cancelInvitation(
 
   if (error) throw error;
 }
+
+export async function acceptInvitation(userId: string) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const invitationId = user?.user_metadata?.invitation_id;
+  const organizationId = user?.user_metadata?.organization_id;
+  const role = user?.user_metadata?.role;
+
+  if (!invitationId || !organizationId || !role) {
+    throw new Error("Invalid invitation data");
+  }
+
+  // Start a transaction using RPC
+  const { error } = await supabase.rpc("accept_invitation", {
+    user_id: userId,
+    invitation_id: invitationId,
+    p_organization_id: organizationId,
+    p_role: role,
+  });
+
+  if (error) throw error;
+}

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Background chat bubble -->
+  <path 
+    d="M 8 8 L 56 8 Q 60 8 60 12 L 60 44 Q 60 48 56 48 L 32 48 L 20 60 L 20 48 L 8 48 Q 4 48 4 44 L 4 12 Q 4 8 8 8 Z" 
+    fill="#4C51BF"
+  />
+  
+  <!-- Letter G -->
+  <path 
+    d="M 42 20 L 42 36 L 32 36 L 32 32 L 38 32 L 38 24 L 26 24 L 26 32 L 32 32 L 32 28 L 36 28 L 36 36 L 22 36 L 22 20 Z" 
+    fill="white"
+  />
+</svg>

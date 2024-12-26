@@ -136,9 +136,9 @@ const EnhancedTeamTable: React.FC<EnhancedTeamTableProps> = ({
                   className="h-2 bg-blue-500 rounded-full"
                   style={{
                     width: `${
-                      member.tokens_remaining
-                        ? (member.current_token_usage /
-                            member.tokens_remaining) *
+                      member?.tokens_remaining
+                        ? (member?.current_token_usage /
+                            member?.tokens_remaining) *
                           100
                         : 0
                     }%`,
@@ -146,8 +146,8 @@ const EnhancedTeamTable: React.FC<EnhancedTeamTableProps> = ({
                 />
               </div>
               <span className="ml-2 text-sm text-gray-500">
-                {member.current_token_usage.toLocaleString()} /{" "}
-                {member.tokens_remaining.toLocaleString()}
+                {member?.current_token_usage?.toLocaleString() || 0} /{" "}
+                {member?.tokens_remaining?.toLocaleString()}
               </span>
             </div>
           </td>

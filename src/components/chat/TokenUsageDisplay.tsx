@@ -38,7 +38,7 @@ export function TokenUsageDisplay() {
         <div className="space-y-2">
           <Progress value={usage.percentage} className="h-2" />
           <div className="flex justify-between text-sm text-muted-foreground">
-            <span>{usage.used.toLocaleString()} used</span>
+            <span>{usage?.used?.toLocaleString()} used</span>
             <span>
               {usage.limit === Infinity
                 ? "Unlimited"

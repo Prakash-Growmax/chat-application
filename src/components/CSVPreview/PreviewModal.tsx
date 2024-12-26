@@ -69,7 +69,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                     <span className="text-gray-300">•</span>
                     <span className="flex items-center gap-1.5">
                       <span className="font-normal text-gray-500">Rows:</span>
-                      {data.totalRows?.toLocaleString()}
+                      {data?.totalRows?.toLocaleString()}
                     </span>
                   </div>
                 </div>

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 
+import { useProfile } from "@/hooks/profile/useProfile";
 import { FC, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -31,6 +32,9 @@ export const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<"admin" | "member">("member");
   const [isLoading, setIsLoading] = useState(false);
+  const { profile } = useProfile();
+  console.log("🚀 ~ profile:", profile);
+  const isOwner = profile?.role === "admin";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +58,7 @@ export const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Invite Member</Button>
+        {isOwner && <Button>Invite Member</Button>}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

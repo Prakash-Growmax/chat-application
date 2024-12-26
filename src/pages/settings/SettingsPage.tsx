@@ -134,7 +134,7 @@ export function SettingsPage() {
                       <Input
                         value={
                           profile?.last_login
-                            ? new Date(profile.last_login).toLocaleString()
+                            ? new Date(profile.last_login)?.toLocaleString()
                             : "Never"
                         }
                         disabled

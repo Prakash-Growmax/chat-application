@@ -16,6 +16,7 @@ import Chat from "./components/ChatNew/Chat";
 import RecentChat from "./components/ChatNew/RecentChat";
 import Team from "./components/Teams/Team";
 import AppContext from "./components/context/AppContext";
+import InviteAcceptedPage from "./pages/InviteAcceptedPage";
 import { ChatState } from "./types";
 
 const AuthWrapper = lazy(() => import("@/components/auth/AuthWrapper"));
@@ -97,6 +98,14 @@ function App() {
                         element={
                           <ProtectedRoute>
                             <SettingsPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/accept-invite"
+                        element={
+                          <ProtectedRoute>
+                            <InviteAcceptedPage />
                           </ProtectedRoute>
                         }
                       />
