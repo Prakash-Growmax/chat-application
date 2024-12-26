@@ -18,8 +18,10 @@ function Chat({ message }: ChatProps) {
   const [isUploading, setIsUploading] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const { queue, processing, addToQueue, processQueue } = useMessageQueue();
   const { open, setOpen, openRight, setOpenRight, state, setState } = useContext(AppContext);
+
   // const [state, setState] = useState<ChatState>({
   //   messages: [],
   //   isLoading: false,
@@ -158,14 +160,14 @@ function Chat({ message }: ChatProps) {
         </div>
 
         {!state.s3Key && (
-          <div className={`${open ? "md:ml-44" : ""}`}>
+          <div className={`${open ? "md:ml-60" : ""}`}>
             <GChatterIntro />
           </div>
         )}
      
      
         <div
-          className={`flex-1 items-center justify-center overflow-y-auto ${open ? "md:ml-44" : ""} ${openRight ? "mr-80" : ""}`}
+          className={`flex-1 items-center justify-center overflow-y-auto ${open ? "md:ml-56" : ""} ${openRight ? "mr-80" : ""}`}
           // style={{
           //   backgroundColor: "#F6F8FA",
           // }}
@@ -176,10 +178,11 @@ function Chat({ message }: ChatProps) {
             isUploading={isUploading}
             setIsUploading={setIsUploading}
             openRight={openRight}
+          
           />
         </div>
         <div
-          className={`flex items-center justify-center py-4 ${open ? "md:ml-44" : ""} ${openRight ? "mr-80" : ""}`}
+          className={`flex items-center justify-center py-4 ${open ? "md:ml-56" : ""} ${openRight ? "mr-80" : ""}`}
           // style={{
           //   backgroundColor: "#F6F8FA",
           // }}
@@ -214,7 +217,7 @@ function Chat({ message }: ChatProps) {
           </div>
      
        
-     {!isMobile && (<Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>)} 
+     {!isMobile && !isTab && (<Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>)} 
     
       <RightSideBar openRight={openRight} setOpenRight={setOpenRight} />
      

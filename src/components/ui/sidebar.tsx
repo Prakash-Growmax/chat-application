@@ -104,10 +104,10 @@ export default function Sidebar({
       <CssBaseline />
       <Drawer
         sx={{
-          width:isMobile ? '100%' : isTab ? '25%' : drawerWidth,
+          width:isMobile ? '100%' : isTab ? '35%' : drawerWidth,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-            width:isMobile ? '100%' : isTab ? '25%' : drawerWidth,
+            width:isMobile ? '100%' : isTab ? '35%' : drawerWidth,
             boxSizing: 'border-box',
             marginTop: '70px',
             backgroundColor: '#F6F8FA',

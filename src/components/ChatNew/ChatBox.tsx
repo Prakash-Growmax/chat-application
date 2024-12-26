@@ -84,7 +84,7 @@ export default function ChatBox({
                             ))}
   
   {state.isLoading && (
-  <div className="flex items-center justify-center -ml-16">
+  <div className="flex items-center justify-center -ml-16 md:-ml-8 ">
     <div className="flex flex-col w-[60%]">
       <div className="flex">
         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-secondary-foreground -mt-2">

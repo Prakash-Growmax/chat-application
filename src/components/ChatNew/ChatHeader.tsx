@@ -23,6 +23,7 @@ export default function ChatHeader({
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const handleChatControl = () => {
     setOpenRight(!openRight);
   };
@@ -39,7 +40,7 @@ export default function ChatHeader({
 
   return (
     <>
-    {!isMobile && (  <div className="w-full">
+    {!isMobile && !isTab && (  <div className="w-full">
         <IconButton
           size="large"
           edge="start"

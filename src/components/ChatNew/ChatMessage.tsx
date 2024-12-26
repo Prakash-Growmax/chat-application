@@ -1,6 +1,6 @@
 import { Message } from "@/types";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 import Typewriter from "typewriter-effect";
 
@@ -9,6 +9,7 @@ import { Dialog, DialogContent } from "../ui/dialog";
 import SwitchButton from "../ui/Switchbutton";
 import { DataChart } from "./DataChat";
 import DataTable from "./DataTable";
+import AppContext from "../context/AppContext";
 interface ChatMessageProps {
   message: Message;
   recent: boolean;
@@ -22,24 +23,30 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
     height: 350,
   });
   const [isChecked, setIsChecked] = useState(false);
+  const {open} = useContext(AppContext)
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setLayoutDimensions({ width: 300, height: 300 });
+      } else if (window.innerWidth >= 768 && window.innerWidth < 1024) {
+        // Mid-screen dimensions
+        setLayoutDimensions({ width: 400, height: 300 });
       } else {
-        setLayoutDimensions({ width: 500, height: 350 });
+        // Larger screen dimensions
+        setLayoutDimensions({ width: 500, height: 300 });
       }
     };
-
+  
     // Set initial dimensions
     handleResize();
-
+  
     // Add event listener
     window.addEventListener("resize", handleResize);
-
+  
     // Cleanup event listener on component unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  
 
   const renderContent = () => {
     if (message.type === "text") {
@@ -80,7 +87,7 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
           {/* <div style={{ width: '600px', height: '350px' }} className="flex flex-col"> */}
 
           <div className={`flex flex-col  lg:w-[800px] lg:h-[500px] md:w-[500px] w-[300px] md:h-[480px]  max-w-full ${openRight ? "lg:w-[590px] lg:h-[450px]" : ""}`}>
-            <div className="flex justify-end md:mr-28 mb-2 ">
+            <div className={`flex justify-end mb-2 ${open ? "md:mr-40" : ""}`} >
               <SwitchButton isChecked={isChecked} setIsChecked={setIsChecked} />
             </div>
             <div>
@@ -118,7 +125,7 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
                   />
                 </>
               ) : (
-                <div>
+                <div className={open ? "md:mr-40" : ""}>
                   <DataTable />
                 </div>
               )}
@@ -164,7 +171,7 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}>
             <div className="flex items-center justify-center">
-              <div className="flex flex-col  bg-white lg:w-[70%] md:w-[70%] w-[100%] px-4 py-2">
+              <div className="flex flex-col  bg-white lg:w-[70%] md:w-[80%] w-[100%] px-4 py-2">
               <div className="flex">
               <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-primary-foreground  ">
               <User className="w-5 h-5" />
@@ -182,7 +189,7 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}>
               <div className="flex items-center justify-center">
-                <div className="flex flex-col lg:w-[70%] md:w-[70%] w-[100%]">
+                <div className="flex flex-col lg:w-[70%] md:w-[80%] w-[100%]">
                   <div className="flex">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-secondary-foreground -mt-2">
             <Bot className="w-6 h-6" />

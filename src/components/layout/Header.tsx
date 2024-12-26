@@ -42,6 +42,7 @@ export function Header() {
   const { user, signOut } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const { data: tokens } = useTokenUsage();
   const location = useLocation();
   const {open,setOpen,createNewChat}=useContext(AppContext)
@@ -56,7 +57,7 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-8">
           <div>
-          {isMobile && user && ( open ? (     <IconButton
+          {(isMobile || isTab) && user && ( open ? (     <IconButton
           size="large"
           edge="start"
           aria-label="menu"
@@ -181,7 +182,7 @@ export function Header() {
           )}
         </div>
       </div>
-      {isMobile && (<Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>)} 
+      {(isMobile || isTab) && (<Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>)} 
     </header>
   );
 }
