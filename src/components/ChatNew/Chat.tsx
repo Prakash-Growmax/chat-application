@@ -10,15 +10,16 @@ import { Message } from "@/types";
 import RightSideBar from "../ui/RightSideBar";
 import Sidebar from "../ui/sidebar";
 import ChatHeader from "./ChatHeader";
+import { useMediaQuery, useTheme } from "@mui/material";
 interface ChatProps {
   message: (chat: string) => void;
 }
 function Chat({ message }: ChatProps) {
   const [isUploading, setIsUploading] = useState(false);
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { queue, processing, addToQueue, processQueue } = useMessageQueue();
-  const { open, setOpen, openRight, setOpenRight, state, setState } =
-    useContext(AppContext);
+  const { open, setOpen, openRight, setOpenRight, state, setState } = useContext(AppContext);
   // const [state, setState] = useState<ChatState>({
   //   messages: [],
   //   isLoading: false,
@@ -213,7 +214,7 @@ function Chat({ message }: ChatProps) {
           </div>
      
        
-      <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>
+     {!isMobile && (<Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>)} 
     
       <RightSideBar openRight={openRight} setOpenRight={setOpenRight} />
      

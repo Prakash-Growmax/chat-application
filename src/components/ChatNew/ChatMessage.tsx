@@ -55,7 +55,7 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
               }}
             />
           ) : (
-            <p className="text-sm">{message.content}</p>
+            <p className="text-sm font-semibold text-muted-foreground">{message.content}</p>
           )}
         </div>
       );
@@ -79,7 +79,7 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
             </Button> */}
           {/* <div style={{ width: '600px', height: '350px' }} className="flex flex-col"> */}
 
-          <div className={`flex flex-col  lg:w-[800px] lg:h-[500px] md:w-[500px] w-[200px] md:h-[480px] max-w-full ${openRight ? "lg:w-[590px] lg:h-[450px]" : ""}`}>
+          <div className={`flex flex-col  lg:w-[800px] lg:h-[500px] md:w-[500px] w-[300px] md:h-[480px]  max-w-full ${openRight ? "lg:w-[590px] lg:h-[450px]" : ""}`}>
             <div className="flex justify-end md:mr-28 mb-2 ">
               <SwitchButton isChecked={isChecked} setIsChecked={setIsChecked} />
             </div>
@@ -164,7 +164,7 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}>
             <div className="flex items-center justify-center">
-              <div className="flex flex-col  bg-white w-[70%] px-4 py-2">
+              <div className="flex flex-col  bg-white lg:w-[70%] md:w-[70%] w-[100%] px-4 py-2">
               <div className="flex">
               <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-primary-foreground  ">
               <User className="w-5 h-5" />
@@ -182,7 +182,7 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}>
               <div className="flex items-center justify-center">
-                <div className="flex flex-col w-[70%]">
+                <div className="flex flex-col lg:w-[70%] md:w-[70%] w-[100%]">
                   <div className="flex">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-secondary-foreground -mt-2">
             <Bot className="w-6 h-6" />
@@ -191,8 +191,11 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
               <p>Assistant G-Chatter</p>
             </div>
                   </div>
-                <div className="flex bg-white w-full px-4 py-2">
-                {renderContent()}
+                <div className="flex bg-white w-full px-4 py-4 rounded-md">
+                  <div className="ml-4">
+                  {renderContent()}
+                  </div>
+              
                 </div>
                 </div>
 

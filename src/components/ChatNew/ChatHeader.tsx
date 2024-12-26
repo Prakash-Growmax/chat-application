@@ -1,5 +1,5 @@
 import { ChatState } from "@/types";
-import { IconButton } from "@mui/material";
+import { IconButton, useMediaQuery, useTheme } from "@mui/material";
 import { MenuIcon, MessageCirclePlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ChatControl from "../ui/chat-control";
@@ -21,6 +21,8 @@ export default function ChatHeader({
   state,
 }: ChatHeaderProps) {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const handleChatControl = () => {
     setOpenRight(!openRight);
   };
@@ -37,7 +39,7 @@ export default function ChatHeader({
 
   return (
     <>
-      <div className="w-full">
+    {!isMobile && (  <div className="w-full">
         <IconButton
           size="large"
           edge="start"
@@ -54,7 +56,8 @@ export default function ChatHeader({
           <MenuIcon style={{ color: "black" }} />{" "}
           {/* Ensures the MenuIcon is white */}
         </IconButton>
-      </div>
+      </div>)}
+    
       {state.s3Key && (
         <div className="flex items-center gap-2">
           <div className="flex" onClick={handleChatControl}>

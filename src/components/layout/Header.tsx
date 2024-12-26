@@ -11,17 +11,26 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { useTokenUsage } from "@/hooks/useTokenUsage";
 import { cn } from "@/lib/utils";
+import { IconButton, useMediaQuery, useTheme } from "@mui/material";
+
 import {
   Building2,
   ChevronDown,
   CreditCard,
   LayoutDashboard,
   LogOut,
+  MenuIcon,
   Settings,
   User,
   Users,
+
 } from "lucide-react";
+import { useContext } from "react";
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+
 import { Link, useLocation } from "react-router-dom";
+import AppContext from "../context/AppContext";
+import Sidebar from "../ui/sidebar";
 const primaryNavItems = [
   { label: "Chat", href: "/chat", icon: LayoutDashboard },
   { label: "Team", href: "/teams", icon: Building2 },
@@ -31,20 +40,64 @@ const primaryNavItems = [
 
 export function Header() {
   const { user, signOut } = useAuth();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { data: tokens } = useTokenUsage();
   const location = useLocation();
-
+  const {open,setOpen,createNewChat}=useContext(AppContext)
+  const handleDrawerOpen=()=>{
+    setOpen(true)
+  }
+  const handleDrawerClose=()=>{
+    setOpen(false)
+  }
   return (
     <header className="sticky top-0 z-50 border-b bg-white">
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-8">
+          <div>
+          {isMobile && user && ( open ? (     <IconButton
+          size="large"
+          edge="start"
+          aria-label="menu"
+          onClick={handleDrawerClose}
+          disableFocusRipple 
+          sx={{
+            mr: 2,
+            color: "black",
+            "&:focus": { outline: "none" }, 
+            "&:active": { outline: "none" }, 
+          }}
+        >
+          <MenuOpenIcon style={{ color: "black" }} />{" "}
+          {/* Ensures the MenuIcon is white */}
+        </IconButton>):(<IconButton
+          size="large"
+          edge="start"
+          aria-label="menu"
+          onClick={handleDrawerOpen}
+          disableFocusRipple 
+          sx={{
+            mr: 2,
+            color: "black",
+            "&:focus": { outline: "none" },
+            "&:active": { outline: "none" }, 
+          }}
+        >
+          <MenuIcon style={{ color: "black" }} />{" "}
+        
+        </IconButton>)  
+   
+      )}
+          </div>
+      
           <Link to="/" className="flex items-center gap-2">
             <Building2 className="h-6 w-6" />
             <span className="lg:text-xl  text-sm font-bold">
               CSV Insight AI
             </span>
           </Link>
-
+ 
           {user && (
             <>
               <nav className="hidden lg:flex">
@@ -128,6 +181,7 @@ export function Header() {
           )}
         </div>
       </div>
+      {isMobile && (<Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>)} 
     </header>
   );
 }
