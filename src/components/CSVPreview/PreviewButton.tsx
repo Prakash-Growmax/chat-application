@@ -1,3 +1,4 @@
+import { Tooltip } from "@mui/material";
 import { Eye } from "lucide-react";
 import React from "react";
 interface PreviewButtonProps {
@@ -11,14 +12,16 @@ export const PreviewButton: React.FC<PreviewButtonProps> = ({
     disabled = false,
   }) => {
     return (
-  <button
+      <>
+      <Tooltip title="Preview Csv">
+      <button
     onClick={onClick}
     disabled={disabled || isLoading}
-    className="inline-flex items-center px-4 py-2 text-sm bg-white text-blue-700 font-medium hover:outline-none hover:border-none focus:outline-none focus:ring-0 focus:border-none focus-visible:outline-none "
+    className="inline-flex items-center px-2 py-2 text-sm items-center justify-center bg-white text-black font-medium hover:bg-gray-100 rounded hover:outline-none hover:border-none focus:outline-none focus:ring-0 focus:border-none focus-visible:outline-none "
     aria-label="Preview CSV file"
   >
     {isLoading ? (
-      <div className="animate-spin -ml-1 mr-2 h-4 w-4 text-blue-500">
+      <div className="animate-spin h-4 w-4 text-black">
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24">
           <circle
             className="opacity-25"
@@ -36,10 +39,14 @@ export const PreviewButton: React.FC<PreviewButtonProps> = ({
         </svg>
       </div>
     ) : (
-      <Eye className="h-4 w-4 mr-2 text-blue-700" aria-hidden="true" />
+      <Eye className="h-6 w-6 text-black" aria-hidden="true" />
     )}
-    Preview CSV
+  
   </button>
+      </Tooltip>
+  
+      </>
+ 
   
   
     

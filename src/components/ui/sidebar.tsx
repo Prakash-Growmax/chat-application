@@ -5,7 +5,7 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import { IconButton, useMediaQuery } from "@mui/material";
+import { IconButton, Tooltip, useMediaQuery } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -16,6 +16,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { styled, useTheme } from "@mui/material/styles";
+import KeyboardTabIcon from '@mui/icons-material/KeyboardTab';
 import {
   Building2,
   CreditCard,
@@ -25,6 +26,8 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import RightArrow from "./RightArrow";
+import LeftArrow from "./LeftArrow";
 const drawerWidth = 280;
 
 const Main = styled("main", {
@@ -95,7 +98,7 @@ export default function Sidebar({
   const { data } = useChatList();
   const [menu, setMenu] = React.useState(false);
   const location = useLocation();
-
+  const [pin,setpin] = React.useState(false)
   const handleMenuOpen = () => setMenu(true);
   const handleMenuClose = () => setMenu(false);
   const handleDrawerClose = () => setOpen(false);
@@ -109,13 +112,13 @@ export default function Sidebar({
           '& .MuiDrawer-paper': {
             width:isMobile ? '100%' : isTab ? '35%' : drawerWidth,
             boxSizing: 'border-box',
-            marginTop: '70px',
+            marginTop: '58px',
             backgroundColor: '#F6F8FA',
           },
         }}
         variant="persistent"
         anchor="left"
-        open={open || menu}
+        open={(open || pin) || menu}
       >
         {isTab && menu && (
           <>
@@ -156,22 +159,39 @@ export default function Sidebar({
             </List>
           </>
         )}
-        {open && !menu && (
+        {(open || pin) && !menu && (
           <>
             <List>
               <div
                 className="flex flex-col cursor-pointer px-4"
-                onClick={() => {
+              
+              >
+                <div className="flex justify-between mb-4">
+                <p className="text-xl font-semibold">G-Chatter</p>
+                  {/* <KeyboardBackspaceIcon className="ml-auto" /> */}
+                  {pin ? (
+      <Tooltip title="Unpin sidebar">
+          <div onClick={() => setpin(false)}>
+      <LeftArrow />
+    </div>
+      </Tooltip>
+  
+  ) : (
+    <Tooltip title="Pin sidebar">
+       <div onClick={() => setpin(true)}>
+      <KeyboardTabIcon />
+    </div>
+    </Tooltip>
+   
+  )}
+                 
+                </div>
+
+                <div className="flex"   onClick={() => {
                   createNewChat();
                   navigate("/chat");
                   setOpen(false);
-                }}
-              >
-                <div className="flex justify-end" onClick={handleDrawerClose}>
-                  <KeyboardBackspaceIcon className="ml-auto" />
-                </div>
-
-                <div className="flex">
+                }}>
                   <MessageCirclePlus className="w-6 h-6 text-black" />
                   <div className="ml-2">
                     <p className="text-lg">Start new chat</p>

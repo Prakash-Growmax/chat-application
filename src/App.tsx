@@ -25,6 +25,7 @@ const ProtectedRoute = lazy(() => import("@/components/auth/ProtectedRoute"));
 function App() {
   const [open, setOpen] = useState(false);
   const [openRight, setOpenRight] = useState(false);
+
   const [state, setState] = useState<ChatState>({
     messages: [],
     isLoading: false,
@@ -46,6 +47,7 @@ function App() {
                 setOpenRight,
                 state,
                 setState,
+              
               }}
             >
               <div className="min-h-screen flex flex-col bg-background">

@@ -41,22 +41,7 @@ export default function ChatHeader({
   return (
     <>
     {!isMobile && !isTab && (  <div className="w-full">
-        <IconButton
-          size="large"
-          edge="start"
-          aria-label="menu"
-          onClick={handleDrawerOpen}
-          disableFocusRipple // Removes focus ripple
-          sx={{
-            mr: 2,
-            color: "black",
-            "&:focus": { outline: "none" }, // Removes focus outline
-            "&:active": { outline: "none" }, // Removes outline on click
-          }}
-        >
-          <MenuIcon style={{ color: "black" }} />{" "}
-          {/* Ensures the MenuIcon is white */}
-        </IconButton>
+       <p className="text-xl font-semibold">G-Chatter</p>
       </div>)}
     
       {state.s3Key && (

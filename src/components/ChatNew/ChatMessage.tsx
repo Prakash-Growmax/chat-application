@@ -171,7 +171,7 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}>
             <div className="flex items-center justify-center">
-              <div className="flex flex-col  bg-white lg:w-[70%] md:w-[80%] w-[100%] px-4 py-2">
+              <div className="flex flex-col  bg-white lg:w-[60%] md:w-[80%] w-[100%] px-4 py-2">
               <div className="flex">
               <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-primary-foreground  ">
               <User className="w-5 h-5" />
@@ -189,7 +189,7 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}>
               <div className="flex items-center justify-center">
-                <div className="flex flex-col lg:w-[70%] md:w-[80%] w-[100%]">
+                <div className="flex flex-col lg:w-[60%] md:w-[80%] w-[100%]">
                   <div className="flex">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-secondary-foreground -mt-2">
             <Bot className="w-6 h-6" />
