@@ -1,14 +1,13 @@
-import { S3UploadError, UploadProgress, uploadToS3 } from "@/lib/s3-client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { S3UploadError, uploadToS3 } from "@/lib/s3-client";
 import { Tooltip } from "@mui/material";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUp, Paperclip } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { CSVPreview } from "../CSVPreview/CSVPreview";
 import Spinner from "../ui/Spinner";
 import AttachIcon from "../ui/attach-ui";
-import { AnimatePresence } from "framer-motion";
-import { ArrowUp } from "lucide-react";
-import { motion } from "framer-motion";
+import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -23,7 +22,6 @@ interface ChatInputProps {
 
 export function ChatInput({
   onSend,
-  disabled,
   onFileUploaded,
   onError,
   isUploading,
@@ -35,14 +33,11 @@ export function ChatInput({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState<UploadProgress | null>(null);
-  const [fileName, setFileName] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   const adjustTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
-    
+
     textarea.style.height = "auto";
     const maxHeight = s3Key ? 120 : 200; // Reduced height when s3Key is present
     const newHeight = Math.min(textarea.scrollHeight, maxHeight);
@@ -114,9 +109,77 @@ export function ChatInput({
   const textareaPaddingBottom = s3Key ? "pb-12" : "pb-14";
 
   return (
-    <div className="flex flex-col w-full border border-gray-100">
+    <div className="w-full">
+      <div className="flex justify-center">
+        <form className="w-full" onSubmit={handleSubmit}>
+          <div className="relative flex h-full max-w-full flex-1 flex-col">
+            <div className="group relative flex w-full items-center">
+              <div className="w-full">
+                <div
+                  id="composer-background"
+                  className="flex w-full cursor-text flex-col rounded-3xl px-2.5 py-1 transition-colors bg-[#f4f4f4] dark:bg-token-main-surface-secondary"
+                >
+                  <div className="flex min-h-[44px] items-start pl-2">
+                    <div className="flex-1 min-w-0 max-w-full">
+                      <div className="max-h-52 overflow-auto">
+                        <textarea
+                          ref={textareaRef}
+                          value={input}
+                          onChange={(e) => {
+                            setInput(e.target.value);
+                            adjustTextareaHeight();
+                          }}
+                          placeholder="Message Chat AI..."
+                          className="block h-10 w-full resize-none border-0 bg-transparent px-0 py-2 text-base text-token-text-primary placeholder:text-gray-500 focus:outline-none focus:ring-0"
+                          style={{ height: "24px", minHeight: "24px" }}
+                          data-virtualkeyboard="true"
+                        />
+                      </div>
+                    </div>
+                    <div className="w-[32px] pt-1"></div>
+                  </div>
+
+                  <div className="flex h-[44px] items-center justify-between">
+                    <div className="flex gap-x-1">
+                      {/* Attachment button */}
+                      <div className="relative">
+                        <button
+                          aria-label="Attach files is unavailable"
+                          className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 opacity-30"
+                        >
+                          <Paperclip size={20} />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Send button */}
+                    <button
+                      type="submit"
+                      disabled={!input.trim()}
+                      className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
+                        input.trim()
+                          ? "bg-black text-white hover:opacity-70"
+                          : "bg-[#D7D7D7] text-[#f4f4f4]"
+                      }`}
+                    >
+                      <ArrowUp size={20} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="flex flex-col w-full ">
       <div className="relative flex-1 flex items-center justify-center">
-        <div className={`relative w-full max-w-8xl lg:w-[60%] md:w-[80%] w-[90%] ${minContainerHeight}`}>
+        <div
+          className={`relative w-full max-w-8xl lg:w-[60%] md:w-[80%] w-[90%] ${minContainerHeight}`}
+        >
           <Textarea
             ref={textareaRef}
             value={input}
@@ -130,11 +193,13 @@ export function ChatInput({
               boxShadow: "none",
               minHeight: s3Key ? "96px" : "160px",
               maxHeight: s3Key ? "120px" : "600px",
-              overflowY: "auto"
+              overflowY: "auto",
             }}
           />
-          
-          <div className={`absolute bottom-0 left-0 right-0 ${footerHeight} bg-white shadow-md border-b border-l border-r rounded-tl-none rounded-tr-none rounded-2xl`}>
+
+          <div
+            className={`absolute bottom-0 left-0 right-0 ${footerHeight} bg-white shadow-md border-b border-l border-r rounded-tl-none rounded-tr-none rounded-2xl`}
+          >
             <div className="flex justify-between items-center px-3 h-full">
               <div className="flex items-center gap-2">
                 <input
@@ -149,19 +214,18 @@ export function ChatInput({
                   <button
                     type="button"
                     className="flex items-center gap-2 text-black hover:bg-gray-100 rounded p-2 transition-colors"
-                    onClick={() => document.getElementById("csv-upload")?.click()}
+                    onClick={() =>
+                      document.getElementById("csv-upload")?.click()
+                    }
                   >
                     {isUploading ? <Spinner /> : <AttachIcon />}
                   </button>
                 </Tooltip>
-                
+
                 {s3Key && (
                   <div>
                     <Tooltip title="Preview CSV">
-                      <CSVPreview 
-                        s3Key={s3Key} 
-                        bucket={bucket}
-                      />
+                      <CSVPreview s3Key={s3Key} bucket={bucket} />
                     </Tooltip>
                   </div>
                 )}

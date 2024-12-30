@@ -1,6 +1,6 @@
 import { ChatState } from "@/types";
-import { IconButton, useMediaQuery, useTheme } from "@mui/material";
-import { MenuIcon, MessageCirclePlus } from "lucide-react";
+import { useMediaQuery, useTheme } from "@mui/material";
+import { MessageCirclePlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ChatControl from "../ui/chat-control";
 interface ChatHeaderProps {
@@ -40,10 +40,6 @@ export default function ChatHeader({
 
   return (
     <>
-    {!isMobile && !isTab && (  <div className="w-full">
-       <p className="text-xl font-semibold">G-Chatter</p>
-      </div>)}
-    
       {state.s3Key && (
         <div className="flex items-center gap-2">
           <div className="flex" onClick={handleChatControl}>

@@ -1,16 +1,14 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import AppContext from "../context/AppContext";
-import ChatBox from "./ChatBox";
-import { ChatInput } from "./ChatInput";
-import GChatterIntro from "./GChatterIntro";
 
 import { getResponse } from "@/lib/pandas-api";
 import { useMessageQueue } from "@/lib/useMessageQuesue";
 import { Message } from "@/types";
+import { styled, useMediaQuery, useTheme } from "@mui/material";
 import RightSideBar from "../ui/RightSideBar";
 import Sidebar from "../ui/sidebar";
-import ChatHeader from "./ChatHeader";
-import { styled, useMediaQuery, useTheme } from "@mui/material";
+import ChatBox from "./ChatBox";
+import { ChatInput } from "./ChatInput";
 interface ChatProps {
   message: (chat: string) => void;
 }
@@ -21,11 +19,6 @@ const Main = styled("main", {
   open?: boolean;
 }>(({ theme, open }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
-  // transition: theme.transitions.create("margin", {
-  //   easing: theme.transitions.easing.sharp,
-  //   duration: theme.transitions.duration.leavingScreen,
-  // }),
   [theme.breakpoints.down("md")]: {
     marginLeft: open ? "176px" : "", // Adjust the values as needed for mid-sized screens
   },
@@ -40,15 +33,8 @@ function Chat({ message }: ChatProps) {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const { queue, processing, addToQueue, processQueue } = useMessageQueue();
-  const { open, setOpen, openRight, setOpenRight, state, setState } = useContext(AppContext);
-
-  // const [state, setState] = useState<ChatState>({
-  //   messages: [],
-  //   isLoading: false,
-  //   csvData: null,
-  //   error: null,
-  //   s3Key: null,
-  // });
+  const { open, setOpen, openRight, setOpenRight, state, setState } =
+    useContext(AppContext);
 
   const processMessage = useCallback(
     async (message: Message) => {
@@ -149,7 +135,9 @@ function Chat({ message }: ChatProps) {
         error: null, // Reset error state
       }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [message]);
+
   const handleError = (error: string) => {
     setState((prev) => ({ ...prev, error, csvData: null }));
   };
@@ -159,14 +147,15 @@ function Chat({ message }: ChatProps) {
       processQueue(processMessage);
     }
   }, [processing, queue, processQueue, processMessage]);
+
   useEffect(() => {
     const handleMouseMove = (event) => {
       // Get the width of the viewport
       const viewportWidth = window.innerWidth;
-      
+
       // Calculate the threshold (e.g., 20% of viewport width)
       const threshold = viewportWidth * 0.2;
-      
+
       // If mouse is within threshold from left edge, open sidebar
       if (event.clientX <= threshold) {
         setOpen(true);
@@ -176,102 +165,95 @@ function Chat({ message }: ChatProps) {
     };
 
     // Add event listener
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
 
     // Cleanup
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener("mousemove", handleMouseMove);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <Main open={open} style={{background:"#F6F8FA"}}>
-      <div className="relative -mt-8 flex flex-col h-screen max-h-[90vh] overflow-hidden" style={{background:"#F6F8FA"}}>
-        <div className="mb-14 w-full">
-          <div
-            className="fixed top-30 right-0 w-full flex justify-end items-center z-50 p-2 px-4"
-            style={{ backgroundColor: "#F6F8FA" }}
-          >
-            <ChatHeader
-              open={open}
-              setOpen={setOpen}
-              openRight={openRight}
-              setOpenRight={setOpenRight}
-              createNewChat={createNewChat}
-              state={state}
-            />
+    <Main open={open} className="relative max-h-screen p-2 overflow-hidden">
+      <div className=" flex flex-col">
+        <div className=" w-screen h-[95vh] flex flex-col items-center justify-center">
+          <div className="mb-7  text-center @lg/thread:block">
+            <div className="relative inline-flex justify-center text-center">
+              {!state.s3Key && (
+                <h1
+                  className="text-[30px] leading-[36px] font-semibold text-[rgb(13,13,13)]"
+                  style={{
+                    fontFamily:
+                      'ui-sans-serif, -apple-system, system-ui, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"',
+                  }}
+                >
+                  What can I help with?
+                </h1>
+              )}
+            </div>
+          </div>
+          {Boolean(state?.messages?.length > 0) && (
+            <div
+              className={`flex-1 items-center justify-center overflow-y-auto  ${
+                openRight ? "mr-80" : ""
+              }`}
+              // style={{
+              //   backgroundColor: "#F6F8FA",
+              // }}
+            >
+              <ChatBox
+                state={state}
+                setState={setState}
+                isUploading={isUploading}
+                setIsUploading={setIsUploading}
+                openRight={openRight}
+              />
+            </div>
+          )}
+          <div className="text-base px-3 w-full md:px-5 lg:px-4 xl:px-5 pb-8">
+            <div className="mx-auto flex flex-1 gap-4 text-base md:gap-5 lg:gap-6 md:max-w-3xl">
+              {" "}
+              <ChatInput
+                onSend={handleSendMessage}
+                disabled={state.isLoading || !state.s3Key}
+                onError={handleError}
+                isUploading={isUploading}
+                setIsUploading={setIsUploading}
+                s3Key={state.s3Key || ""}
+                bucket={import.meta.env.VITE_S3_BUCKET_NAME}
+                onFileUploaded={(key: string) => {
+                  setState({
+                    ...state,
+                    s3Key: key,
+                    messages: [
+                      {
+                        id: Date.now().toString(),
+                        content:
+                          'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
+                        role: "assistant",
+                        timestamp: new Date(),
+                        type: "text",
+                      },
+                    ],
+                  });
+                }}
+              />
+            </div>
           </div>
         </div>
-
-        {!state.s3Key && (
-         <div className="relative w-screen h-screen flex flex-col">
-         <div className="fixed -top-40 left-0 mr-4 w-full h-full flex items-center justify-center">
-           <GChatterIntro />
-         </div>
-        
-       </div>
-        )}
-     
-     
-        <div
-          className={`flex-1 items-center justify-center overflow-y-auto  ${openRight ? "mr-80" : ""}`}
-          // style={{
-          //   backgroundColor: "#F6F8FA",
-          // }}
-        >
-          <ChatBox
-            state={state}
-            setState={setState}
-            isUploading={isUploading}
-            setIsUploading={setIsUploading}
-            openRight={openRight}
-          
-          />
-        </div>
-        <div
-  className={`${
-    state.s3Key
-      ?  `flex items-center justify-center  ${openRight ? "mr-80" : ""}`
-      : `fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-[80%] px-4`
-  }`}
-  
-> 
-  <ChatInput
-    onSend={handleSendMessage}
-    disabled={state.isLoading || !state.s3Key}
-    onError={handleError}
-    isUploading={isUploading}
-    setIsUploading={setIsUploading}
-    s3Key={state.s3Key || ""}
-    bucket={import.meta.env.VITE_S3_BUCKET_NAME}
-    onFileUploaded={(key: string) => {
-      setState({
-        ...state,
-        s3Key: key,
-        messages: [
-          {
-            id: Date.now().toString(),
-            content:
-              'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
-            role: "assistant",
-            timestamp: new Date(),
-            type: "text",
-          },
-        ],
-      });
-    }}
-  />
-</div>
-
-       
+        <div className="w-full px-2 pb-4 text-center text-xs text-gray-500">
+          <div>
+            <div>Chat AI can make mistakes. Check important info.</div>
           </div>
-     
-       
-     {!isMobile && !isTab && (<Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>)} 
-    
+        </div>
+      </div>
+
+      {!isMobile && !isTab && (
+        <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat} />
+      )}
+
       <RightSideBar openRight={openRight} setOpenRight={setOpenRight} />
-     
-    
     </Main>
   );
 }

@@ -1,16 +1,16 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App';
-import './index.css';
-import { initSupabase } from './lib/supabase';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import "./index.css";
+import { initSupabase } from "./lib/supabase";
 
 async function initApp() {
   try {
     await initSupabase();
-    
-    const root = document.getElementById('root');
+
+    const root = document.getElementById("root");
     if (!root) {
-      throw new Error('Root element not found');
+      throw new Error("Root element not found");
     }
 
     createRoot(root).render(
@@ -19,8 +19,8 @@ async function initApp() {
       </StrictMode>
     );
   } catch (error) {
-    console.error('Failed to initialize application:', error);
-    const root = document.getElementById('root');
+    console.error("Failed to initialize application:", error);
+    const root = document.getElementById("root");
     if (root) {
       root.innerHTML = `
         <div style="display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center;">

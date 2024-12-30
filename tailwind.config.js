@@ -10,6 +10,32 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        system: [
+          "ui-sans-serif",
+          "-apple-system",
+          "system-ui",
+          "Segoe UI",
+          "Helvetica",
+          "Apple Color Emoji",
+          "Arial",
+          "sans-serif",
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+        ],
+      },
+      // Adding ChatGPT-specific font sizes
+      fontSize: {
+        xs: ["0.75rem", { lineHeight: "1rem" }], // 12px
+        sm: ["0.875rem", { lineHeight: "1.25rem" }], // 14px
+        base: ["1rem", { lineHeight: "1.5rem" }], // 16px
+        md: ["1.0625rem", { lineHeight: "1.5rem" }], // 17px - ChatGPT's common text size
+        lg: ["1.125rem", { lineHeight: "1.75rem" }], // 18px
+        xl: ["1.25rem", { lineHeight: "1.75rem" }], // 20px
+        "2xl": ["1.5rem", { lineHeight: "2rem" }], // 24px - ChatGPT's heading size
+        "3xl": ["1.875rem", { lineHeight: "2.25rem" }], // 30px
+      },
+      // Rest of your existing configuration
       spacing: {
         xs: "var(--spacing-xs)",
         sm: "var(--spacing-sm)",
@@ -21,63 +47,31 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        chat: "1.5rem", // ChatGPT's rounded corners
+        full: "9999px", // For circular buttons
       },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        "chat-bg": "#f4f4f4", // ChatGPT's input background
+        "chat-border": "#e5e5e5",
+        "chat-text": "#343541",
+        "chat-placeholder": "#8e8ea0",
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        chart: {
-          1: "hsl(var(--chart-1))",
-          2: "hsl(var(--chart-2))",
-          3: "hsl(var(--chart-3))",
-          4: "hsl(var(--chart-4))",
-          5: "hsl(var(--chart-5))",
-        },
+        // ... rest of your colors
       },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
+      // Add specific heights for the chat interface
+      height: {
+        "chat-input": "44px",
+        "chat-min": "24px",
       },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+      maxHeight: {
+        "chat-max": "200px",
       },
+      // ... rest of your existing config
     },
   },
   plugins: [tailwindcssanimate],

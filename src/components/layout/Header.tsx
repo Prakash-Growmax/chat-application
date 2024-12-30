@@ -11,22 +11,23 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { useTokenUsage } from "@/hooks/useTokenUsage";
 import { cn } from "@/lib/utils";
-import { IconButton, useMediaQuery, useTheme } from "@mui/material";
+import { Avatar, IconButton, useMediaQuery, useTheme } from "@mui/material";
 
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import {
   Building2,
   ChevronDown,
   CreditCard,
+  Layout,
   LayoutDashboard,
   LogOut,
+  Menu,
   MenuIcon,
   Settings,
   User,
   Users,
-
 } from "lucide-react";
 import { useContext } from "react";
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 
 import { Link, useLocation } from "react-router-dom";
 import AppContext from "../context/AppContext";
@@ -45,61 +46,122 @@ export function Header() {
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const { data: tokens } = useTokenUsage();
   const location = useLocation();
-  const {open,setOpen,createNewChat}=useContext(AppContext)
-  const handleDrawerOpen=()=>{
-    setOpen(true)
-  }
-  const handleDrawerClose=()=>{
-    setOpen(false)
-  }
+  const { open, setOpen, createNewChat } = useContext(AppContext);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <header className="flex items-center justify-between px-4 py-4  bg-white">
+      {/* Left section */}
+      <div className="flex items-center space-x-2">
+        <button className="p-2 hover:bg-gray-100 rounded-md">
+          <Menu size={25} className="text-gray-800" />
+        </button>
+        <button className="p-2 hover:bg-gray-100 rounded-md">
+          <Layout size={25} className="text-gray-800" />
+        </button>
+        <div className="flex items-center space-x-2">
+          <span className="font-bold text-lg text-gray-800">ChatGPT</span>
+        </div>
+      </div>
+
+      {/* Right section */}
+      <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4">
+          <div className="w-8 h-8  rounded-full flex items-center justify-center cursor-pointer">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Avatar alt="Menu" size={30} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem asChild>
+                    <Link to="/plans" className="w-full">
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      Plans & Billing
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/teams" className="w-full">
+                      <Users className="mr-2 h-4 w-4" />
+                      Teams
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/settings" className="w-full">
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={signOut} className="text-red-600">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Log Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
   return (
     <header className="sticky top-0 z-50 border-b bg-white">
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-8">
-          
           <div>
-          {(isMobile || isTab) && user && ( open ? (     <IconButton
-          size="large"
-          edge="start"
-          aria-label="menu"
-          onClick={handleDrawerClose}
-          disableFocusRipple 
-          sx={{
-            mr: 2,
-            color: "black",
-            "&:focus": { outline: "none" }, 
-            "&:active": { outline: "none" }, 
-          }}
-        >
-          <MenuOpenIcon style={{ color: "black" }} />{" "}
-          {/* Ensures the MenuIcon is white */}
-        </IconButton>):(<IconButton
-          size="large"
-          edge="start"
-          aria-label="menu"
-          onClick={handleDrawerOpen}
-          disableFocusRipple 
-          sx={{
-            mr: 2,
-            color: "black",
-            "&:focus": { outline: "none" },
-            "&:active": { outline: "none" }, 
-          }}
-        >
-          <MenuIcon style={{ color: "black" }} />{" "}
-        
-        </IconButton>)  
-   
-      )}
+            {(isMobile || isTab) &&
+              user &&
+              (open ? (
+                <IconButton
+                  size="large"
+                  edge="start"
+                  aria-label="menu"
+                  onClick={handleDrawerClose}
+                  disableFocusRipple
+                  sx={{
+                    mr: 2,
+                    color: "black",
+                    "&:focus": { outline: "none" },
+                    "&:active": { outline: "none" },
+                  }}
+                >
+                  <MenuOpenIcon style={{ color: "black" }} />{" "}
+                  {/* Ensures the MenuIcon is white */}
+                </IconButton>
+              ) : (
+                <IconButton
+                  size="large"
+                  edge="start"
+                  aria-label="menu"
+                  onClick={handleDrawerOpen}
+                  disableFocusRipple
+                  sx={{
+                    mr: 2,
+                    color: "black",
+                    "&:focus": { outline: "none" },
+                    "&:active": { outline: "none" },
+                  }}
+                >
+                  <MenuIcon style={{ color: "black" }} />{" "}
+                </IconButton>
+              ))}
           </div>
-      
+
           <Link to="/" className="flex items-center gap-2">
             <Building2 className="h-6 w-6" />
             <span className="lg:text-xl  text-sm font-bold">
               CSV Insight AI
             </span>
           </Link>
- 
+
           {user && (
             <>
               <nav className="hidden lg:flex">
@@ -183,7 +245,9 @@ export function Header() {
           )}
         </div>
       </div>
-      {(isMobile || isTab) && (<Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>)} 
+      {(isMobile || isTab) && (
+        <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat} />
+      )}
     </header>
   );
 }

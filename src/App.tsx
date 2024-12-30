@@ -47,19 +47,17 @@ function App() {
                 setOpenRight,
                 state,
                 setState,
-              
               }}
             >
-              <div className="min-h-screen flex flex-col bg-background">
-                {/* Fixed Header */}
+              <div className="flex flex-col ">
                 <div className="fixed top-0 left-0 w-full z-50">
                   <Header />
                 </div>
 
                 {/* Scrollable Content */}
-                <div className="flex-1 pt-[64px] overflow-y-auto">
+                <div className="flex-1 min-h-screen">
                   <Suspense fallback={<LoadingScreen />}>
-                    <main>
+                    <main className="min-h-screen">
                       <Routes>
                         <Route
                           path="/login"
@@ -130,6 +128,7 @@ function App() {
                     </main>
                   </Suspense>
                 </div>
+
                 <Toaster />
                 <GlobalLoadingIndicator />
               </div>
