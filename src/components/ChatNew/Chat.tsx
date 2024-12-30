@@ -14,19 +14,21 @@ interface ChatProps {
 }
 const drawerWidth = 280;
 const Main = styled("main", {
-  shouldForwardProp: (prop) => prop !== "open",
+  shouldForwardProp: (prop) => prop !== "open" && prop !== "pin",
 })<{
   open?: boolean;
-}>(({ theme, open }) => ({
+  pin?: boolean;
+}>(({ theme, open, pin }) => ({
   flexGrow: 1,
   [theme.breakpoints.down("md")]: {
-    marginLeft: open ? "176px" : "", // Adjust the values as needed for mid-sized screens
+    marginLeft: open || pin ? "176px" : "", // Apply margin when either open or pin is true
   },
 
   [theme.breakpoints.up("md")]: {
-    marginLeft: open ? "176px" : "", // Default value for screens larger than "md"
+    marginLeft: open || pin ? "176px" : "", // Same logic for larger screens
   },
 }));
+
 function Chat({ message }: ChatProps) {
   const [isUploading, setIsUploading] = useState(false);
   const theme = useTheme();

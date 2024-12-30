@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import AppContext from "../context/AppContext";
 import LeftArrow from "./LeftArrow";
 const drawerWidth = 280;
 
@@ -84,11 +85,7 @@ const primaryNavItems = [
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 
-export default function Sidebar({
-  open,
-  setOpen,
-  createNewChat,
-}: SideBarProps) {
+export default function Sidebar({ createNewChat }: SideBarProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
@@ -96,7 +93,8 @@ export default function Sidebar({
   const { data } = useChatList();
   const [menu, setMenu] = React.useState(false);
   const location = useLocation();
-  const [pin, setpin] = React.useState(false);
+  // const [pin,setpin] = React.useState(false)
+  const { open, setOpen, pin, setpin } = React.useContext(AppContext);
   const handleMenuOpen = () => setMenu(true);
   const handleMenuClose = () => setMenu(false);
   const handleDrawerClose = () => setOpen(false);
