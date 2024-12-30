@@ -25,7 +25,7 @@ const ProtectedRoute = lazy(() => import("@/components/auth/ProtectedRoute"));
 function App() {
   const [open, setOpen] = useState(false);
   const [openRight, setOpenRight] = useState(false);
-
+    const [pin,setpin] = useState(false)
   const [state, setState] = useState<ChatState>({
     messages: [],
     isLoading: false,
@@ -47,6 +47,8 @@ function App() {
                 setOpenRight,
                 state,
                 setState,
+                pin,
+                setpin
               
               }}
             >

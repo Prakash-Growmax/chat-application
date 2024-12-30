@@ -40,11 +40,12 @@ export function ChatInput({
   const [error, setError] = useState<string | null>(null);
 
   const adjustTextareaHeight = useCallback(() => {
+    console.log("hi");
     const textarea = textareaRef.current;
     if (!textarea) return;
     
     textarea.style.height = "auto";
-    const maxHeight = s3Key ? 120 : 200; // Reduced height when s3Key is present
+    const maxHeight = s3Key ? 120 : 200; 
     const newHeight = Math.min(textarea.scrollHeight, maxHeight);
     textarea.style.height = `${newHeight}px`;
   }, [s3Key]);

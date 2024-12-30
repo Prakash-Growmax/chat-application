@@ -28,6 +28,7 @@ import * as React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import RightArrow from "./RightArrow";
 import LeftArrow from "./LeftArrow";
+import AppContext from "../context/AppContext";
 const drawerWidth = 280;
 
 const Main = styled("main", {
@@ -87,8 +88,7 @@ const primaryNavItems = [
 ];
 
 export default function Sidebar({
-  open,
-  setOpen,
+
   createNewChat,
 }: SideBarProps) {
   const theme = useTheme();
@@ -98,7 +98,8 @@ export default function Sidebar({
   const { data } = useChatList();
   const [menu, setMenu] = React.useState(false);
   const location = useLocation();
-  const [pin,setpin] = React.useState(false)
+  // const [pin,setpin] = React.useState(false)
+  const { open, setOpen,pin,setpin} = React.useContext(AppContext);
   const handleMenuOpen = () => setMenu(true);
   const handleMenuClose = () => setMenu(false);
   const handleDrawerClose = () => setOpen(false);

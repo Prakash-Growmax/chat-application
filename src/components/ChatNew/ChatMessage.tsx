@@ -51,7 +51,7 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
   const renderContent = () => {
     if (message.type === "text") {
       return (
-        <div className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+        <div className="text-base leading-relaxed text-justify" style={{ color: "#0D0D0D" }}>
           {message.isTyping ? (
             <Typewriter
               options={{
@@ -62,11 +62,14 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
               }}
             />
           ) : (
-            <p className="text-sm font-semibold text-muted-foreground">{message.content}</p>
+            <p className="text-base" style={{ color: "#0D0D0D" }}>
+              {message.content}
+            </p>
           )}
         </div>
       );
     }
+    
 
     if (message.type === "chart") {
       return (
@@ -166,20 +169,18 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
   
     return (
       <>
-      {isUser ? ( <motion.div
+      {isUser ? (<motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}>
             <div className="flex items-center justify-center">
-              <div className="flex flex-col  bg-white lg:w-[60%] md:w-[80%] w-[100%] px-4 py-2">
-              <div className="flex">
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-primary-foreground  ">
-              <User className="w-5 h-5" />
-              </div>
-               <p className="font-bold text-sm ml-2">ajitha@apptino.com</p>
-              </div>
-              <div className="flex w-full ml-10">
-              {renderContent()}
+              <div className="flex flex-col lg:w-[60%] md:w-[100%] w-[100%] ">
+           
+              <div className="flex justify-end">
+                <div className="w-auto lg:max-w-[60%] md:max-w-[60%] max-w-[80%] px-5 py-2.5 gap-1 rounded-3xl bg-[#E8E8E880]">
+                {renderContent()}
+                </div>
+             
               </div>
               </div>
 
@@ -188,17 +189,17 @@ export function ChatMessage({ message,openRight }: ChatMessageProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}>
-              <div className="flex items-center justify-center">
-                <div className="flex flex-col lg:w-[60%] md:w-[80%] w-[100%]">
-                  <div className="flex">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-secondary-foreground -mt-2">
-            <Bot className="w-6 h-6" />
-            </div>
-            <div className="font-bold text-sm ml-2">
-              <p>Assistant G-Chatter</p>
-            </div>
-                  </div>
-                <div className="flex bg-white w-full px-4 py-4 rounded-md">
+              <div className="flex items-center justify-center py-[18px] lg:px-2 md:px-4 px-3">
+                <div className="flex lg:gap-6 md:gap-3 gap-4 lg:w-[60%] md:w-[100%] w-[100%]">
+               
+                <div className="flex mt-4">
+                <Bot className="w-6 h-6" />
+                </div>
+         
+           
+          
+            
+                <div className="flex bg-transparent w-full px-4 py-4 rounded-md">
                   <div className="ml-4">
                   {renderContent()}
                   </div>

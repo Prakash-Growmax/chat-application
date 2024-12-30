@@ -16,31 +16,29 @@ interface ChatProps {
 }
 const drawerWidth = 280;
 const Main = styled("main", {
-  shouldForwardProp: (prop) => prop !== "open",
+  shouldForwardProp: (prop) => prop !== "open" && prop !== "pin",
 })<{
   open?: boolean;
-}>(({ theme, open }) => ({
+  pin?: boolean;
+}>(({ theme, open, pin }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  // transition: theme.transitions.create("margin", {
-  //   easing: theme.transitions.easing.sharp,
-  //   duration: theme.transitions.duration.leavingScreen,
-  // }),
   [theme.breakpoints.down("md")]: {
-    marginLeft: open ? "176px" : "", // Adjust the values as needed for mid-sized screens
+    marginLeft: (open || pin) ? "176px" : "", // Apply margin when either open or pin is true
   },
 
   [theme.breakpoints.up("md")]: {
-    marginLeft: open ? "176px" : "", // Default value for screens larger than "md"
+    marginLeft: (open || pin) ? "176px" : "", // Same logic for larger screens
   },
 }));
+
 function Chat({ message }: ChatProps) {
   const [isUploading, setIsUploading] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const { queue, processing, addToQueue, processQueue } = useMessageQueue();
-  const { open, setOpen, openRight, setOpenRight, state, setState } = useContext(AppContext);
+  const { open, setOpen, openRight, setOpenRight, state, setState,pin,setpin} = useContext(AppContext);
 
   // const [state, setState] = useState<ChatState>({
   //   messages: [],
@@ -185,7 +183,7 @@ function Chat({ message }: ChatProps) {
   }, []);
 
   return (
-    <Main open={open} style={{background:"#F6F8FA"}}>
+    <Main open={open} pin={pin} style={{background:"#F6F8FA"}}>
       <div className="relative -mt-8 flex flex-col h-screen max-h-[90vh] overflow-hidden" style={{background:"#F6F8FA"}}>
         <div className="mb-14 w-full">
           <div
@@ -214,7 +212,7 @@ function Chat({ message }: ChatProps) {
      
      
         <div
-          className={`flex-1 items-center justify-center overflow-y-auto  ${openRight ? "mr-80" : ""}`}
+          className={`flex-1 items-center justify-center overflow-y-auto ${openRight ? "mr-80" : ""}`}
           // style={{
           //   backgroundColor: "#F6F8FA",
           // }}
@@ -267,7 +265,7 @@ function Chat({ message }: ChatProps) {
           </div>
      
        
-     {!isMobile && !isTab && (<Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat}/>)} 
+     {!isMobile && !isTab && (<Sidebar createNewChat={createNewChat}/>)} 
     
       <RightSideBar openRight={openRight} setOpenRight={setOpenRight} />
      
