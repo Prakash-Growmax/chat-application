@@ -32,6 +32,8 @@ import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import AppContext from "../context/AppContext";
 import Sidebar from "../ui/sidebar";
+import MenuNew from "../ui/menu-new";
+import ChatEdit from "../ui/chat-edit";
 const primaryNavItems = [
   { label: "Chat", href: "/chat", icon: LayoutDashboard },
   { label: "Team", href: "/teams", icon: Building2 },
@@ -47,70 +49,86 @@ export function Header() {
   const { data: tokens } = useTokenUsage();
   const location = useLocation();
   const { open, setOpen, createNewChat } = useContext(AppContext);
-  const handleDrawerOpen = () => {
+  const handleDrawer = () => {
     setOpen(true);
   };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+ 
 
   return (
-    <header className="flex items-center justify-between px-4 py-4  bg-white">
-      {/* Left section */}
-      <div className="flex items-center space-x-2">
-        <button className="p-2 hover:bg-gray-100 rounded-md">
-          <Menu size={25} className="text-gray-800" />
+    <header className="fixed top-0 w-full h-16 bg-white z-50">
+    <div className="relative h-full flex items-center justify-between px-4">
+      {/* Left section with fixed width container */}
+      <div
+        className="relative flex items-center w-auto space-x-2"
+       
+      >
+        <button
+          className="p-2 hover:bg-gray-100 rounded-md" 
+        onClick={handleDrawer} >
+          <MenuNew />
         </button>
-        <button className="p-2 hover:bg-gray-100 rounded-md">
-          <Layout size={25} className="text-gray-800" />
+        <button
+          className="p-2 hover:bg-gray-100 rounded-md" 
+        >
+          <ChatEdit />
         </button>
-        <div className="flex items-center space-x-2">
-          <span className="font-bold text-lg text-gray-800">ChatGPT</span>
-        </div>
+
+        {/* ChatGPT Label */}
+        {open ? (
+          <div
+            className="absolute left-[290px] font-bold text-lg text-gray-800"
+            style={{ whiteSpace: "nowrap" }}
+          >
+            ChatGPT
+          </div>
+        ) : (
+          <div className="flex items-center space-x-2">
+            <span className="font-bold text-lg text-gray-800">ChatGPT</span>
+          </div>
+        )}
       </div>
 
-      {/* Right section */}
-      <div className="flex items-center space-x-4">
-        <div className="flex items-center space-x-4">
-          <div className="w-8 h-8  rounded-full flex items-center justify-center cursor-pointer">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar alt="Menu" size={30} />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem asChild>
-                    <Link to="/plans" className="w-full">
-                      <CreditCard className="mr-2 h-4 w-4" />
-                      Plans & Billing
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/teams" className="w-full">
-                      <Users className="mr-2 h-4 w-4" />
-                      Teams
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/settings" className="w-full">
-                      <Settings className="mr-2 h-4 w-4" />
-                      Settings
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={signOut} className="text-red-600">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Log Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
+      {/* Right section - fixed position */}
+      <div className="flex items-center">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div className="w-8 h-8 rounded-full cursor-pointer">
+              <Avatar alt="Menu" sx={{ width: 32, height: 32 }} />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem asChild>
+                <Link to="/plans" className="w-full">
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Plans & Billing
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/teams" className="w-full">
+                  <Users className="mr-2 h-4 w-4" />
+                  Teams
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/settings" className="w-full">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={signOut} className="text-red-600">
+              <LogOut className="mr-2 h-4 w-4" />
+              Log Out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
-    </header>
+    </div>
+  </header>
   );
   return (
     <header className="sticky top-0 z-50 border-b bg-white">
