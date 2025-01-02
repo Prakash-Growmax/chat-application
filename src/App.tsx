@@ -18,6 +18,7 @@ import Team from "./components/Teams/Team";
 import AppContext from "./components/context/AppContext";
 import InviteAcceptedPage from "./pages/InviteAcceptedPage";
 import { ChatState } from "./types";
+import Sidebar from "./components/ui/sidebar";
 
 const AuthWrapper = lazy(() => import("@/components/auth/AuthWrapper"));
 const ProtectedRoute = lazy(() => import("@/components/auth/ProtectedRoute"));
@@ -25,7 +26,6 @@ const ProtectedRoute = lazy(() => import("@/components/auth/ProtectedRoute"));
 function App() {
   const [open, setOpen] = useState(false);
   const [openRight, setOpenRight] = useState(false);
-  const [pin, setpin] = useState(false);
   const [state, setState] = useState<ChatState>({
     messages: [],
     isLoading: false,
@@ -47,15 +47,16 @@ function App() {
                 setOpenRight,
                 state,
                 setState,
-                pin,
-                setpin,
+            
               }}
             >
               <div className="flex flex-col ">
-                <div className="fixed top-0 left-0 w-full z-50">
+                <div className="fixed h-18 top-0 left-0 w-full z-50">
                   <Header />
                 </div>
-
+                <div className="flex">
+              <Sidebar />
+                </div>
                 {/* Scrollable Content */}
                 <div className="flex-1 min-h-screen">
                   <Suspense fallback={<LoadingScreen />}>

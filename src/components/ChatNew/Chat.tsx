@@ -6,7 +6,6 @@ import { useMessageQueue } from "@/lib/useMessageQuesue";
 import { Message } from "@/types";
 import { styled, useMediaQuery, useTheme } from "@mui/material";
 import RightSideBar from "../ui/RightSideBar";
-import Sidebar from "../ui/sidebar";
 import ChatBox from "./ChatBox";
 import { ChatInput } from "./ChatInput";
 interface ChatProps {
@@ -14,14 +13,18 @@ interface ChatProps {
 }
 const drawerWidth = 280;
 const Main = styled("main", {
-  shouldForwardProp: (prop) => prop !== "open" && prop !== "pin",
+  shouldForwardProp: (prop) => prop !== "open",
 })<{
   open?: boolean;
-  pin?: boolean;
-}>(({ theme, open, pin }) => ({
+}>(({ theme, open }) => ({
   flexGrow: 1,
+  padding: theme.spacing(3),
+  // transition: theme.transitions.create("margin", {
+  //   easing: theme.transitions.easing.sharp,
+  //   duration: theme.transitions.duration.leavingScreen,
+  // }),
   [theme.breakpoints.down("md")]: {
-    marginLeft: open || pin ? "176px" : "", // Apply margin when either open or pin is true
+    marginLeft: open ? "176px" : "", // Adjust the values as needed for mid-sized screens
   },
 
   [theme.breakpoints.up("md")]: {
@@ -150,32 +153,6 @@ function Chat({ message }: ChatProps) {
     }
   }, [processing, queue, processQueue, processMessage]);
 
-  useEffect(() => {
-    const handleMouseMove = (event) => {
-      // Get the width of the viewport
-      const viewportWidth = window.innerWidth;
-
-      // Calculate the threshold (e.g., 20% of viewport width)
-      const threshold = viewportWidth * 0.2;
-
-      // If mouse is within threshold from left edge, open sidebar
-      if (event.clientX <= threshold) {
-        setOpen(true);
-      } else {
-        setOpen(false);
-      }
-    };
-
-    // Add event listener
-    window.addEventListener("mousemove", handleMouseMove);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <Main open={open} className="relative max-h-screen p-2 overflow-hidden">
       <div className=" flex flex-col">
@@ -251,9 +228,9 @@ function Chat({ message }: ChatProps) {
         </div>
       </div>
 
-      {!isMobile && !isTab && (
+      {/* {!isMobile && !isTab && (
         <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat} />
-      )}
+      )} */}
 
       <RightSideBar openRight={openRight} setOpenRight={setOpenRight} />
     </Main>
