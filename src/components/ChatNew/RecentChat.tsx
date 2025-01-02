@@ -1,17 +1,11 @@
-
-import { useState } from "react";
+import { useGetChatHistory } from "@/hooks/useGetChatHistory";
 import { useParams } from "react-router-dom";
 import Chat from "./Chat";
-import { useGetChatHistory } from "@/hooks/useGetChatHistory";
 
-const RecentChat=()=>{
-    const { id } = useParams();
- const {data}=useGetChatHistory(id);
+const RecentChat = () => {
+  const { id } = useParams();
+  const { data } = useGetChatHistory(id);
 
-
- return(
-    <Chat message={data}/>
- )
-
-}
-export default RecentChat
+  return <Chat message={data} />;
+};
+export default RecentChat;

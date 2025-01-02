@@ -12,6 +12,8 @@ export async function sendOTP(email: string): Promise<OTPResponse> {
       email,
       options: {
         shouldCreateUser: true,
+        channel: "email",
+        type: "otp",
       },
     });
 

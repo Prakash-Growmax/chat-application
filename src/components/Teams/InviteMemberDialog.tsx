@@ -33,7 +33,6 @@ export const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
   const [role, setRole] = useState<"admin" | "member">("member");
   const [isLoading, setIsLoading] = useState(false);
   const { profile } = useProfile();
-  console.log("🚀 ~ profile:", profile);
   const isOwner = profile?.role === "admin";
 
   const handleSubmit = async (e: React.FormEvent) => {

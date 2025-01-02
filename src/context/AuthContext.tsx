@@ -111,13 +111,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loadingState.startLoading("Verifying login code...");
     try {
       const { session } = await AuthService.verifyOTP(email, otp);
-
       if (session?.user) {
         const userData = await buildUserProfile(session.user);
         setUser(userData);
         toast.success("Successfully verified");
         return;
       }
+
       throw new Error("Failed to verify login code");
     } catch (error) {
       console.error("OTP verification error:", error);

@@ -9,11 +9,12 @@ export interface User {
 export interface Message {
   id: string;
   content: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   timestamp: Date;
-  type: 'text' | 'chart' | 'table';
+  type: "text" | "chart" | "table";
   data?: any;
   error?: boolean;
+  isTyping: boolean;
 }
 export interface Organization {
   id: string;

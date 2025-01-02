@@ -25,7 +25,7 @@ const Main = styled("main", {
   },
 
   [theme.breakpoints.up("md")]: {
-    marginLeft: open || pin ? "176px" : "", // Same logic for larger screens
+    // marginLeft: (open || pin) ? "176px" : "", // Same logic for larger screens
   },
 }));
 

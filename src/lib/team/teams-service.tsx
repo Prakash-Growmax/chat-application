@@ -123,13 +123,23 @@ export async function cancelInvitation(
   if (error) throw error;
 }
 
-export async function acceptInvitation(userId: string) {
+export async function acceptInvitation() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const invitationId = user?.user_metadata?.invitation_id;
-  const organizationId = user?.user_metadata?.organization_id;
-  const role = user?.user_metadata?.role;
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user?.id)
+    .single();
+  console.log("🚀 ~ acceptInvitation ~ profile:", profile);
+
+  if (profileError) throw profileError;
+
+  const invitationId = profile?.invitation_id;
+  const organizationId = profile?.organization_id;
+  const role = profile?.role;
 
   if (!invitationId || !organizationId || !role) {
     throw new Error("Invalid invitation data");
@@ -137,7 +147,7 @@ export async function acceptInvitation(userId: string) {
 
   // Start a transaction using RPC
   const { error } = await supabase.rpc("accept_invitation", {
-    user_id: userId,
+    user_id: user?.id,
     invitation_id: invitationId,
     p_organization_id: organizationId,
     p_role: role,

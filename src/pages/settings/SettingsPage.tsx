@@ -12,6 +12,7 @@ import { useState } from "react";
 
 export function SettingsPage() {
   const { profile, loading, error } = useProfile();
+  console.log("🚀 ~ SettingsPage ~ profile:", profile);
   const { organization, updateOrganizationName } = useOrganization(
     profile?.organization_id
   );

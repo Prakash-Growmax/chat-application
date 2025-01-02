@@ -41,33 +41,24 @@ export function useOrganization(organizationId?: string) {
   }, [organizationId]);
 
   const updateOrganizationName = async (name: string) => {
-    console.log("🚀 ~ updateOrganizationName ~ name:", name);
-    console.log(
-      "🚀 ~ updateOrganizationName ~ organizationId:",
-      organizationId
-    );
-
     if (!organization?.id) {
       return { success: false, error: "No organization found" };
     }
-    const { data: res } = await supabase
+    await supabase
       .from("organizations")
       .select("*")
       .eq("id", organizationId)
       .single();
-    console.log("🚀 ~ updateOrganizationName ~ res:", res);
 
     try {
       setLoading(true);
-      const { data, error: updateError } = await supabase
+      const { error: updateError } = await supabase
         .from("organizations")
         .update({
           name,
         })
         .eq("id", organizationId)
         .select();
-      console.log("🚀 ~ updateOrganizationName ~ data:", data);
-
       if (updateError) throw updateError;
 
       await fetchOrganization();
