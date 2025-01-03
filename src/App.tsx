@@ -26,13 +26,7 @@ const ProtectedRoute = lazy(() => import("@/components/auth/ProtectedRoute"));
 function App() {
   const [open, setOpen] = useState(false);
   const [openRight, setOpenRight] = useState(false);
-  const [state, setState] = useState<ChatState>({
-    messages: [],
-    isLoading: false,
-    csvData: null,
-    error: null,
-    s3Key: null,
-  });
+
 
   return (
     <ThemeProvider defaultTheme="light" storageKey="ui-theme">
@@ -45,8 +39,7 @@ function App() {
                 setOpen,
                 openRight,
                 setOpenRight,
-                state,
-                setState,
+              
             
               }}
             >

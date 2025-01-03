@@ -28,17 +28,24 @@ const Main = styled("main", {
   },
 
   [theme.breakpoints.up("md")]: {
-    // marginLeft: (open || pin) ? "176px" : "", // Same logic for larger screens
+    marginLeft: open ? "100px" : "", // Default value for screens larger than "md"
   },
 }));
 
 function Chat({ message }: ChatProps) {
+    const [state, setState] = useState<ChatState>({
+      messages: [],
+      isLoading: false,
+      csvData: null,
+      error: null,
+      s3Key: null,
+    });
   const [isUploading, setIsUploading] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const { queue, processing, addToQueue, processQueue } = useMessageQueue();
-  const { open, setOpen, openRight, setOpenRight, state, setState } =
+  const { open, setOpen, openRight, setOpenRight } =
     useContext(AppContext);
 
   const processMessage = useCallback(
@@ -161,7 +168,7 @@ function Chat({ message }: ChatProps) {
             <div className="relative inline-flex justify-center text-center">
               {!state.s3Key && (
                 <h1
-                  className="text-[30px] leading-[36px] font-semibold text-[rgb(13,13,13)]"
+                  className="text-[30px] leading-[36px] font-semibold text-[rgb(13,13,13)] lg:mr-0 md:mr-8 mr-12"
                   style={{
                     fontFamily:
                       'ui-sans-serif, -apple-system, system-ui, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"',
@@ -174,9 +181,7 @@ function Chat({ message }: ChatProps) {
           </div>
           {Boolean(state?.messages?.length > 0) && (
             <div
-              className={`flex-1 items-center justify-center overflow-y-auto  ${
-                openRight ? "mr-80" : ""
-              }`}
+              className={`flex-1 items-center justify-center overflow-y-auto lg:mr-0 md:mr-12 `}
               // style={{
               //   backgroundColor: "#F6F8FA",
               // }}
@@ -190,8 +195,9 @@ function Chat({ message }: ChatProps) {
               />
             </div>
           )}
-          <div className="text-base px-3 w-full md:px-5 lg:px-4 xl:px-5 pb-8">
-            <div className="mx-auto flex flex-1 gap-4 text-base md:gap-5 lg:gap-6 md:max-w-3xl">
+          <div className={`text-base px-3 w-full md:px-5 lg:px-4 xl:px-5 pb-8 lg:mr-0 md:mr-8 ${state.s3Key ? "" : "mr-12"}`}>
+          <div className="mx-auto flex flex-1 gap-3 md:gap-4 lg:gap-5 xl:gap-6 md:max-w-4xl">
+          {/* <div className="mx-auto flex flex-1 gap-4 text-base md:gap-5 lg:gap-6 md:max-w-3xl"> */}
               {" "}
               <ChatInput
                 onSend={handleSendMessage}

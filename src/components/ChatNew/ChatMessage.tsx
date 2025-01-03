@@ -121,10 +121,10 @@ const ChartTableResponse = ({
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
-        setLayoutDimensions({ width: 300, height: 300 });
+        setLayoutDimensions({ width: 250, height: 300 });
       } else if (window.innerWidth >= 768 && window.innerWidth < 1024) {
         // Mid-screen dimensions
-        setLayoutDimensions({ width: 400, height: 300 });
+        setLayoutDimensions({ width: 400, height: 350 });
       } else {
         // Larger screen dimensions
         setLayoutDimensions({ width: 500, height: 300 });

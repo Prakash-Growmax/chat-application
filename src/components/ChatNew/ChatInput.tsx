@@ -1,4 +1,4 @@
-import { S3UploadError, uploadToS3 } from "@/lib/s3-client";
+import { S3UploadError, UploadProgress, uploadToS3 } from "@/lib/s3-client";
 import { Tooltip } from "@mui/material";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUp, Paperclip } from "lucide-react";
@@ -27,12 +27,14 @@ export function ChatInput({
   isUploading,
   setIsUploading,
   s3Key,
-  bucket,
 }: ChatInputProps) {
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<UploadProgress | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const adjustTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current;
@@ -54,13 +56,14 @@ export function ChatInput({
     }
   }, [s3Key]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInput(e.target.value);
-  };
-
   const handleFileUpload = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
+      if (!file) {
+        console.error("No file selected");
+        return;
+      }
+
       setFileName(file.name);
       setIsUploading(true);
       setError(null);
@@ -83,7 +86,7 @@ export function ChatInput({
         setUploadProgress(null);
       }
     },
-    [onFileUploaded, onError]
+    [onFileUploaded, onError, setIsUploading]
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,56 +106,55 @@ export function ChatInput({
     }
   };
 
-  // Calculate dynamic heights based on s3Key
-  const minContainerHeight = s3Key ? "min-h-24" : "min-h-40";
-  const footerHeight = s3Key ? "h-10" : "h-14";
-  const textareaPaddingBottom = s3Key ? "pb-12" : "pb-14";
-
   return (
     <div className="w-full">
       <div className="flex justify-center">
-        <form className="w-full" onSubmit={handleSubmit}>
+        <form className="w-full" onSubmit={handleSubmit} ref={containerRef}>
           <div className="relative flex h-full max-w-full flex-1 flex-col">
             <div className="group relative flex w-full items-center">
               <div className="w-full">
                 <div
                   id="composer-background"
-                  className="flex w-full cursor-text flex-col rounded-3xl px-2.5 py-1 transition-colors bg-[#f4f4f4] dark:bg-token-main-surface-secondary"
+                  className="flex w-full cursor-text flex-col rounded-3xl px-2.5 py-1 transition-colors bg-[#f4f4f4]"
                 >
                   <div className="flex min-h-[44px] items-start pl-2">
-                    <div className="flex-1 min-w-0 max-w-full">
-                      <div className="max-h-52 overflow-auto">
-                        <textarea
-                          ref={textareaRef}
-                          value={input}
-                          onChange={(e) => {
-                            setInput(e.target.value);
-                            adjustTextareaHeight();
-                          }}
-                          placeholder="Message Chat AI..."
-                          className="block h-10 w-full resize-none border-0 bg-transparent px-0 py-2 text-base text-token-text-primary placeholder:text-gray-500 focus:outline-none focus:ring-0"
-                          style={{ height: "24px", minHeight: "24px" }}
-                          data-virtualkeyboard="true"
-                        />
-                      </div>
-                    </div>
-                    <div className="w-[32px] pt-1"></div>
+                    <textarea
+                      ref={textareaRef}
+                      value={input}
+                      onChange={(e) => {
+                        setInput(e.target.value);
+                        adjustTextareaHeight();
+                      }}
+                      placeholder="Message Chat AI..."
+                      className="block h-10 w-full resize-none border-0 bg-transparent px-0 py-2 text-base text-token-text-primary placeholder:text-gray-500 focus:outline-none"
+                      onKeyDown={handleKeyDown}
+                    />
                   </div>
 
                   <div className="flex h-[44px] items-center justify-between">
                     <div className="flex gap-x-1">
                       {/* Attachment button */}
-                      <div className="relative">
+                      <input
+                        type="file"
+                        accept=".csv"
+                        onChange={handleFileUpload}
+                        className="hidden"
+                        id="csv-upload"
+                        disabled={isUploading}
+                      />
+                      <Tooltip title="Upload CSV">
                         <button
-                          aria-label="Attach files is unavailable"
-                          className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 opacity-30"
+                          type="button"
+                          className="flex items-center gap-2 text-black hover:bg-gray-100 rounded p-2 transition-colors"
+                          onClick={() =>
+                            document.getElementById("csv-upload")?.click()
+                          }
                         >
-                          <Paperclip size={20} />
+                          {isUploading ? <Spinner /> : <AttachIcon />}
                         </button>
-                      </div>
+                      </Tooltip>
                     </div>
 
-                    {/* Send button */}
                     <button
                       type="submit"
                       disabled={!input.trim()}
@@ -170,88 +172,6 @@ export function ChatInput({
             </div>
           </div>
         </form>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="flex flex-col w-full ">
-      <div className="relative flex-1 flex items-center justify-center">
-        <div
-          className={`relative w-full max-w-8xl lg:w-[60%] md:w-[80%] w-[90%] ${minContainerHeight}`}
-        >
-          <Textarea
-            ref={textareaRef}
-            value={input}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            placeholder="Message G-Chat"
-            className={`w-full rounded-2xl py-4 px-8 resize-none placeholder:font-semibold leading-[1.5] text-base transition-all bg-white shadow-md ${textareaPaddingBottom}`}
-            style={{
-              border: "1px solid #e0e0e0",
-              outline: "none",
-              boxShadow: "none",
-              minHeight: s3Key ? "96px" : "160px",
-              maxHeight: s3Key ? "120px" : "600px",
-              overflowY: "auto",
-            }}
-          />
-
-          <div
-            className={`absolute bottom-0 left-0 right-0 ${footerHeight} bg-white shadow-md border-b border-l border-r rounded-tl-none rounded-tr-none rounded-2xl`}
-          >
-            <div className="flex justify-between items-center px-3 h-full">
-              <div className="flex items-center gap-2">
-                <input
-                  type="file"
-                  accept=".csv"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                  id="csv-upload"
-                  disabled={isUploading}
-                />
-                <Tooltip title="Upload CSV">
-                  <button
-                    type="button"
-                    className="flex items-center gap-2 text-black hover:bg-gray-100 rounded p-2 transition-colors"
-                    onClick={() =>
-                      document.getElementById("csv-upload")?.click()
-                    }
-                  >
-                    {isUploading ? <Spinner /> : <AttachIcon />}
-                  </button>
-                </Tooltip>
-
-                {s3Key && (
-                  <div>
-                    <Tooltip title="Preview CSV">
-                      <CSVPreview s3Key={s3Key} bucket={bucket} />
-                    </Tooltip>
-                  </div>
-                )}
-              </div>
-
-              <AnimatePresence>
-                {input.trim() && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                  >
-                    <Button
-                      type="submit"
-                      className="flex items-center gap-2 bg-black hover:bg-blue-600 rounded-full p-2"
-                      disabled={isSubmitting || !input.trim()}
-                      onClick={handleSubmit}
-                    >
-                      <ArrowUp className="h-8 w-5" />
-                    </Button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
