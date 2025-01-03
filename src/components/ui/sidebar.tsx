@@ -35,7 +35,15 @@ import DeleteIcon from "./delete-icon";
 import MenuNew from "./menu-new";
 import ChatEdit from "./chat-edit";
 import TokenIcon from '@mui/icons-material/Token';
-const drawerWidth = 280;
+import MenuClose from "./menu-close";
+import MyRecent from "../ChatNew/MyRecent";
+import MyFiles from "./my-file";
+import WorkFlow from "./workflow";
+import ResourcesIcon from "./resources-icons";
+import Resources from "../ChatNew/Resources";
+import ProfileLoginIcon from "./profilelog-icon";
+import LogoutIcon from "./logout-icon";
+const drawerWidth = 250;
 
 
 
@@ -133,12 +141,20 @@ export default function Sidebar() {
       boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", // Optional for a shadow effect
     }}
   >
-    <div className="flex justify-between w-full">
-      <div className="flex-1" onClick={handleDrawerClose}>
-        <MenuNew />
+    <div className="flex justify-between w-full px-2">
+      <div className="flex-1" >
+      <p
+  className="text-xl text-[#52D999] font-semibold"
+  style={{
+    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+  }}
+>
+  Ansight
+</p>
+
       </div>
-      <div className="flex-none">
-        <ChatEdit />
+      <div className="flex-none" onClick={handleDrawerClose}>
+      <MenuClose />
       </div>
     </div>
   </DrawerHeader>
@@ -151,95 +167,56 @@ export default function Sidebar() {
     }}
   >
     <List>
-      <div className="flex flex-col cursor-pointer px-2">
-        <div className="flex justify-between w-full group hover:bg-gray-200 rounded-lg px-2 py-2">
-          <div className="flex">
-            <p className="text-base">ChatGpt</p>
-          </div>
-          <div className="flex-none opacity-0 group-hover:opacity-100">
-            <ChatEdit />
-          </div>
-        </div>
-      </div>
+      <div className="flex flex-col">
+      <div className="flex items-center justify-center px-2 py-2">
+       
+       <button className="bg-white w-[176px] h-[31px] px-2.5 py-1.5 border border-gray-100 rounded-md text-sm flex items-center justify-center">
+   <span className="flex items-center gap-2">
+     <ChatEdit/>
+     <span>NewThread</span>
+   </span>
+ </button>
+ 
+         </div>
+         <div className="flex items-center px-2 gap-2">
+  <div>
+    <WorkFlow />
+  </div>
+  <p className="text-base font-semibold">Workspace</p>
+</div>
+
+</div>
+  
     </List>
     <Divider />
     <div className="w-full">
-      <List>
-        <p className="flex text-base font-bold ml-4">Recents</p>
-        <div className="px-2 py-0.5">
-          {data.map((chat, index) => (
-            <div key={index} className="relative mb-2">
-              <div
-                className={`flex items-center justify-between px-2 py-0.5 rounded-lg ${
-                  index === 0 || hoveredIndex === index ? "bg-gray-200" : ""
-                }`}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-              >
-                <div
-                  className="flex-1 cursor-pointer"
-                  onClick={() => {
-                    navigate(`/chat/${chat.chat_id}`);
-                    setOpen(false);
-                  }}
-                >
-                  <p
-                    className="text-sm text-gray-700 truncate px-2 py-2"
-                    style={{ width: "200px" }}
-                  >
-                    {chat.last_message}
-                  </p>
-                </div>
-                {(index === 0 || hoveredIndex === index) && (
-                  <div className="relative dropdown-container">
-                    <BootstrapTooltip title="Options" placement="top-start">
-                      <button
-                        onClick={(e) => toggleDropdown(index, e)}
-                        className="ml-2 p-1 text-sm text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-300"
-                      >
-                        <OptionIcon />
-                      </button>
-                    </BootstrapTooltip>
-                    {activeDropdownIndex === index && (
-                      <div
-                        className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <ul className="py-2 text-sm text-gray-700">
-                          <li>
-                            <button className="flex gap-3 w-full text-left px-4 py-2 hover:bg-gray-100">
-                              <ShareIcon />
-                              Share
-                            </button>
-                          </li>
-                          <li>
-                            <button className="flex gap-3 w-full text-left px-4 py-2 hover:bg-gray-100">
-                              <RenameIcon />
-                              Rename
-                            </button>
-                          </li>
-                          <li>
-                            <button className="flex gap-3 w-full text-left px-4 py-2 hover:bg-gray-100">
-                              <ArchiveIcon />
-                              Archive
-                            </button>
-                          </li>
-                          <li>
-                            <button className="flex gap-3 w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600">
-                              <DeleteIcon />
-                              Delete
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </List>
+    <List>
+  <div className="flex flex-col gap-4 px-4 py-4">
+    {/* Pass state and updater to MyRecent */}
+    <MyRecent isDropdownOpen={isDropdownOpen} setDropdownOpen={setDropdownOpen} />
+
+    {/* Adjust MyFiles transition dynamically */}
+    <div
+      className={`overflow-hidden transition-all duration-100 ease-in-out ${
+        isDropdownOpen ? "mt-40" : "mt-0"
+      }`}
+    >
+      <MyFiles />
+    </div>
+  </div>
+</List>
+ <div>
+ <div className="flex items-center px-2 gap-2 py-2">
+  <div>
+    <ResourcesIcon/>
+  </div>
+  <p className="text-base font-semibold">Resource</p>
+</div>
+<Divider />
+<div className="flex px-4 py-4">
+<Resources/>
+</div>
+ </div>
     </div>
   </Box>
 
@@ -251,14 +228,24 @@ export default function Sidebar() {
       zIndex: 10,
       backgroundColor: "#F9F9F9",
       boxShadow: "0px -2px 4px rgba(0, 0, 0, 0.1)", // Optional for a shadow effect
-      padding: theme.spacing(2),
+      // padding: theme.spacing(2),
     }}
   >
-    <div className="flex gap-3 items-center justify-center hover:bg-gray-200 px-2 py-2 rounded-lg" onClick={()=>{navigate("/plans")}}>
-     <TokenIcon/>
+    <div className="flex py-2 px-2.5">
+      <LogoutIcon/>
+      <p
+        className="flex text-sm font-medium ml-4 cursor-pointer"
+       
+      >
+        Logout
+      </p>
+
+    </div>
+    <div className="flex gap-3  hover:bg-gray-200 px-2.5 py-4 rounded-lg" onClick={()=>{navigate("/plans")}}>
+     <ProfileLoginIcon/>
      <div className="flex flex-col">
-     <p className="text-base">Upgrade plan</p>
-     <p className="text-xs text-gray-500">More access to the best models</p>
+     <p className="text-sm">Ajitha Jeeva</p>
+     <p className="text-xs text-gray-500">ajitha@apptino.com</p>
      </div>
     
 

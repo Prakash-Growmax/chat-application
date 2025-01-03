@@ -67,23 +67,19 @@ export function Header() {
         onClick={handleDrawer} >
           <MenuNew />
         </button>
-        <button
-          className="p-2 hover:bg-gray-100 rounded-md" 
-        >
-          <ChatEdit />
-        </button>
+      
 
         {/* ChatGPT Label */}
-        {open ? (
-          <div
-            className="absolute left-[290px] font-bold text-lg text-gray-800"
-            style={{ whiteSpace: "nowrap" }}
-          >
-            ChatGPT
-          </div>
-        ) : (
+        {!open  && (
           <div className="flex items-center space-x-2">
-            <span className="font-bold text-lg text-gray-800">ChatGPT</span>
+              <p
+  className="text-xl text-[#52D999] font-semibold"
+  style={{
+    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+  }}
+>
+  Ansight
+</p>
           </div>
         )}
       </div>

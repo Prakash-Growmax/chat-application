@@ -8,6 +8,7 @@ import Spinner from "../ui/Spinner";
 import AttachIcon from "../ui/attach-ui";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import ChatControl from "../ui/chat-control";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -27,6 +28,7 @@ export function ChatInput({
   isUploading,
   setIsUploading,
   s3Key,
+  bucket
 }: ChatInputProps) {
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -133,7 +135,7 @@ export function ChatInput({
 
                   <div className="flex h-[44px] items-center justify-between">
                     <div className="flex gap-x-1">
-                      {/* Attachment button */}
+                      <div className="flex">
                       <input
                         type="file"
                         accept=".csv"
@@ -154,6 +156,21 @@ export function ChatInput({
                         </button>
                       </Tooltip>
                     </div>
+                    {s3Key && (
+                  <div>
+                    <Tooltip title="Preview CSV">
+                      <CSVPreview 
+                        s3Key={s3Key} 
+                        bucket={bucket}
+                      />
+                    </Tooltip>
+                  </div>
+                )}
+             
+              
+                      </div>
+                      {/* Attachment button */}
+                
 
                     <button
                       type="submit"

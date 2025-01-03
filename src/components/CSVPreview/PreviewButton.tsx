@@ -17,7 +17,7 @@ export const PreviewButton: React.FC<PreviewButtonProps> = ({
       <button
     onClick={onClick}
     disabled={disabled || isLoading}
-    className="inline-flex items-center px-2 py-2 text-sm items-center justify-center bg-white text-black font-medium hover:bg-gray-100 rounded hover:outline-none hover:border-none focus:outline-none focus:ring-0 focus:border-none focus-visible:outline-none "
+    className="inline-flex items-center px-2 py-2 text-sm items-center justify-center bg-transparent text-black font-medium hover:bg-gray-100 rounded hover:outline-none hover:border-none focus:outline-none focus:ring-0 focus:border-none focus-visible:outline-none "
     aria-label="Preview CSV file"
   >
     {isLoading ? (
