@@ -4,10 +4,11 @@ import { useContext, useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 import Typewriter from "typewriter-effect";
 
-import { Bot } from "lucide-react";
 import AppContext from "../context/AppContext";
+import PaperCard from "../Custom-UI/PaperCard";
 import { Dialog, DialogContent } from "../ui/dialog";
 import SwitchButton from "../ui/Switchbutton";
+import ChatTypeInfo from "./ChatMessage/ChatTypeInfo";
 import { DataChart } from "./DataChat";
 import DataTable from "./DataTable";
 interface ChatMessageProps {
@@ -15,47 +16,41 @@ interface ChatMessageProps {
   recent: boolean;
   openRight: boolean;
 }
-export function ChatMessage({ message, openRight }: ChatMessageProps) {
+export function ChatMessage({ message }: ChatMessageProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const isUser = message.role === "user";
 
   return (
     <>
-      {isUser ? (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="flex items-center justify-center m-auto text-base py-[18px] px-3 w-full md:px-5 lg:px-4 xl:px-5">
-            <div className="flex flex-col lg:w-[60%] md:w-[100%] w-[100%]">
-              <div className="flex justify-end">
-                <div className="w-auto lg:max-w-[60%] md:max-w-[60%] max-w-[80%]  gap-1 rounded-3xl bg-[#E8E8E880]">
-                  <RenderContent message={message} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      ) : (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="flex items-center justify-center py-[18px] lg:px-2 md:px-5 px-3">
-            <div className="flex lg:gap-6 md:gap-0 gap-4 lg:w-[60%] md:w-[100%] w-[100%]">
-              <div className="flex ">
-                <Bot className="w-6 h-6" />
-              </div>
-
-              <div className="flex bg-transparent w-full rounded-md">
+      <div className="mx-auto max-w-5xl h-full">
+        {isUser ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex w-full items-center justify-center py-2">
+              <PaperCard className="w-full border-none rounded-3xl p-3">
+                <ChatTypeInfo isUser={isUser} />
                 <RenderContent message={message} />
-              </div>
+              </PaperCard>
             </div>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex w-full items-center justify-center py-2">
+              <PaperCard className="w-full border-none rounded-3xl p-3">
+                <ChatTypeInfo isUser={isUser} />
+                <RenderContent message={message} />
+              </PaperCard>
+            </div>
+          </motion.div>
+        )}
+      </div>
 
       <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
         <DialogContent className="max-w-[90vw] w-[90vw] h-[90vh] overflow-auto">
@@ -82,11 +77,7 @@ const TextResponse = ({
   message: { content: string; isTyping: boolean };
 }) => {
   return (
-    <div
-      className={`flex justify-end m-auto text-base ${
-        message?.role === "user" ? `py-[10px] px-3` : ""
-      }  w-full md:px-5 lg:px-4 xl:px-5`}
-    >
+    <div className={`flex m-auto text-base py-2`}>
       {message.isTyping ? (
         <Typewriter
           options={{
@@ -104,7 +95,6 @@ const TextResponse = ({
 };
 
 const ChartTableResponse = ({
-  message,
   openRight,
 }: {
   message: Message;

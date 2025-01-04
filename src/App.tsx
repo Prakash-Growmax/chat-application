@@ -16,9 +16,8 @@ import Chat from "./components/ChatNew/Chat";
 import RecentChat from "./components/ChatNew/RecentChat";
 import Team from "./components/Teams/Team";
 import AppContext from "./components/context/AppContext";
-import InviteAcceptedPage from "./pages/InviteAcceptedPage";
-import { ChatState } from "./types";
 import Sidebar from "./components/ui/sidebar";
+import InviteAcceptedPage from "./pages/InviteAcceptedPage";
 
 const AuthWrapper = lazy(() => import("@/components/auth/AuthWrapper"));
 const ProtectedRoute = lazy(() => import("@/components/auth/ProtectedRoute"));
@@ -26,7 +25,6 @@ const ProtectedRoute = lazy(() => import("@/components/auth/ProtectedRoute"));
 function App() {
   const [open, setOpen] = useState(false);
   const [openRight, setOpenRight] = useState(false);
-
 
   return (
     <ThemeProvider defaultTheme="light" storageKey="ui-theme">
@@ -39,8 +37,6 @@ function App() {
                 setOpen,
                 openRight,
                 setOpenRight,
-              
-            
               }}
             >
               <div className="flex flex-col ">
@@ -48,7 +44,7 @@ function App() {
                   <Header />
                 </div>
                 <div className="flex">
-              <Sidebar />
+                  <Sidebar />
                 </div>
                 {/* Scrollable Content */}
                 <div className="flex-1 min-h-screen">

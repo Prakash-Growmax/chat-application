@@ -62,14 +62,12 @@ export default function ChatBox({
                   className="flex-1 flex flex-col"
                 >
                   <div className="flex flex-col h-screen">
-                    {/* {!state.s3Key && <GChatterIntro />} */}
-
                     <div className="w-full md:w-full max-w-[100%] mx-auto h-full items-center justify-center">
                       <ScrollArea
                         ref={scrollAreaRef}
                         className="flex-1 px-4 overflow-auto my-4 items-center"
                       >
-                        <div className="mx-auto space-y-6">
+                        <div className="mx-auto">
                           {state.messages.map((message) => (
                             <ChatMessage
                               key={message.id}

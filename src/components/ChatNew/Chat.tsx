@@ -3,15 +3,14 @@ import AppContext from "../context/AppContext";
 
 import { getResponse } from "@/lib/pandas-api";
 import { useMessageQueue } from "@/lib/useMessageQuesue";
-import { Message } from "@/types";
-import { styled, useMediaQuery, useTheme } from "@mui/material";
+import { ChatState, Message } from "@/types";
+import { styled } from "@mui/material";
 import RightSideBar from "../ui/RightSideBar";
 import ChatBox from "./ChatBox";
 import { ChatInput } from "./ChatInput";
 interface ChatProps {
   message: (chat: string) => void;
 }
-const drawerWidth = 280;
 const Main = styled("main", {
   shouldForwardProp: (prop) => prop !== "open",
 })<{
@@ -33,20 +32,16 @@ const Main = styled("main", {
 }));
 
 function Chat({ message }: ChatProps) {
-    const [state, setState] = useState<ChatState>({
-      messages: [],
-      isLoading: false,
-      csvData: null,
-      error: null,
-      s3Key: null,
-    });
+  const [state, setState] = useState<ChatState>({
+    messages: [],
+    isLoading: false,
+    csvData: null,
+    error: null,
+    s3Key: null,
+  });
   const [isUploading, setIsUploading] = useState(false);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const { queue, processing, addToQueue, processQueue } = useMessageQueue();
-  const { open, setOpen, openRight, setOpenRight } =
-    useContext(AppContext);
+  const { open, setOpen, openRight, setOpenRight } = useContext(AppContext);
 
   const processMessage = useCallback(
     async (message: Message) => {
@@ -174,7 +169,7 @@ function Chat({ message }: ChatProps) {
                       'ui-sans-serif, -apple-system, system-ui, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"',
                   }}
                 >
-                  What can I help with?
+                  What do you want to analyze today ?
                 </h1>
               )}
             </div>
@@ -195,10 +190,13 @@ function Chat({ message }: ChatProps) {
               />
             </div>
           )}
-          <div className={`text-base px-3 w-full md:px-5 lg:px-4 xl:px-5 pb-8 lg:mr-0 md:mr-8 ${state.s3Key ? "" : "mr-12"}`}>
-          <div className="mx-auto flex flex-1 gap-3 md:gap-4 lg:gap-5 xl:gap-6 md:max-w-4xl">
-          {/* <div className="mx-auto flex flex-1 gap-4 text-base md:gap-5 lg:gap-6 md:max-w-3xl"> */}
-              {" "}
+          <div
+            className={`text-base px-3 w-full md:px-5 lg:px-4 xl:px-5 pb-8 lg:mr-0 md:mr-8 ${
+              state.s3Key ? "" : "mr-12"
+            }`}
+          >
+            <div className="mx-auto max-w-5xl flex flex-1">
+              {/* <div className="mx-auto flex flex-1 gap-4 text-base md:gap-5 lg:gap-6 md:max-w-3xl"> */}{" "}
               <ChatInput
                 onSend={handleSendMessage}
                 disabled={state.isLoading || !state.s3Key}
@@ -229,7 +227,7 @@ function Chat({ message }: ChatProps) {
         </div>
         <div className="w-full px-2 pb-4 text-center text-xs text-gray-500">
           <div>
-            <div>Chat AI can make mistakes. Check important info.</div>
+            <div>Ansight can make mistakes. Check important info.</div>
           </div>
         </div>
       </div>

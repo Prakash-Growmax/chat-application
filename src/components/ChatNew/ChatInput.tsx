@@ -1,13 +1,9 @@
-import { S3UploadError, UploadProgress, uploadToS3 } from "@/lib/s3-client";
+import { S3UploadError, uploadToS3 } from "@/lib/s3-client";
 import { Tooltip } from "@mui/material";
-import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUp, Paperclip } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { CSVPreview } from "../CSVPreview/CSVPreview";
 import Spinner from "../ui/Spinner";
 import AttachIcon from "../ui/attach-ui";
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -32,9 +28,6 @@ export function ChatInput({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState<UploadProgress | null>(null);
-  const [fileName, setFileName] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   const adjustTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current;
@@ -64,26 +57,19 @@ export function ChatInput({
         return;
       }
 
-      setFileName(file.name);
       setIsUploading(true);
-      setError(null);
 
       try {
-        const s3Key = await uploadToS3(file, (progress) => {
-          setUploadProgress(progress);
-        });
+        const s3Key = await uploadToS3(file, () => {});
         onFileUploaded(s3Key);
       } catch (error) {
         if (error instanceof S3UploadError) {
-          setError(error.message);
           onError(error.message);
         } else {
-          setError("An unexpected error occurred");
           onError("An unexpected error occurred");
         }
       } finally {
         setIsUploading(false);
-        setUploadProgress(null);
       }
     },
     [onFileUploaded, onError, setIsUploading]
@@ -115,7 +101,7 @@ export function ChatInput({
               <div className="w-full">
                 <div
                   id="composer-background"
-                  className="flex w-full cursor-text flex-col rounded-3xl px-2.5 py-1 transition-colors bg-[#f4f4f4]"
+                  className="flex w-full cursor-text flex-col rounded-3xl px-2.5 py-1 transition-colors shadow-lg"
                 >
                   <div className="flex min-h-[44px] items-start pl-2">
                     <textarea
@@ -125,7 +111,7 @@ export function ChatInput({
                         setInput(e.target.value);
                         adjustTextareaHeight();
                       }}
-                      placeholder="Message Chat AI..."
+                      placeholder="Message Ansight..."
                       className="block h-10 w-full resize-none border-0 bg-transparent px-0 py-2 text-base text-token-text-primary placeholder:text-gray-500 focus:outline-none"
                       onKeyDown={handleKeyDown}
                     />
@@ -157,9 +143,8 @@ export function ChatInput({
 
                     <button
                       type="submit"
-                      disabled={!input.trim()}
                       className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
-                        input.trim()
+                        input
                           ? "bg-black text-white hover:opacity-70"
                           : "bg-[#D7D7D7] text-[#f4f4f4]"
                       }`}
