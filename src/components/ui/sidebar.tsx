@@ -1,11 +1,7 @@
 import DarkLogo from "@/assets/Logo/DarkLogo";
 import { useChatList } from "@/hooks/useChatList";
-import {
-  Tooltip,
-  tooltipClasses,
-  TooltipProps,
-  useMediaQuery,
-} from "@mui/material";
+
+import { Tooltip, tooltipClasses, TooltipProps, useMediaQuery } from "@mui/material";
 import { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,17 +10,22 @@ import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import { styled, useTheme } from "@mui/material/styles";
 import * as React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
+
+
+import TokenIcon from '@mui/icons-material/Token';
+import MenuClose from "./menu-close";
 import MyRecent from "../ChatNew/MyRecent";
 import Resources from "../ChatNew/Resources";
 import AppContext from "../context/AppContext";
 import ChatEdit from "./chat-edit";
 import LogoutIcon from "./logout-icon";
-import MenuClose from "./menu-close";
-import MyFiles from "./my-file";
-import ProfileLoginIcon from "./profilelog-icon";
-import ResourcesIcon from "./resources-icons";
+import { useAuth } from "@/hooks/useAuth";
 import WorkFlow from "./workflow";
+import MyFiles from "./my-file";
+import ResourcesIcon from "./resources-icons";
+import ProfileLoginIcon from "./profilelog-icon";
 const drawerWidth = 250;
 
 interface AppBarProps extends MuiAppBarProps {
@@ -55,16 +56,15 @@ export default function Sidebar() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
-  const { data } = useChatList();
-  const [menu, setMenu] = React.useState(false);
-  const location = useLocation();
+
+
   // const [pin,setpin] = React.useState(false)
   const { open, setOpen } = React.useContext(AppContext);
-  const handleMenuOpen = () => setMenu(true);
-  const handleMenuClose = () => setMenu(false);
+
   const handleDrawerClose = () => setOpen(false);
   const [hoveredIndex, setHoveredIndex] = React.useState(null);
   const [isDropdownOpen, setDropdownOpen] = React.useState(false);
+    const { user, signOut } = useAuth();
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState(null);
   React.useEffect(() => {
     const handleClickOutside = (event) => {
@@ -84,7 +84,6 @@ export default function Sidebar() {
     e.stopPropagation();
     setActiveDropdownIndex((prevIndex) => (prevIndex === index ? null : index));
   };
-
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -96,28 +95,35 @@ export default function Sidebar() {
             width: isMobile ? "100%" : isTab ? "35%" : drawerWidth,
             boxSizing: "border-box",
             backgroundColor: "#F9F9F9",
-            display: "flex", // Ensure flex layout
-            flexDirection: "column", // Align header, content, footer vertically
-            maxHeight: "100vh", // Limit height to viewport
+            display: "flex",
+            flexDirection: "column",
+            maxHeight: "100vh",
           },
         }}
         variant="persistent"
         anchor="left"
         open={open}
       >
-        {/* Drawer Header */}
         <DrawerHeader
           sx={{
-            position: "sticky", // Makes the header fixed
+            position: "sticky",
             top: 0,
             zIndex: 10,
             backgroundColor: "#F9F9F9",
-            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", // Optional for a shadow effect
+            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
           }}
         >
           <div className="flex justify-between w-full px-2">
-            <div className="flex items-center">
-              <DarkLogo height={25} />
+            <div className="flex-1">
+              <p
+                className="text-xl text-[#52D999] font-semibold"
+                style={{
+                  fontFamily:
+                    'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                }}
+              >
+                Ansight
+              </p>
             </div>
             <div className="flex-none" onClick={handleDrawerClose}>
               <MenuClose />
@@ -125,20 +131,21 @@ export default function Sidebar() {
           </div>
         </DrawerHeader>
 
-        {/* Scrollable Content */}
         <Box
           sx={{
-            flexGrow: 1, // Takes up available space
-            overflowY: "auto", // Enables scrolling
+            flexGrow: 1,
+            overflowY: "auto",
           }}
         >
           <List>
             <div className="flex flex-col">
               <div className="flex items-center justify-center px-2 py-2">
-                <button className="bg-white w-[176px] h-[31px] px-2.5 py-1.5 border border-gray-100 rounded-md text-sm flex items-center justify-center">
+                <button className="group bg-white w-[176px] h-[31px] px-2.5 py-1.5 border border-gray-100 rounded-md text-sm flex items-center justify-center hover:text-black shadow">
                   <span className="flex items-center gap-2">
                     <ChatEdit />
-                    <span>NewThread</span>
+                    <span className="text-sm text-gray-500 group-hover:text-black">
+                      New Thread
+                    </span>
                   </span>
                 </button>
               </div>
@@ -153,17 +160,14 @@ export default function Sidebar() {
           <Divider />
           <div className="w-full">
             <List>
-              <div className="flex flex-col gap-4 px-4 py-4">
-                {/* Pass state and updater to MyRecent */}
+              <div className="flex flex-col gap-1 px-4 py-4">
                 <MyRecent
                   isDropdownOpen={isDropdownOpen}
                   setDropdownOpen={setDropdownOpen}
                 />
-
-                {/* Adjust MyFiles transition dynamically */}
                 <div
                   className={`overflow-hidden transition-all duration-100 ease-in-out ${
-                    isDropdownOpen ? "mt-40" : "mt-0"
+                    isDropdownOpen ? "mt-40" : ""
                   }`}
                 >
                   <MyFiles />
@@ -175,7 +179,7 @@ export default function Sidebar() {
                 <div>
                   <ResourcesIcon />
                 </div>
-                <p className="text-base font-semibold">Resource</p>
+                <p className="text-base font-semibold">Resources</p>
               </div>
               <Divider />
               <div className="flex px-4 py-4">
@@ -185,25 +189,23 @@ export default function Sidebar() {
           </div>
         </Box>
 
-        {/* Drawer Footer */}
         <Box
           sx={{
-            position: "sticky", // Makes the footer fixed
+            position: "sticky",
             bottom: 0,
             zIndex: 10,
             backgroundColor: "#F9F9F9",
-            boxShadow: "0px -2px 4px rgba(0, 0, 0, 0.1)", // Optional for a shadow effect
-            // padding: theme.spacing(2),
+            boxShadow: "0px -2px 4px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <div className="flex py-2 px-2.5">
+          <div className="flex py-2 px-2.5" onClick={signOut}>
             <LogoutIcon />
             <p className="flex text-sm font-medium ml-4 cursor-pointer">
               Logout
             </p>
           </div>
           <div
-            className="flex gap-3  hover:bg-gray-200 px-2.5 py-4 rounded-lg"
+            className="flex gap-3 hover:bg-gray-200 px-2.5 py-4 rounded-lg"
             onClick={() => {
               navigate("/plans");
             }}
@@ -218,4 +220,5 @@ export default function Sidebar() {
       </Drawer>
     </Box>
   );
+
 }

@@ -6,7 +6,7 @@ import TeamsIcon from "../ui/teams";
 export default function Resources() {
   const navigate = useNavigate();
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col">
       <div
         className="flex items-center px-2 py-2 rounded-lg hover:bg-gray-200 cursor-pointer"
         onClick={() => {
