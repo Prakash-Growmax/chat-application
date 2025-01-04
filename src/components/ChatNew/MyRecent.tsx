@@ -9,6 +9,8 @@ import ShareIcon from "../ui/share-icon";
 import RenameIcon from "../ui/rename-icon";
 import ArchiveIcon from "../ui/archive-icon";
 import DeleteIcon from "../ui/delete-icon";
+import RightArrow from "../ui/right-arrow";
+import BellowArrow from "../ui/bellow-arrow";
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -61,61 +63,75 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
   return (
     <div className="relative">
       {/* Main Thread Button */}
-      <div className="flex gap-1 px-2 py-2 rounded-lg hover:bg-gray-200 cursor-pointer">
+      <div className="flex px-2 py-2 rounded-lg hover:bg-gray-200 cursor-pointer justify-between">
+        <div className="flex gap-1">
         <ChatMsg />
         <p
-          className="flex text-sm font-medium ml-4 cursor-pointer"
+          className="flex text-xs font-medium ml-4 cursor-pointer"
           onClick={() => setDropdownOpen(!isDropdownOpen)}
         >
           My Thread
         </p>
-        <KeyboardArrowDownIcon 
-          className="cursor-pointer"
-          onClick={() => setDropdownOpen(!isDropdownOpen)} 
-        />
+        </div>
+     
+        <div>
+          {isDropdownOpen ? (<div onClick={()=>{setDropdownOpen(false)}}>
+           <BellowArrow/>
+          </div>) : (<div onClick={()=>{setDropdownOpen(true)}}>
+            <RightArrow/>
+          </div>)}
+        
+        </div>
+       
       </div>
 
       {/* Thread Dropdown */}
       {isDropdownOpen && (
-        <div className="absolute z-10 bg-transparent  mt-2 w-56 max-h-40 overflow-y-auto">
-          {data.map((chat, index) => (
-            <div 
-              key={index} 
-              className="relative mb-2"
+  <div className="absolute z-10 bg-transparent mt-2 w-48 max-h-40 overflow-y-auto">
+    {data.map((chat, index) => (
+      <div key={index} className="relative mb-2">
+        <div
+          className={`flex items-center px-2 py-0.5 rounded-lg ${
+            hoveredIndex === index ? "bg-gray-200" : ""
+          }`}
+          onMouseEnter={() => setHoveredIndex(index)}
+          onMouseLeave={() => setHoveredIndex(null)}
+        >
+          {/* Chat Message */}
+          <div
+            className="flex"
+            onClick={() => {
+              navigate(`/chat/${chat.chat_id}`);
+              setDropdownOpen(false);
+            }}
+          >
+            <p
+              className="text-xs cursor-pointer text-gray-700 truncate"
+              style={{ width: "150px" }}
             >
-              <div
-                className={`flex items-center justify-between px-2 py-1 rounded-lg ${
-                  hoveredIndex === index ? "bg-gray-200" : ""
-                }`}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-              >
-                <div
-                  className="flex-1 cursor-pointer"
-                  onClick={() => {
-                    navigate(`/chat/${chat.chat_id}`);
-                    setDropdownOpen(false);
-                  }}
-                >
-                  <p className="text-xs text-gray-700 truncate px-2" style={{ width: "150px" }}>
-                    {chat.last_message}
-                  </p>
-                </div>
-                {(hoveredIndex === index || index === 0) && (
-                  <div className="dropdown-container">
-                    <button
-                      onClick={(e) => toggleDropdown(index, e)}
-                      className="ml-2 p-1 text-sm text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-300"
-                    >
-                      <OptionIcon />
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
+              {chat.last_message}
+            </p>
+          </div>
+
+          {/* Option Icon */}
+          <div className="dropdown-container mt-1">
+            <button
+              onClick={(e) => toggleDropdown(index, e)}
+              className={`text-sm text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-300 ${
+                hoveredIndex === index || index === 0
+                  ? "visible"
+                  : "invisible"
+              }`}
+            >
+              <OptionIcon />
+            </button>
+          </div>
         </div>
-      )}
+      </div>
+    ))}
+  </div>
+)}
+
 
       {/* Options Menu - Positioned fixed relative to viewport */}
       {activeDropdownIndex !== null && (
@@ -128,24 +144,6 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
           onClick={(e) => e.stopPropagation()}
         >
           <ul className="py-2 text-sm text-gray-700">
-            <li>
-              <button className="flex gap-3 w-full text-left px-4 py-2 hover:bg-gray-100">
-                <ShareIcon />
-                Share
-              </button>
-            </li>
-            <li>
-              <button className="flex gap-3 w-full text-left px-4 py-2 hover:bg-gray-100">
-                <RenameIcon />
-                Rename
-              </button>
-            </li>
-            <li>
-              <button className="flex gap-3 w-full text-left px-4 py-2 hover:bg-gray-100">
-                <ArchiveIcon />
-                Archive
-              </button>
-            </li>
             <li>
               <button className="flex gap-3 w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600">
                 <DeleteIcon />

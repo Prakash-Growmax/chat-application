@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,11 +13,10 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { getAvailablePlans } from "@/lib/plans/plans-service";
 import { Plan } from "@/types/plans";
 import { Check, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Sparkles } from "lucide-react";
 
-// Simple className utility to replace cn
 const classNames = (...classes: (string | boolean | undefined)[]) => {
   return classes.filter(Boolean).join(" ");
 };
@@ -51,22 +51,25 @@ export function PlansPage() {
     } catch (error) {
       console.error("Failed to load plans:", error);
       setError("Failed to load plans. Please refresh the page.");
-    } finally {
-      setLoading(null);
     }
   };
 
   useEffect(() => {
     loadOrganizations();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Disable scrolling
+    document.body.style.overflow = "hidden";
+    return () => {
+      // Re-enable scrolling on cleanup
+      document.body.style.overflow = "";
+    };
   }, [user]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      <div className="container py-16">
+    <div className="fixed inset-0 overflow-hidden bg-gradient-to-b from-slate-50 to-white pl-24">
+      <div className="container py-16 h-full flex flex-col justify-center">
         <div className="mx-auto max-w-4xl space-y-12">
           <div className="text-center space-y-4">
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-[#0A0A0A]">
               Choose Your Plan
             </h1>
             <p className="text-lg text-muted-foreground max-w-xl mx-auto">

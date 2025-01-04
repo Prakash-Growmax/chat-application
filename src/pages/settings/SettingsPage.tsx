@@ -34,7 +34,7 @@ export function SettingsPage() {
   const isOwner = profile?.role === "admin";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white pt-12 pl-24">
       <div className="container py-10">
         <div className="mx-auto max-w-4xl space-y-8">
           <div className="space-y-2">

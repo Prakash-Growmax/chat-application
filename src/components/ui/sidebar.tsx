@@ -26,7 +26,7 @@ import WorkFlow from "./workflow";
 import MyFiles from "./my-file";
 import ResourcesIcon from "./resources-icons";
 import ProfileLoginIcon from "./profilelog-icon";
-const drawerWidth = 250;
+const drawerWidth = 200;
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -113,22 +113,18 @@ export default function Sidebar() {
             boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <div className="flex justify-between w-full px-2">
-            <div className="flex-1">
-              <p
-                className="text-xl text-[#52D999] font-semibold"
-                style={{
-                  fontFamily:
-                    'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                }}
-              >
-                Ansight
-              </p>
-            </div>
-            <div className="flex-none" onClick={handleDrawerClose}>
-              <MenuClose />
-            </div>
-          </div>
+      <div className="flex w-full px-2 justify-between items-center">
+  <div>
+    <DarkLogo />
+  </div>
+  <div className="flex-none cursor-pointer" onClick={handleDrawerClose}>
+ 
+    <MenuClose />
+ 
+    
+  </div>
+</div>
+
         </DrawerHeader>
 
         <Box
@@ -140,27 +136,31 @@ export default function Sidebar() {
           <List>
             <div className="flex flex-col">
               <div className="flex items-center justify-center px-2 py-2">
-                <button className="group bg-white w-[176px] h-[31px] px-2.5 py-1.5 border border-gray-100 rounded-md text-sm flex items-center justify-center hover:text-black shadow">
-                  <span className="flex items-center gap-2">
+                <button className="group bg-white w-[176px] h-[31px] px-2.5 py-1.5 border border-gray-100 rounded-md text-sm flex items-center justify-center hover:text-black shadow"  onClick={() => {
+              navigate("/chat");
+            }}>
+                <span className="flex items-center gap-2">
                     <ChatEdit />
-                    <span className="text-sm text-gray-500 group-hover:text-black">
+                    <span className="text-xs text-gray-500 group-hover:text-black">
                       New Thread
                     </span>
                   </span>
                 </button>
+                
+              
               </div>
               <div className="flex items-center px-2 gap-2">
                 <div>
                   <WorkFlow />
                 </div>
-                <p className="text-base font-semibold">Workspace</p>
+                <p className="text-xs font-semibold">Workspace</p>
               </div>
             </div>
           </List>
           <Divider />
           <div className="w-full">
             <List>
-              <div className="flex flex-col gap-1 px-4 py-4">
+              <div className="flex flex-col gap-1 px-1 py-1">
                 <MyRecent
                   isDropdownOpen={isDropdownOpen}
                   setDropdownOpen={setDropdownOpen}
@@ -179,10 +179,10 @@ export default function Sidebar() {
                 <div>
                   <ResourcesIcon />
                 </div>
-                <p className="text-base font-semibold">Resources</p>
+                <p className="text-xs font-semibold">Resources</p>
               </div>
               <Divider />
-              <div className="flex px-4 py-4">
+              <div className="flex px-1 py-4">
                 <Resources />
               </div>
             </div>
@@ -196,23 +196,24 @@ export default function Sidebar() {
             zIndex: 10,
             backgroundColor: "#F9F9F9",
             boxShadow: "0px -2px 4px rgba(0, 0, 0, 0.1)",
+            padding:"4px"
           }}
         >
-          <div className="flex py-2 px-2.5" onClick={signOut}>
+          <div className="flex py-2 px-2.5 rounded-lg hover:bg-gray-200 cursor-pointer" onClick={signOut}>
             <LogoutIcon />
-            <p className="flex text-sm font-medium ml-4 cursor-pointer">
+            <p className="flex text-xs font-medium ml-4 cursor-pointer">
               Logout
             </p>
           </div>
           <div
-            className="flex gap-3 hover:bg-gray-200 px-2.5 py-4 rounded-lg"
+            className="flex gap-3 hover:bg-gray-200 hover:rounded-lg px-2.5 py-4 rounded-lg"
             onClick={() => {
               navigate("/plans");
             }}
           >
             <ProfileLoginIcon />
             <div className="flex flex-col">
-              <p className="text-sm">Ajitha Jeeva</p>
+              <p className="text-xs font-semibold">Ajitha Jeeva</p>
               <p className="text-xs text-gray-500">ajitha@apptino.com</p>
             </div>
           </div>

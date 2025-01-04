@@ -16,6 +16,7 @@ import DarkLogo from "@/assets/Logo/DarkLogo";
 import { Link } from "react-router-dom";
 import AppContext from "../context/AppContext";
 import MenuNew from "../ui/menu-new";
+import TooltipNew from "../ui/tooltipnew";
 
 export function Header() {
   const { signOut } = useAuth();
@@ -29,12 +30,15 @@ export function Header() {
       <div className="relative h-full flex items-center justify-between px-4">
         {/* Left section with fixed width container */}
         <div className="relative flex items-center w-auto space-x-2">
+          <TooltipNew title="Expand Menu" placement="top-start">
           <button
             className="p-2 hover:bg-gray-100 rounded-md"
             onClick={handleDrawer}
           >
             <MenuNew />
           </button>
+          </TooltipNew>
+       
 
           {/* ChatGPT Label */}
           {!open && (

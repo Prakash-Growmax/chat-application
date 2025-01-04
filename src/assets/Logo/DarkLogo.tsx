@@ -1,4 +1,4 @@
-const DarkLogo = ({ width = 120, height = 120 }) => {
+const DarkLogo = ({ width = 90, height = 20 }) => {
   return (
     <div>
       <svg

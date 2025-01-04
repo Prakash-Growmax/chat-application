@@ -14,7 +14,7 @@ export default function Resources() {
         }}
       >
         <PlanIcon />
-        <p className="ml-4 text-sm font-medium">Subscription</p>
+        <p className="ml-4 text-xs font-medium">Subscription</p>
       </div>
       <div
         className="flex items-center px-2 py-2 rounded-lg hover:bg-gray-200 cursor-pointer"
@@ -23,7 +23,7 @@ export default function Resources() {
         }}
       >
         <TeamsIcon />
-        <p className="ml-4 text-sm font-medium">Teams</p>
+        <p className="ml-4 text-xs font-medium">Teams</p>
       </div>
       <div
         className="flex items-center px-2 py-2 rounded-lg hover:bg-gray-200 cursor-pointer"
@@ -32,7 +32,7 @@ export default function Resources() {
         }}
       >
         <ProfileIcon />
-        <p className="ml-4 text-sm font-medium">Profile</p>
+        <p className="ml-4 text-xs font-medium">Profile</p>
       </div>
     </div>
   );
