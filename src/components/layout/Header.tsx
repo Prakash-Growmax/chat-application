@@ -15,7 +15,6 @@ import { useContext } from "react";
 import DarkLogo from "@/assets/Logo/DarkLogo";
 import { Link } from "react-router-dom";
 import AppContext from "../context/AppContext";
-import ChatEdit from "../ui/chat-edit";
 import MenuNew from "../ui/menu-new";
 
 export function Header() {
@@ -36,25 +35,14 @@ export function Header() {
           >
             <MenuNew />
           </button>
-          <button className="p-2 hover:bg-gray-100 rounded-md">
-            <ChatEdit />
-          </button>
 
-          {open ? (
-            <div
-              className="absolute left-[290px] font-bold text-lg text-gray-800"
-              style={{ whiteSpace: "nowrap" }}
-            >
-              <DarkLogo />
-            </div>
-          ) : (
-            <div className="flex items-center space-x-2">
+          {/* ChatGPT Label */}
+          {!open && (
+            <div className="flex items-center ml-4">
               <DarkLogo />
             </div>
           )}
         </div>
-
-        {/* Right section - fixed position */}
         <div className="flex items-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -94,6 +82,8 @@ export function Header() {
           </DropdownMenu>
         </div>
       </div>
+
+      {/* Right section - fixed position */}
     </header>
   );
 }

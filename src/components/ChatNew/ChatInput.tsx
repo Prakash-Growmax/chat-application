@@ -2,6 +2,7 @@ import { S3UploadError, uploadToS3 } from "@/lib/s3-client";
 import { Tooltip } from "@mui/material";
 import { ArrowUp } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { CSVPreview } from "../CSVPreview/CSVPreview";
 import Spinner from "../ui/Spinner";
 import AttachIcon from "../ui/attach-ui";
 
@@ -23,6 +24,7 @@ export function ChatInput({
   isUploading,
   setIsUploading,
   s3Key,
+  bucket,
 }: ChatInputProps) {
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -119,27 +121,36 @@ export function ChatInput({
 
                   <div className="flex h-[44px] items-center justify-between">
                     <div className="flex gap-x-1">
-                      {/* Attachment button */}
-                      <input
-                        type="file"
-                        accept=".csv"
-                        onChange={handleFileUpload}
-                        className="hidden"
-                        id="csv-upload"
-                        disabled={isUploading}
-                      />
-                      <Tooltip title="Upload CSV">
-                        <button
-                          type="button"
-                          className="flex items-center gap-2 text-black hover:bg-gray-100 rounded p-2 transition-colors"
-                          onClick={() =>
-                            document.getElementById("csv-upload")?.click()
-                          }
-                        >
-                          {isUploading ? <Spinner /> : <AttachIcon />}
-                        </button>
-                      </Tooltip>
+                      <div className="flex">
+                        <input
+                          type="file"
+                          accept=".csv"
+                          onChange={handleFileUpload}
+                          className="hidden"
+                          id="csv-upload"
+                          disabled={isUploading}
+                        />
+                        <Tooltip title="Upload CSV">
+                          <button
+                            type="button"
+                            className="flex items-center gap-2 text-black hover:bg-gray-100 rounded p-2 transition-colors"
+                            onClick={() =>
+                              document.getElementById("csv-upload")?.click()
+                            }
+                          >
+                            {isUploading ? <Spinner /> : <AttachIcon />}
+                          </button>
+                        </Tooltip>
+                      </div>
+                      {s3Key && (
+                        <div>
+                          <Tooltip title="Preview CSV">
+                            <CSVPreview s3Key={s3Key} bucket={bucket} />
+                          </Tooltip>
+                        </div>
+                      )}
                     </div>
+                    {/* Attachment button */}
 
                     <button
                       type="submit"
