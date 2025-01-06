@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,7 +12,7 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { getAvailablePlans } from "@/lib/plans/plans-service";
 import { Plan } from "@/types/plans";
 import { Check, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Sparkles } from "lucide-react";
 
@@ -84,7 +83,9 @@ export function PlansPage() {
             </div>
           )}
 
-          <div className="grid gap-8 lg:grid-cols-3 lg:gap-12">
+          <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 mx-auto justify-center">
+            {" "}
+            {/* Centering added here */}{" "}
             {plans.map((plan) => (
               <Card
                 key={plan.name}
