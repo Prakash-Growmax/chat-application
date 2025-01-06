@@ -8,31 +8,33 @@ export default function Resources() {
   return (
     <div className="flex flex-col">
       <div
-        className="flex items-center px-2 py-2 rounded-lg hover:bg-gray-200 cursor-pointer"
+        className="flex items-center rounded-lg hover:bg-gray-200 cursor-pointer gap-3" style={{padding:"4.8px",marginTop:"4px"}}
         onClick={() => {
           navigate("/plans");
         }}
       >
         <PlanIcon />
-        <p className="ml-4 text-xs font-medium">Subscription</p>
+        <p className="font-normal text-[11px] leading-[16px] text-[#64748b] font-inter">Subscription</p>
       </div>
       <div
-        className="flex items-center px-2 py-2 rounded-lg hover:bg-gray-200 cursor-pointer"
+        className="flex items-center rounded-lg hover:bg-gray-200 cursor-pointer gap-3"
         onClick={() => {
           navigate("/teams");
         }}
+        style={{padding:"4.8px",marginTop:"4px"}}
       >
         <TeamsIcon />
-        <p className="ml-4 text-xs font-medium">Teams</p>
+        <p className="font-normal text-[11px] leading-[16px] text-[#64748b] font-inter">Teams</p>
       </div>
       <div
-        className="flex items-center px-2 py-2 rounded-lg hover:bg-gray-200 cursor-pointer"
+        className="flex items-center rounded-lg hover:bg-gray-200 cursor-pointer gap-3"
         onClick={() => {
           navigate("/settings");
         }}
+        style={{padding:"4.8px",marginTop:"4px"}}
       >
         <ProfileIcon />
-        <p className="ml-4 text-xs font-medium">Profile</p>
+        <p className="font-normal text-[11px] leading-[16px] text-[#64748b] font-inter">Profile</p>
       </div>
     </div>
   );

@@ -103,7 +103,7 @@ export function ChatInput({
               <div className="w-full">
                 <div
                   id="composer-background"
-                  className="flex w-full cursor-text flex-col rounded-3xl px-2.5 py-1 transition-colors shadow-lg"
+                    className="flex w-full cursor-text flex-col rounded-3xl px-2.5 py-1 transition-colors shadow-[0_6px_8px_rgba(0,0,0,0.15),0_-2px_4px_rgba(0,0,0,0.15)]"
                 >
                   <div className="flex min-h-[44px] items-start pl-2">
                     <textarea

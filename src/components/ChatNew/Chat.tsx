@@ -191,11 +191,11 @@ function Chat({ message }: ChatProps) {
             </div>
           )}
           <div
-            className={`text-base px-3 w-full md:px-5 lg:px-4 xl:px-5 pb-8 lg:mr-0 md:mr-8 ${
+            className={`text-base px-3 w-full md:px-5 lg:px-4 xl:px-5 pb-4 lg:mr-0 md:mr-8${
               state.s3Key ? "" : "mr-12"
             }`}
           >
-            <div className="mx-auto max-w-5xl flex flex-1">
+            <div className="mx-auto max-w-4xl flex flex-1">
               {/* <div className="mx-auto flex flex-1 gap-4 text-base md:gap-5 lg:gap-6 md:max-w-3xl"> */}{" "}
               <ChatInput
                 onSend={handleSendMessage}
@@ -225,7 +225,7 @@ function Chat({ message }: ChatProps) {
             </div>
           </div>
         </div>
-        <div className="w-full px-2 pb-4 text-center text-xs text-gray-500">
+        <div className="w-full px-2 pb-2 text-center text-xs text-gray-500">
           <div>
             <div>Ansight can make mistakes. Check important info.</div>
           </div>

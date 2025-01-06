@@ -23,7 +23,7 @@ const AuthWrapper = lazy(() => import("@/components/auth/AuthWrapper"));
 const ProtectedRoute = lazy(() => import("@/components/auth/ProtectedRoute"));
 
 function App() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [openRight, setOpenRight] = useState(false);
 
   return (

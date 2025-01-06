@@ -22,7 +22,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
   return (
     <>
-      <div className="mx-auto max-w-5xl h-full">
+      <div className="mx-auto max-w-4xl h-full">
         {isUser ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -67,7 +67,7 @@ const RenderContent = ({ message }: { message: Message }) => {
   }
 
   if (message.type === "chart") {
-    return <ChartTableResponse message={message} openRight={openRight} />;
+    return <ChartTableResponse message={message}  />;
   }
 };
 
@@ -94,12 +94,7 @@ const TextResponse = ({
   );
 };
 
-const ChartTableResponse = ({
-  openRight,
-}: {
-  message: Message;
-  openRight: boolean;
-}) => {
+const ChartTableResponse = ({ message }) => {
   const [isChecked, setIsChecked] = useState(false);
   const { open } = useContext(AppContext);
 
@@ -111,13 +106,13 @@ const ChartTableResponse = ({
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
-        setLayoutDimensions({ width: 250, height: 300 });
+        setLayoutDimensions({ width:280, height: 450 });
       } else if (window.innerWidth >= 768 && window.innerWidth < 1024) {
         // Mid-screen dimensions
-        setLayoutDimensions({ width: 400, height: 350 });
+        setLayoutDimensions({ width: 700, height: 350 });
       } else {
         // Larger screen dimensions
-        setLayoutDimensions({ width: 500, height: 300 });
+        setLayoutDimensions({ width: 800, height: 450 });
       }
     };
 
@@ -135,52 +130,68 @@ const ChartTableResponse = ({
       initial={{ opacity: 0, transform: "scale(0.95)" }}
       animate={{ opacity: 1, transform: "scale(1)" }}
       transition={{ duration: 0.5 }}
-      className="relative"
+      className="relative px-4"
     >
       <div
-        className={`flex flex-col  lg:w-[800px] lg:h-[500px] md:w-[500px] w-[300px] md:h-[480px]  max-w-full ${
-          openRight ? "lg:w-[590px] lg:h-[450px]" : ""
-        }`}
+        className={`flex flex-col lg:w-[800px] lg:h-[500px] md:w-[700px] w-[300px] md:h-[480px]  max-w-full `}
       >
-        <div className={`flex justify-end mb-2 ${open ? "md:mr-40" : ""}`}>
+        <div className={`flex justify-end mb-2 `}>
           <SwitchButton isChecked={isChecked} setIsChecked={setIsChecked} />
         </div>
         <div>
           {isChecked ? (
             <>
-              <Plot
-                data={[
-                  {
-                    type: "bar",
-                    x: ["Product A", "Product B", "Product C"],
-                    y: [20, 14, 23],
-                    name: "Sales",
-                    marker: { color: "rgb(55, 83, 109)" },
-                  },
-                ]}
-                layout={{
-                  title: {
-                    text: "Sales Data",
-                    font: { size: 24 },
-                  },
-                  xaxis: {
-                    title: "Products",
-                    showgrid: true,
-                    zeroline: true,
-                  },
-                  yaxis: {
-                    title: "Quantity Sold",
-                    showgrid: true,
-                    zeroline: true,
-                  },
-                  barmode: "group",
-                  width: layoutDimensions.width,
-                  height: layoutDimensions.height,
-                }}
-              />
+           <Plot
+  data={[
+    {
+      type: "bar",
+      x: [
+        "Raja Gold Cooking Oil",
+        "Rin Soap",
+        "Marie Gold",
+        "Milk Bikis",
+        "Surf Excel Soap",
+        "MR Gold Sunflower Oil",
+        "Urad Dal",
+        "Stayfree Secure XL",
+        "Fortune Chakki Atta"
+      ],
+      y: [120, 90, 80, 70, 150, 200, 50, 60, 140], // Replace with actual revenue numbers
+      marker: {
+        color: "rgba(55, 128, 191, 0.7)",
+        line: {
+          color: "rgba(55, 128, 191, 1.0)",
+          width: 2
+        }
+      }
+    }
+  ]}
+  layout={{
+    title: {
+      text: "Revenue by Product",
+      font: {
+        size: 14
+      }
+    },
+    xaxis: {
+      title: "Product Name",
+      tickangle: -45,
+      automargin: true
+    },
+    yaxis: {
+      title: "Revenue"
+    },
+    margin: {
+      b: 100
+    },
+    "height": layoutDimensions.height,
+    "width":layoutDimensions.width
+  }}
+/>
+
             </>
           ) : (
-            <div className={open ? "md:mr-40" : ""}>
+            <div>
               <DataTable />
             </div>
           )}

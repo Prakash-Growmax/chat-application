@@ -26,7 +26,7 @@ const Team = () => {
   }
   const {open} = useContext(AppContext);
   return (
-    <div className={`container mx-auto py-8 ${open ? "max-w-screen-lg pl-8 " : ""}`}>
+    <div className={`container mx-auto py-8 ${open ? "lg:max-w-screen-lg md:max-w-screen-md md:pl-36 lg:pl-36" : ""}`}>
       <div className="flex justify-between items-center mb-8 pt-16">
         <h1 className="text-3xl font-bold">Team Management</h1>
         <InviteMemberDialog onInvite={inviteMemberByEmail} />

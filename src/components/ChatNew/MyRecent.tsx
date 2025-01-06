@@ -11,6 +11,7 @@ import ArchiveIcon from "../ui/archive-icon";
 import DeleteIcon from "../ui/delete-icon";
 import RightArrow from "../ui/right-arrow";
 import BellowArrow from "../ui/bellow-arrow";
+import TooltipNew from "../ui/tooltipnew";
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -63,23 +64,33 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
   return (
     <div className="relative">
       {/* Main Thread Button */}
-      <div className="flex px-2 py-2 rounded-lg hover:bg-gray-200 cursor-pointer justify-between">
-        <div className="flex gap-1">
+      <div className="flex rounded-lg hover:bg-gray-200 cursor-pointer justify-between" style={{padding:"4.8px"}}>
+        <div className="flex gap-3">
         <ChatMsg />
-        <p
-          className="flex text-xs font-medium ml-4 cursor-pointer"
-          onClick={() => setDropdownOpen(!isDropdownOpen)}
-        >
-          My Thread
-        </p>
+      
+          <p className="font-inter text-slate-500 text-[11px] leading-[16px]"onClick={() => setDropdownOpen(!isDropdownOpen)}> My Thread</p>
+
+         
+        
         </div>
      
         <div>
-          {isDropdownOpen ? (<div onClick={()=>{setDropdownOpen(false)}}>
+          
+          {isDropdownOpen ? (
+            <TooltipNew title="Close My Thread" placement="top-start">
+               <div onClick={()=>{setDropdownOpen(false)}}>
            <BellowArrow/>
-          </div>) : (<div onClick={()=>{setDropdownOpen(true)}}>
+          </div>
+            </TooltipNew>
+           ) : (
+            <TooltipNew title="Exapand My Thread" placement="top-start">
+            <div onClick={()=>{setDropdownOpen(true)}}>
             <RightArrow/>
-          </div>)}
+            </div>
+            </TooltipNew>
+          )}
+          
+         
         
         </div>
        
@@ -87,11 +98,11 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
 
       {/* Thread Dropdown */}
       {isDropdownOpen && (
-  <div className="absolute z-10 bg-transparent mt-2 w-48 max-h-40 overflow-y-auto">
+  <div className="absolute z-10 bg-transparent mt-2 w-44 max-h-40 overflow-y-auto"  style={{padding:"4.8px"}}>
     {data.map((chat, index) => (
-      <div key={index} className="relative mb-2">
+      <div key={index} className="relative">
         <div
-          className={`flex items-center px-2 py-0.5 rounded-lg ${
+          className={`flex items-center rounded-lg px-3 ${
             hoveredIndex === index ? "bg-gray-200" : ""
           }`}
           onMouseEnter={() => setHoveredIndex(index)}
@@ -106,7 +117,7 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
             }}
           >
             <p
-              className="text-xs cursor-pointer text-gray-700 truncate"
+              className="font-inter text-gray-600 text-xs leading-4 cursor-pointer truncate"
               style={{ width: "150px" }}
             >
               {chat.last_message}
@@ -115,6 +126,7 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
 
           {/* Option Icon */}
           <div className="dropdown-container mt-1">
+            <TooltipNew title="Options" placement="top-start">
             <button
               onClick={(e) => toggleDropdown(index, e)}
               className={`text-sm text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-300 ${
@@ -125,6 +137,8 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
             >
               <OptionIcon />
             </button>
+            </TooltipNew>
+         
           </div>
         </div>
       </div>

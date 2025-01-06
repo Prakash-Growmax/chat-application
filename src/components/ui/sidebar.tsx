@@ -65,6 +65,7 @@ export default function Sidebar() {
   const [hoveredIndex, setHoveredIndex] = React.useState(null);
   const [isDropdownOpen, setDropdownOpen] = React.useState(false);
     const { user, signOut } = useAuth();
+  
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState(null);
   React.useEffect(() => {
     const handleClickOutside = (event) => {
@@ -92,7 +93,7 @@ export default function Sidebar() {
           width: isMobile ? "100%" : isTab ? "35%" : drawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: isMobile ? "100%" : isTab ? "35%" : drawerWidth,
+            width: isMobile ? "100%" : isTab ? "25%" : drawerWidth,
             boxSizing: "border-box",
             backgroundColor: "#F9F9F9",
             display: "flex",
@@ -131,12 +132,14 @@ export default function Sidebar() {
           sx={{
             flexGrow: 1,
             overflowY: "auto",
+            paddingLeft:"9.6px",
+            paddingRight:"9.6px"
           }}
         >
           <List>
             <div className="flex flex-col">
-              <div className="flex items-center justify-center px-2 py-2">
-                <button className="group bg-white w-[176px] h-[31px] px-2.5 py-1.5 border border-gray-100 rounded-md text-sm flex items-center justify-center hover:text-black shadow"  onClick={() => {
+              <div className="flex items-center justify-center" style={{paddingLeft:"6.4px",paddingRight:"6.4px",paddingTop:"8px",paddingBottom:"12.8px"}}>
+                <button className="group bg-white w-full h-[31px] px-2.5 py-1.5 border border-gray-100 rounded-md text-sm flex items-center justify-center hover:text-black shadow"  onClick={() => {
               navigate("/chat");
             }}>
                 <span className="flex items-center gap-2">
@@ -149,22 +152,27 @@ export default function Sidebar() {
                 
               
               </div>
-              <div className="flex items-center px-2 gap-2">
+              <div className="flex items-center gap-2">
                 <div>
                   <WorkFlow />
                 </div>
-                <p className="text-xs font-semibold">Workspace</p>
-              </div>
+                <div className="font-inter font-medium text-[13px] leading-[20px] text-[rgb(2,8,23)]">
+                Workspace
+                </div>
+                 </div>
             </div>
           </List>
           <Divider />
           <div className="w-full">
             <List>
-              <div className="flex flex-col gap-1 px-1 py-1">
+              <div className="flex flex-col">
+                <div>
                 <MyRecent
                   isDropdownOpen={isDropdownOpen}
                   setDropdownOpen={setDropdownOpen}
                 />
+                </div>
+               
                 <div
                   className={`overflow-hidden transition-all duration-100 ease-in-out ${
                     isDropdownOpen ? "mt-40" : ""
@@ -175,14 +183,18 @@ export default function Sidebar() {
               </div>
             </List>
             <div>
-              <div className="flex items-center px-2 gap-2 py-2">
+              <div className="flex items-center gap-2" style={{marginBottom:"4.8px"}}>
                 <div>
                   <ResourcesIcon />
                 </div>
-                <p className="text-xs font-semibold">Resources</p>
+                <div className="font-inter font-medium text-customColor text-[13px] leading-[20px]">
+  Resources
+</div>
+
+
               </div>
               <Divider />
-              <div className="flex px-1 py-4">
+              <div className="flex">
                 <Resources />
               </div>
             </div>
@@ -196,25 +208,29 @@ export default function Sidebar() {
             zIndex: 10,
             backgroundColor: "#F9F9F9",
             boxShadow: "0px -2px 4px rgba(0, 0, 0, 0.1)",
-            padding:"4px"
+            padding:"9.6px"
           }}
         >
-          <div className="flex py-2 px-2.5 rounded-lg hover:bg-gray-200 cursor-pointer" onClick={signOut}>
+          <div className="flex rounded-lg hover:bg-gray-200 gap-x-2 cursor-pointer" onClick={signOut} style={{paddingTop:"3.6px",paddingLeft:"9.6px",paddingRight:"9.6px"}}>
             <LogoutIcon />
-            <p className="flex text-xs font-medium ml-4 cursor-pointer">
+            <p className="font-inter font-semibold text-[11px] leading-[16px] text-[rgb(100,116,139)]">
               Logout
             </p>
           </div>
           <div
-            className="flex gap-3 hover:bg-gray-200 hover:rounded-lg px-2.5 py-4 rounded-lg"
+            className="flex gap-2 hover:bg-gray-200 hover:rounded-lg rounded-lg"
             onClick={() => {
               navigate("/plans");
             }}
-          >
-            <ProfileLoginIcon />
+            style={{paddingTop:"9.6px",paddingLeft:"9.6px",paddingRight:"9.6px"}}
+          > 
+          <div className="flex items-center justify-center">
+          <ProfileLoginIcon />
+          </div>
+          
             <div className="flex flex-col">
-              <p className="text-xs font-semibold">Ajitha Jeeva</p>
-              <p className="text-xs text-gray-500">ajitha@apptino.com</p>
+              <p className="font-inter text-black text-sm leading-5">{user?.name}</p>
+              <p className="font-normal text-[11px] leading-[16px] text-[#64748b]">{user?.email}</p>
             </div>
           </div>
         </Box>

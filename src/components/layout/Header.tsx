@@ -1,12 +1,4 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { useAuth } from "@/hooks/useAuth";
 import { Avatar } from "@mui/material";
 import { CreditCard, LogOut, Settings, Users } from "lucide-react";
@@ -47,7 +39,7 @@ export function Header() {
             </div>
           )}
         </div>
-        <div className="flex items-center">
+        {/* <div className="flex items-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <div className="w-8 h-8 rounded-full cursor-pointer">
@@ -84,7 +76,7 @@ export function Header() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
+        </div> */}
       </div>
 
       {/* Right section - fixed position */}

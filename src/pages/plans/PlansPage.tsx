@@ -15,6 +15,7 @@ import { Check, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Sparkles } from "lucide-react";
+import AppContext from "@/components/context/AppContext";
 
 const classNames = (...classes: (string | boolean | undefined)[]) => {
   return classes.filter(Boolean).join(" ");
@@ -23,7 +24,7 @@ const classNames = (...classes: (string | boolean | undefined)[]) => {
 export function PlansPage() {
   const { user } = useAuth();
   const { upgradePlan, planId } = useSubscription();
-
+  const {open}=useContext(AppContext)
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState<string | null>(null);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
@@ -64,9 +65,9 @@ export function PlansPage() {
   }, [user]);
 
   return (
-    <div className="fixed inset-0 overflow-hidden bg-gradient-to-b from-slate-50 to-white pl-24">
+    <div className="fixed inset-0 overflow-y-auto bg-gradient-to-b from-slate-50 to-white pl-24">
       <div className="container py-16 h-full flex flex-col justify-center">
-        <div className="mx-auto max-w-4xl space-y-12">
+        <div className={`mx-auto max-w-4xl space-y-12 ${open ? "lg:max-w-3xl md:pl-16 lg:pt-12" : ""}`}>
           <div className="text-center space-y-4">
             <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-[#0A0A0A]">
               Choose Your Plan

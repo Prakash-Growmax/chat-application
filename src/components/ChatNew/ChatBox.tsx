@@ -8,6 +8,7 @@ import { ScrollArea } from "../ui/scroll-area";
 
 import LinearIndeterminate from "../ui/LinearProgress";
 import { ChatMessage } from "./ChatMessage";
+import DarkLogo from "@/assets/Logo/DarkLogo";
 
 interface ChatBoxProps {
   state: ChatState;
@@ -79,10 +80,10 @@ export default function ChatBox({
 
                           {state.isLoading && (
                             <div className="flex items-center justify-center">
-                              <div className="flex flex-col max-w-8xl lg:w-[64%] md:w-[97%] w-[100%]">
+                              <div className="flex flex-col max-w-8xl lg:w-[61%] md:w-[97%] w-[100%]">
                                 <div className="flex">
-                                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-secondary-foreground -mt-2">
-                                    <Bot className="w-6 h-6" />
+                                  <div className="flex w-[95%] h-[20%] mt-4">
+                                   <DarkLogo/>
                                   </div>
                                   {/* <div className="font-bold text-sm ml-2">
                                     <p>Assistant G-Chatter</p>
