@@ -20,6 +20,9 @@ export default defineConfig(({ command, mode }) => {
     optimizeDeps: {
       exclude: ['lucide-react'],
     },
+    build: {
+      chunkSizeWarningLimit: 1000, // Increase the limit
+    },
     define: {
       // Supabase
       'process.env.VITE_SUPABASE_URL': JSON.stringify(process.env.VITE_SUPABASE_URL),

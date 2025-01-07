@@ -1,8 +1,10 @@
+@import "./styles/spacing.css";
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import "./styles/spacing.css";
 
 @layer base {
   :root {
@@ -31,9 +33,8 @@
 
 @layer components {
   .border-border {
-    border-color: var(
-      --border
-    ); /* Define the border color using the CSS variable */
+    border-color: var(--border);
+    /* Define the border color using the CSS variable */
   }
 }
 
@@ -41,6 +42,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
