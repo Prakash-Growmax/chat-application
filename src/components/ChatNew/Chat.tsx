@@ -1,15 +1,16 @@
-import { lazy, useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import AppContext from "../context/AppContext";
 
 import { getResponse } from "@/lib/pandas-api";
 import { useMessageQueue } from "@/lib/useMessageQuesue";
 import { ChatState, Message } from "@/types";
 import { styled } from "@mui/material";
-const ChatBox = lazy(() => import("./ChatBox"));
+import RightSideBar from "../ui/RightSideBar";
+// const ChatBox = lazy(() => import("./ChatBox"));
 const ChatInput = lazy(() => import("./ChatInput").then(module => ({ default: module.ChatInput })));
-
-
-
+interface ChatProps {
+  message: (chat: string) => void;
+}
 const Main = styled("main", {
   shouldForwardProp: (prop) => prop !== "open",
 })<{
@@ -25,11 +26,6 @@ const Main = styled("main", {
     marginLeft: open ? "100px" : "", 
   },
 }));
-
-
-interface ChatProps {
-  message: (chat: string) => void;
-}
 
 function Chat({ message }: ChatProps) {
   const [state, setState] = useState<ChatState>({
@@ -115,10 +111,10 @@ function Chat({ message }: ChatProps) {
     addToQueue(userMessage);
   };
 
- console.log(message)
+ 
   useEffect(() => {
     if (message?.length) {
-      const mappedMessages = message?.map((msg) => ({
+      const mappedMessages = message?.map((msg  ) => ({
         id: msg.id, // Example of mapping fields
         content: msg.content, // Assuming the structure of each message
         timestamp: msg.timestamp || Date.now(),
@@ -173,13 +169,13 @@ function Chat({ message }: ChatProps) {
               //   backgroundColor: "#F6F8FA",
               // }}
             >
-              <ChatBox
+              {/* <ChatBox
                 state={state}
                 setState={setState}
                 isUploading={isUploading}
                 setIsUploading={setIsUploading}
                 openRight={openRight}
-              />
+              /> */}
             </div>
           )}
           <div
@@ -228,7 +224,7 @@ function Chat({ message }: ChatProps) {
         <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat} />
       )} */}
 
-      {/* <RightSideBar openRight={openRight} setOpenRight={setOpenRight} /> */}
+      <RightSideBar openRight={openRight} setOpenRight={setOpenRight} />
     </Main>
   );
 }
