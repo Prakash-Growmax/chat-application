@@ -1,9 +1,10 @@
 import { fetchCSVPreview } from "@/lib/s3-client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { PreviewButton } from "./PreviewButton";
 import { PreviewModal } from "./PreviewModal";
 import { CSVPreviewData, FileMetadata, PreviewError } from "@/lib/types/csv";
+import AppContext from "../context/AppContext";
 
 interface CSVPreviewProps {
     bucket: string;
@@ -15,8 +16,9 @@ export const CSVPreview: React.FC<CSVPreviewProps> = ({ bucket, s3Key }) => {
     const [error, setError] = useState<PreviewError | null>(null);
     const [previewData, setPreviewData] = useState<CSVPreviewData | null>(null);
     const [metadata, setMetadata] = useState<FileMetadata | null>(null);
-  
+    const {open,setOpen} = useContext(AppContext);
     const handlePreviewClick = async () => {
+   
       setIsLoading(true);
       setError(null);
   
@@ -30,6 +32,7 @@ export const CSVPreview: React.FC<CSVPreviewProps> = ({ bucket, s3Key }) => {
       } finally {
         setIsLoading(false);
       }
+      setOpen(false);
     };
   
     return (
@@ -50,7 +53,8 @@ export const CSVPreview: React.FC<CSVPreviewProps> = ({ bucket, s3Key }) => {
         {previewData && metadata && (
           <PreviewModal
             isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
+            onClose={() => {setIsModalOpen(false)
+              setOpen(true)}}
             data={previewData}
             metadata={metadata}
           />

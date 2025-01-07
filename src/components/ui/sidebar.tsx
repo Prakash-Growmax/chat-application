@@ -61,11 +61,13 @@ export default function Sidebar() {
   // const [pin,setpin] = React.useState(false)
   const { open, setOpen } = React.useContext(AppContext);
 
-  const handleDrawerClose = () => setOpen(false);
-  const [hoveredIndex, setHoveredIndex] = React.useState(null);
-  const [isDropdownOpen, setDropdownOpen] = React.useState(false);
-    const { user, signOut } = useAuth();
+  const handleDrawerClose = () =>{
+    setOpen(false);
   
+  }
+  const [hoveredIndex, setHoveredIndex] = React.useState(null);
+  const [isDropdownOpen, setDropdownOpen] = React.useState(true);
+    const { user, signOut } = useAuth();
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState(null);
   React.useEffect(() => {
     const handleClickOutside = (event) => {
@@ -85,6 +87,12 @@ export default function Sidebar() {
     e.stopPropagation();
     setActiveDropdownIndex((prevIndex) => (prevIndex === index ? null : index));
   };
+  React.useEffect(()=>{
+   if(user){
+    setOpen(true);
+   }
+  },[user])
+  
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -156,7 +164,7 @@ export default function Sidebar() {
                 <div>
                   <WorkFlow />
                 </div>
-                <div className="font-inter font-medium text-[13px] leading-[20px] text-[rgb(2,8,23)]">
+                <div className="font-inter  text-[15px] leading-[20px] text-[rgb(2,8,23)]">
                 Workspace
                 </div>
                  </div>
@@ -175,7 +183,7 @@ export default function Sidebar() {
                
                 <div
                   className={`overflow-hidden transition-all duration-100 ease-in-out ${
-                    isDropdownOpen ? "mt-40" : ""
+                    isDropdownOpen ? "mt-44" : ""
                   }`}
                 >
                   <MyFiles />
@@ -187,7 +195,7 @@ export default function Sidebar() {
                 <div>
                   <ResourcesIcon />
                 </div>
-                <div className="font-inter font-medium text-customColor text-[13px] leading-[20px]">
+                <div className="font-inter font-medium text-customColor text-[15px] leading-[20px]">
   Resources
 </div>
 
@@ -211,7 +219,7 @@ export default function Sidebar() {
             padding:"9.6px"
           }}
         >
-          <div className="flex rounded-lg hover:bg-gray-200 gap-x-2 cursor-pointer" onClick={signOut} style={{paddingTop:"3.6px",paddingLeft:"9.6px",paddingRight:"9.6px"}}>
+          <div className="flex rounded-lg hover:bg-gray-200 gap-x-2 cursor-pointer" onClick={signOut} style={{paddingTop:"3.6px",paddingLeft:"9.6px",paddingRight:"9.6px",paddingBottom:"3.6px"}}>
             <LogoutIcon />
             <p className="font-inter font-semibold text-[11px] leading-[16px] text-[rgb(100,116,139)]">
               Logout
@@ -222,7 +230,7 @@ export default function Sidebar() {
             onClick={() => {
               navigate("/plans");
             }}
-            style={{paddingTop:"9.6px",paddingLeft:"9.6px",paddingRight:"9.6px"}}
+            style={{paddingTop:"9.6px",paddingLeft:"9.6px",paddingRight:"9.6px",paddingBottom:"9.6px"}}
           > 
           <div className="flex items-center justify-center">
           <ProfileLoginIcon />

@@ -6,36 +6,38 @@ import TeamsIcon from "../ui/teams";
 export default function Resources() {
   const navigate = useNavigate();
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full" style={{marginTop:"8px",marginBottom:"8px"}}>
       <div
-        className="flex items-center rounded-lg hover:bg-gray-200 cursor-pointer gap-3" style={{padding:"4.8px",marginTop:"4px"}}
+        className="flex items-center rounded-lg hover:bg-gray-200 cursor-pointer gap-3 w-full px-4 py-2"
+        // style={{ padding: "4.8px", marginTop: "4px" }}
         onClick={() => {
           navigate("/plans");
         }}
       >
         <PlanIcon />
-        <p className="font-normal text-[11px] leading-[16px] text-[#64748b] font-inter">Subscription</p>
+        <p className="font-inter text-slate-500  text-[13px] leading-4">Subscription</p>
       </div>
       <div
-        className="flex items-center rounded-lg hover:bg-gray-200 cursor-pointer gap-3"
+        className="flex items-center rounded-lg hover:bg-gray-200 cursor-pointer gap-3 w-full px-4 py-2"
+        // style={{ padding: "4.8px", marginTop: "4px" }}
         onClick={() => {
           navigate("/teams");
         }}
-        style={{padding:"4.8px",marginTop:"4px"}}
       >
         <TeamsIcon />
-        <p className="font-normal text-[11px] leading-[16px] text-[#64748b] font-inter">Teams</p>
+        <p className="font-inter text-slate-500  text-[13px] leading-4">Teams</p>
       </div>
       <div
-        className="flex items-center rounded-lg hover:bg-gray-200 cursor-pointer gap-3"
+        className="flex items-center rounded-lg hover:bg-gray-200 cursor-pointer gap-3 w-full px-4 py-2"
+        // style={{ padding: "4.8px", marginTop: "4px" }}
         onClick={() => {
           navigate("/settings");
         }}
-        style={{padding:"4.8px",marginTop:"4px"}}
       >
         <ProfileIcon />
-        <p className="font-normal text-[11px] leading-[16px] text-[#64748b] font-inter">Profile</p>
+        <p className="font-inter text-slate-500  text-[13px] leading-4">Profile</p>
       </div>
     </div>
   );
 }
+

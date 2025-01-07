@@ -24,7 +24,7 @@ export function EmailForm({ email, loading, onEmailChange, onSubmit }: EmailForm
       />
       <Button
         type="submit"
-        className="h-12 w-full space-x-2"
+        className="h-12 w-full space-x-2 bg-black text-white"
         disabled={loading}
       >
         {loading ? (

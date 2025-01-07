@@ -45,8 +45,8 @@ function App() {
                 <div className="fixed h-18 top-0 left-0 w-full z-50">
                   <Header />
                 </div>
-                <div className="flex">
-                  <Sidebar />
+                <div>
+                  <Sidebar/>
                 </div>
                 {/* Scrollable Content */}
                 <div className="flex-1 min-h-screen">

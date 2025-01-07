@@ -1,18 +1,23 @@
+import React, { useState } from 'react';
 import { CSVPreviewData, FileMetadata } from "@/lib/types/csv";
-import { X } from "lucide-react";
-import React from "react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
+
 interface PreviewModalProps {
   isOpen: boolean;
   onClose: () => void;
   data: CSVPreviewData;
   metadata: FileMetadata;
 }
+
 export const PreviewModal: React.FC<PreviewModalProps> = ({
   isOpen,
   onClose,
   data,
   metadata,
 }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
   if (!isOpen) return null;
 
   const formatFileSize = (bytes: number): string => {
@@ -35,14 +40,29 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
     }).format(date);
   };
 
+  // Pagination calculations
+  const totalPages = Math.ceil(data.rows.length / pageSize);
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, data.rows.length);
+  const currentRows = data.rows.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(Math.min(Math.max(1, page), totalPages));
+  };
+
+  const handlePageSizeChange = (newSize: number) => {
+    setPageSize(newSize);
+    setCurrentPage(1); // Reset to first page when changing page size
+  };
+
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto "
+      className="fixed inset-0 z-50 overflow-y-auto"
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
     >
-      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0 ">
+      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div
           className="fixed inset-0 bg-gray-500/75 backdrop-blur-sm transition-opacity"
           aria-hidden="true"
@@ -83,9 +103,9 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
               </button>
             </div>
 
-            <div className="mt-6 border rounded-lg overflow-hidden border-gray-200 h-[90%]">
-              <div className="overflow-x-auto h-[100%]">
-                <table className="min-w-full divide-y divide-gray-200 h-[100%]">
+            <div className="mt-6 border rounded-lg overflow-hidden border-gray-200 h-[80%]">
+              <div className="overflow-x-auto h-full">
+                <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
                       {data.headers.map((header, index) => (
@@ -100,7 +120,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {data.rows.map((row, rowIndex) => (
+                    {currentRows.map((row, rowIndex) => (
                       <tr key={rowIndex}>
                         {row.map((cell, cellIndex) => (
                           <td
@@ -116,9 +136,57 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                 </table>
               </div>
             </div>
+
+            {/* Pagination Controls */}
+            <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 mt-4">
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-gray-700">Rows per page:</span>
+                <select
+                  value={pageSize}
+                  onChange={(e) => handlePageSizeChange(Number(e.target.value))}
+                  className="rounded-md border-gray-300 py-1.5 text-sm font-medium focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                >
+                  {[10, 20, 50, 100].map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <p className="text-sm text-gray-700">
+                  Showing{" "}
+                  <span className="font-medium">
+                    {startIndex + 1} - {endIndex}
+                  </span>{" "}
+                  of{" "}
+                  <span className="font-medium">{data.rows.length}</span>
+                </p>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
+export default PreviewModal;
