@@ -1,16 +1,15 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { lazy, useCallback, useContext, useEffect, useState } from "react";
 import AppContext from "../context/AppContext";
 
 import { getResponse } from "@/lib/pandas-api";
 import { useMessageQueue } from "@/lib/useMessageQuesue";
 import { ChatState, Message } from "@/types";
 import { styled } from "@mui/material";
-import RightSideBar from "../ui/RightSideBar";
-import ChatBox from "./ChatBox";
-import { ChatInput } from "./ChatInput";
-interface ChatProps {
-  message: (chat: string) => void;
-}
+const ChatBox = lazy(() => import("./ChatBox"));
+const ChatInput = lazy(() => import("./ChatInput").then(module => ({ default: module.ChatInput })));
+
+
+
 const Main = styled("main", {
   shouldForwardProp: (prop) => prop !== "open",
 })<{
@@ -18,18 +17,19 @@ const Main = styled("main", {
 }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  // transition: theme.transitions.create("margin", {
-  //   easing: theme.transitions.easing.sharp,
-  //   duration: theme.transitions.duration.leavingScreen,
-  // }),
   [theme.breakpoints.down("md")]: {
-    marginLeft: open ? "176px" : "", // Adjust the values as needed for mid-sized screens
+    marginLeft: open ? "176px" : "", 
   },
 
   [theme.breakpoints.up("md")]: {
-    marginLeft: open ? "100px" : "", // Default value for screens larger than "md"
+    marginLeft: open ? "100px" : "", 
   },
 }));
+
+
+interface ChatProps {
+  message: (chat: string) => void;
+}
 
 function Chat({ message }: ChatProps) {
   const [state, setState] = useState<ChatState>({
@@ -115,18 +115,10 @@ function Chat({ message }: ChatProps) {
     addToQueue(userMessage);
   };
 
-  function createNewChat() {
-    setState({
-      messages: [],
-      isLoading: false,
-      csvData: null,
-      error: null,
-      s3Key: null,
-    });
-  }
+ console.log(message)
   useEffect(() => {
     if (message?.length) {
-      const mappedMessages = message.map((msg) => ({
+      const mappedMessages = message?.map((msg) => ({
         id: msg.id, // Example of mapping fields
         content: msg.content, // Assuming the structure of each message
         timestamp: msg.timestamp || Date.now(),
@@ -236,7 +228,7 @@ function Chat({ message }: ChatProps) {
         <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat} />
       )} */}
 
-      <RightSideBar openRight={openRight} setOpenRight={setOpenRight} />
+      {/* <RightSideBar openRight={openRight} setOpenRight={setOpenRight} /> */}
     </Main>
   );
 }

@@ -5,23 +5,23 @@ import { LoadingScreen } from "@/components/layout/LoadingScreen";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/theme-provider";
-import { LoginPage } from "@/pages/auth/LoginPage";
-import { NotFoundPage } from "@/pages/error/NotFoundPage";
-import { WelcomePage } from "@/pages/home/WelcomePage";
-import { PlansPage } from "@/pages/plans/PlansPage";
-import { SettingsPage } from "@/pages/settings/SettingsPage";
 import { Suspense, lazy, useState } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Chat from "./components/ChatNew/Chat";
-import RecentChat from "./components/ChatNew/RecentChat";
-import Team from "./components/Teams/Team";
 import AppContext from "./components/context/AppContext";
 import Sidebar from "./components/ui/sidebar";
-import InviteAcceptedPage from "./pages/InviteAcceptedPage";
 
+// Lazy load all major components
 const AuthWrapper = lazy(() => import("@/components/auth/AuthWrapper"));
 const ProtectedRoute = lazy(() => import("@/components/auth/ProtectedRoute"));
-
+const LoginPage = lazy(() => import("@/pages/auth/LoginPage"));
+const NotFoundPage = lazy(() => import("@/pages/error/NotFoundPage"));
+const WelcomePage = lazy(() => import("@/pages/home/WelcomePage"));
+const PlansPage = lazy(() => import("@/pages/plans/PlansPage"));
+const SettingsPage = lazy(() => import("@/pages/settings/SettingsPage"));
+const Chat = lazy(() => import("./components/ChatNew/Chat"));
+const RecentChat = lazy(() => import("./components/ChatNew/RecentChat"));
+const Team = lazy(() => import("./components/Teams/Team"));
+const InviteAcceptedPage = lazy(() => import("./pages/InviteAcceptedPage"));
 function App() {
   const [open, setOpen] = useState(true);
   const [openRight, setOpenRight] = useState(false);

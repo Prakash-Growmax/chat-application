@@ -14,7 +14,7 @@ const suggestedLinks = [
   { title: "Plans", path: "/plans" },
 ];
 
-export function NotFoundPage() {
+ function NotFoundPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -114,3 +114,5 @@ export function NotFoundPage() {
     </div>
   );
 }
+export default NotFoundPage;
+

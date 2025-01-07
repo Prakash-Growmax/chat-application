@@ -9,7 +9,7 @@ import { Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export function LoginPage() {
+function LoginPage() {
   const [otp, setOtp] = useState("");
   const { user, loading: authLoading, verifyOTP: verifyAuthOTP } = useAuth();
   const navigate = useNavigate();
@@ -106,3 +106,6 @@ export function LoginPage() {
     </AuthLayout>
   );
 }
+
+
+export default LoginPage;

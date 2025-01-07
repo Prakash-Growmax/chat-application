@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 import { ArrowRight, Building2, FileSpreadsheet, MessageSquare } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-export function WelcomePage() {
+function WelcomePage() {
   return (
     <div className="relative min-h-[calc(100vh-4rem)]">
       <div className="absolute inset-0 bg-grid-white/10" />
@@ -46,6 +46,9 @@ export function WelcomePage() {
     </div>
   );
 }
+
+export default WelcomePage;
+
 
 const features = [
   {
