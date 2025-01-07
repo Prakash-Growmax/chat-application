@@ -140,8 +140,8 @@ export default function Sidebar() {
           sx={{
             flexGrow: 1,
             overflowY: "auto",
-            paddingLeft:"9.6px",
-            paddingRight:"9.6px"
+            paddingLeft:"7.6px",
+            paddingRight:"7.6px"
           }}
         >
           <List>
@@ -160,7 +160,7 @@ export default function Sidebar() {
                 
               
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 px-1">
                 <div>
                   <WorkFlow />
                 </div>
@@ -191,7 +191,7 @@ export default function Sidebar() {
               </div>
             </List>
             <div>
-              <div className="flex items-center gap-2" style={{marginBottom:"4.8px"}}>
+              <div className="flex items-center gap-2 px-1" style={{marginBottom:"4.8px"}}>
                 <div>
                   <ResourcesIcon />
                 </div>

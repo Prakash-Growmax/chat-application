@@ -70,7 +70,7 @@ export function PlansPage() {
   }, [user]);
 
   return (
-    <div className="fixed inset-0 overflow-y-auto bg-gradient-to-b from-slate-50 to-white pl-24">
+    <div className="fixed inset-0 overflow-y-auto bg-white from-slate-50 to-white pl-24">
       <div className="container py-16 h-full flex flex-col justify-center">
         <div
           className={`mx-auto max-w-4xl space-y-12 ${
