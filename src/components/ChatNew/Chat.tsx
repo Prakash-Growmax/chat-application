@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { lazy, useCallback, useContext, useEffect, useState } from "react";
 import AppContext from "../context/AppContext";
 
 import { getResponse } from "@/lib/pandas-api";

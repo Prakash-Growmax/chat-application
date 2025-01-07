@@ -5,6 +5,12 @@ import { defineConfig } from 'vite';
 
 dotenv.config();
 
+const viteEnvVariables = Object.keys(process.env)
+  .filter(key => key.startsWith('VITE_')) // Only include variables with VITE_ prefix
+  .reduce((env, key) => {
+    env[`import.meta.env.${key}`] = JSON.stringify(process.env[key]);
+    return env;
+  }, {});
 
 export default defineConfig({
   plugins: [react()],
@@ -19,4 +25,5 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  define: viteEnvVariables, // Inject environment variables
 });
