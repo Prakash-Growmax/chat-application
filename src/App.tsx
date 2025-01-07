@@ -9,6 +9,8 @@ import { Suspense, lazy, useState } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import AppContext from "./components/context/AppContext";
 import Sidebar from "./components/ui/sidebar";
+import CancelPayment from "./pages/Cancel-Payment/CancelPayment";
+import SuccessPayment from "./pages/Payments/SuccessPayment";
 
 // Lazy load all major components
 const AuthWrapper = lazy(() => import("@/components/auth/AuthWrapper"));
@@ -115,6 +117,8 @@ function App() {
                             </AuthWrapper>
                           }
                         />
+                        <Route path="/cancel" element={<CancelPayment />} />
+                        <Route path="/success" element={<SuccessPayment />} />
                         <Route path="*" element={<NotFoundPage />} />
                       </Routes>
                     </main>

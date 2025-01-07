@@ -15,7 +15,7 @@ import { Check, Loader2 } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
 import AppContext from "@/components/context/AppContext";
-import { Sparkles } from "lucide-react";
+import { createSubscriptionCheckoutSession } from "@/lib/stripe/stripe-service";
 
 const classNames = (...classes: (string | boolean | undefined)[]) => {
   return classes.filter(Boolean).join(" ");
@@ -24,22 +24,27 @@ const classNames = (...classes: (string | boolean | undefined)[]) => {
 export function PlansPage() {
   const { user } = useAuth();
   const { upgradePlan, planId } = useSubscription();
+  console.log("🚀 ~ PlansPage ~ planId:", planId);
   const { open } = useContext(AppContext);
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState<string | null>(null);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubscribe = async (planName: "Single" | "Team" | "Free") => {
-    setLoading(planName);
-    try {
-      await upgradePlan(planName);
-    } catch (error) {
-      console.error("Subscription error:", error);
-      setError("Failed to upgrade plan. Please try again.");
-    } finally {
-      setLoading(null);
+  const handleSubscribe = async (plan: any) => {
+    if (!user?.id) {
+      return null;
     }
+    createSubscriptionCheckoutSession(Number(plan?.price), user?.id);
+    // setLoading(plan?.name);
+    // try {
+    //   await upgradePlan(plan.name);
+    // } catch (error) {
+    //   console.error("Subscription error:", error);
+    //   setError("Failed to upgrade plan. Please try again.");
+    // } finally {
+    //   setLoading(null);
+    // }
   };
 
   const loadOrganizations = async () => {
@@ -104,17 +109,6 @@ export function PlansPage() {
                 onMouseEnter={() => setHoveredCard(plan.name)}
                 onMouseLeave={() => setHoveredCard(null)}
               >
-                {plan.name === "team" && (
-                  <div className="absolute -right-2 -top-2">
-                    <div className="relative">
-                      <div className="absolute inset-0 animate-ping">
-                        <Sparkles className="h-8 w-8 text-primary opacity-25" />
-                      </div>
-                      <Sparkles className="h-8 w-8 text-primary" />
-                    </div>
-                  </div>
-                )}
-
                 <CardHeader>
                   <CardTitle className="text-2xl font-bold capitalize">
                     {plan.name}
@@ -154,14 +148,12 @@ export function PlansPage() {
                       plan.name === "team"
                         ? "bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
                         : "hover:border-primary hover:text-primary",
-                      planId === plan.id && "opacity-75 cursor-not-allowed"
+                      planId === plan.id && "opacity-75"
                     )}
                     variant={plan.name === "team" ? "default" : "outline"}
                     size="lg"
-                    disabled={loading === plan.name || planId === plan.id}
-                    onClick={() =>
-                      handleSubscribe(plan.name as "Single" | "Team" | "Free")
-                    }
+                    disabled={loading === plan.name}
+                    onClick={() => handleSubscribe(plan)}
                   >
                     {loading === plan.name ? (
                       <Loader2 className="h-4 w-4 animate-spin" />

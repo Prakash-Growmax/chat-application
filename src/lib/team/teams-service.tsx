@@ -133,8 +133,6 @@ export async function acceptInvitation() {
     .select("*")
     .eq("id", user?.id)
     .single();
-  console.log("🚀 ~ acceptInvitation ~ profile:", profile);
-
   if (profileError) throw profileError;
 
   const invitationId = profile?.invitation_id;
