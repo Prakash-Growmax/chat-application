@@ -74,7 +74,7 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
   <div className="flex items-center gap-3">
     <ChatMsg />
     <p
-      className="font-inter text-slate-500  text-[13px] leading-4"
+      className="font-inter text-slate-500  text-[15px] leading-4"
       onClick={(e) => {
         e.stopPropagation(); // Prevents the parent click handler from firing
         setDropdownOpen(!isDropdownOpen);
@@ -100,7 +100,7 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
           {data.map((chat, index) => (
             <div key={index} className="relative my-2">
               <div
-                className={`flex items-center rounded-lg px-3 py-1 ${
+                className={`flex items-center rounded-lg px-4 py-1 ${
                   hoveredIndex === index ? "bg-gray-200" : ""
                 }`}
                 onMouseEnter={() => setHoveredIndex(index)}

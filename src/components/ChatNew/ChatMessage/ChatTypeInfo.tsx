@@ -1,4 +1,5 @@
 import UserIcon from "@/assets/Icons/UserIcon";
+import DarkLogo from "@/assets/Logo/DarkLogo";
 import LogoIcon from "@/assets/Logo/LogoIcon";
 
 function ChatTypeInfo({ isUser }: { isUser: boolean }) {
@@ -11,8 +12,7 @@ function ChatTypeInfo({ isUser }: { isUser: boolean }) {
         </>
       ) : (
         <>
-          <LogoIcon className="w-10 h-10" />
-          <p className="ml-2 font-normal text-sm">Anisght</p>
+         <DarkLogo/>
         </>
       )}
     </div>

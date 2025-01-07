@@ -6,6 +6,7 @@ import { useMessageQueue } from "@/lib/useMessageQuesue";
 import { ChatState, Message } from "@/types";
 import { styled } from "@mui/material";
 import RightSideBar from "../ui/RightSideBar";
+import ChatBox from "./ChatBox";
 // const ChatBox = lazy(() => import("./ChatBox"));
 const ChatInput = lazy(() => import("./ChatInput").then(module => ({ default: module.ChatInput })));
 interface ChatProps {
@@ -169,13 +170,13 @@ function Chat({ message }: ChatProps) {
               //   backgroundColor: "#F6F8FA",
               // }}
             >
-              {/* <ChatBox
+              <ChatBox
                 state={state}
                 setState={setState}
                 isUploading={isUploading}
                 setIsUploading={setIsUploading}
                 openRight={openRight}
-              /> */}
+              />
             </div>
           )}
           <div

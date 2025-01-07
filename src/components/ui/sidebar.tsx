@@ -183,7 +183,7 @@ export default function Sidebar() {
                
                 <div
                   className={`overflow-hidden transition-all duration-100 ease-in-out ${
-                    isDropdownOpen ? "mt-44" : ""
+                    isDropdownOpen ? "mt-40" : ""
                   }`}
                 >
                   <MyFiles />
@@ -216,16 +216,24 @@ export default function Sidebar() {
             zIndex: 10,
             backgroundColor: "#F9F9F9",
             boxShadow: "0px -2px 4px rgba(0, 0, 0, 0.1)",
-            padding:"9.6px"
+            padding:"9.6px",
+            display: "flex", // Set display to flex
+            justifyContent: "center", // Horizontally center items
+            alignItems: "center", // Vertically center items
           }}
         >
-          <div className="flex rounded-lg hover:bg-gray-200 gap-x-2 cursor-pointer" onClick={signOut} style={{paddingTop:"3.6px",paddingLeft:"9.6px",paddingRight:"9.6px",paddingBottom:"3.6px"}}>
-            <LogoutIcon />
-            <p className="font-inter font-semibold text-[11px] leading-[16px] text-[rgb(100,116,139)]">
-              Logout
-            </p>
-          </div>
-          <div
+                  <div className="flex items-center gap-2 w-full hover:bg-gray-200 px-4 py-2 rounded-lg" style={{marginBottom:"4.8px"}} onClick={signOut}>
+                <div>
+                <LogoutIcon />
+                </div>
+                <div className="font-inter font-medium text-customColor text-[15px] leading-[20px]">
+  Logout
+</div>
+
+
+              </div>
+      
+          {/* <div
             className="flex gap-2 hover:bg-gray-200 hover:rounded-lg rounded-lg"
             onClick={() => {
               navigate("/plans");
@@ -240,7 +248,7 @@ export default function Sidebar() {
               <p className="font-inter text-black text-sm leading-5">{user?.name}</p>
               <p className="font-normal text-[11px] leading-[16px] text-[#64748b]">{user?.email}</p>
             </div>
-          </div>
+          </div> */}
         </Box>
       </Drawer>
     </Box>
