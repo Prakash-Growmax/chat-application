@@ -1,3 +1,4 @@
+import AppContext from "@/components/context/AppContext";
 import { EditOrgDialog } from "@/components/organizations/EditOrganizationDialog";
 import { CurrentPlan } from "@/components/subscription/CurrentPlan";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -8,14 +9,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useOrganization } from "@/hooks/organization/useOrganization";
 import { useProfile } from "@/hooks/profile/useProfile";
 import { CreditCard, Loader2, Settings2, User } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 export function SettingsPage() {
   const { profile, loading, error } = useProfile();
   const { organization, updateOrganizationName } = useOrganization(
     profile?.organization_id
   );
-
+  const {open}=useContext(AppContext)
   const [activeTab, setActiveTab] = useState("subscription");
 
   const handleUpdateOrgName = async (newName: string) => {
@@ -33,7 +34,7 @@ export function SettingsPage() {
   const isOwner = profile?.role === "admin";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white pt-12 pl-24">
+    <div className={`min-h-screen bg-white from-slate-50 to-white pt-12 pl-24 ${open ? "md:pl-56" :""}`}>
       <div className="container py-10">
         <div className="mx-auto max-w-4xl space-y-8">
           <div className="space-y-2">

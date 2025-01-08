@@ -9,7 +9,7 @@ import { Avatar } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 
 export function Header() {
-  const { signOut, user } = useAuth();
+  const {user} = useAuth();
   const { open, setOpen, createNewChat } = useContext(AppContext);
 
   useEffect(() => {
