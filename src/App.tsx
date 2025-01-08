@@ -25,9 +25,9 @@ const RecentChat = lazy(() => import("./components/ChatNew/RecentChat"));
 const Team = lazy(() => import("./components/Teams/Team"));
 const InviteAcceptedPage = lazy(() => import("./pages/InviteAcceptedPage"));
 function App() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [openRight, setOpenRight] = useState(false);
-
+  
   return (
     <ThemeProvider defaultTheme="light" storageKey="ui-theme">
       <ErrorBoundary>

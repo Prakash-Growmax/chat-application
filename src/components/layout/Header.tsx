@@ -52,7 +52,7 @@ export function Header() {
             </div>
           )}
         </div>
-        <div className="flex items-center">
+        {user && (  <div className="flex items-center">
         <TooltipNew
   title={
     <>
@@ -70,7 +70,8 @@ export function Header() {
 </Avatar>
           </TooltipNew>
     
-        </div>
+        </div>)}
+      
       </div>
 
       {/* Right section - fixed position */}
