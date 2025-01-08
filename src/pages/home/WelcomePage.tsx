@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 function WelcomePage() {
   return (
-    <div className="relative min-h-[calc(100vh-4rem)]">
-      <div className="absolute inset-0 bg-grid-white/10" />
+    <div className="relative min-h-[calc(100vh-4rem)] pl-16">
+      <div className="absolute inset-0 bg-white" />
       <div className="relative">
         <div className="container flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-12 px-4 py-16 md:py-24">
           <div className="flex flex-col items-center gap-6 text-center">
@@ -21,7 +21,7 @@ function WelcomePage() {
               Upload your CSV files and get instant insights through natural conversations.
               Perfect for data analysis, reporting, and decision making.
             </p>
-            <Button asChild size="lg" className="gap-2">
+            <Button asChild size="lg" className="gap-2 bg-black text-white">
               <Link to="/login">
                 Get Started
                 <ArrowRight className="h-4 w-4" />

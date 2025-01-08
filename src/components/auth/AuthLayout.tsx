@@ -17,8 +17,8 @@ interface AuthLayoutProps {
 
 export function AuthLayout({ children, icon, title, description }: AuthLayoutProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-primary/5">
-      <div className="absolute inset-0 bg-grid-white/10" />
+    <div className="min-h-screen bg-gradient-to-br from-background to-primary/5 pl-16">
+      <div className="absolute inset-0 bg-white" />
       <div className="container relative flex min-h-screen items-center justify-center p-4">
         <Card className="w-full max-w-md backdrop-blur-sm bg-card/80">
           <CardHeader className="space-y-3">
@@ -38,7 +38,7 @@ export function AuthLayout({ children, icon, title, description }: AuthLayoutPro
             {children}
           </CardContent>
           <CardFooter className="flex flex-col space-y-4 text-center text-sm text-muted-foreground">
-            <p>
+            {/* <p>
               By continuing, you agree to our{' '}
               <a href="#" className="underline underline-offset-4 hover:text-primary">
                 Terms of Service
@@ -48,7 +48,7 @@ export function AuthLayout({ children, icon, title, description }: AuthLayoutPro
                 Privacy Policy
               </a>
               .
-            </p>
+            </p> */}
           </CardFooter>
         </Card>
       </div>

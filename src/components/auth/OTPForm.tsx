@@ -49,7 +49,7 @@ export function OTPForm({
       </p>
       <Button
         type="submit"
-        className={cn('h-12 w-full space-x-2')}
+        className={cn('h-12 w-full space-x-2 bg-black text-white')}
         disabled={loading || otp.length !== 6}
       >
         {loading ? (

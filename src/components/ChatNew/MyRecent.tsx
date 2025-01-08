@@ -64,88 +64,81 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
   return (
     <div className="relative">
       {/* Main Thread Button */}
-      <div className="flex rounded-lg hover:bg-gray-200 cursor-pointer justify-between" style={{padding:"4.8px"}}>
-        <div className="flex gap-3">
-        <ChatMsg />
-      
-          <p className="font-inter text-slate-500 text-[11px] leading-[16px]"onClick={() => setDropdownOpen(!isDropdownOpen)}> My Thread</p>
+      <TooltipNew title={isDropdownOpen ? "Close My Thread":"Expand My Thread"} placement="top-start">
+      <div
+  className="flex items-center justify-between rounded-lg hover:bg-gray-200 cursor-pointer px-4 py-2"
+  onClick={() => {
+    setDropdownOpen(!isDropdownOpen);
+  }}
+>
+  <div className="flex items-center gap-3">
+    <ChatMsg />
+    <p
+      className="font-inter text-slate-500  text-[15px] leading-4"
+      onClick={(e) => {
+        e.stopPropagation(); // Prevents the parent click handler from firing
+        setDropdownOpen(!isDropdownOpen);
+      }}
+    >
+      My Thread
+    </p>
+  </div>
+  <div>
+    {isDropdownOpen ? <BellowArrow /> : <RightArrow />}
+  </div>
+</div>
 
-         
-        
-        </div>
-     
-        <div>
-          
-          {isDropdownOpen ? (
-            <TooltipNew title="Close My Thread" placement="top-start">
-               <div onClick={()=>{setDropdownOpen(false)}}>
-           <BellowArrow/>
-          </div>
-            </TooltipNew>
-           ) : (
-            <TooltipNew title="Exapand My Thread" placement="top-start">
-            <div onClick={()=>{setDropdownOpen(true)}}>
-            <RightArrow/>
-            </div>
-            </TooltipNew>
-          )}
-          
-         
-        
-        </div>
-       
-      </div>
+      </TooltipNew>
+    
 
       {/* Thread Dropdown */}
       {isDropdownOpen && (
-  <div className="absolute z-10 bg-transparent mt-2 w-44 max-h-40 overflow-y-auto"  style={{padding:"4.8px"}}>
-    {data.map((chat, index) => (
-      <div key={index} className="relative">
         <div
-          className={`flex items-center rounded-lg px-3 ${
-            hoveredIndex === index ? "bg-gray-200" : ""
-          }`}
-          onMouseEnter={() => setHoveredIndex(index)}
-          onMouseLeave={() => setHoveredIndex(null)}
+          className="absolute z-10 bg-transparent w-44 max-h-40 overflow-y-auto"
+          style={{ paddingLeft:"4.8px",paddingRight:"4.8px"}}
         >
-          {/* Chat Message */}
-          <div
-            className="flex"
-            onClick={() => {
-              navigate(`/chat/${chat.chat_id}`);
-              setDropdownOpen(false);
-            }}
-          >
-            <p
-              className="font-inter text-gray-600 text-xs leading-4 cursor-pointer truncate"
-              style={{ width: "150px" }}
-            >
-              {chat.last_message}
-            </p>
-          </div>
+          {data.map((chat, index) => (
+            <div key={index} className="relative my-2">
+              <div
+                className={`flex items-center rounded-lg px-4 py-1 ${
+                  hoveredIndex === index ? "bg-gray-200" : ""
+                }`}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                {/* Chat Message and Option Icon Container */}
+                <div className="flex justify-between w-full items-center">
+                  {/* Chat Message */}
+                  <p
+                    className="font-inter text-gray-600 text-[13px] text-[#64748B] leading-4 truncate"
+                    style={{ width: "150px" }}
+                    onClick={() => {
+                      navigate(`/chat/${chat.chat_id}`);
+                      setDropdownOpen(false);
+                    }}
+                  >
+                    {chat.last_message}
+                  </p>
 
-          {/* Option Icon */}
-          <div className="dropdown-container mt-1">
-            <TooltipNew title="Options" placement="top-start">
-            <button
-              onClick={(e) => toggleDropdown(index, e)}
-              className={`text-sm text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-300 ${
-                hoveredIndex === index || index === 0
-                  ? "visible"
-                  : "invisible"
-              }`}
-            >
-              <OptionIcon />
-            </button>
-            </TooltipNew>
-         
-          </div>
+                  {/* Option Icon */}
+                  {hoveredIndex === index && (
+                    <div className="dropdown-container">
+                      <TooltipNew title="Options" placement="top-start">
+                        <button
+                          onClick={(e) => toggleDropdown(index, e)}
+                          className="text-sm text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-300"
+                        >
+                          <OptionIcon />
+                        </button>
+                      </TooltipNew>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
-    ))}
-  </div>
-)}
-
+      )}
 
       {/* Options Menu - Positioned fixed relative to viewport */}
       {activeDropdownIndex !== null && (
@@ -153,7 +146,7 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
           className="options-menu fixed bg-white rounded-lg shadow-lg border border-gray-200 z-50 w-44"
           style={{
             top: `${optionsPosition.top}px`,
-            left: `${optionsPosition.left}px`
+            left: `${optionsPosition.left}px`,
           }}
           onClick={(e) => e.stopPropagation()}
         >

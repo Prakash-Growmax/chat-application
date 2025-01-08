@@ -19,7 +19,7 @@ interface ChatMessageProps {
 export function ChatMessage({ message }: ChatMessageProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const isUser = message.role === "user";
-
+  console.log(message);
   return (
     <>
       <div className="mx-auto max-w-4xl h-full">
@@ -112,7 +112,7 @@ const ChartTableResponse = ({ message }) => {
         setLayoutDimensions({ width: 700, height: 350 });
       } else {
         // Larger screen dimensions
-        setLayoutDimensions({ width: 800, height: 450 });
+        setLayoutDimensions({ width: 800, height: 400 });
       }
     };
 
@@ -186,6 +186,21 @@ const ChartTableResponse = ({ message }) => {
     },
     "height": layoutDimensions.height,
     "width":layoutDimensions.width
+  }}
+    config={{
+    displaylogo: false, // Remove Plotly logo
+    modeBarButtonsToRemove: [
+      "zoom2d",        // Removes zoom functionality
+      "pan2d",         // Removes pan functionality
+      "select2d", 
+      "lasso2d", 
+      "hoverClosestCartesian", 
+      "hoverCompareCartesian", 
+      "toggleSpikelines", 
+      "autoScale2d", 
+      "resetScale2d",
+    ],
+    modeBarButtonsToAdd: ["toImage"], // Keep only the screenshot option
   }}
 />
 
