@@ -1,3 +1,4 @@
+import { updateProfile_stripeCustomerId } from "../profile/profile-service";
 import {
   getSubscriptionByUserId,
   updateSessionIdInSubscription,
@@ -5,6 +6,7 @@ import {
 
 export const createSubscriptionCheckoutSession = (
   price: Number,
+  email: string,
   userId: string
 ) => {
   try {
@@ -14,13 +16,14 @@ export const createSubscriptionCheckoutSession = (
         "Content-Type": "application/json",
       },
       mode: "cors",
-      body: JSON.stringify({ plan: price, customerId: userId }),
+      body: JSON.stringify({ plan: price, email: email }),
     })
       .then((res) => {
         if (res.ok) return res.json();
         return res.json().then((json) => Promise.reject(json));
       })
-      .then(async ({ session }) => {
+      .then(async ({ session, stripeCustomerId }) => {
+        updateProfile_stripeCustomerId(userId, stripeCustomerId);
         const subscription = await getSubscriptionByUserId(userId);
 
         if (!session.id || !session.id) return null;

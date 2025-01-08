@@ -24,7 +24,6 @@ const classNames = (...classes: (string | boolean | undefined)[]) => {
 export function PlansPage() {
   const { user } = useAuth();
   const { upgradePlan, planId } = useSubscription();
-  console.log("🚀 ~ PlansPage ~ planId:", planId);
   const { open } = useContext(AppContext);
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState<string | null>(null);
@@ -35,7 +34,11 @@ export function PlansPage() {
     if (!user?.id) {
       return null;
     }
-    createSubscriptionCheckoutSession(Number(plan?.price), user?.id);
+    createSubscriptionCheckoutSession(
+      Number(plan?.price),
+      user?.email,
+      user?.id
+    );
     // setLoading(plan?.name);
     // try {
     //   await upgradePlan(plan.name);
