@@ -11,20 +11,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        system: [
-          "ui-sans-serif",
-          "-apple-system",
-          "system-ui",
-          "Segoe UI",
-          "Helvetica",
-          "Apple Color Emoji",
-          "Arial",
-          "sans-serif",
-          "Segoe UI Emoji",
-          "Segoe UI Symbol",
-        ],
+        inter: ["__Inter_d65c78", "__Inter_Fallback_d65c78", "sans-serif"],
       },
-      // Adding ChatGPT-specific font sizes
+      fontSize: {
+        base: ["13px", "20px"],
+      },
       fontSize: {
         xs: ["0.75rem", { lineHeight: "1rem" }], // 12px
         sm: ["0.875rem", { lineHeight: "1.25rem" }], // 14px
@@ -51,6 +42,7 @@ export default {
         full: "9999px", // For circular buttons
       },
       colors: {
+        "custom-color": "rgb(2, 8, 23)",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         "chat-bg": "#f4f4f4", // ChatGPT's input background

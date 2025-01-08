@@ -1,8 +1,6 @@
 import DarkLogo from "@/assets/Logo/DarkLogo";
-import { useChatList } from "@/hooks/useChatList";
 
-import { Tooltip, tooltipClasses, TooltipProps, useMediaQuery } from "@mui/material";
-import { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import { useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
@@ -10,44 +8,25 @@ import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import { styled, useTheme } from "@mui/material/styles";
 import * as React from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-
-
-import TokenIcon from '@mui/icons-material/Token';
-import MenuClose from "./menu-close";
+import { useAuth } from "@/hooks/useAuth";
 import MyRecent from "../ChatNew/MyRecent";
 import Resources from "../ChatNew/Resources";
 import AppContext from "../context/AppContext";
-import ChatEdit from "./chat-edit";
+import NewChatButton from "../layout/SideBar/NewChatButton";
+import SideBarListItemHeader from "../layout/SideBar/SideBarListItemHeader";
 import LogoutIcon from "./logout-icon";
-import { useAuth } from "@/hooks/useAuth";
-import WorkFlow from "./workflow";
+import MenuClose from "./menu-close";
 import MyFiles from "./my-file";
 import ResourcesIcon from "./resources-icons";
-import ProfileLoginIcon from "./profilelog-icon";
+import WorkFlow from "./workflow";
 const drawerWidth = 200;
-
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-}
-
-const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} arrow classes={{ popper: className }} />
-))(({ theme }) => ({
-  [`& .${tooltipClasses.arrow}`]: {
-    color: theme.palette.common.black,
-  },
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: theme.palette.common.black,
-  },
-}));
-
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  padding: theme.spacing(0, 1),
-  ...theme.mixins.toolbar,
+  padding: theme.spacing(2, 1),
+  // ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
 
@@ -57,20 +36,16 @@ export default function Sidebar() {
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
 
-
-  // const [pin,setpin] = React.useState(false)
   const { open, setOpen } = React.useContext(AppContext);
 
-  const handleDrawerClose = () =>{
+  const handleDrawerClose = () => {
     setOpen(false);
-  
-  }
-  const [hoveredIndex, setHoveredIndex] = React.useState(null);
+  };
   const [isDropdownOpen, setDropdownOpen] = React.useState(true);
-    const { user, signOut } = useAuth();
+  const { user, signOut } = useAuth();
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState(null);
   React.useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: any) => {
       if (
         activeDropdownIndex !== null &&
         !event.target.closest(".dropdown-container")
@@ -83,16 +58,12 @@ export default function Sidebar() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [activeDropdownIndex]);
 
-  const toggleDropdown = (index, e) => {
-    e.stopPropagation();
-    setActiveDropdownIndex((prevIndex) => (prevIndex === index ? null : index));
-  };
-  React.useEffect(()=>{
-   if(user){
-    setOpen(true);
-   }
-  },[user])
-  
+  React.useEffect(() => {
+    if (user) {
+      setOpen(true);
+    }
+  }, [user]);
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -102,7 +73,6 @@ export default function Sidebar() {
           flexShrink: 0,
           "& .MuiDrawer-paper": {
             width: isMobile ? "100%" : isTab ? "25%" : drawerWidth,
-            boxSizing: "border-box",
             backgroundColor: "#F9F9F9",
             display: "flex",
             flexDirection: "column",
@@ -119,68 +89,43 @@ export default function Sidebar() {
             top: 0,
             zIndex: 10,
             backgroundColor: "#F9F9F9",
-            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
           }}
         >
-      <div className="flex w-full px-2 justify-between items-center">
-  <div>
-    <DarkLogo />
-  </div>
-  <div className="flex-none cursor-pointer" onClick={handleDrawerClose}>
- 
-    <MenuClose />
- 
-    
-  </div>
-</div>
-
+          <div className="flex w-full px-2 justify-between items-center">
+            <div>
+              <DarkLogo />
+            </div>
+            <div
+              className="flex-none cursor-pointer"
+              onClick={handleDrawerClose}
+            >
+              <MenuClose />
+            </div>
+          </div>
         </DrawerHeader>
 
         <Box
           sx={{
             flexGrow: 1,
             overflowY: "auto",
-            paddingLeft:"7.6px",
-            paddingRight:"7.6px"
+            paddingLeft: "7.6px",
+            paddingRight: "7.6px",
           }}
         >
           <List>
-            <div className="flex flex-col">
-              <div className="flex items-center justify-center" style={{paddingLeft:"6.4px",paddingRight:"6.4px",paddingTop:"8px",paddingBottom:"12.8px"}}>
-                <button className="group bg-white w-full h-[31px] px-2.5 py-1.5 border border-gray-100 rounded-md text-sm flex items-center justify-center hover:text-black shadow"  onClick={() => {
-              navigate("/chat");
-            }}>
-                <span className="flex items-center gap-2">
-                    <ChatEdit />
-                    <span className="text-xs text-gray-500 group-hover:text-black">
-                      New Thread
-                    </span>
-                  </span>
-                </button>
-                
-              
-              </div>
-              <div className="flex items-center gap-2 px-1">
-                <div>
-                  <WorkFlow />
-                </div>
-                <div className="font-inter  text-[15px] leading-[20px] text-[rgb(2,8,23)]">
-                Workspace
-                </div>
-                 </div>
-            </div>
+            <NewChatButton />
+            <SideBarListItemHeader icon={WorkFlow} title="Workflow" />
           </List>
-          <Divider />
           <div className="w-full">
             <List>
               <div className="flex flex-col">
                 <div>
-                <MyRecent
-                  isDropdownOpen={isDropdownOpen}
-                  setDropdownOpen={setDropdownOpen}
-                />
+                  <MyRecent
+                    isDropdownOpen={isDropdownOpen}
+                    setDropdownOpen={setDropdownOpen}
+                  />
                 </div>
-               
+
                 <div
                   className={`overflow-hidden transition-all duration-100 ease-in-out ${
                     isDropdownOpen ? "mt-40" : ""
@@ -191,15 +136,16 @@ export default function Sidebar() {
               </div>
             </List>
             <div>
-              <div className="flex items-center gap-2 px-1" style={{marginBottom:"4.8px"}}>
+              <div
+                className="flex items-center gap-2 px-1"
+                style={{ marginBottom: "4.8px" }}
+              >
                 <div>
                   <ResourcesIcon />
                 </div>
                 <div className="font-inter font-medium text-customColor text-[15px] leading-[20px]">
-  Resources
-</div>
-
-
+                  Resources
+                </div>
               </div>
               <Divider />
               <div className="flex">
@@ -216,23 +162,25 @@ export default function Sidebar() {
             zIndex: 10,
             backgroundColor: "#F9F9F9",
             boxShadow: "0px -2px 4px rgba(0, 0, 0, 0.1)",
-            padding:"9.6px",
+            padding: "9.6px",
             display: "flex", // Set display to flex
             justifyContent: "center", // Horizontally center items
             alignItems: "center", // Vertically center items
           }}
         >
-                  <div className="flex items-center gap-2 w-full hover:bg-gray-200 px-4 py-2 rounded-lg" style={{marginBottom:"4.8px"}} onClick={signOut}>
-                <div>
-                <LogoutIcon />
-                </div>
-                <div className="font-inter font-medium text-customColor text-[15px] leading-[20px]">
-  Logout
-</div>
+          <div
+            className="flex items-center gap-2 w-full hover:bg-gray-200 px-4 py-2 rounded-lg"
+            style={{ marginBottom: "4.8px" }}
+            onClick={signOut}
+          >
+            <div>
+              <LogoutIcon />
+            </div>
+            <div className="font-inter font-medium text-customColor text-[15px] leading-[20px]">
+              Logout
+            </div>
+          </div>
 
-
-              </div>
-      
           {/* <div
             className="flex gap-2 hover:bg-gray-200 hover:rounded-lg rounded-lg"
             onClick={() => {
@@ -253,5 +201,4 @@ export default function Sidebar() {
       </Drawer>
     </Box>
   );
-
 }
