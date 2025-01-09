@@ -1,49 +1,28 @@
-FROM node:16-alpine
+FROM node:18-slim AS build
+
+ENV NPM_CONFIG_UPDATE_NOTIFIER=false
+ENV NPM_CONFIG_FUND=false
+# ENV NODE_ENV=production
 
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install --legacy-peer-deps
+RUN npm ci
 
-# Copy project files
-COPY . .
+COPY . ./
 
-# Build the app
-RUN CI=true npm run build
+# Specify any needed environment variables here
+ARG VITE_API_URL
 
-# Install serve globally
-RUN npm install -g serve
+RUN npm run build
 
-# Use PORT environment variable
-ENV PORT=3000
-EXPOSE ${PORT}
-
-# Serve from 'dist' directory and use PORT env variable
-CMD serve -s dist -l ${PORT}
-
-FROM node:16-alpine
+FROM caddy
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+COPY Caddyfile ./
 
-# Install dependencies
-RUN npm install --legacy-peer-deps
+COPY --from=build /app/dist /app/dist
 
-# Copy project files
-COPY . .
-
-
-RUN CI=true npm run build
-
-# Install serve globally
-RUN npm install -g serve
-
-ENV PORT=3000
-EXPOSE ${PORT}
-
-CMD serve -s dist -l ${PORT}
+CMD ["caddy", "run", "--config", "Caddyfile", "--adapter", "caddyfile"]
