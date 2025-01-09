@@ -16,7 +16,7 @@ function SideBarListItemHeader({
         <span className="font-inter font-medium lg:text-base md:text-lg text-lg text-custom-color">
           {title}
         </span>
-      </div>
+      </label>
       <Divider />
     </>
   );
