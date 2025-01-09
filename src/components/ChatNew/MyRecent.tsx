@@ -1,31 +1,14 @@
+import { useChatList } from "@/hooks/useChatList";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { styled, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
-import { useChatList } from "@/hooks/useChatList";
-import ChatMsg from "../ui/chat-message";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import OptionIcon from "../ui/option-icon";
-import ShareIcon from "../ui/share-icon";
-import RenameIcon from "../ui/rename-icon";
-import ArchiveIcon from "../ui/archive-icon";
-import DeleteIcon from "../ui/delete-icon";
-import RightArrow from "../ui/right-arrow";
 import BellowArrow from "../ui/bellow-arrow";
+import ChatMsg from "../ui/chat-message";
+import DeleteIcon from "../ui/delete-icon";
+import OptionIcon from "../ui/option-icon";
+import RightArrow from "../ui/right-arrow";
 import TooltipNew from "../ui/tooltipnew";
 
-const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} arrow classes={{ popper: className }} />
-))(({ theme }) => ({
-  [`& .${tooltipClasses.arrow}`]: {
-    color: theme.palette.common.black,
-  },
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: theme.palette.common.black,
-  },
-}));
-
-export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
- 
+export default function MyRecent({ isDropdownOpen, setDropdownOpen }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const navigate = useNavigate();
   const { data } = useChatList();
@@ -33,18 +16,21 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
   const [optionsPosition, setOptionsPosition] = useState({ top: 0, left: 0 });
   React.useEffect(() => {
     const handleClickOutside = (event) => {
-      if (activeDropdownIndex !== null && !event.target.closest('.dropdown-container')) {
+      if (
+        activeDropdownIndex !== null &&
+        !event.target.closest(".dropdown-container")
+      ) {
         setActiveDropdownIndex(null);
       }
     };
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, [activeDropdownIndex]);
 
   const toggleDropdown = (index, e) => {
     e.stopPropagation();
-    
+
     if (activeDropdownIndex === index) {
       setActiveDropdownIndex(null);
       return;
@@ -53,49 +39,48 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
     const button = e.currentTarget;
     const rect = button.getBoundingClientRect();
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
+
     setOptionsPosition({
       top: rect.bottom + scrollTop,
-      left: rect.left
+      left: rect.left,
     });
-    
+
     setActiveDropdownIndex(index);
   };
   return (
     <div className="relative">
       {/* Main Thread Button */}
-      <TooltipNew title={isDropdownOpen ? "Close My Thread":"Expand My Thread"} placement="top-start">
-      <div
-  className="flex items-center justify-between rounded-lg hover:bg-gray-200 cursor-pointer px-4 py-2"
-  onClick={() => {
-    setDropdownOpen(!isDropdownOpen);
-  }}
->
-  <div className="flex items-center gap-3">
-    <ChatMsg />
-    <p
-      className="font-inter text-slate-500  text-[15px] leading-4"
-      onClick={(e) => {
-        e.stopPropagation(); // Prevents the parent click handler from firing
-        setDropdownOpen(!isDropdownOpen);
-      }}
-    >
-      My Thread
-    </p>
-  </div>
-  <div>
-    {isDropdownOpen ? <BellowArrow /> : <RightArrow />}
-  </div>
-</div>
-
+      <TooltipNew
+        title={isDropdownOpen ? "Close My Thread" : "Expand My Thread"}
+        placement="top-start"
+      >
+        <div
+          className="flex items-center justify-between rounded-lg hover:bg-gray-200 cursor-pointer px-4 py-2"
+          onClick={() => {
+            setDropdownOpen(!isDropdownOpen);
+          }}
+        >
+          <div className="flex items-center gap-3">
+            <ChatMsg />
+            <p
+              className="font-inter text-slate-500  text-[15px] leading-4"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevents the parent click handler from firing
+                setDropdownOpen(!isDropdownOpen);
+              }}
+            >
+              My Thread
+            </p>
+          </div>
+          <div>{isDropdownOpen ? <BellowArrow /> : <RightArrow />}</div>
+        </div>
       </TooltipNew>
-    
 
       {/* Thread Dropdown */}
       {isDropdownOpen && (
         <div
           className="absolute z-10 bg-transparent w-44 max-h-40 overflow-y-auto"
-          style={{ paddingLeft:"4.8px",paddingRight:"4.8px"}}
+          style={{ paddingLeft: "4.8px", paddingRight: "4.8px" }}
         >
           {data.map((chat, index) => (
             <div key={index} className="relative my-2">

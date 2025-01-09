@@ -3,22 +3,20 @@ import DarkLogo from "@/assets/Logo/DarkLogo";
 import { useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
+
 import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
 import { styled, useTheme } from "@mui/material/styles";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/hooks/useAuth";
-import MyRecent from "../ChatNew/MyRecent";
 import Resources from "../ChatNew/Resources";
 import AppContext from "../context/AppContext";
 import NewChatButton from "../layout/SideBar/NewChatButton";
 import SideBarListItemHeader from "../layout/SideBar/SideBarListItemHeader";
+import WorkflowList from "../layout/SideBar/WorkflowList";
 import LogoutIcon from "./logout-icon";
 import MenuClose from "./menu-close";
-import MyFiles from "./my-file";
 import ResourcesIcon from "./resources-icons";
 import WorkFlow from "./workflow";
 const drawerWidth = 200;
@@ -112,42 +110,13 @@ export default function Sidebar() {
             paddingRight: "7.6px",
           }}
         >
-          <List>
-            <NewChatButton />
-            <SideBarListItemHeader icon={WorkFlow} title="Workflow" />
-          </List>
+          <NewChatButton />
+          <SideBarListItemHeader icon={WorkFlow} title="Workflow" />
           <div className="w-full">
-            <List>
-              <div className="flex flex-col">
-                <div>
-                  <MyRecent
-                    isDropdownOpen={isDropdownOpen}
-                    setDropdownOpen={setDropdownOpen}
-                  />
-                </div>
-
-                <div
-                  className={`overflow-hidden transition-all duration-100 ease-in-out ${
-                    isDropdownOpen ? "mt-40" : ""
-                  }`}
-                >
-                  <MyFiles />
-                </div>
-              </div>
-            </List>
+            <WorkflowList />
             <div>
-              <div
-                className="flex items-center gap-2 px-1"
-                style={{ marginBottom: "4.8px" }}
-              >
-                <div>
-                  <ResourcesIcon />
-                </div>
-                <div className="font-inter font-medium text-customColor text-[15px] leading-[20px]">
-                  Resources
-                </div>
-              </div>
-              <Divider />
+              <SideBarListItemHeader icon={ResourcesIcon} title="Resources" />
+
               <div className="flex">
                 <Resources />
               </div>

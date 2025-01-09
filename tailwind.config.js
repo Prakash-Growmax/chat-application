@@ -11,20 +11,17 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        inter: ["__Inter_d65c78", "__Inter_Fallback_d65c78", "sans-serif"],
-      },
-      fontSize: {
-        base: ["13px", "20px"],
+        inter: ["Inter", "sans-serif"],
       },
       fontSize: {
         xs: ["0.75rem", { lineHeight: "1rem" }], // 12px
         sm: ["0.875rem", { lineHeight: "1.25rem" }], // 14px
-        base: ["1rem", { lineHeight: "1.5rem" }], // 16px
         md: ["1.0625rem", { lineHeight: "1.5rem" }], // 17px - ChatGPT's common text size
         lg: ["1.125rem", { lineHeight: "1.75rem" }], // 18px
         xl: ["1.25rem", { lineHeight: "1.75rem" }], // 20px
         "2xl": ["1.5rem", { lineHeight: "2rem" }], // 24px - ChatGPT's heading size
         "3xl": ["1.875rem", { lineHeight: "2.25rem" }], // 30px
+        itemHeader: ["0.8125rem", { lineHeight: "1.25rem" }],
       },
       // Rest of your existing configuration
       spacing: {
