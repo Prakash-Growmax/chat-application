@@ -1,6 +1,6 @@
 import DarkLogo from "@/assets/Logo/DarkLogo";
 
-import { useMediaQuery } from "@mui/material";
+import { Divider, List, useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 
@@ -19,6 +19,8 @@ import LogoutIcon from "./logout-icon";
 import MenuClose from "./menu-close";
 import ResourcesIcon from "./resources-icons";
 import WorkFlow from "./workflow";
+import MyRecent from "../ChatNew/MyRecent";
+import MyFiles from "./my-file";
 const drawerWidth = 200;
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -27,7 +29,16 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   // ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
-
+const Backdrop = styled('div')`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1200;
+  transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1);
+`
 export default function Sidebar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -65,16 +76,20 @@ export default function Sidebar() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <Drawer
+      {open && (isMobile || isTab) && (
+        <Backdrop onClick={handleDrawerClose} />
+      )}
+        <Drawer
         sx={{
           width: isMobile ? "100%" : isTab ? "35%" : drawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: isMobile ? "100%" : isTab ? "25%" : drawerWidth,
+            width: isMobile ? "70%" : isTab ? "55%" : drawerWidth,
             backgroundColor: "#F9F9F9",
             display: "flex",
             flexDirection: "column",
             maxHeight: "100vh",
+            zIndex: 1300, // Ensure drawer is above backdrop
           },
         }}
         variant="persistent"
@@ -110,13 +125,45 @@ export default function Sidebar() {
             paddingRight: "7.6px",
           }}
         >
-          <NewChatButton />
-          <SideBarListItemHeader icon={WorkFlow} title="Workflow" />
+          <List>
+            <NewChatButton isMobile={isMobile}/>
+            <SideBarListItemHeader icon={WorkFlow} title="Workspace" />
+          </List>
           <div className="w-full">
-            <WorkflowList />
-            <div>
-              <SideBarListItemHeader icon={ResourcesIcon} title="Resources" />
+            <List>
+              <div className="flex flex-col">
+                <div>
+                  <MyRecent
+                    isDropdownOpen={isDropdownOpen}
+                    setDropdownOpen={setDropdownOpen}
+                    isMobile={isMobile}
+                    isTab={isTab}
+                  />
+                </div>
 
+                <div
+                  className={`overflow-hidden transition-all duration-100 ease-in-out ${
+                    isDropdownOpen ? "mt-40" : ""
+                  }`}
+                >
+                  <MyFiles />
+                </div>
+              </div>
+            </List>
+            <div>
+              <div
+                className="flex items-center gap-2 px-1"
+                // style={{ marginBottom: "4.8px" }}
+              >
+                    <SideBarListItemHeader icon={ResourcesIcon} title="Resources" />
+                {/* <div>
+                  <ResourcesIcon />
+                </div>
+                <div className="font-inter font-medium text-customColor text-[15px] leading-[20px]">
+                  Resources
+                </div> */}
+              </div>
+              <Divider />
               <div className="flex">
                 <Resources />
               </div>
@@ -145,7 +192,7 @@ export default function Sidebar() {
             <div>
               <LogoutIcon />
             </div>
-            <div className="font-inter font-medium text-customColor text-[15px] leading-[20px]">
+            <div className="font-inter font-medium text-customColor lg:text-[15px] md:text-[18px] text-[18px] leading-[20px]">
               Logout
             </div>
           </div>

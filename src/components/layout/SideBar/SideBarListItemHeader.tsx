@@ -9,9 +9,11 @@ function SideBarListItemHeader({
 }) {
   return (
     <>
-      <div className="mb-1.5 mt-3.5 flex items-center gap-2">
-        <Icon />
-        <span className=" font-[600] text-[12.5px] text-custom-color">
+      <label className="mb-1.5 text-sm font-medium mt-3.5 flex flex-row items-center gap-0.5">
+        <div className="">
+          <Icon className="w-4 h-4" />
+        </div>
+        <span className="font-inter font-medium lg:text-base md:text-lg text-lg text-custom-color">
           {title}
         </span>
       </div>
