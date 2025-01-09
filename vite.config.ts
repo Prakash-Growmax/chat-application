@@ -5,7 +5,7 @@ import { viteEnvs } from "vite-envs";
 
 export default defineConfig(({ mode }) => {
   return {
-    plugins: [react(), viteEnvs()],
+    plugins: [react(), viteEnvs({})],
     build: {
       chunkSizeWarningLimit: 1200,
     },
