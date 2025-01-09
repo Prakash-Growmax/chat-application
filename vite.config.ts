@@ -1,35 +1,32 @@
 import react from "@vitejs/plugin-react";
-import dotenv from "dotenv";
 import path from "path";
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 
-dotenv.config();
+export default defineConfig(({ mode }) => {
+  // Load env file based on `mode` in the current working directory.
+  // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
+  const env = loadEnv(mode, process.cwd(), "");
 
-const viteEnvVariables = Object.keys(process.env)
-  .filter((key) => key.startsWith("VITE_"))
-  .reduce((env, key) => {
-    // Remove the import.meta.env prefix
-    env[key] = JSON.stringify(process.env[key]);
-    return env;
-  }, {});
-
-export default defineConfig({
-  plugins: [react()],
-  build: {
-    chunkSizeWarningLimit: 1200,
-  },
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
+  return {
+    plugins: [react()],
+    build: {
+      chunkSizeWarningLimit: 1200,
     },
-  },
-  optimizeDeps: {
-    exclude: ["lucide-react"],
-  },
-  define: {
-    "import.meta.env": {
-      ...import.meta.env,
-      ...viteEnvVariables,
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
     },
-  },
+    optimizeDeps: {
+      exclude: ["lucide-react"],
+    },
+    define: {
+      "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(
+        env.VITE_SUPABASE_URL
+      ),
+      "import.meta.env.VITE_SUPABASE_ANON_KEY": JSON.stringify(
+        env.VITE_SUPABASE_ANON_KEY
+      ),
+    },
+  };
 });
