@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
 import { useChatList } from "@/hooks/useChatList";
@@ -12,6 +12,7 @@ import DeleteIcon from "../ui/delete-icon";
 import RightArrow from "../ui/right-arrow";
 import BellowArrow from "../ui/bellow-arrow";
 import TooltipNew from "../ui/tooltipnew";
+import AppContext from "../context/AppContext";
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -24,8 +25,8 @@ const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
- 
+export default function MyRecent({isDropdownOpen,setDropdownOpen,isMobile}) {
+   const {open,setOpen}=useContext(AppContext);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const navigate = useNavigate();
   const { data } = useChatList();
@@ -114,7 +115,9 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen}) {
                     style={{ width: "150px" }}
                     onClick={() => {
                       navigate(`/chat/${chat.chat_id}`);
-                      setDropdownOpen(false);
+                      if(isMobile){
+                        setOpen(false)
+                      }
                     }}
                   >
                     {chat.last_message}

@@ -179,7 +179,7 @@ function Chat({ message }: ChatProps) {
             </div>
           )}
           <div
-            className={`text-base px-3 w-full md:px-5 lg:px-4 xl:px-5 pb-4 lg:mr-0 md:mr-8${
+            className={`text-base px-3 w-full md:px-5 lg:px-4 xl:px-5 pb-4 lg:mr-0 md:mr-8 ${
               state.s3Key ? "" : "mr-12"
             }`}
           >

@@ -123,6 +123,7 @@ export default function Sidebar() {
                   <MyRecent
                     isDropdownOpen={isDropdownOpen}
                     setDropdownOpen={setDropdownOpen}
+                    isMobile={isMobile}
                   />
                 </div>
 
