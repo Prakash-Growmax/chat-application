@@ -1,3 +1,4 @@
+import DarkLogo from "@/assets/Logo/DarkLogo";
 import {
   Card,
   CardContent,
@@ -28,7 +29,7 @@ export function AuthLayout({
           <CardHeader className="space-y-3">
             <div className="flex items-center justify-center">
               <div className="rounded-full bg-primary/10 p-3">
-                {icon || <Building2 className="h-6 w-6" />}
+                <DarkLogo/>
               </div>
             </div>
             <CardTitle className="text-center text-2xl font-bold">

@@ -1,6 +1,5 @@
-import UserIcon from "@/assets/Icons/UserIcon";
+// import UserIcon from "@/assets/Icons/UserIcon";
 import DarkLogo from "@/assets/Logo/DarkLogo";
-import LogoIcon from "@/assets/Logo/LogoIcon";
 import { useAuth } from "@/hooks/useAuth";
 import { Avatar } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";

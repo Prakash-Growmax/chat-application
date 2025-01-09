@@ -1,7 +1,6 @@
 import { useMessageQueue } from "@/lib/useMessageQuesue";
 import { ChatState } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
 import { Alert, AlertDescription } from "../ui/alert";
 import { ScrollArea } from "../ui/scroll-area";
@@ -19,9 +18,6 @@ interface ChatBoxProps {
 }
 export default function ChatBox({
   state,
-  setState,
-  isUploading,
-  setIsUploading,
   openRight,
 }: ChatBoxProps) {
   const { queue, processing, addToQueue, processQueue } = useMessageQueue();
@@ -43,12 +39,7 @@ export default function ChatBox({
   useEffect(() => {
     scrollToBottom();
   }, [state.messages, scrollToBottom]);
-
-  const handleError = (error: string) => {
-    setState((prev) => ({ ...prev, error, csvData: null }));
-  };
-
-  return (
+return (
     <>
       <div className="min-h-screen">
         <div className="flex h-screen">

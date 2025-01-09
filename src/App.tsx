@@ -27,7 +27,7 @@ const InviteAcceptedPage = lazy(() => import("./pages/InviteAcceptedPage"));
 function App() {
   const [open, setOpen] = useState(false);
   const [openRight, setOpenRight] = useState(false);
-  
+  const hideHeader = location.pathname === "/login";
   return (
     <ThemeProvider defaultTheme="light" storageKey="ui-theme">
       <ErrorBoundary>
@@ -42,9 +42,10 @@ function App() {
               }}
             >
               <div className="flex flex-col ">
-                <div className="fixed h-18 top-0 left-0 w-full z-50">
+                {!hideHeader && (  <div className="fixed h-18 top-0 left-0 w-full z-50">
                   <Header />
-                </div>
+                </div>)}
+              
                 <div>
                   <Sidebar/>
                 </div>
