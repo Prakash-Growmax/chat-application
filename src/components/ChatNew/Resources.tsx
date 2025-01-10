@@ -16,7 +16,7 @@ export default function Resources() {
         }}
       >
         <PlanIcon />
-        <p className="font-inter text-slate-500  text-[15px] leading-4">Subscription</p>
+        <p className="font-inter text-slate-500  lg:text-[15px] md:text-[18px] text-[18px] leading-4">Subscription</p>
       </div>
       <div
         className="flex items-center rounded-lg hover:bg-gray-200 cursor-pointer gap-3 w-full px-4 py-2"
@@ -27,7 +27,7 @@ export default function Resources() {
         }}
       >
         <TeamsIcon />
-        <p className="font-inter text-slate-500  text-[15px] leading-4">Teams</p>
+        <p className="font-inter text-slate-500  lg:text-[15px] md:text-[18px] text-[18px] leading-4">Teams</p>
       </div>
       <div
         className="flex items-center rounded-lg hover:bg-gray-200 cursor-pointer gap-3 w-full px-4 py-2"
@@ -38,7 +38,7 @@ export default function Resources() {
         }}
       >
         <ProfileIcon />
-        <p className="font-inter text-slate-500  text-[15px] leading-4">Profile</p>
+        <p className="font-inter text-slate-500  lg:text-[15px] md:text-[18px] text-[18px] leading-4">Profile</p>
       </div>
     </div>
   );

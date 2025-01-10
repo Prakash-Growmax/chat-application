@@ -3,11 +3,9 @@ import ChatEdit from "@/components/ui/chat-edit";
 import { useMediaQuery, useTheme } from "@mui/material";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
-function NewChatButton() {
-    const theme = useTheme();
+ 
+function NewChatButton({isMobile}) {
   const navigate = useNavigate();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const {open,setOpen}=useContext(AppContext);
   return (
     <div className="flex items-center justify-center">
@@ -22,7 +20,7 @@ function NewChatButton() {
       >
         <span className="flex items-center gap-2">
           <ChatEdit className="text-black" />
-          <span className="text-xs text-black">New Thread</span>
+          <span className="lg:text-xs md:text-base text-black text-base">New Thread</span>
         </span>
       </button>
     </div>
