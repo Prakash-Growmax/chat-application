@@ -111,7 +111,7 @@ export default function Sidebar() {
           }}
         >
           <NewChatButton />
-          <SideBarListItemHeader icon={WorkFlow} title="Workflow" />
+          <SideBarListItemHeader icon={WorkFlow} title="Workspace" />
           <div className="w-full">
             <WorkflowList />
             <div>

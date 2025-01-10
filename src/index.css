@@ -40,10 +40,6 @@
   * {
     @apply border-border;
   }
-
-  body {
-    @apply bg-background text-foreground;
-  }
 }
 
 .bg-grid-white\/10 {

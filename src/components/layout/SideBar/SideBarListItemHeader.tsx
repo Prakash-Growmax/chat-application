@@ -1,3 +1,4 @@
+import { ListItemHeaderText } from "@/Theme/Typography";
 import { Divider } from "@mui/material";
 
 function SideBarListItemHeader({
@@ -11,9 +12,7 @@ function SideBarListItemHeader({
     <>
       <div className="mb-1.5 mt-3.5 flex items-center gap-2">
         <Icon />
-        <span className=" font-[600] text-[12.5px] text-custom-color">
-          {title}
-        </span>
+        <ListItemHeaderText>{title}</ListItemHeaderText>
       </div>
       <Divider />
     </>

@@ -29,7 +29,7 @@ function App() {
   const [openRight, setOpenRight] = useState(false);
   const hideHeader = location.pathname === "/login";
   return (
-    <ThemeProvider defaultTheme="light" storageKey="ui-theme">
+    <ThemeProvider>
       <ErrorBoundary>
         <AuthProvider>
           <Router>
@@ -42,12 +42,14 @@ function App() {
               }}
             >
               <div className="flex flex-col ">
-                {!hideHeader && (  <div className="fixed h-18 top-0 left-0 w-full z-50">
-                  <Header />
-                </div>)}
-              
+                {!hideHeader && (
+                  <div className="fixed h-18 top-0 left-0 w-full z-50">
+                    <Header />
+                  </div>
+                )}
+
                 <div>
-                  <Sidebar/>
+                  <Sidebar />
                 </div>
                 {/* Scrollable Content */}
                 <div className="flex-1 min-h-screen">
