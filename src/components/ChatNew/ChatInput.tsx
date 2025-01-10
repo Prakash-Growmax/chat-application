@@ -5,6 +5,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { CSVPreview } from "../CSVPreview/CSVPreview";
 import Spinner from "../ui/Spinner";
 import AttachIcon from "../ui/attach-ui";
+import { useProfile } from "@/hooks/profile/useProfile";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -30,7 +32,14 @@ export function ChatInput({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const token = localStorage.getItem("supabase.auth.token");
+  const tokenJson = JSON.parse(token);
+  const accessToken=tokenJson.access_token;
+  const tokenType = tokenJson.token_type;
+  const chatId=localStorage.getItem("chatId");
+  const [filename,setFilename]=useState("");
+  const {user}=useAuth();
+   const { profile } = useProfile();
   const adjustTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -40,7 +49,6 @@ export function ChatInput({
     const newHeight = Math.min(textarea.scrollHeight, maxHeight);
     textarea.style.height = `${newHeight}px`;
   }, [s3Key]);
-
   useEffect(() => {
     adjustTextareaHeight();
   }, [input, adjustTextareaHeight, s3Key]);
@@ -54,6 +62,7 @@ export function ChatInput({
   const handleFileUpload = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
+      setFilename(file?.name);
       if (!file) {
         console.error("No file selected");
         return;
@@ -63,6 +72,7 @@ export function ChatInput({
 
       try {
         const s3Key = await uploadToS3(file, () => {});
+      
         onFileUploaded(s3Key);
       } catch (error) {
         if (error instanceof S3UploadError) {
@@ -73,11 +83,42 @@ export function ChatInput({
       } finally {
         setIsUploading(false);
       }
+      
+      if(profile?.organization_id){   
+        const response = await fetch(`https://analytics-production-88e7.up.railway.app/api/v1/datasets/datasets?${chatId}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",  // Add this
+            "x-organization-id": profile.organization_id,
+            "Authorization": `${tokenType} ${accessToken}`
+        },
+        body: JSON.stringify({
+          s3_path: `s3://growmax-dev-app-assets/analytics/${file.name}`,
+          org_id:profile?.organization_id,
+          type:"unknown"
+        })
+    });}
+   
     },
     [onFileUploaded, onError, setIsUploading]
   );
-
+ 
   const handleSubmit = async (e: React.FormEvent) => {
+  //   if(profile?.organization_id){   
+  //     const response = await fetch(`https://analytics-production-88e7.up.railway.app/api/v1/analytics/analyze?${chatId}`, {
+  //     method: "POST",
+  //     headers: {
+  //         "Content-Type": "application/json",
+  //         "x-organization-id": profile.organization_id,
+  //         "Authorization": `${tokenType} ${accessToken}`
+  //     },
+  //     body: JSON.stringify({
+  //       s3_path: `s3://growmax-dev-app-assets/analytics/${filename}`,
+  //       org_id:profile?.organization_id,
+  //       query:input.trim(),
+  //       user_id:user?.id
+  //     })
+  // });}
     e.preventDefault();
     if (input.trim() && !isSubmitting) {
       setIsSubmitting(true);

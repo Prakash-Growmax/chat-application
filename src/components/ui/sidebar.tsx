@@ -182,7 +182,7 @@ export default function Sidebar() {
           }}
         >
           <div
-            className="flex items-center gap-2 w-full hover:bg-gray-200 px-4 py-2 rounded-lg"
+            className="flex items-center gap-2 w-full hover:bg-gray-200 px-4 py-2 rounded-lg cursor-pointer"
             style={{ marginBottom: "4.8px" }}
             onClick={signOut}
           >

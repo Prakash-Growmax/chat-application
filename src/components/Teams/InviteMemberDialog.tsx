@@ -59,7 +59,7 @@ export const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
       <DialogTrigger asChild>
         {isOwner && <Button>Invite Member</Button>}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="h-[300px]">
         <DialogHeader>
           <DialogTitle>Invite Team Member</DialogTitle>
           <DialogDescription>
@@ -84,7 +84,7 @@ export const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
               <SelectTrigger>
                 <SelectValue placeholder="Select role" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white">
                 <SelectItem value="member">Member</SelectItem>
                 <SelectItem value="admin">Admin</SelectItem>
               </SelectContent>

@@ -12,7 +12,7 @@ import { CreditCard, Loader2, Settings2, User } from "lucide-react";
 import { useContext, useState } from "react";
 
 export function SettingsPage() {
-  const { profile, loading, error } = ile();
+  const { profile, loading, error } = useProfile();
   const { organization, updateOrganizationName } = useOrganization(
     profile?.organization_id
   );

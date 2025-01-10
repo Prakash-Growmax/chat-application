@@ -15,6 +15,7 @@ import { User,Mail, Settings, LogOut} from "lucide-react";
 import TokenIcon from "./icons/token-icon";
 import PlanIcon from "../ui/plan-icon";
 import { useNavigate } from "react-router-dom";
+import LogoutIcon from "../ui/logout-icon";
 export default function MyAccountDetails(){
     const {user,signOut}=useAuth();
     const navigate =useNavigate();
@@ -37,7 +38,7 @@ export default function MyAccountDetails(){
       const capitalizedName = capitalizeFirstName(userName);
     return(
         <>
-           {user && (
+        
             <div className="flex items-center">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -58,53 +59,42 @@ export default function MyAccountDetails(){
 
   <DropdownMenuGroup>
     <DropdownMenuItem>
-      <div className="flex gap-4 truncate">
+      {/* <div className="flex gap-4 truncate">
         <User className="w-5 h-5" />
         <span>{capitalizedName}</span>
-      </div>
+      </div> */}
+        <span className="px-1 py-1">{capitalizedName}</span>
     </DropdownMenuItem>
     <DropdownMenuItem>
-      <div className="flex gap-4 truncate">
-        <Mail className="w-5 h-5" />
-        <span className="truncate">{user?.email}</span>
+      <div className="flex truncate">
+  
+        <span className="truncate px-1 py-1">{user?.email}</span>
       </div>
+      
     </DropdownMenuItem>
     <DropdownMenuItem>
-      <div className="flex gap-4 truncate">
-        <TokenIcon />
-        <span>{user?.tokenUsage}/1000</span>
-      </div>
+   
+        <span className="px-1 py-1">{user?.tokenUsage} tokens used</span>
     </DropdownMenuItem>
-    <DropdownMenuItem>
-      <div className="flex gap-4 truncate items-center">
-        <PlanIcon />
-        <span>{user?.plan}</span>
-      </div>
-    </DropdownMenuItem>
+
   </DropdownMenuGroup>
-  <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
-  <DropdownMenuGroup>
-    <DropdownMenuItem>
-      <div className="flex gap-4 cursor-pointer" onClick={() => navigate("/settings")}>
-        <Settings className="w-5 h-5" />
-        <span>Settings</span>
-      </div>
-    </DropdownMenuItem>
-  </DropdownMenuGroup>
-  <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
-  <DropdownMenuGroup>
-    <DropdownMenuItem>
-      <div className="flex gap-4 cursor-pointer" onClick={signOut}>
-        <LogOut className="w-5 h-5" />
-        <span>Log out</span>
-      </div>
-    </DropdownMenuItem>
-  </DropdownMenuGroup>
+ <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
+ <DropdownMenuItem>
+ <div className="flex gap-4 cursor-pointer items-center hover:bg-gray-200 w-full rounded-lg px-1 py-1" onClick={signOut}>
+  <div>
+  <LogoutIcon />
+  </div>
+ 
+  <span>Log out</span>
+</div>
+
+        </DropdownMenuItem>
+ 
 </DropdownMenuContent>
 
               </DropdownMenu>
             </div>
-          )}</>
+         </>
      
     )
 }

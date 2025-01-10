@@ -54,7 +54,7 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen,isMobile,isTab}
   };
 
   return (
-    <div className="relative">
+    <div className="relative cursor-pointer">
     <TooltipNew title={isDropdownOpen ? "Close My Thread":"Expand My Thread"} placement="top-start">
       <div
         className="flex items-center justify-between rounded-lg hover:bg-gray-200 cursor-pointer px-4 py-2"
