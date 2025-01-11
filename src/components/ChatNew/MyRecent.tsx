@@ -1,15 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext,useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppContext from "../context/AppContext";
 import BellowArrow from "../ui/bellow-arrow";
-import ChatMsg from "../ui/chat-message";
+
 import DeleteIcon from "../ui/delete-icon";
 import OptionIcon from "../ui/option-icon";
 import RightArrow from "../ui/right-arrow";
 import TooltipNew from "../ui/tooltipnew";
-import { styled } from "@mui/system";
 import { useChatList } from "@/hooks/useChatList";
-
+import { MessageSquareMore } from 'lucide-react';
 
 
 export default function MyRecent({isDropdownOpen,setDropdownOpen,isMobile,isTab}) {
@@ -63,7 +62,8 @@ export default function MyRecent({isDropdownOpen,setDropdownOpen,isMobile,isTab}
         }}
       >
         <div className="flex items-center gap-3">
-          <ChatMsg />
+ 
+          <MessageSquareMore size={20} color="#64748B"/>
           <p
             className="font-inter text-slate-500 lg:text-[15px] md:text-[18px] text-[18px] leading-4"
             onClick={(e) => {

@@ -15,11 +15,14 @@ import Resources from "../ChatNew/Resources";
 import AppContext from "../context/AppContext";
 import NewChatButton from "../layout/SideBar/NewChatButton";
 import SideBarListItemHeader from "../layout/SideBar/SideBarListItemHeader";
-import LogoutIcon from "./logout-icon";
-import MenuClose from "./menu-close";
+
 import MyFiles from "./my-file";
-import ResourcesIcon from "./resources-icons";
-import WorkFlow from "./workflow";
+
+import { PanelRightOpen } from 'lucide-react';
+import TooltipNew from "./tooltipnew";
+import { Layers } from 'lucide-react';
+import { CloudCog } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 const drawerWidth = 200;
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -109,7 +112,11 @@ export default function Sidebar() {
               className="flex-none cursor-pointer"
               onClick={handleDrawerClose}
             >
-              <MenuClose />
+              <TooltipNew title="Close Menu" placement="top-start">
+              <PanelRightOpen size={24}/>
+              </TooltipNew>
+            
+           
             </div>
           </div>
         </DrawerHeader>
@@ -124,7 +131,7 @@ export default function Sidebar() {
         >
           <List>
             <NewChatButton isMobile={isMobile} />
-            <SideBarListItemHeader icon={WorkFlow} title="Workspace" />
+            <SideBarListItemHeader icon={Layers} title="Workspace" />
           </List>
           <div className="w-full">
             <List>
@@ -152,13 +159,8 @@ export default function Sidebar() {
                 className="flex items-center gap-2 px-1"
                 // style={{ marginBottom: "4.8px" }}
               >
-                <SideBarListItemHeader icon={ResourcesIcon} title="Resources" />
-                {/* <div>
-                  <ResourcesIcon />
-                </div>
-                <div className="font-inter font-medium text-customColor text-[15px] leading-[20px]">
-                  Resources
-                </div> */}
+                <SideBarListItemHeader icon={CloudCog} title="Resources" />
+              
               </div>
               <Divider />
               <div className="flex">
@@ -187,29 +189,14 @@ export default function Sidebar() {
             onClick={signOut}
           >
             <div>
-              <LogoutIcon />
+            <LogOut size={20} color="#64748B"/>
             </div>
             <div className="font-inter font-medium text-customColor lg:text-[15px] md:text-[18px] text-[18px] leading-[20px]">
               Logout
             </div>
           </div>
 
-          {/* <div
-            className="flex gap-2 hover:bg-gray-200 hover:rounded-lg rounded-lg"
-            onClick={() => {
-              navigate("/plans");
-            }}
-            style={{paddingTop:"9.6px",paddingLeft:"9.6px",paddingRight:"9.6px",paddingBottom:"9.6px"}}
-          > 
-          <div className="flex items-center justify-center">
-          <ProfileLoginIcon />
-          </div>
-          
-            <div className="flex flex-col">
-              <p className="font-inter text-black text-sm leading-5">{user?.name}</p>
-              <p className="font-normal text-[11px] leading-[16px] text-[#64748b]">{user?.email}</p>
-            </div>
-          </div> */}
+        
         </Box>
       </Drawer>
     </Box>

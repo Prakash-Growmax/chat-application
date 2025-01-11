@@ -11,7 +11,7 @@ function SideBarListItemHeader({
   return (
     <>
       <div className="mb-1.5 mt-3.5 flex items-center gap-2">
-        <Icon />
+        <Icon size={20}/>
         <ListItemHeaderText>{title}</ListItemHeaderText>
       </div>
       <Divider />

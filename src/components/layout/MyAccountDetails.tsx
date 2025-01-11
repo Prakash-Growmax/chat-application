@@ -11,11 +11,12 @@ import {
   } from "@/components/ui/dropdown-menu"
   import { Avatar } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
-import { User,Mail, Settings, LogOut} from "lucide-react";
+import { User,Mail, Settings} from "lucide-react";
 import TokenIcon from "./icons/token-icon";
 import PlanIcon from "../ui/plan-icon";
 import { useNavigate } from "react-router-dom";
-import LogoutIcon from "../ui/logout-icon";
+import { LogOut } from 'lucide-react';
+// import LogoutIcon from "../ui/logout-icon";
 export default function MyAccountDetails(){
     const {user,signOut}=useAuth();
     const navigate =useNavigate();
@@ -82,7 +83,7 @@ export default function MyAccountDetails(){
  <DropdownMenuItem>
  <div className="flex gap-4 cursor-pointer items-center hover:bg-gray-200 w-full rounded-lg px-1 py-1" onClick={signOut}>
   <div>
-  <LogoutIcon />
+  <LogOut size={20}/>
   </div>
  
   <span>Log out</span>

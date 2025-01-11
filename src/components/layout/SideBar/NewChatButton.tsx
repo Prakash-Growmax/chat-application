@@ -3,7 +3,7 @@ import ChatEdit from "@/components/ui/chat-edit";
 import { useMediaQuery, useTheme } from "@mui/material";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
- 
+import { MessageSquarePlus } from 'lucide-react';
 function NewChatButton({isMobile}) {
   const navigate = useNavigate();
   const {open,setOpen}=useContext(AppContext);
@@ -16,10 +16,13 @@ function NewChatButton({isMobile}) {
           if(isMobile){
             setOpen(false);
           }
+          localStorage.removeItem('chatId');
+
         }}
       >
         <span className="flex items-center gap-2">
-          <ChatEdit className="text-black" />
+          <MessageSquarePlus size={20}/>
+          {/* <ChatEdit className="text-black" /> */}
           <span className="lg:text-xs md:text-base text-black text-base">New Thread</span>
         </span>
       </button>

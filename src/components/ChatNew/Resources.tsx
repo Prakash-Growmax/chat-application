@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import PlanIcon from "../ui/plan-icon";
-import ProfileIcon from "../ui/profile-icon";
-import TeamsIcon from "../ui/teams";
+
+import { Wallet } from 'lucide-react';
+import { Users } from 'lucide-react';
+import { SquareUser } from 'lucide-react';
 
 export default function Resources() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function Resources() {
           navigate("/plans");
         }}
       >
-        <PlanIcon />
+        <Wallet size={20} color="#64748B"/>
         <p className="font-inter text-slate-500  lg:text-[15px] md:text-[18px] text-[18px] leading-4">Subscription</p>
       </div>
       <div
@@ -26,7 +27,7 @@ export default function Resources() {
           navigate("/teams");
         }}
       >
-        <TeamsIcon />
+        <Users size={20} color="#64748B"/>
         <p className="font-inter text-slate-500  lg:text-[15px] md:text-[18px] text-[18px] leading-4">Teams</p>
       </div>
       <div
@@ -37,7 +38,7 @@ export default function Resources() {
           navigate("/settings");
         }}
       >
-        <ProfileIcon />
+        <SquareUser size={20} color="#64748B"/>
         <p className="font-inter text-slate-500  lg:text-[15px] md:text-[18px] text-[18px] leading-4">Profile</p>
       </div>
     </div>
