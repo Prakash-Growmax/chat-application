@@ -5,6 +5,7 @@ import { PreviewButton } from "./PreviewButton";
 import { PreviewModal } from "./PreviewModal";
 import { CSVPreviewData, FileMetadata, PreviewError } from "@/lib/types/csv";
 import AppContext from "../context/AppContext";
+import SnackbarUi from "../layout/UI/SnackbarUi";
 
 interface CSVPreviewProps {
     bucket: string;
@@ -17,11 +18,13 @@ export const CSVPreview: React.FC<CSVPreviewProps> = ({ bucket, s3Key }) => {
     const [previewData, setPreviewData] = useState<CSVPreviewData | null>(null);
     const [metadata, setMetadata] = useState<FileMetadata | null>(null);
     const {open,setOpen} = useContext(AppContext);
+    const [openSnackbar,setOpenSnackBar]=useState(true)
+ 
     const handlePreviewClick = async () => {
    
       setIsLoading(true);
       setError(null);
-  
+      setOpenSnackBar(true)
       try {
         const { data, metadata } = await fetchCSVPreview(bucket, s3Key);
         setPreviewData(data);
@@ -44,10 +47,13 @@ export const CSVPreview: React.FC<CSVPreviewProps> = ({ bucket, s3Key }) => {
         />
   
         {error && (
-          <div className="mt-2 text-sm text-red-600" role="alert">
-            {error.message}
-            {error.code && ` (${error.code})`}
-          </div>
+          // <div className="mt-2 text-sm text-red-600" role="alert">
+          //   {error.message}
+          //   {error.code && ` (${error.code})`}
+          // </div>
+          <>
+          <SnackbarUi open={openSnackbar} setOpen={setOpenSnackBar}/>
+          </>
         )}
   
         {previewData && metadata && (

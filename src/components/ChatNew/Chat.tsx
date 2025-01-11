@@ -20,12 +20,15 @@ const Main = styled("main", {
 }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
+  transition: theme.transitions.create(['margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
   [theme.breakpoints.down("md")]: {
-    marginLeft: open ? "176px" : "", 
+    marginLeft: open ? "176px" : "0",
   },
-
   [theme.breakpoints.up("md")]: {
-    marginLeft: open ? "100px" : "", 
+    marginLeft: open ? "100px" : "0",
   },
 }));
 

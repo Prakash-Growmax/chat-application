@@ -6,7 +6,7 @@ import AppContext from "../context/AppContext";
 import MenuNew from "../ui/menu-new";
 import TooltipNew from "../ui/tooltipnew";
 import MyAccountDetails from "./MyAccountDetails";
-
+import { PanelLeftOpen } from 'lucide-react';
 
 export function Header() {
   const {user} = useAuth();
@@ -34,7 +34,8 @@ export function Header() {
                 className="p-2 hover:bg-gray-100 rounded-md"
                 onClick={handleDrawer}
               >
-                <MenuNew />
+                <PanelLeftOpen size={24}/>
+                {/* <MenuNew /> */}
               </button>
             </TooltipNew>
           )}

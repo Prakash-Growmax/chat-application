@@ -9,6 +9,7 @@ export function useCreateChatId(state) {
     const tokenJson = JSON.parse(token);
     const accessToken=tokenJson.access_token;
     const tokenType = tokenJson.token_type;
+    const chatId=localStorage.getItem("chatId");
     const [res,setRes]=useState([]);
     const message=state.messages;
     async function getChatId() {
@@ -46,10 +47,10 @@ export function useCreateChatId(state) {
         }
     }
     useEffect(() => {
-        if (user && profile?.organization_id && accessToken && message.length === 0) {
+        if (user && profile?.organization_id && accessToken && message.length === 0 && !chatId) {
             getChatId();
         }
-    }, [user, profile?.organization_id, accessToken,message]);
+    }, [user, profile?.organization_id, accessToken,message,chatId]);
    
   
     return {
