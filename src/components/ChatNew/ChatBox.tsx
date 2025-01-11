@@ -16,6 +16,7 @@ interface ChatBoxProps {
   setIsUploading: (state: boolean) => void;
   openRight: boolean;
 }
+
 export default function ChatBox({
   state,
   openRight,
@@ -26,20 +27,19 @@ export default function ChatBox({
 
   const scrollToBottom = useCallback(() => {
     if (messagesEndRef.current) {
-      // Use a small delay to prevent immediate scrolling
-      setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest", // This helps with more subtle scrolling
-        });
-      }, 100); // Small delay to prevent jarring scroll
+      messagesEndRef.current.scrollIntoView({
+        behavior: "smooth", // Smooth scrolling
+        block: "nearest",   // Subtle alignment
+      });
     }
   }, []);
-  // Effect to scroll to bottom when messages change
+
+  // Effect to scroll to the bottom when messages change
   useEffect(() => {
     scrollToBottom();
   }, [state.messages, scrollToBottom]);
-return (
+
+  return (
     <>
       <div className="min-h-screen">
         <div className="flex h-screen">
@@ -51,15 +51,27 @@ return (
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
+                  transition={{
+                    duration: 0.5, // Smoother transitions
+                    ease: "easeInOut",
+                  }}
                   className="flex-1 flex flex-col"
                 >
                   <div className="flex flex-col h-screen">
                     <div className="w-full md:w-full max-w-[100%] mx-auto h-full items-center justify-center">
                       <ScrollArea
                         ref={scrollAreaRef}
-                        className="flex-1 px-4 overflow-auto my-4 items-center"
+                        className="flex-1 px-4 overflow-auto my-4 items-center scroll-container"
                       >
-                        <div className="mx-auto">
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{
+                            duration: 0.5,
+                            ease: "easeInOut",
+                          }}
+                          className="mx-auto"
+                        >
                           {state.messages.map((message) => (
                             <ChatMessage
                               key={message.id}
@@ -74,11 +86,8 @@ return (
                               <div className="flex flex-col max-w-8xl lg:w-[61%] md:w-[97%] w-[100%]">
                                 <div className="flex">
                                   <div className="flex w-[95%] h-[20%] mt-4">
-                                   <DarkLogo/>
+                                    <DarkLogo />
                                   </div>
-                                  {/* <div className="font-bold text-sm ml-2">
-                                    <p>Assistant G-Chatter</p>
-                                  </div> */}
                                 </div>
                                 <div className="flex w-full px-4 py-2">
                                   <div className="flex flex-col w-[100%]">
@@ -94,7 +103,7 @@ return (
 
                           {/* Invisible div to help with scrolling */}
                           <div ref={messagesEndRef} />
-                        </div>
+                        </motion.div>
                       </ScrollArea>
                     </div>
                   </div>

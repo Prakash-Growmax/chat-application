@@ -39,7 +39,7 @@ export function ChatInput({
   const chatId=localStorage.getItem("chatId");
   const [filename,setFilename]=useState("");
   const {user}=useAuth();
-  console.log(user)
+ 
    const { profile } = useProfile();
   const adjustTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current;
@@ -119,21 +119,8 @@ export function ChatInput({
   
  
   const handleSubmit = async (e: React.FormEvent) => {
-    // if(profile?.organization_id){
-    //   const response = await fetch(`https://analytics-production-88e7.up.railway.app/api/v1/analytics/analyze?chat_id=${chatId}`, {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         "x-organization-id": profile.organization_id,
-    //          "chat_id":chatId,
-    //         "Authorization": `${tokenType} ${accessToken}`
-    //     },
-     
-    // });
-    // }
-  
-    
-    try{    if(profile?.organization_id){   
+   
+     try{    if(profile?.organization_id){   
       const response = await fetch(`https://analytics-production-88e7.up.railway.app/api/v1/analytics/analyze?chat_id=${chatId}`, {
       method: "POST",
       headers: {
