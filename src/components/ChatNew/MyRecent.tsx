@@ -4,10 +4,13 @@ import AppContext from "../context/AppContext";
 
 import { useChatList } from "@/hooks/useChatList";
 import { ListItemText } from "@/Theme/Typography";
-import { ChevronDown, ChevronRight, MessageSquareMore } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  EllipsisVertical,
+  MessageSquareMore,
+} from "lucide-react";
 import DeleteIcon from "../ui/delete-icon";
-import OptionIcon from "../ui/option-icon";
-import TooltipNew from "../ui/tooltipnew";
 
 export default function MyRecent({
   isDropdownOpen,
@@ -57,7 +60,7 @@ export default function MyRecent({
   return (
     <div className="relative cursor-pointer">
       <div
-        className="flex items-center justify-between rounded-lg hover:bg-gray-200 cursor-pointer px-2 py-1"
+        className="flex items-center justify-between rounded-lg hover:bg-gray-200 cursor-pointer py-1"
         onClick={() => {
           setDropdownOpen(!isDropdownOpen);
         }}
@@ -90,15 +93,15 @@ export default function MyRecent({
           {data.map((chat, index) => (
             <div key={index} className="relative my-2 lg:ml-0 ml-8">
               <div
-                className={`flex items-center rounded-lg px-4 py-1 ${
+                className={`flex items-center rounded-lg px-2 py-1 ${
                   hoveredIndex === index ? "bg-gray-200" : ""
                 }`}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(0)}
               >
                 <div className="flex justify-between w-full items-center">
-                  <p
-                    className="font-inter text-gray-600 lg:text-[13px] md:text-[15px] text-[15px] text-[#64748B] leading-4 truncate md:max-w-[calc(100%-40px)] lg:max-w-[150px]"
+                  <ListItemText
+                    className="leading-4 truncate "
                     onClick={() => {
                       navigate(`/chat/${chat.chat_id}`);
                       if (isMobile) {
@@ -107,19 +110,12 @@ export default function MyRecent({
                     }}
                   >
                     {chat.last_message}
-                  </p>
+                  </ListItemText>
 
                   {hoveredIndex === index && (
-                    <div className="dropdown-container">
-                      <TooltipNew title="Options" placement="top-start">
-                        <button
-                          onClick={(e) => toggleDropdown(index, e)}
-                          className="text-sm text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-300"
-                        >
-                          <OptionIcon />
-                        </button>
-                      </TooltipNew>
-                    </div>
+                    <button onClick={(e) => toggleDropdown(index, e)}>
+                      <EllipsisVertical size={12} className="m-1" />
+                    </button>
                   )}
                 </div>
               </div>
@@ -139,7 +135,7 @@ export default function MyRecent({
         >
           <ul className="py-2 text-sm text-gray-700">
             <li>
-              <button className="flex gap-3 w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600">
+              <button className="flex gap-3 w-full text-left px-2 py-2 hover:bg-gray-100 text-red-600">
                 <DeleteIcon />
                 Delete
               </button>

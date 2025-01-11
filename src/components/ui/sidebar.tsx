@@ -15,8 +15,8 @@ import AppContext from "../context/AppContext";
 import NewChatButton from "../layout/SideBar/NewChatButton";
 import SideBarListItemHeader from "../layout/SideBar/SideBarListItemHeader";
 
-import { Label } from "@/Theme/Typography";
-import { CloudCog, Layers, LogOut, PanelRightOpen } from "lucide-react";
+import { CloudCog, Layers, PanelRightOpen } from "lucide-react";
+import LogoutButton from "../auth/LogoutButton";
 import TooltipNew from "./tooltipnew";
 const drawerWidth = 200;
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -163,13 +163,7 @@ export default function Sidebar() {
             alignItems: "center", // Vertically center items
           }}
         >
-          <div
-            className="flex items-center gap-2 w-full hover:bg-gray-200 px-4 py-2 rounded-lg cursor-pointer"
-            onClick={signOut}
-          >
-            <LogOut size={16} color="#64748B" />
-            <Label>Logout</Label>
-          </div>
+          <LogoutButton />
         </Box>
       </Drawer>
     </Box>

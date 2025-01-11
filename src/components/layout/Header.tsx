@@ -2,15 +2,18 @@ import { useAuth } from "@/hooks/useAuth";
 import { useContext, useEffect } from "react";
 
 import DarkLogo from "@/assets/Logo/DarkLogo";
+import { PanelLeftOpen } from "lucide-react";
 import AppContext from "../context/AppContext";
-import MenuNew from "../ui/menu-new";
 import TooltipNew from "../ui/tooltipnew";
 import MyAccountDetails from "./MyAccountDetails";
-import { PanelLeftOpen } from 'lucide-react';
 
 export function Header() {
-  const {user} = useAuth();
-  const { open, setOpen, createNewChat } = useContext(AppContext);
+  const { user } = useAuth();
+  const { open, setOpen } = useContext(AppContext);
+
+  const handleDrawer = () => {
+    setOpen(true);
+  };
 
   useEffect(() => {
     if (!user) {
@@ -18,10 +21,6 @@ export function Header() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
-  const handleDrawer = () => {
-    setOpen(true);
-  };
- 
 
   return (
     <header className="fixed top-0 w-full h-16 bg-white z-50">
@@ -34,7 +33,7 @@ export function Header() {
                 className="p-2 hover:bg-gray-100 rounded-md"
                 onClick={handleDrawer}
               >
-                <PanelLeftOpen size={24}/>
+                <PanelLeftOpen size={24} />
                 {/* <MenuNew /> */}
               </button>
             </TooltipNew>
@@ -46,13 +45,9 @@ export function Header() {
             </div>
           )}
         </div>
-        
-        <MyAccountDetails/>
 
-      
+        <MyAccountDetails />
       </div>
-
-      {/* Right section - fixed position */}
     </header>
   );
 }

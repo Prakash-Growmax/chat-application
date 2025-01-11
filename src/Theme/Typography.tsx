@@ -173,6 +173,7 @@ export const HelperText = ({
     {children}
   </p>
 );
+
 // List Item Components
 export const ListItemHeaderText = ({
   children,
@@ -191,11 +192,13 @@ export const ListItemHeaderText = ({
 export const ListItemText = ({
   children,
   className = "",
+  ...props
 }: {
   children: ReactNode;
   className?: string;
 }) => (
   <p
+    {...props}
     className={`text-xs font-normal text-gray-700 dark:text-gray-300 ${className}`}
   >
     {children}
