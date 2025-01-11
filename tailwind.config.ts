@@ -65,7 +65,7 @@ export default {
       },
       colors: {
         //old..
-        // "custom-color": "rgb(2, 8, 23)",
+        "custom-color": "rgb(2, 8, 23)",
         // background: "hsl(var(--background))",
         // foreground: "hsl(var(--foreground))",
         // "chat-bg": "#f4f4f4", // ChatGPT's input background

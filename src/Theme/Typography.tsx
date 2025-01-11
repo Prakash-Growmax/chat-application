@@ -26,3 +26,10 @@ export const ListItemHeaderText: React.FC<{
     {children}
   </p>
 );
+
+export const ListItemText: React.FC<{
+  children: ReactNode;
+  className?: string;
+}> = ({ children, className = "" }) => (
+  <p className={`font-[400] text-[11px]  ${className}`}>{children}</p>
+);

@@ -47,10 +47,10 @@ function App() {
                     <Header />
                   </div>
                 )}
-
                 <div>
                   <Sidebar />
                 </div>
+
                 {/* Scrollable Content */}
                 <div className="flex-1 min-h-screen">
                   <Suspense fallback={<LoadingScreen />}>
@@ -127,7 +127,6 @@ function App() {
                     </main>
                   </Suspense>
                 </div>
-
                 <Toaster />
                 <GlobalLoadingIndicator />
               </div>
