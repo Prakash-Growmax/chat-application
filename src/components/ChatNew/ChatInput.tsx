@@ -39,6 +39,7 @@ export function ChatInput({
   const chatId=localStorage.getItem("chatId");
   const [filename,setFilename]=useState("");
   const {user}=useAuth();
+ 
    const { profile } = useProfile();
   const adjustTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current;
@@ -118,28 +119,33 @@ export function ChatInput({
   
  
   const handleSubmit = async (e: React.FormEvent) => {
-  //   if(profile?.organization_id){   
-  //     const response = await fetch(`https://analytics-production-88e7.up.railway.app/api/v1/analytics/analyze?${chatId}`, {
-  //     method: "POST",
-  //     headers: {
-  //         "Content-Type": "application/json",
-  //         "x-organization-id": profile.organization_id,
-  //         "Authorization": `${tokenType} ${accessToken}`
-  //     },
-  //     body: JSON.stringify({
-  //       s3_path: `s3://growmax-dev-app-assets/analytics/${filename}`,
-  //       org_id:profile?.organization_id,
-  //       query:input.trim(),
-  //       user_id:user?.id
-  //     })
-  // });}
-    e.preventDefault();
-    if (input.trim() && !isSubmitting) {
-      setIsSubmitting(true);
-      onSend(input.trim());
-      setInput("");
-      setIsSubmitting(false);
-    }
+   
+     try{    if(profile?.organization_id){   
+      const response = await fetch(`https://analytics-production-88e7.up.railway.app/api/v1/analytics/analyze?chat_id=${chatId}`, {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+          "x-organization-id": profile.organization_id,
+          "Authorization": `${tokenType} ${accessToken}`
+      },
+      body: JSON.stringify({
+        s3_path: `s3://growmax-dev-app-assets/analytics/${filename}`,
+        org_id:profile?.organization_id,
+        query:input.trim(),
+        user_id:user?.id
+      })
+  });}}
+  catch(error){
+    console.log(error);
+  }
+
+    // e.preventDefault();
+    // if (input.trim() && !isSubmitting) {
+    //   setIsSubmitting(true);
+    //   onSend(input.trim());
+    //   setInput("");
+    //   setIsSubmitting(false);
+    // }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

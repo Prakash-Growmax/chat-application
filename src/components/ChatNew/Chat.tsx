@@ -20,15 +20,17 @@ const Main = styled("main", {
 }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  transition: theme.transitions.create(['margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
+  transition: theme.transitions.create(['margin', 'width'], {
+    easing: theme.transitions.easing.easeInOut,
+    duration: '0.3s',  // Increased duration for smoother feel
   }),
   [theme.breakpoints.down("md")]: {
     marginLeft: open ? "176px" : "0",
+    width: open ? `calc(100% - 176px)` : '100%',
   },
   [theme.breakpoints.up("md")]: {
     marginLeft: open ? "100px" : "0",
+    width: open ? `calc(100% - 100px)` : '100%',
   },
 }));
 

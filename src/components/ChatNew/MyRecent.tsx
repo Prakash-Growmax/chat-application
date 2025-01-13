@@ -56,7 +56,7 @@ export default function MyRecent({
 
     setActiveDropdownIndex(index);
   };
-
+  console.log(activeDropdownIndex);
   return (
     <div className="relative cursor-pointer">
       <div
@@ -124,7 +124,7 @@ export default function MyRecent({
         </div>
       )}
 
-      {activeDropdownIndex !== null && (
+      {activeDropdownIndex !== null && activeDropdownIndex !== undefined && (
         <div
           className="options-menu fixed bg-white rounded-lg shadow-lg border border-gray-200 z-50 w-44"
           style={{

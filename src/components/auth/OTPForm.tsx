@@ -73,7 +73,7 @@ export function OTPForm({
         ) : (
           <>
             <RefreshCw className="h-4 w-4" />
-            <span>Resend Code</span>
+            <span className='cursor-pointer'>Resend Code</span>
           </>
         )}
       </Button>
