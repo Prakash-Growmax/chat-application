@@ -60,16 +60,13 @@ function LoginPage() {
     }
   };
 
-  if (authLoading || persistenceLoading) {
-    return (
-      <AuthLayout
-        title="Loading..."
-        description="Please wait while we check your authentication status"
-      >
-        <LoadingScreen fullScreen={false} />
-      </AuthLayout>
-    );
-  }
+  // if (authLoading || persistenceLoading) {
+  //   return (
+  //     <div className="flex justify-center items-center h-screen w-screen">
+  //       <LoadingScreen fullScreen={false} />
+  //     </div>
+  //   );
+  // }
 
   if (isVerifying) {
     return (
@@ -97,15 +94,20 @@ function LoginPage() {
       title="Welcome back"
       description="Sign in to your account using your email"
     >
-      <EmailForm
-        email={email}
-        loading={loading}
-        onEmailChange={setEmail}
-        onSubmit={onSendOTP}
-      />
+      {authLoading || persistenceLoading ? (
+        // <div className="flex justify-center items-center h-screen w-screen">
+        <LoadingScreen fullScreen={false} />
+      ) : (
+        // </div>
+        <EmailForm
+          email={email}
+          loading={loading}
+          onEmailChange={setEmail}
+          onSubmit={onSendOTP}
+        />
+      )}
     </AuthLayout>
   );
 }
-
 
 export default LoginPage;

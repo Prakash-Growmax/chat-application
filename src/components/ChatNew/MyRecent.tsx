@@ -60,7 +60,7 @@ export default function MyRecent({
   return (
     <div className="relative cursor-pointer">
       <div
-        className="flex items-center justify-between rounded-lg hover:bg-gray-200 cursor-pointer py-1"
+        className="flex items-center justify-between rounded-lg hover:bg-gray-200 cursor-pointer p-1"
         onClick={() => {
           setDropdownOpen(!isDropdownOpen);
         }}
