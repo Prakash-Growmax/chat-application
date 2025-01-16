@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useOrganization } from "@/hooks/organization/useOrganization";
 import { useProfile } from "@/hooks/profile/useProfile";
+import Main from "@/Theme/MainAnimation";
 import { CreditCard, Loader2, Settings2, User } from "lucide-react";
 import { useContext, useState } from "react";
 
@@ -34,9 +35,10 @@ export function SettingsPage() {
   const isOwner = profile?.role === "admin";
 
   return (
-    <div className={`min-h-screen bg-white from-slate-50 to-white pt-12 pl-24 ${open ? "md:pl-56" :""}`}>
+    <Main open={open} className={`min-h-screen bg-white from-slate-50 to-white pt-12 `}>
+      
       <div className="container py-10">
-        <div className="mx-auto max-w-4xl space-y-8">
+        <div className={`mx-auto max-w-6xl space-y-8 ${open ? "lg:max-w-5xl" : ""}`}>
           <div className="space-y-2">
             <h1 className="text-4xl font-bold tracking-tight">Settings</h1>
             <p className="text-lg text-muted-foreground">
@@ -169,7 +171,9 @@ export function SettingsPage() {
           </Tabs>
         </div>
       </div>
-    </div>
+ 
+    </Main>
+  
   );
 }
 
