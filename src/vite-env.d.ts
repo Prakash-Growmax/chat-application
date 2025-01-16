@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   readonly VITE_AWS_SECRET_ACCESS_KEY: string;
   readonly VITE_S3_BUCKET_NAME: string;
   readonly VITE_S3_REGION: string;
+  readonly VITE_ANALYSIS_URL: string;
 }
 
 interface ImportMeta {

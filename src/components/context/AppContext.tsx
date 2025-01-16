@@ -1,5 +1,17 @@
 import React from "react";
 
-const AppContext = React.createContext();
+interface AppContextType {
+  sideDrawerOpen: boolean;
+  setSideDrawerOpen: (value: boolean) => void;
+  openRight: boolean;
+  setOpenRight: (value: boolean) => void;
+}
 
-export default AppContext
+const AppContext = React.createContext<AppContextType>({
+  sideDrawerOpen: false,
+  setSideDrawerOpen: () => {},
+  openRight: false,
+  setOpenRight: () => {},
+});
+
+export default AppContext;

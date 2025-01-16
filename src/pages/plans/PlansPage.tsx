@@ -24,7 +24,7 @@ const classNames = (...classes: (string | boolean | undefined)[]) => {
 export function PlansPage() {
   const { user } = useAuth();
   const { upgradePlan, planId } = useSubscription();
-  const { open } = useContext(AppContext);
+  const { sideDrawerOpen } = useContext(AppContext);
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState<string | null>(null);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
@@ -77,7 +77,7 @@ export function PlansPage() {
       <div className="container py-16 h-full flex flex-col justify-center">
         <div
           className={`mx-auto max-w-4xl space-y-12 ${
-            open ? "lg:max-w-3xl md:pl-16 lg:pt-12" : ""
+            sideDrawerOpen ? "lg:max-w-3xl md:pl-16 lg:pt-12" : ""
           }`}
         >
           <div className="text-center space-y-4">

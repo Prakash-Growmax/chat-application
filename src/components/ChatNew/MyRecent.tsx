@@ -17,7 +17,7 @@ export default function MyRecent({
   setDropdownOpen,
   isMobile,
 }) {
-  const { open, setOpen } = useContext(AppContext);
+  const { setSideDrawerOpen } = useContext(AppContext);
   const [hoveredIndex, setHoveredIndex] = useState(0);
   const navigate = useNavigate();
   const { data } = useChatList();
@@ -56,7 +56,6 @@ export default function MyRecent({
 
     setActiveDropdownIndex(index);
   };
-  console.log(activeDropdownIndex);
   return (
     <div className="relative cursor-pointer">
       <div
@@ -105,7 +104,7 @@ export default function MyRecent({
                     onClick={() => {
                       navigate(`/chat/${chat.chat_id}`);
                       if (isMobile) {
-                        setOpen(false);
+                        setSideDrawerOpen(false);
                       }
                     }}
                   >

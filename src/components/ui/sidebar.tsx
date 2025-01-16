@@ -15,10 +15,10 @@ import AppContext from "../context/AppContext";
 import NewChatButton from "../layout/SideBar/NewChatButton";
 import SideBarListItemHeader from "../layout/SideBar/SideBarListItemHeader";
 
+import { drawerWidth } from "@/constants/general.constant";
 import { CloudCog, Layers, PanelRightOpen } from "lucide-react";
 import LogoutButton from "../auth/LogoutButton";
 import TooltipNew from "./tooltipnew";
-const drawerWidth = 200;
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -41,13 +41,13 @@ export default function Sidebar() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
 
-  const { open, setOpen } = React.useContext(AppContext);
+  const { sideDrawerOpen, setSideDrawerOpen } = React.useContext(AppContext);
 
   const handleDrawerClose = () => {
-    setOpen(false);
+    setSideDrawerOpen(false);
   };
   const [isDropdownOpen, setDropdownOpen] = React.useState(true);
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState(null);
   React.useEffect(() => {
     const handleClickOutside = (event: any) => {
@@ -65,17 +65,18 @@ export default function Sidebar() {
 
   React.useEffect(() => {
     if (user) {
-      setOpen(true);
+      setSideDrawerOpen(true);
     }
   }, [user]);
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      {open && (isMobile || isTab) && <Backdrop onClick={handleDrawerClose} />}
+      {sideDrawerOpen && (isMobile || isTab) && (
+        <Backdrop onClick={handleDrawerClose} />
+      )}
       <Drawer
         sx={{
-          width: isMobile ? "100%" : isTab ? "35%" : drawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
             width: isMobile ? "70%" : isTab ? "55%" : drawerWidth,
@@ -88,7 +89,7 @@ export default function Sidebar() {
         }}
         variant="persistent"
         anchor="left"
-        open={open}
+        open={sideDrawerOpen}
       >
         <DrawerHeader
           sx={{

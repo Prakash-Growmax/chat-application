@@ -1,15 +1,14 @@
-import { lazy, useCallback, useContext, useEffect, useState } from "react";
-import AppContext from "../context/AppContext";
 import { getResponse } from "@/lib/pandas-api";
 import { useMessageQueue } from "@/lib/useMessageQuesue";
 import { ChatState, Message } from "@/types";
 import { styled } from "@mui/material";
-import RightSideBar from "../ui/RightSideBar";
+import { lazy, useCallback, useContext, useEffect, useState } from "react";
+import AppContext from "../context/AppContext";
 import ChatBox from "./ChatBox";
-import { useCreateChatId } from "@/hooks/useCreateChat";
 
-// const ChatBox = lazy(() => import("./ChatBox"));
-const ChatInput = lazy(() => import("./ChatInput").then(module => ({ default: module.ChatInput })));
+const ChatInput = lazy(() =>
+  import("./ChatInput").then((module) => ({ default: module.ChatInput }))
+);
 interface ChatProps {
   message: (chat: string) => void;
 }
@@ -20,17 +19,17 @@ const Main = styled("main", {
 }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  transition: theme.transitions.create(['margin', 'width'], {
+  transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.easeInOut,
-    duration: '0.3s',  // Increased duration for smoother feel
+    duration: "0.3s", // Increased duration for smoother feel
   }),
   [theme.breakpoints.down("md")]: {
     marginLeft: open ? "176px" : "0",
-    width: open ? `calc(100% - 176px)` : '100%',
+    width: open ? `calc(100% - 176px)` : "100%",
   },
   [theme.breakpoints.up("md")]: {
     marginLeft: open ? "100px" : "0",
-    width: open ? `calc(100% - 100px)` : '100%',
+    width: open ? `calc(100% - 100px)` : "100%",
   },
 }));
 
@@ -44,10 +43,8 @@ function Chat({ message }: ChatProps) {
   });
   const [isUploading, setIsUploading] = useState(false);
   const { queue, processing, addToQueue, processQueue } = useMessageQueue();
-  const { open, setOpen, openRight, setOpenRight } = useContext(AppContext);
-  const {chatId} = useCreateChatId(state)
-  
- 
+  const { sideDrawerOpen, openRight, setOpenRight } = useContext(AppContext);
+
   const processMessage = useCallback(
     async (message: Message) => {
       setState((prev) => ({
@@ -120,10 +117,9 @@ function Chat({ message }: ChatProps) {
     addToQueue(userMessage);
   };
 
- 
   useEffect(() => {
     if (message?.length) {
-      const mappedMessages = message?.map((msg  ) => ({
+      const mappedMessages = message?.map((msg) => ({
         id: msg.id, // Example of mapping fields
         content: msg.content, // Assuming the structure of each message
         timestamp: msg.timestamp || Date.now(),
@@ -153,7 +149,10 @@ function Chat({ message }: ChatProps) {
   }, [processing, queue, processQueue, processMessage]);
 
   return (
-    <Main open={open} className="relative max-h-screen p-2 overflow-hidden">
+    <Main
+      open={sideDrawerOpen}
+      className="relative max-h-screen p-2 overflow-hidden"
+    >
       <div className=" flex flex-col">
         <div className=" w-screen h-[95vh] flex flex-col items-center justify-center">
           <div className="mb-7  text-center @lg/thread:block">
@@ -229,11 +228,7 @@ function Chat({ message }: ChatProps) {
         </div>
       </div>
 
-      {/* {!isMobile && !isTab && (
-        <Sidebar open={open} setOpen={setOpen} createNewChat={createNewChat} />
-      )} */}
-
-      <RightSideBar openRight={openRight} setOpenRight={setOpenRight} />
+      {/* <RightSideBar openRight={openRight} setOpenRight={setOpenRight} /> */}
     </Main>
   );
 }

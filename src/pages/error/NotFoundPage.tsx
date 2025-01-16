@@ -9,12 +9,12 @@ import { useNavigate } from "react-router-dom";
 
 const REDIRECT_DELAY = 5000;
 const suggestedLinks = [
-  { title: "Chat", path: "/chat" },
+  { title: "Chat", path: "/chat/chat_1" },
   { title: "Settings", path: "/settings" },
   { title: "Plans", path: "/plans" },
 ];
 
- function NotFoundPage() {
+function NotFoundPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,7 +27,7 @@ const suggestedLinks = [
     }, 1000);
 
     const redirect = setTimeout(() => {
-      navigate(user ? "/chat" : "/login", { replace: true });
+      navigate(user ? "/chat/chat_1" : "/login", { replace: true });
     }, REDIRECT_DELAY);
 
     return () => {
@@ -115,4 +115,3 @@ const suggestedLinks = [
   );
 }
 export default NotFoundPage;
-

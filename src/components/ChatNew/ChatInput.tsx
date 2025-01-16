@@ -1,3 +1,5 @@
+import { useProfile } from "@/hooks/profile/useProfile";
+import { useAuth } from "@/hooks/useAuth";
 import { S3UploadError, uploadToS3 } from "@/lib/s3-client";
 import { Tooltip } from "@mui/material";
 import { ArrowUp } from "lucide-react";
@@ -5,8 +7,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { CSVPreview } from "../CSVPreview/CSVPreview";
 import Spinner from "../ui/Spinner";
 import AttachIcon from "../ui/attach-ui";
-import { useProfile } from "@/hooks/profile/useProfile";
-import { useAuth } from "@/hooks/useAuth";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -34,13 +34,13 @@ export function ChatInput({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const token = localStorage.getItem("supabase.auth.token");
   const tokenJson = JSON.parse(token);
-  const accessToken=tokenJson.access_token;
+  const accessToken = tokenJson.access_token;
   const tokenType = tokenJson.token_type;
-  const chatId=localStorage.getItem("chatId");
-  const [filename,setFilename]=useState("");
-  const {user}=useAuth();
- 
-   const { profile } = useProfile();
+  const chatId = localStorage.getItem("chatId");
+  const [filename, setFilename] = useState("");
+  const { user } = useAuth();
+
+  const { profile } = useProfile();
   const adjustTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -67,9 +67,9 @@ export function ChatInput({
         console.error("No file selected");
         return;
       }
-  
+
       setIsUploading(true); // Set uploading to true before starting any requests
-  
+
       try {
         // 1. Make the API call first (to fetch the response)
         if (profile?.organization_id) {
@@ -80,7 +80,7 @@ export function ChatInput({
               headers: {
                 "Content-Type": "application/json",
                 "x-organization-id": profile.organization_id,
-                "Authorization": `${tokenType} ${accessToken}`,
+                Authorization: `${tokenType} ${accessToken}`,
               },
               body: JSON.stringify({
                 s3_path: `s3://growmax-dev-app-assets/analytics/${file.name}`,
@@ -89,19 +89,18 @@ export function ChatInput({
               }),
             }
           );
-  
+
           // Handle response (if needed)
           if (!response.ok) {
-            throw new Error('Failed to upload dataset info');
+            throw new Error("Failed to upload dataset info");
           }
         }
-  
+
         // 2. Upload file to S3
         const s3Key = await uploadToS3(file, () => {});
-  
+
         // Call onFileUploaded with the S3 key
         onFileUploaded(s3Key);
-  
       } catch (error) {
         // Handle errors accordingly
         if (error instanceof S3UploadError) {
@@ -116,28 +115,29 @@ export function ChatInput({
     },
     [onFileUploaded, onError, setIsUploading]
   );
-  
- 
+
   const handleSubmit = async (e: React.FormEvent) => {
-   
-     try{    if(profile?.organization_id){   
-      const response = await fetch(`https://analytics-production-88e7.up.railway.app/api/v1/analytics/analyze?chat_id=${chatId}`, {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-          "x-organization-id": profile.organization_id,
-          "Authorization": `${tokenType} ${accessToken}`
-      },
-      body: JSON.stringify({
-        s3_path: `s3://growmax-dev-app-assets/analytics/${filename}`,
-        org_id:profile?.organization_id,
-        query:input.trim(),
-        user_id:user?.id
-      })
-  });}}
-  catch(error){
-    console.log(error);
-  }
+    try {
+      if (profile?.organization_id) {
+        const response = await fetch(
+          `https://analytics-production-88e7.up.railway.app/api/v1/analytics/analyze?chat_id=${chatId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-organization-id": profile.organization_id,
+              Authorization: `${tokenType} ${accessToken}`,
+            },
+            body: JSON.stringify({
+              s3_path: `s3://growmax-dev-app-assets/analytics/${filename}`,
+              org_id: profile?.organization_id,
+              query: input.trim(),
+              user_id: user?.id,
+            }),
+          }
+        );
+      }
+    } catch (error) {}
 
     // e.preventDefault();
     // if (input.trim() && !isSubmitting) {
@@ -149,7 +149,6 @@ export function ChatInput({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-  
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);

@@ -16,7 +16,6 @@ export const updateProfile_stripeCustomerId = async (
       throw error;
     }
 
-    console.log("Successfully updated stripe_customer_id:", data);
     return data;
   } catch (error: any) {
     console.error("Error updating stripe_customer_id:", error.message);

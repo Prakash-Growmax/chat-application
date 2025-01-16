@@ -1,5 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 
 import DarkLogo from "@/assets/Logo/DarkLogo";
 import { PanelLeftOpen } from "lucide-react";
@@ -9,18 +9,11 @@ import MyAccountDetails from "./MyAccountDetails";
 
 export function Header() {
   const { user } = useAuth();
-  const { open, setOpen } = useContext(AppContext);
+  const { sideDrawerOpen, setSideDrawerOpen } = useContext(AppContext);
 
   const handleDrawer = () => {
-    setOpen(true);
+    setSideDrawerOpen(true);
   };
-
-  useEffect(() => {
-    if (!user) {
-      setOpen(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
 
   return (
     <header className="fixed top-0 w-full h-16 bg-white z-50">

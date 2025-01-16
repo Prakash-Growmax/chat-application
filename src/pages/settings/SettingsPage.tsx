@@ -16,7 +16,7 @@ export function SettingsPage() {
   const { organization, updateOrganizationName } = useOrganization(
     profile?.organization_id
   );
-  const {open}=useContext(AppContext)
+  const { sideDrawerOpen } = useContext(AppContext);
   const [activeTab, setActiveTab] = useState("subscription");
 
   const handleUpdateOrgName = async (newName: string) => {
@@ -34,7 +34,11 @@ export function SettingsPage() {
   const isOwner = profile?.role === "admin";
 
   return (
-    <div className={`min-h-screen bg-white from-slate-50 to-white pt-12 pl-24 ${open ? "md:pl-56" :""}`}>
+    <div
+      className={`min-h-screen bg-white from-slate-50 to-white pt-12 pl-24 ${
+        sideDrawerOpen ? "md:pl-56" : ""
+      }`}
+    >
       <div className="container py-10">
         <div className="mx-auto max-w-4xl space-y-8">
           <div className="space-y-2">

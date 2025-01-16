@@ -69,14 +69,6 @@ function SuccessPayment() {
           const durationInDays: number = moment
             .duration(durationInSeconds, "seconds")
             .asDays();
-          console.log(
-            userId,
-            planId,
-            startDate,
-            endDate,
-            subscription.stripe_session_id,
-            durationInDays
-          );
 
           const { data: updatedSubscription, error } = await supabase
             .from("subscriptions")
@@ -103,7 +95,7 @@ function SuccessPayment() {
         //
       })
       .catch((e) => {
-        console.log(e);
+        e;
       });
   };
 
