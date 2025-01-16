@@ -4,10 +4,8 @@ import AppContext from "../context/AppContext";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { InviteMemberDialog } from "./InviteMemberDialog";
 import EnhancedTeamTable from "./TeamTable";
-
 const Team = () => {
   const {
-    teamMembers,
     loading,
     refetch,
     error,
@@ -20,7 +18,7 @@ const Team = () => {
     return (
       <Alert variant="destructive">
         <AlertTitle>Error</AlertTitle>
-        <AlertDescription>{error?.message || ""}</AlertDescription>
+        <AlertDescription>{error || ""}</AlertDescription>
       </Alert>
     );
   }

@@ -23,10 +23,10 @@ const Main = styled("main", {
     easing: theme.transitions.easing.easeInOut,
     duration: "0.3s", // Increased duration for smoother feel
   }),
-  [theme.breakpoints.down("md")]: {
-    marginLeft: open ? "176px" : "0",
-    width: open ? `calc(100% - 176px)` : "100%",
-  },
+  // [theme.breakpoints.down("md")]: {
+  //   marginLeft: open ? "176px" : "0",
+  //   width: open ? `calc(100% - 176px)` : '100%',
+  // },
   [theme.breakpoints.up("md")]: {
     marginLeft: open ? "100px" : "0",
     width: open ? `calc(100% - 100px)` : "100%",

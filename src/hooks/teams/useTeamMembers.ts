@@ -12,7 +12,7 @@ export const useTeamMembers = (): UseTeamMembersReturn => {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [organizationId, setOrganizationId] = useState<string | null>();
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<any | null>(null);
   const [teamData, setTeamData] = useState<TeamData | null>(null);
 
   const fetchTeamMembers = useCallback(async () => {
