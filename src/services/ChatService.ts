@@ -1,5 +1,5 @@
 import { ApiResponse } from "@/types/api.types";
-import { ChatSession, CreateSessionRequest } from "@/types/Chat";
+import { ChatHistory, ChatSession, CreateSessionRequest } from "@/types/Chat";
 import { ApiClient, apiClient } from "./apiConfig";
 
 class ChatService {
@@ -20,6 +20,15 @@ class ChatService {
 
   async deleteSession(sessionId: string): Promise<ApiResponse<void>> {
     return this.apiClient.delete<void>(`/chat/sessions/${sessionId}`);
+  }
+
+  async getChatHistory(
+    chatId: string,
+    options?: {
+      headers: Record<string, string>;
+    }
+  ): Promise<ApiResponse<ChatHistory | undefined>> {
+    return this.apiClient.get<ChatHistory>(`/queries/${chatId}`, options);
   }
 }
 

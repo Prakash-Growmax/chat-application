@@ -14,8 +14,9 @@ function NewChatButton({ isMobile }: { isMobile: boolean }) {
       <button
         className="group bg-white w-full py-2 px-1 border border-gray-200 rounded-md text-sm flex items-center justify-center hover:border-gray-300 hover:shadow-md transition duration-200 ease-in-out"
         onClick={async () => {
+          localStorage.removeItem("chatId");
           // const chatId = await getChatId();
-          navigate(`/chat`);
+          navigate(`/chat/new`);
           if (isMobile) {
             setSideDrawerOpen(false);
           }

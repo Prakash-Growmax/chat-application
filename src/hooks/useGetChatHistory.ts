@@ -1,8 +1,14 @@
+import { chatService } from "@/services/ChatService";
 import { useEffect, useState } from "react";
+import { useProfile } from "./profile/useProfile";
 import { useCreateChatId } from "./useCreateChat";
 
+const token = JSON.parse(
+  localStorage.getItem("supabase.auth.token") || ""
+)?.access_token;
+
 export function useGetChatHistory(chatId: string | null) {
-  console.log("🚀 ~ useGetChatHistory ~ chatId:", chatId);
+  const { profile } = useProfile();
   const [Id, setId] = useState(chatId);
   const [chatHistory, setChatHistory] = useState<{
     loading: boolean;
@@ -20,7 +26,7 @@ export function useGetChatHistory(chatId: string | null) {
   }
 
   useEffect(() => {
-    if (!chatId) {
+    if (!chatId || chatId === "new") {
       fetchChatId();
     } else {
       setId(chatId);
@@ -75,13 +81,29 @@ export function useGetChatHistory(chatId: string | null) {
     },
   };
 
-  useEffect(() => {
-    if (Id) {
-      console.log("🚀 ~ useEffect ~ Id:", Id);
+  async function fetchChatHistory(chat_id: string) {
+    try {
+      if (!profile?.organization_id) return null;
+
+      const response = await chatService.getChatHistory(chat_id, {
+        headers: {
+          "x-organization-id": profile.organization_id,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("🚀 ~ fetchChatHistory ~ response:", response);
       setChatHistory({
         loading: false,
         data: getChatHistory?.data?.messages,
       });
+    } catch (error) {
+      console.log("🚀 ~ fetchChatHistory ~ error:", error);
+    }
+  }
+
+  useEffect(() => {
+    if (Id) {
+      fetchChatHistory(Id);
     } else {
       setChatHistory({
         loading: false,

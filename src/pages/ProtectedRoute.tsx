@@ -11,8 +11,6 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     user,
     // loading
   } = useAuth();
-  console.log("🚀 ~ ProtectedRoute ~ user:", user);
-
   //   const navigate = useNavigate();
   //   const location = useLocation();
 
