@@ -143,82 +143,108 @@ function Chat({ message }: ChatProps) {
       processQueue(processMessage);
     }
   }, [processing, queue, processQueue, processMessage]);
+  const hasMessages = Boolean(state?.messages?.length > 0);
 
-  return (
-    <div className="h-[calc(100vh-64px)] flex flex-col justify-between">
-      {/* Chat Input */}
-      <div className="flex flex-col  justify-center flex-1 pb-4 mb-16">
-        <div className="flex flex-col items-center justify-center">
-          <div className="mb-7 text-center @lg/thread:block">
-            <div className="relative inline-flex justify-center text-center">
-              {!state.s3Key && (
-                <h1
-                  className="text-[30px] leading-[36px] font-semibold text-[rgb(13,13,13)] lg:mr-0 md:mr-8 mr-12"
-                  style={{
-                    fontFamily:
-                      'ui-sans-serif, -apple-system, system-ui, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"',
-                  }}
-                >
-                  What do you want to analyze today ?
-                </h1>
-              )}
-            </div>
+  if (!hasMessages) {
+    return (
+      <div className="h-[calc(100vh-64px)]  flex flex-col">
+        {/* Centered content when no messages */}
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <h1 className="text-3xl font-semibold text-gray-900 mb-8">
+            What do you want to analyze today?
+          </h1>
+
+          <div className="w-full max-w-4xl px-4">
+            <ChatInput
+              onSend={handleSendMessage}
+              disabled={state.isLoading || !state.s3Key}
+              onError={handleError}
+              isUploading={isUploading}
+              setIsUploading={setIsUploading}
+              s3Key={state.s3Key || ""}
+              bucket={import.meta.env.VITE_S3_BUCKET_NAME}
+              onFileUploaded={(key) => {
+                setState({
+                  ...state,
+                  s3Key: key,
+                  messages: [
+                    {
+                      id: Date.now().toString(),
+                      content:
+                        'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
+                      role: "assistant",
+                      timestamp: new Date(),
+                      type: "text",
+                    },
+                  ],
+                });
+              }}
+            />
           </div>
-          {Boolean(state?.messages?.length > 0) && (
-            <div
-              className={`flex-1 items-center justify-center overflow-y-auto lg:mr-0 md:mr-12 `}
-              // style={{
-              //   backgroundColor: "#F6F8FA",
-              // }}
-            >
-              <ChatBox
-                state={state}
-                setState={setState}
-                isUploading={isUploading}
-                setIsUploading={setIsUploading}
-                openRight={openRight}
-              />
-            </div>
-          )}
-          <div
-            className={`text-base px-3 w-full md:px-5 lg:px-4 xl:px-5 pb-4 lg:mr-0 md:mr-8 ${
-              state.s3Key ? "" : "mr-12"
-            }`}
-          >
-            <div className="mx-auto max-w-4xl flex flex-1">
-              <ChatInput
-                onSend={handleSendMessage}
-                disabled={state.isLoading || !state.s3Key}
-                onError={handleError}
-                isUploading={isUploading}
-                setIsUploading={setIsUploading}
-                s3Key={state.s3Key || ""}
-                bucket={import.meta.env.VITE_S3_BUCKET_NAME}
-                onFileUploaded={(key: string) => {
-                  setState({
-                    ...state,
-                    s3Key: key,
-                    messages: [
-                      {
-                        id: Date.now().toString(),
-                        content:
-                          'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
-                        role: "assistant",
-                        timestamp: new Date(),
-                        type: "text",
-                      },
-                    ],
-                  });
-                }}
-              />
-            </div>
+        </div>
+
+        {/* Disclaimer */}
+        <div className="px-2 pb-2 text-center">
+          <div className="text-xs text-gray-500">
+            Ansight can make mistakes. Check important info.
           </div>
         </div>
       </div>
-      {/* end message */}
-      <div className="w-full px-2 pb-2 text-center text-xs text-gray-500">
-        <div>
-          <div>Ansight can make mistakes. Check important info.</div>
+    );
+  }
+
+  return (
+    <div className="h-[calc(100vh-64px)]  flex flex-col">
+      {/* Messages section - scrollable */}
+      <div className="flex-1 overflow-y-auto px-4">
+        <div className="max-w-4xl mx-auto">
+          <ChatBox
+            state={state}
+            setState={setState}
+            isUploading={isUploading}
+            setIsUploading={setIsUploading}
+            openRight={openRight}
+          />
+        </div>
+      </div>
+
+      {/* Footer section with input and disclaimer - fixed at bottom */}
+      <div className="mt-auto">
+        <div className="px-4 py-4">
+          <div className="max-w-4xl mx-auto">
+            <ChatInput
+              onSend={handleSendMessage}
+              disabled={state.isLoading || !state.s3Key}
+              onError={handleError}
+              isUploading={isUploading}
+              setIsUploading={setIsUploading}
+              s3Key={state.s3Key || ""}
+              bucket={import.meta.env.VITE_S3_BUCKET_NAME}
+              onFileUploaded={(key) => {
+                setState({
+                  ...state,
+                  s3Key: key,
+                  messages: [
+                    {
+                      id: Date.now().toString(),
+                      content:
+                        'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
+                      role: "assistant",
+                      timestamp: new Date(),
+                      type: "text",
+                    },
+                  ],
+                });
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Disclaimer */}
+        <div className="px-2 pb-2 text-center">
+          <div className="text-xs text-gray-500">
+            Ansight can make mistakes. Check important info.
+          </div>
         </div>
       </div>
     </div>
