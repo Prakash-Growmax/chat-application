@@ -30,7 +30,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           className={`flex-1 pt-16  
             duration-200 
             ease-in-out
-           ${sideDrawerOpen ? "ml-56" : "ml-4"}`}
+           ${sideDrawerOpen ? "ml-48" : "ml-4"}`}
         >
           {children}
         </main>

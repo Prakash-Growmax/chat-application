@@ -21,12 +21,8 @@ const Main = styled("main", {
   padding: theme.spacing(3),
   transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.easeInOut,
-    duration: "0.3s", // Increased duration for smoother feel
+    duration: "0.3s",
   }),
-  // [theme.breakpoints.down("md")]: {
-  //   marginLeft: open ? "176px" : "0",
-  //   width: open ? `calc(100% - 176px)` : '100%',
-  // },
   [theme.breakpoints.up("md")]: {
     marginLeft: open ? "100px" : "0",
     width: open ? `calc(100% - 100px)` : "100%",
@@ -43,7 +39,7 @@ function Chat({ message }: ChatProps) {
   });
   const [isUploading, setIsUploading] = useState(false);
   const { queue, processing, addToQueue, processQueue } = useMessageQueue();
-  const { sideDrawerOpen, openRight, setOpenRight } = useContext(AppContext);
+  const { sideDrawerOpen, openRight } = useContext(AppContext);
 
   const processMessage = useCallback(
     async (message: Message) => {
@@ -149,13 +145,11 @@ function Chat({ message }: ChatProps) {
   }, [processing, queue, processQueue, processMessage]);
 
   return (
-    <Main
-      open={sideDrawerOpen}
-      className="relative max-h-screen p-2 overflow-hidden"
-    >
-      <div className=" flex flex-col">
-        <div className=" w-screen h-[95vh] flex flex-col items-center justify-center">
-          <div className="mb-7  text-center @lg/thread:block">
+    <div className="h-[calc(100vh-64px)] flex flex-col justify-between">
+      {/* Chat Input */}
+      <div className="flex flex-col  justify-center flex-1 pb-4 mb-16">
+        <div className="flex flex-col items-center justify-center">
+          <div className="mb-7 text-center @lg/thread:block">
             <div className="relative inline-flex justify-center text-center">
               {!state.s3Key && (
                 <h1
@@ -192,7 +186,6 @@ function Chat({ message }: ChatProps) {
             }`}
           >
             <div className="mx-auto max-w-4xl flex flex-1">
-              {/* <div className="mx-auto flex flex-1 gap-4 text-base md:gap-5 lg:gap-6 md:max-w-3xl"> */}{" "}
               <ChatInput
                 onSend={handleSendMessage}
                 disabled={state.isLoading || !state.s3Key}
@@ -221,15 +214,14 @@ function Chat({ message }: ChatProps) {
             </div>
           </div>
         </div>
-        <div className="w-full px-2 pb-2 text-center text-xs text-gray-500">
-          <div>
-            <div>Ansight can make mistakes. Check important info.</div>
-          </div>
+      </div>
+      {/* end message */}
+      <div className="w-full px-2 pb-2 text-center text-xs text-gray-500">
+        <div>
+          <div>Ansight can make mistakes. Check important info.</div>
         </div>
       </div>
-
-      {/* <RightSideBar openRight={openRight} setOpenRight={setOpenRight} /> */}
-    </Main>
+    </div>
   );
 }
 

@@ -27,18 +27,11 @@ const AppRoutes = () => {
             </PublicLayout>
           }
         />
-        <Route
-          path="/"
-          element={
-            <PublicLayout>
-              <WelcomePage />
-            </PublicLayout>
-          }
-        />
+        <Route path="/" element={<WelcomePage />} />
 
         {/* Protected Routes */}
         <Route
-          path="/chat/:id"
+          path="/chat"
           element={
             <ProtectedRoute>
               <ChatSection />
