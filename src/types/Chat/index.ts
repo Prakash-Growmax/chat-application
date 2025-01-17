@@ -9,6 +9,15 @@ export interface CreateSessionRequest {
 }
 
 export interface ChatHistory {
-  details: string;
+  details: string;}
   // Add other session properties
+export interface uploadDataSetRequest{
+  s3_path:string;
+  org_id:string;
+  chat_id:string;
+}
+export interface analyseDataset{
+  query:string,
+  user_id:string,
+  org_id:string
 }

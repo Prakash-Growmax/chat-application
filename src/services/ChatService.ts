@@ -1,5 +1,6 @@
 import { ApiResponse } from "@/types/api.types";
-import { ChatHistory, ChatSession, CreateSessionRequest } from "@/types/Chat";
+
+import { analyseDataset, ChatSession, CreateSessionRequest,uploadDataSetRequest,ChatHistory } from "@/types/Chat";
 import { ApiClient, apiClient } from "./apiConfig";
 
 class ChatService {
@@ -11,9 +12,14 @@ class ChatService {
       headers: Record<string, string>;
     }
   ): Promise<ApiResponse<ChatSession>> {
-    return this.apiClient.post<ChatSession>("/chat/sessions", reqBody, options);
+    return this.apiClient.post<ChatSession>("chat/sessions", reqBody, options);
   }
-
+  async uploadDataset(reqBody:uploadDataSetRequest,options?:{headers:Record<string, string>;}):Promise<ApiResponse<ChatSession>>{
+    return this.apiClient.post<ChatSession>("datasets/datasets",reqBody,options)
+  }
+ async analyzeDataset(reqBody:analyseDataset,options?:{headers:Record<string,string>;}):Promise<ApiResponse<ChatSession>>{
+  return this.apiClient.post<ChatSession>("analytics/analyze",reqBody,options)
+ }
   async getSession(sessionId: string): Promise<ApiResponse<ChatSession>> {
     return this.apiClient.get<ChatSession>(`/chat/sessions/${sessionId}`);
   }

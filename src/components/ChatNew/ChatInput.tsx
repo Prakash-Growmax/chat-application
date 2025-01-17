@@ -71,8 +71,12 @@ export function ChatInput({
       setIsUploading(true); // Set uploading to true before starting any requests
 
       try {
-        // 1. Make the API call first (to fetch the response)
+   
         if (profile?.organization_id) {
+          const requestBody = {
+            s3_path: `s3://growmax-dev-app-assets/analytics/${file.name}`,
+            org_id: profile?.organization_id,
+          };
           const response = await fetch(
             `https://analytics-production-88e7.up.railway.app/api/v1/datasets/datasets?${chatId}`,
             {
@@ -96,13 +100,12 @@ export function ChatInput({
           }
         }
 
-        // 2. Upload file to S3
+     
         const s3Key = await uploadToS3(file, () => {});
 
-        // Call onFileUploaded with the S3 key
         onFileUploaded(s3Key);
       } catch (error) {
-        // Handle errors accordingly
+      
         if (error instanceof S3UploadError) {
           onError(error.message);
         } else {
