@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { CSVPreview } from "../CSVPreview/CSVPreview";
 import Spinner from "../ui/Spinner";
 import AttachIcon from "../ui/attach-ui";
+import { chatService } from "@/services/ChatService";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -32,10 +33,13 @@ export function ChatInput({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const token = localStorage.getItem("supabase.auth.token");
-  const tokenJson = JSON.parse(token);
-  const accessToken = tokenJson.access_token;
-  const tokenType = tokenJson.token_type;
+  const token = JSON.parse(
+    localStorage.getItem("supabase.auth.token") || ""
+  )?.access_token;
+  // const token = localStorage.getItem("supabase.auth.token");
+  // const tokenJson = JSON.parse(token);
+  // const accessToken = tokenJson.access_token;
+  // const tokenType = tokenJson.token_type;
   const chatId = localStorage.getItem("chatId");
   const [filename, setFilename] = useState("");
   const { user } = useAuth();
@@ -76,23 +80,15 @@ export function ChatInput({
           const requestBody = {
             s3_path: `s3://growmax-dev-app-assets/analytics/${file.name}`,
             org_id: profile?.organization_id,
+            
           };
-          const response = await fetch(
-            `https://analytics-production-88e7.up.railway.app/api/v1/datasets/datasets?${chatId}`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "x-organization-id": profile.organization_id,
-                Authorization: `${tokenType} ${accessToken}`,
-              },
-              body: JSON.stringify({
-                s3_path: `s3://growmax-dev-app-assets/analytics/${file.name}`,
-                org_id: profile?.organization_id,
-                type: "unknown",
-              }),
-            }
-          );
+          const response = await chatService.uploadDataset(requestBody, chatId, {
+            headers: {
+              "x-organization-id": profile.organization_id,
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          
 
           // Handle response (if needed)
           if (!response.ok) {
@@ -122,23 +118,17 @@ export function ChatInput({
   const handleSubmit = async (e: React.FormEvent) => {
     try {
       if (profile?.organization_id) {
-        const response = await fetch(
-          `https://analytics-production-88e7.up.railway.app/api/v1/analytics/analyze?chat_id=${chatId}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-organization-id": profile.organization_id,
-              Authorization: `${tokenType} ${accessToken}`,
-            },
-            body: JSON.stringify({
-              s3_path: `s3://growmax-dev-app-assets/analytics/${filename}`,
-              org_id: profile?.organization_id,
-              query: input.trim(),
-              user_id: user?.id,
-            }),
-          }
-        );
+        const requestBody ={
+          org_id: profile?.organization_id,
+          query: input.trim(),
+          user_id: user?.id,
+        }
+        const response = await chatService.analyzeDataset(requestBody,{
+          headers: {
+            "x-organization-id": profile.organization_id,
+            Authorization: `Bearer ${token}`,
+          },
+        });
       }
     } catch (error) {}
 

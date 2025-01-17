@@ -14,8 +14,8 @@ class ChatService {
   ): Promise<ApiResponse<ChatSession>> {
     return this.apiClient.post<ChatSession>("chat/sessions", reqBody, options);
   }
-  async uploadDataset(reqBody:uploadDataSetRequest,options?:{headers:Record<string, string>;}):Promise<ApiResponse<ChatSession>>{
-    return this.apiClient.post<ChatSession>("datasets/datasets",reqBody,options)
+  async uploadDataset(reqBody:uploadDataSetRequest,chatId:string,options?:{headers:Record<string, string>;}):Promise<ApiResponse<ChatSession>>{
+    return this.apiClient.post<ChatSession>(`datasets/datasets?chat_id=${chatId}`,reqBody,options)
   }
  async analyzeDataset(reqBody:analyseDataset,options?:{headers:Record<string,string>;}):Promise<ApiResponse<ChatSession>>{
   return this.apiClient.post<ChatSession>("analytics/analyze",reqBody,options)
