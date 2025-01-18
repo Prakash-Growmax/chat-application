@@ -4,8 +4,7 @@ import { MessageCirclePlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ChatControl from "../ui/chat-control";
 interface ChatHeaderProps {
-  openRight: boolean;
-  open: boolean;
+
   setOpen: (leftside: boolean) => void;
   setOpenRight: (side: boolean) => void;
   createNewChat: (chat: string) => void;
@@ -15,8 +14,7 @@ interface ChatHeaderProps {
 export default function ChatHeader({
   open,
   setOpen,
-  openRight,
-  setOpenRight,
+ 
   createNewChat,
   state,
 }: ChatHeaderProps) {
@@ -24,9 +22,7 @@ export default function ChatHeader({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
-  const handleChatControl = () => {
-    setOpenRight(!openRight);
-  };
+ 
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -42,9 +38,9 @@ export default function ChatHeader({
     <>
       {state.s3Key && (
         <div className="flex items-center gap-2">
-          <div className="flex" onClick={handleChatControl}>
+          {/* <div className="flex" onClick={handleChatControl}>
             <ChatControl />
-          </div>
+          </div> */}
           <div className="flex" onClick={handleCreateChat}>
             <MessageCirclePlus className="cursor-pointer w-8 h-8 text-black ml-4" />
           </div>

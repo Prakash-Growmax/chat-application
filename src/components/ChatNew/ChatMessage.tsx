@@ -14,7 +14,7 @@ import DataTable from "./DataTable";
 interface ChatMessageProps {
   message: Message;
   recent: boolean;
-  openRight: boolean;
+
 }
 export function ChatMessage({ message }: ChatMessageProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);

@@ -17,16 +17,25 @@ class ChatService {
   async uploadDataset(reqBody:uploadDataSetRequest,chatId:string,options?:{headers:Record<string, string>;}):Promise<ApiResponse<ChatSession>>{
     return this.apiClient.post<ChatSession>(`datasets/datasets?chat_id=${chatId}`,reqBody,options)
   }
- async analyzeDataset(reqBody:analyseDataset,options?:{headers:Record<string,string>;}):Promise<ApiResponse<ChatSession>>{
-  return this.apiClient.post<ChatSession>("analytics/analyze",reqBody,options)
+ async analyzeDataset(reqBody:analyseDataset,chatId:string,options?:{headers:Record<string,string>;}):Promise<ApiResponse<ChatSession>>{
+  return this.apiClient.post<ChatSession>(`analytics/analyze?chat_id=${chatId}`,reqBody,options)
  }
-  async getSession(sessionId: string): Promise<ApiResponse<ChatSession>> {
-    return this.apiClient.get<ChatSession>(`/chat/sessions/${sessionId}`);
+  async getSession(options?:{headers:Record<string,string>;}): Promise<ApiResponse<ChatSession>> {
+    return this.apiClient.get<ChatSession>("chat/users/me/sessions",options);
   }
 
-  async deleteSession(sessionId: string): Promise<ApiResponse<void>> {
-    return this.apiClient.delete<void>(`/chat/sessions/${sessionId}`);
+  async deleteSession(
+    sessionId: string,
+    options?: { headers: Record<string, string> }
+  ): Promise<ApiResponse<ChatSession>> {
+    // Pass headers explicitly into the third argument (if apiClient.post supports it)
+    return this.apiClient.post<ChatSession>(
+      `chat/sessions/${sessionId}/inactivate`,
+      null, // No payload for the body
+      options // Pass options containing headers as the config object
+    );
   }
+  
 
   async getChatHistory(
     chatId: string,
@@ -34,7 +43,7 @@ class ChatService {
       headers: Record<string, string>;
     }
   ): Promise<ApiResponse<ChatHistory | undefined>> {
-    return this.apiClient.get<ChatHistory>(`/queries/${chatId}`, options);
+    return this.apiClient.get<ChatHistory>(`queries/${chatId}`, options);
   }
 }
 

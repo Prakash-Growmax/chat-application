@@ -46,7 +46,7 @@ export default function Sidebar() {
   const handleDrawerClose = () => {
     setSideDrawerOpen(false);
   };
-  const [isDropdownOpen, setDropdownOpen] = React.useState(true);
+  const [isDropdownOpen, setDropdownOpen] = React.useState(false);
   const { user } = useAuth();
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState(null);
   React.useEffect(() => {

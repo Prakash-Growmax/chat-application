@@ -8,6 +8,7 @@ import { CSVPreview } from "../CSVPreview/CSVPreview";
 import Spinner from "../ui/Spinner";
 import AttachIcon from "../ui/attach-ui";
 import { chatService } from "@/services/ChatService";
+import { token } from "@/utils/storage.utils";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -32,14 +33,7 @@ export function ChatInput({
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLFormElement>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const token = JSON.parse(
-    localStorage.getItem("supabase.auth.token") || ""
-  )?.access_token;
-  // const token = localStorage.getItem("supabase.auth.token");
-  // const tokenJson = JSON.parse(token);
-  // const accessToken = tokenJson.access_token;
-  // const tokenType = tokenJson.token_type;
+
   const chatId = localStorage.getItem("chatId");
   const [filename, setFilename] = useState("");
   const { user } = useAuth();
@@ -123,7 +117,7 @@ export function ChatInput({
           query: input.trim(),
           user_id: user?.id,
         }
-        const response = await chatService.analyzeDataset(requestBody,{
+        const response = await chatService.analyzeDataset(requestBody,chatId,{
           headers: {
             "x-organization-id": profile.organization_id,
             Authorization: `Bearer ${token}`,

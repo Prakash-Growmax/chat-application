@@ -39,7 +39,7 @@ function Chat({ message }: ChatProps) {
   });
   const [isUploading, setIsUploading] = useState(false);
   const { queue, processing, addToQueue, processQueue } = useMessageQueue();
-  const { sideDrawerOpen, openRight } = useContext(AppContext);
+  const { sideDrawerOpen} = useContext(AppContext);
 
   const processMessage = useCallback(
     async (message: Message) => {
@@ -203,7 +203,7 @@ function Chat({ message }: ChatProps) {
             setState={setState}
             isUploading={isUploading}
             setIsUploading={setIsUploading}
-            openRight={openRight}
+          
           />
         </div>
       </div>
