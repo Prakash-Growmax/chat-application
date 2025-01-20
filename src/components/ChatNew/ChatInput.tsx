@@ -1,12 +1,12 @@
+import { useChatContext } from "@/context/ChatContext";
 import { useProfile } from "@/hooks/profile/useProfile";
 import { useAuth } from "@/hooks/useAuth";
-import { S3UploadError, uploadToS3 } from "@/lib/s3-client";
+import { Message } from "@/types";
 import { Tooltip } from "@mui/material";
 import { ArrowUp } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CSVPreview } from "../CSVPreview/CSVPreview";
-import Spinner from "../ui/Spinner";
-import AttachIcon from "../ui/attach-ui";
+import ChatUploadBtn from "../layout/ChatSection/ChatUpload/ChatUploadBtn";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -19,25 +19,17 @@ interface ChatInputProps {
   bucket: string;
 }
 
-export function ChatInput({
-  onSend,
-  onFileUploaded,
-  onError,
-  isUploading,
-  setIsUploading,
-  s3Key,
-  bucket,
-}: ChatInputProps) {
+export function ChatInput({ onFileUploaded, s3Key, bucket }: ChatInputProps) {
+  const { addToQueue } = useChatContext();
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLFormElement>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const token = localStorage.getItem("supabase.auth.token");
+  const token = localStorage.getItem("supabase.auth.token") || "";
   const tokenJson = JSON.parse(token);
   const accessToken = tokenJson.access_token;
   const tokenType = tokenJson.token_type;
-  const chatId = localStorage.getItem("chatId");
-  const [filename, setFilename] = useState("");
+  const chatId = localStorage.getItem("chatId") || "";
+
   const { user } = useAuth();
 
   const { profile } = useProfile();
@@ -50,6 +42,7 @@ export function ChatInput({
     const newHeight = Math.min(textarea.scrollHeight, maxHeight);
     textarea.style.height = `${newHeight}px`;
   }, [s3Key]);
+
   useEffect(() => {
     adjustTextareaHeight();
   }, [input, adjustTextareaHeight, s3Key]);
@@ -59,93 +52,60 @@ export function ChatInput({
       containerRef.current?.scrollIntoView({ behavior: "auto" });
     }
   }, [s3Key]);
-  const handleFileUpload = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      setFilename(file?.name);
-      if (!file) {
-        console.error("No file selected");
-        return;
-      }
 
-      setIsUploading(true); // Set uploading to true before starting any requests
-
-      try {
-        // 1. Make the API call first (to fetch the response)
-        if (profile?.organization_id) {
-          const response = await fetch(
-            `https://analytics-production-88e7.up.railway.app/api/v1/datasets/datasets?${chatId}`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "x-organization-id": profile.organization_id,
-                Authorization: `${tokenType} ${accessToken}`,
-              },
-              body: JSON.stringify({
-                s3_path: `s3://growmax-dev-app-assets/analytics/${file.name}`,
-                org_id: profile?.organization_id,
-                type: "unknown",
-              }),
-            }
-          );
-
-          // Handle response (if needed)
-          if (!response.ok) {
-            throw new Error("Failed to upload dataset info");
-          }
-        }
-
-        // 2. Upload file to S3
-        const s3Key = await uploadToS3(file, () => {});
-
-        // Call onFileUploaded with the S3 key
-        onFileUploaded(s3Key);
-      } catch (error) {
-        // Handle errors accordingly
-        if (error instanceof S3UploadError) {
-          onError(error.message);
-        } else {
-          onError("An unexpected error occurred");
-        }
-      } finally {
-        // Ensure uploading state is false after both tasks are done
-        setIsUploading(false);
-      }
-    },
-    [onFileUploaded, onError, setIsUploading]
-  );
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
     try {
-      if (profile?.organization_id) {
-        const response = await fetch(
-          `https://analytics-production-88e7.up.railway.app/api/v1/analytics/analyze?chat_id=${chatId}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-organization-id": profile.organization_id,
-              Authorization: `${tokenType} ${accessToken}`,
-            },
-            body: JSON.stringify({
-              s3_path: `s3://growmax-dev-app-assets/analytics/${filename}`,
-              org_id: profile?.organization_id,
-              query: input.trim(),
-              user_id: user?.id,
-            }),
-          }
-        );
-      }
-    } catch (error) {}
-
-    // e.preventDefault();
-    // if (input.trim() && !isSubmitting) {
-    //   setIsSubmitting(true);
-    //   onSend(input.trim());
-    //   setInput("");
-    //   setIsSubmitting(false);
-    // }
+      const value = input.trim();
+      setInput("");
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        content: value,
+        role: "user",
+        timestamp: new Date(),
+        type: "text",
+        isTyping: false,
+      };
+      addToQueue(userMessage);
+      // if (profile?.organization_id && user?.id) {
+      //   const result = await chatService.analyzeQuery(
+      //     chatId,
+      //     {
+      //       // s3_path: `s3://growmax-dev-app-assets/analytics/${filename}`,
+      //       org_id: profile?.organization_id,
+      //       query: input.trim(),
+      //       user_id: user?.id,
+      //       chat_id: chatId,
+      //     },
+      //     {
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //         "x-organization-id": profile.organization_id,
+      //         Authorization: `${tokenType} ${accessToken}`,
+      //       },
+      //     }
+      //   );
+      //   const userMessage: Message = {
+      //     id: Date.now().toString(),
+      //     content: input.trim(),
+      //     role: "user",
+      //     timestamp: new Date(),
+      //     type: "text",
+      //     isTyping: false,
+      //   };
+      //   addToQueue(userMessage);
+      // }
+    } catch (error) {
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        content: error?.message || "Facing some issues",
+        role: "assistant",
+        timestamp: new Date(),
+        type: "text",
+        isTyping: false,
+      };
+      addToQueue(userMessage);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -182,27 +142,8 @@ export function ChatInput({
 
                   <div className="flex h-[44px] items-center justify-between">
                     <div className="flex gap-x-1">
-                      <div className="flex">
-                        <input
-                          type="file"
-                          accept=".csv"
-                          onChange={handleFileUpload}
-                          className="hidden"
-                          id="csv-upload"
-                          disabled={isUploading}
-                        />
-                        <Tooltip title="Upload CSV">
-                          <button
-                            type="button"
-                            className="flex items-center gap-2 text-black hover:bg-gray-100 rounded p-2 transition-colors"
-                            onClick={() =>
-                              document.getElementById("csv-upload")?.click()
-                            }
-                          >
-                            {isUploading ? <Spinner /> : <AttachIcon />}
-                          </button>
-                        </Tooltip>
-                      </div>
+                      <ChatUploadBtn onFileUploaded={onFileUploaded} />
+
                       {s3Key && (
                         <div>
                           <Tooltip title="Preview CSV">

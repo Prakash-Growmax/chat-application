@@ -7,9 +7,10 @@ const token = JSON.parse(
   localStorage.getItem("supabase.auth.token") || ""
 )?.access_token;
 
-export function useGetChatHistory(chatId: string | null) {
+export function useGetChatHistory(chatId: string | undefined) {
   const { profile } = useProfile();
-  const [Id, setId] = useState(chatId);
+  const [Id, setId] = useState<string | null>(null);
+  const [fetchingId, setFetchingId] = useState(true);
   const [chatHistory, setChatHistory] = useState<{
     loading: boolean;
     data: any;
@@ -22,14 +23,18 @@ export function useGetChatHistory(chatId: string | null) {
   async function fetchChatId(): Promise<any> {
     const chatId = await getChatId();
     if (!chatId) return null;
+    localStorage.setItem("chatId", chatId);
     setId(chatId);
+    setFetchingId(false);
   }
 
   useEffect(() => {
+    setFetchingId(true);
     if (!chatId || chatId === "new") {
       fetchChatId();
     } else {
       setId(chatId);
+      setFetchingId(false);
     }
   }, [chatId]);
 
@@ -91,26 +96,25 @@ export function useGetChatHistory(chatId: string | null) {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("🚀 ~ fetchChatHistory ~ response:", response);
       setChatHistory({
         loading: false,
-        data: getChatHistory?.data?.messages,
+        data: response?.data,
       });
-    } catch (error) {
-      console.log("🚀 ~ fetchChatHistory ~ error:", error);
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {
-    if (Id) {
-      fetchChatHistory(Id);
-    } else {
-      setChatHistory({
-        loading: false,
-        data: [],
-      });
+    if (!fetchingId) {
+      if (Id) {
+        fetchChatHistory(Id);
+      } else {
+        setChatHistory({
+          loading: false,
+          data: getChatHistory?.data?.messages,
+        });
+      }
     }
-  }, [Id]);
+  }, [Id, fetchingId]);
 
-  return { data: chatHistory?.data };
+  return { data: chatHistory?.data?.items || [] };
 }

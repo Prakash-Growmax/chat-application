@@ -1,10 +1,9 @@
 import { Message } from "@/types";
 import { motion } from "framer-motion";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 import Typewriter from "typewriter-effect";
 
-import AppContext from "../context/AppContext";
 import PaperCard from "../Custom-UI/PaperCard";
 import { Dialog, DialogContent } from "../ui/dialog";
 import SwitchButton from "../ui/Switchbutton";
@@ -13,8 +12,6 @@ import { DataChart } from "./DataChat";
 import DataTable from "./DataTable";
 interface ChatMessageProps {
   message: Message;
-  recent: boolean;
-  openRight: boolean;
 }
 export function ChatMessage({ message }: ChatMessageProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);

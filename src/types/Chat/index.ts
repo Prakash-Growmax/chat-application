@@ -9,6 +9,15 @@ export interface CreateSessionRequest {
 }
 
 export interface ChatHistory {
-  details: string;
+  data: {
+    items: Array<any>;
+  };
   // Add other session properties
+}
+
+export interface AnalyzeChatRequest {
+  query: string;
+  org_id: string;
+  user_id: string;
+  chat_id: string;
 }

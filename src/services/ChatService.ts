@@ -1,5 +1,10 @@
 import { ApiResponse } from "@/types/api.types";
-import { ChatHistory, ChatSession, CreateSessionRequest } from "@/types/Chat";
+import {
+  AnalyzeChatRequest,
+  ChatHistory,
+  ChatSession,
+  CreateSessionRequest,
+} from "@/types/Chat";
 import { ApiClient, apiClient } from "./apiConfig";
 
 class ChatService {
@@ -27,8 +32,22 @@ class ChatService {
     options?: {
       headers: Record<string, string>;
     }
-  ): Promise<ApiResponse<ChatHistory | undefined>> {
+  ): Promise<ApiResponse<ChatHistory>> {
     return this.apiClient.get<ChatHistory>(`/queries/${chatId}`, options);
+  }
+
+  async analyzeQuery(
+    chatId: string,
+    reqBody: AnalyzeChatRequest,
+    options?: {
+      headers: Record<string, string>;
+    }
+  ): Promise<ApiResponse<AnalyzeChatRequest>> {
+    return this.apiClient.post<AnalyzeChatRequest>(
+      `/analytics/analyze?chat_id=${chatId}`,
+      reqBody,
+      options
+    );
   }
 }
 

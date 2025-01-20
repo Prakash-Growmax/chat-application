@@ -1,13 +1,13 @@
-import { useMessageQueue } from "@/lib/useMessageQuesue";
 import { ChatState } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef } from "react";
 import { Alert, AlertDescription } from "../ui/alert";
 import { ScrollArea } from "../ui/scroll-area";
 
+import DarkLogo from "@/assets/Logo/DarkLogo";
+import { useChatContext } from "@/context/ChatContext";
 import LinearIndeterminate from "../ui/LinearProgress";
 import { ChatMessage } from "./ChatMessage";
-import DarkLogo from "@/assets/Logo/DarkLogo";
 
 interface ChatBoxProps {
   state: ChatState;
@@ -17,11 +17,8 @@ interface ChatBoxProps {
   openRight: boolean;
 }
 
-export default function ChatBox({
-  state,
-  openRight,
-}: ChatBoxProps) {
-  const { queue, processing, addToQueue, processQueue } = useMessageQueue();
+export default function ChatBox({ state, openRight }: ChatBoxProps) {
+  const { queue } = useChatContext();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -29,7 +26,7 @@ export default function ChatBox({
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({
         behavior: "smooth", // Smooth scrolling
-        block: "nearest",   // Subtle alignment
+        block: "nearest", // Subtle alignment
       });
     }
   }, []);
@@ -72,13 +69,8 @@ export default function ChatBox({
                           }}
                           className="mx-auto"
                         >
-                          {state.messages.map((message) => (
-                            <ChatMessage
-                              key={message.id}
-                              message={message}
-                              state={state}
-                              openRight={openRight}
-                            />
+                          {queue?.map((message) => (
+                            <ChatMessage message={message} />
                           ))}
 
                           {state.isLoading && (

@@ -1,18 +1,18 @@
-import { useState, useRef, useEffect } from 'react';
-import { Send, Loader2, MessageSquare, AlertCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Card } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { useTokens } from '@/hooks/useTokens';
-import { useAuth } from '@/hooks/useAuth';
-import { toast } from 'sonner';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useAuth } from "@/hooks/useAuth";
+import { useTokens } from "@/hooks/useTokens";
+import { cn } from "@/lib/utils";
+import { Loader2, MessageSquare, Send } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 interface Message {
   id: string;
   content: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   timestamp: Date;
   tokenCost: number;
 }
@@ -26,15 +26,15 @@ export function ChatWindow({ fileName, onSendMessage }: ChatWindowProps) {
   const { user } = useAuth();
   const { processAction } = useTokens();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const suggestions = [
-    'Show me a summary of the data',
-    'What are the main trends?',
-    'Calculate average values',
-    'Find outliers in the data',
+    "Show me a summary of the data",
+    "What are the main trends?",
+    "Calculate average values",
+    "Find outliers in the data",
   ];
 
   const handleSend = async (e: React.FormEvent) => {
@@ -46,32 +46,30 @@ export function ChatWindow({ fileName, onSendMessage }: ChatWindowProps) {
 
     try {
       // First, try to process the tokens
-      const tokenCost = await processAction(
-        chatId,
-        'text_question',
-        input,
-        { fileName }
-      );
+      const tokenCost = await processAction(chatId, "text_question", input, {
+        fileName,
+      });
 
       const userMessage: Message = {
         id: Date.now().toString(),
         content: input,
-        role: 'user',
+        role: "user",
         timestamp: new Date(),
         tokenCost,
       };
 
       setMessages((prev) => [...prev, userMessage]);
-      setInput('');
+      setInput("");
 
       // Process the actual message
       await onSendMessage(input);
 
       // Simulate AI response with token cost
-      const aiResponse = 'This is a simulated AI response based on your CSV data.';
+      const aiResponse =
+        "This is a simulated AI response based on your CSV data.";
       const aiTokenCost = await processAction(
         chatId,
-        'text_question',
+        "text_question",
         aiResponse,
         { fileName, isResponse: true }
       );
@@ -79,7 +77,7 @@ export function ChatWindow({ fileName, onSendMessage }: ChatWindowProps) {
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: aiResponse,
-        role: 'assistant',
+        role: "assistant",
         timestamp: new Date(),
         tokenCost: aiTokenCost,
       };
@@ -89,7 +87,7 @@ export function ChatWindow({ fileName, onSendMessage }: ChatWindowProps) {
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
-        toast.error('Failed to process message');
+        toast.error("Failed to process message");
       }
     } finally {
       setLoading(false);
@@ -122,16 +120,16 @@ export function ChatWindow({ fileName, onSendMessage }: ChatWindowProps) {
             <div
               key={message.id}
               className={cn(
-                'flex',
-                message.role === 'user' ? 'justify-end' : 'justify-start'
+                "flex",
+                message.role === "user" ? "justify-end" : "justify-start"
               )}
             >
               <div
                 className={cn(
-                  'rounded-lg px-4 py-2 max-w-[80%]',
-                  message.role === 'user'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted'
+                  "rounded-lg px-4 py-2 max-w-[80%]",
+                  message.role === "user"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted"
                 )}
               >
                 <p className="text-sm">{message.content}</p>
