@@ -84,7 +84,7 @@ export default function MyRecent({
 
     setActiveDropdownIndex(index);
   };
-  console.log(sessionList)
+ 
   return (
     <div className="relative cursor-pointer">
       <div

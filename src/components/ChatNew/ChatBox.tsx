@@ -30,7 +30,7 @@ export default function ChatBox() {
       <div className="min-h-screen">
         <div className="flex h-screen">
           {/* Main Content */}
-          <div className="flex flex-col w-screen">
+          <div className="flex flex-col w-svw">
             <main className="flex-1 flex flex-col">
               <AnimatePresence mode="wait">
                 <motion.div
