@@ -22,9 +22,9 @@ const AppRoutes = () => {
         <Route
           path="/login"
           element={
-            <PublicLayout>
+            // <PublicLayout>
               <LoginPage />
-            </PublicLayout>
+            // </PublicLayout>
           }
         />
         <Route path="/" element={<WelcomePage />} />

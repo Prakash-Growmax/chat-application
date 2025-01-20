@@ -15,7 +15,7 @@ const Main = styled("main", {
     //   marginLeft: open ? "176px" : "0",
     // },
     [theme.breakpoints.up("md")]: {
-      marginLeft: open ? "200px" : "0",
+      marginLeft: open ? "20px" : "0",
     },
   }));
   export default Main;

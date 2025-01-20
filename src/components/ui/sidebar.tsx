@@ -46,7 +46,7 @@ export default function Sidebar() {
   const handleDrawerClose = () => {
     setSideDrawerOpen(false);
   };
-  const [isDropdownOpen, setDropdownOpen] = React.useState(false);
+  const [isDropdownOpen, setDropdownOpen] = React.useState(true);
   const { user } = useAuth();
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState(null);
   React.useEffect(() => {
@@ -79,7 +79,7 @@ export default function Sidebar() {
         sx={{
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: isMobile ? "70%" : isTab ? "55%" : drawerWidth,
+            width: isMobile ? "70%" : isTab ? "40%" : drawerWidth,
             backgroundColor: "#F9F9F9",
             display: "flex",
             flexDirection: "column",

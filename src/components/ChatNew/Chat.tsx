@@ -54,7 +54,7 @@ function Chat({ message }: ChatProps) {
       <div className="h-[calc(100vh-64px)]  flex flex-col">
         {/* Centered content when no messages */}
         <div className="flex-1 flex flex-col items-center justify-center">
-          <h1 className="text-3xl font-semibold text-gray-900 mb-8">
+          <h1 className="text-lg lg:text-3xl md:text-3xl font-semibold text-gray-900 mb-8">
             What do you want to analyze today?
           </h1>
 
