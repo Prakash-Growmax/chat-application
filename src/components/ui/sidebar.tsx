@@ -63,11 +63,11 @@ export default function Sidebar() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [activeDropdownIndex]);
 
-  React.useEffect(() => {
-    if (user) {
-      setSideDrawerOpen(true);
-    }
-  }, [user]);
+  // React.useEffect(() => {
+  //   if (user) {
+  //     setSideDrawerOpen(true);
+  //   }
+  // }, [user]);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -79,7 +79,7 @@ export default function Sidebar() {
         sx={{
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: isMobile ? "70%" : isTab ? "40%" : drawerWidth,
+            width: isMobile ? "70%" : isTab ? "30%" : drawerWidth,
             backgroundColor: "#F9F9F9",
             display: "flex",
             flexDirection: "column",

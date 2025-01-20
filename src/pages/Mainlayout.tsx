@@ -21,7 +21,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       </>)}
      
       <div
-        className={`flex-1 flex flex-col transition-all duration-300 
+        className={`flex-1 flex flex-col  transition-all duration-300 h-[90%] w-[80%]
           ${sideDrawerOpen ? "ml-0" : "ml-0"}`}
       >
         {!hideHeader && (
@@ -30,10 +30,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           </header>
         )}
         <main
-          className={`flex-1 pt-16  
+          className={`flex-1 pt-16 justify-center items-center  
             duration-200 
             ease-in-out
-           ${sideDrawerOpen ? "ml-48" : "ml-0"}`}
+           ${sideDrawerOpen ? "ml-48" : ""}`}
         >
           {children}
         </main>
