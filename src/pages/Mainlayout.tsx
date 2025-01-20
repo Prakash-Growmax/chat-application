@@ -33,7 +33,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           className={`flex-1 pt-16 justify-center items-center  
             duration-200 
             ease-in-out
-           ${sideDrawerOpen ? "ml-48" : ""}`}
+           ${sideDrawerOpen ? "lg:ml-48" : ""}`}
         >
           {children}
         </main>

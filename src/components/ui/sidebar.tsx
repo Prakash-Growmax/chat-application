@@ -40,7 +40,7 @@ export default function Sidebar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
-
+  console.log(isTab)
   const { sideDrawerOpen, setSideDrawerOpen } = React.useContext(AppContext);
 
   const handleDrawerClose = () => {
@@ -79,7 +79,7 @@ export default function Sidebar() {
         sx={{
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: isMobile ? "70%" : isTab ? "30%" : drawerWidth,
+            width:drawerWidth,
             backgroundColor: "#F9F9F9",
             display: "flex",
             flexDirection: "column",
@@ -122,7 +122,7 @@ export default function Sidebar() {
             paddingRight: "7.6px",
           }}
         >
-          <NewChatButton isMobile={isMobile} />
+          <NewChatButton isMobile={isMobile} isTab={isTab}/>
           <SideBarListItemHeader icon={Layers} title="Workspace" />
           <div className="w-full">
             <List>
