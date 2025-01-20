@@ -1,16 +1,14 @@
 import { ApiError } from "@/services/apiConfig";
 import { chatService } from "@/services/ChatService";
+import { getAccessToken } from "@/utils/storage.utils";
 import { useProfile } from "./profile/useProfile";
-import { token } from "@/utils/storage.utils";
-
 
 const chatId = localStorage.getItem("chatId");
 
 export function useCreateChatId() {
   const { profile } = useProfile();
-  
+
   async function getChatId() {
-   
     if (profile?.organization_id) {
       const requestBody = {
         name: "New Thread",
@@ -20,13 +18,14 @@ export function useCreateChatId() {
       };
 
       try {
+        const token = getAccessToken();
         const response = await chatService.createSession(requestBody, {
           headers: {
             "x-organization-id": profile.organization_id,
             Authorization: `Bearer ${token}`,
           },
         });
-       
+
         if (response?.status !== 200)
           throw new Error("Error while creating session");
 

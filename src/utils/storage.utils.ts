@@ -1,19 +1,98 @@
-import { AccessToken_LocalKey } from "@/constants/storage.constant";
+import {
+  AccessToken_LocalKey,
+  ChatId_LocalKey,
+} from "@/constants/storage.constant";
 
-const storedToken = localStorage.getItem(AccessToken_LocalKey);
+export const tokenType = "Bearer";
 
-let token;
-if (storedToken) {
- 
+export function getAccessToken(): string | null {
   try {
-    const parsedToken = JSON.parse(storedToken);
-    token = parsedToken?.access_token || null;
+    const storedToken = localStorage.getItem(AccessToken_LocalKey);
+    if (storedToken) {
+      const parsedToken = JSON.parse(storedToken);
+      return parsedToken?.access_token || null;
+    }
+    return null;
   } catch (error) {
-    console.error("Error parsing token:", error);
-    token = null;
+    console.error("Failed to get stored token:", error);
+    return null;
   }
-} else {
-
-  token = null;
 }
-export {token}
+
+export function getChatId(): string {
+  try {
+    const chatId = localStorage.getItem(ChatId_LocalKey);
+    if (chatId) {
+      return chatId;
+    }
+    return "";
+  } catch (error) {
+    console.error("Failed to get chatId:", error);
+    return "";
+  }
+}
+
+// import { User } from '@/types';
+
+// const STORAGE_KEYS = {
+//   AUTH_TOKEN: 'auth_token',
+//   USER_DATA: 'user_data',
+// } as const;
+
+// export async function getStoredToken(): Promise<string | null> {
+//   try {
+//     return localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+//   } catch (error) {
+//     console.error('Failed to get stored token:', error);
+//     return null;
+//   }
+// }
+
+// export async function setStoredToken(token: string): Promise<void> {
+//   try {
+//     localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
+//   } catch (error) {
+//     console.error('Failed to store token:', error);
+//   }
+// }
+
+// export async function removeStoredToken(): Promise<void> {
+//   try {
+//     localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
+//   } catch (error) {
+//     console.error('Failed to remove token:', error);
+//   }
+// }
+
+// export async function getStoredUser(): Promise<User | null> {
+//   try {
+//     const data = localStorage.getItem(STORAGE_KEYS.USER_DATA);
+//     return data ? JSON.parse(data) : null;
+//   } catch (error) {
+//     console.error('Failed to get stored user:', error);
+//     return null;
+//   }
+// }
+
+// export async function setStoredUser(user: User): Promise<void> {
+//   try {
+//     localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(user));
+//   } catch (error) {
+//     console.error('Failed to store user:', error);
+//   }
+// }
+
+// export async function removeStoredUser(): Promise<void> {
+//   try {
+//     localStorage.removeItem(STORAGE_KEYS.USER_DATA);
+//   } catch (error) {
+//     console.error('Failed to remove user:', error);
+//   }
+// }
+
+// export async function clearStorage(): Promise<void> {
+//   await Promise.all([
+//     removeStoredToken(),
+//     removeStoredUser(),
+//   ]);
+// }

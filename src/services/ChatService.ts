@@ -66,7 +66,7 @@ class ChatService {
       headers: Record<string, string>;
     }
   ): Promise<ApiResponse<ChatHistory>> {
-    return this.apiClient.get<ChatHistory>(`/queries/${chatId}`, options);
+    return this.apiClient.get<ChatHistory>(`queries/${chatId}`, options);
   }
 
   async analyzeQuery(
@@ -77,7 +77,7 @@ class ChatService {
     }
   ): Promise<ApiResponse<AnalyzeChatRequest>> {
     return this.apiClient.post<AnalyzeChatRequest>(
-      `/analytics/analyze?chat_id=${chatId}`,
+      `analytics/analyze?chat_id=${chatId}`,
       reqBody,
       options
     );

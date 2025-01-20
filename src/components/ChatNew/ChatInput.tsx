@@ -1,5 +1,9 @@
 import { useChatContext } from "@/context/ChatContext";
+import { useProfile } from "@/hooks/profile/useProfile";
+import { useAuth } from "@/hooks/useAuth";
+import { chatService } from "@/services/ChatService";
 import { Message } from "@/types";
+import { getAccessToken, getChatId, tokenType } from "@/utils/storage.utils";
 import { Tooltip } from "@mui/material";
 import { ArrowUp } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -18,10 +22,14 @@ interface ChatInputProps {
 }
 
 export function ChatInput({ onFileUploaded, s3Key, bucket }: ChatInputProps) {
+  const { user } = useAuth();
+  const { profile } = useProfile();
   const { addToQueue } = useChatContext();
+
   const [input, setInput] = useState("");
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLFormElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   const adjustTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -30,16 +38,6 @@ export function ChatInput({ onFileUploaded, s3Key, bucket }: ChatInputProps) {
     const maxHeight = s3Key ? 120 : 200;
     const newHeight = Math.min(textarea.scrollHeight, maxHeight);
     textarea.style.height = `${newHeight}px`;
-  }, [s3Key]);
-
-  useEffect(() => {
-    adjustTextareaHeight();
-  }, [input, adjustTextareaHeight, s3Key]);
-
-  useEffect(() => {
-    if (s3Key) {
-      containerRef.current?.scrollIntoView({ behavior: "auto" });
-    }
   }, [s3Key]);
 
   const handleSubmit = async (e: any) => {
@@ -56,34 +54,36 @@ export function ChatInput({ onFileUploaded, s3Key, bucket }: ChatInputProps) {
         isTyping: false,
       };
       addToQueue(userMessage);
-      // if (profile?.organization_id && user?.id) {
-      //   const result = await chatService.analyzeQuery(
-      //     chatId,
-      //     {
-      //       // s3_path: `s3://growmax-dev-app-assets/analytics/${filename}`,
-      //       org_id: profile?.organization_id,
-      //       query: input.trim(),
-      //       user_id: user?.id,
-      //       chat_id: chatId,
-      //     },
-      //     {
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //         "x-organization-id": profile.organization_id,
-      //         Authorization: `${tokenType} ${accessToken}`,
-      //       },
-      //     }
-      //   );
-      //   const userMessage: Message = {
-      //     id: Date.now().toString(),
-      //     content: input.trim(),
-      //     role: "user",
-      //     timestamp: new Date(),
-      //     type: "text",
-      //     isTyping: false,
-      //   };
-      //   addToQueue(userMessage);
-      // }
+      if (profile?.organization_id && user?.id) {
+        const chatId = getChatId() || "";
+        const org_id = profile.organization_id;
+        const result = await chatService.analyzeQuery(
+          chatId,
+          {
+            org_id,
+            query: input.trim(),
+            user_id: user?.id,
+            chat_id: chatId,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "x-organization-id": org_id,
+              Authorization: `${tokenType} ${getAccessToken()}`,
+            },
+          }
+        );
+        console.log("🚀 ~ handleSubmit ~ result:", result);
+        // const userMessage: Message = {
+        //   id: Date.now().toString(),
+        //   content: input.trim(),
+        //   role: "user",
+        //   timestamp: new Date(),
+        //   type: "text",
+        //   isTyping: false,
+        // };
+        // addToQueue(userMessage);
+      }
     } catch (error) {
       const userMessage: Message = {
         id: Date.now().toString(),
@@ -96,6 +96,16 @@ export function ChatInput({ onFileUploaded, s3Key, bucket }: ChatInputProps) {
       addToQueue(userMessage);
     }
   };
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [input, adjustTextareaHeight, s3Key]);
+
+  useEffect(() => {
+    if (s3Key) {
+      containerRef.current?.scrollIntoView({ behavior: "auto" });
+    }
+  }, [s3Key]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {

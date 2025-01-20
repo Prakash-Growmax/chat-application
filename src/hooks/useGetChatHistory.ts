@@ -1,10 +1,8 @@
 import { chatService } from "@/services/ChatService";
+import { getAccessToken } from "@/utils/storage.utils";
 import { useEffect, useState } from "react";
 import { useProfile } from "./profile/useProfile";
 import { useCreateChatId } from "./useCreateChat";
-import { token } from "@/utils/storage.utils";
-
-
 
 export function useGetChatHistory(chatId: string | undefined) {
   const { profile } = useProfile();
@@ -88,7 +86,7 @@ export function useGetChatHistory(chatId: string | undefined) {
   async function fetchChatHistory(chat_id: string) {
     try {
       if (!profile?.organization_id) return null;
-
+      const token = getAccessToken();
       const response = await chatService.getChatHistory(chat_id, {
         headers: {
           "x-organization-id": profile.organization_id,
