@@ -3,6 +3,7 @@ import { useProfile } from "@/hooks/profile/useProfile";
 import { useAuth } from "@/hooks/useAuth";
 import { chatService } from "@/services/ChatService";
 import { Message } from "@/types";
+import { formQueueMessage } from "@/utils/chat.utils";
 import { getAccessToken, getChatId, tokenType } from "@/utils/storage.utils";
 import { Tooltip } from "@mui/material";
 import { ArrowUp } from "lucide-react";
@@ -85,18 +86,15 @@ export function ChatInput({ onFileUploaded, s3Key, bucket }: ChatInputProps) {
             },
           }
         );
+
+        console.log("🚀 ~ processMessage ~ result:", result);
+
         if (result?.data?.error) {
           throw new Error(result?.data?.error);
         }
 
-        const assistantMessage: Message = {
-          id: Date.now().toString(),
-          content: result?.data?.response || "",
-          role: "assistant",
-          timestamp: new Date(),
-          type: "text",
-          isTyping: false,
-        };
+        let assistantMessage;
+        assistantMessage = formQueueMessage(result?.data?.response || "", true);
         addToQueue(assistantMessage);
       }
     } catch (error) {

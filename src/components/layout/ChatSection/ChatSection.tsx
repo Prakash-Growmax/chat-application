@@ -24,7 +24,7 @@ function ChatSection() {
       if (processing || queue.length === 0) return;
 
       setProcessing(true);
-      const message = queue[0];
+      const message = queue[queue.length - 1];
 
       try {
         await handler(message);

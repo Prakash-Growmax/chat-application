@@ -3,7 +3,7 @@ import { Message } from "@/types";
 export const formQueueMessage = (
   content: string,
   isAssistant: boolean,
-  additionalParams: object
+  additionalParams?: object
 ) => {
   const message: Message = {
     id: Date.now().toString(),
