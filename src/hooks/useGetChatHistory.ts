@@ -2,10 +2,9 @@ import { chatService } from "@/services/ChatService";
 import { useEffect, useState } from "react";
 import { useProfile } from "./profile/useProfile";
 import { useCreateChatId } from "./useCreateChat";
+import { token } from "@/utils/storage.utils";
 
-const token = JSON.parse(
-  localStorage.getItem("supabase.auth.token") || ""
-)?.access_token;
+
 
 export function useGetChatHistory(chatId: string | undefined) {
   const { profile } = useProfile();

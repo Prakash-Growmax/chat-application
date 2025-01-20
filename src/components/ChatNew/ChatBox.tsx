@@ -14,10 +14,9 @@ interface ChatBoxProps {
   setState: (state: ChatState) => void;
   isUploading: boolean;
   setIsUploading: (state: boolean) => void;
-  openRight: boolean;
 }
 
-export default function ChatBox({ state, openRight }: ChatBoxProps) {
+export default function ChatBox({ state }: ChatBoxProps) {
   const { queue } = useChatContext();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);

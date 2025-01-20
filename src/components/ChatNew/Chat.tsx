@@ -107,7 +107,6 @@ function Chat({ message }: ChatProps) {
             setState={setState}
             isUploading={isUploading}
             setIsUploading={setIsUploading}
-            openRight={openRight}
           />
         </div>
       </div>

@@ -10,7 +10,7 @@ import AppContext from "./components/context/AppContext";
 
 function App() {
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
-  const [openRight, setOpenRight] = useState(false);
+
   return (
     <ThemeProvider>
       <ErrorBoundary>
@@ -20,8 +20,7 @@ function App() {
               value={{
                 sideDrawerOpen,
                 setSideDrawerOpen,
-                openRight,
-                setOpenRight,
+            
               }}
             >
               <div className="flex flex-col min-h-screen">

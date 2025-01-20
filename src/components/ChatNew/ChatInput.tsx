@@ -1,6 +1,4 @@
 import { useChatContext } from "@/context/ChatContext";
-import { useProfile } from "@/hooks/profile/useProfile";
-import { useAuth } from "@/hooks/useAuth";
 import { Message } from "@/types";
 import { Tooltip } from "@mui/material";
 import { ArrowUp } from "lucide-react";
@@ -24,15 +22,6 @@ export function ChatInput({ onFileUploaded, s3Key, bucket }: ChatInputProps) {
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLFormElement>(null);
-  const token = localStorage.getItem("supabase.auth.token") || "";
-  const tokenJson = JSON.parse(token);
-  const accessToken = tokenJson.access_token;
-  const tokenType = tokenJson.token_type;
-  const chatId = localStorage.getItem("chatId") || "";
-
-  const { user } = useAuth();
-
-  const { profile } = useProfile();
   const adjustTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;

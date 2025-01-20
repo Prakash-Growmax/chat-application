@@ -1,16 +1,16 @@
 import { ApiError } from "@/services/apiConfig";
 import { chatService } from "@/services/ChatService";
 import { useProfile } from "./profile/useProfile";
+import { token } from "@/utils/storage.utils";
 
-const token = JSON.parse(
-  localStorage.getItem("supabase.auth.token") || ""
-)?.access_token;
+
 const chatId = localStorage.getItem("chatId");
 
 export function useCreateChatId() {
   const { profile } = useProfile();
-
+  
   async function getChatId() {
+   
     if (profile?.organization_id) {
       const requestBody = {
         name: "New Thread",
@@ -26,7 +26,7 @@ export function useCreateChatId() {
             Authorization: `Bearer ${token}`,
           },
         });
-
+       
         if (response?.status !== 200)
           throw new Error("Error while creating session");
 
