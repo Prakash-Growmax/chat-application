@@ -14,7 +14,6 @@ export interface Message {
   type: "text" | "chart" | "table";
   data?: any;
   error?: boolean;
-  isTyping: boolean;
 }
 export interface Organization {
   id: string;

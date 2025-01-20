@@ -24,7 +24,9 @@ class ChatService {
   async uploadDataset(
     reqBody: uploadDataSetRequest,
     chatId: string,
-    options?: { headers: Record<string, string> }
+    options?: {
+      headers: Record<string, string>;
+    }
   ): Promise<ApiResponse<ChatSession>> {
     return this.apiClient.post<ChatSession>(
       `datasets/datasets?chat_id=${chatId}`,

@@ -16,7 +16,7 @@ export interface ChatHistory {
 export interface uploadDataSetRequest {
   s3_path: string;
   org_id: string;
-  chat_id: string;
+  type: string;
 }
 export interface analyseDataset {
   query: string;
@@ -31,6 +31,15 @@ export interface AnalyzeChatRequest {
   chat_id: string;
 }
 
+//Api Response Types.....
+
+export interface UploadDatasetResponse {
+  error?: string;
+  response?: string;
+  id: string;
+  status: string | "failed";
+  token_usage: any;
+}
 export interface AnalyzeChatResponse {
   error?: string;
   response?: string;

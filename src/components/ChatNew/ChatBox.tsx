@@ -8,6 +8,7 @@ import { ChatMessage } from "./ChatMessage";
 
 export default function ChatBox() {
   const { queue, processing } = useChatContext();
+  console.log("🚀 ~ ChatBox ~ queue:", queue);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
