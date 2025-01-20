@@ -1,9 +1,18 @@
-const LogoIcon = ({ className }: { className: string }) => {
+const LogoIcon = ({
+  className,
+  width = "20px",
+  height = "20px",
+}: {
+  className?: string;
+  width?: string;
+  height?: string;
+}) => {
+  console.log("🚀 ~ LogoIcon ~ className:", className);
   return (
     <div
       style={{
-        width: "20px",
-        height: "20px",
+        width,
+        height,
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",

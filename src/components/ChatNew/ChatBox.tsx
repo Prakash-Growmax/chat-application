@@ -2,9 +2,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef } from "react";
 import { ScrollArea } from "../ui/scroll-area";
 
-import DarkLogo from "@/assets/Logo/DarkLogo";
 import { useChatContext } from "@/context/ChatContext";
-import LinearIndeterminate from "../ui/LinearProgress";
+import ChatLoader from "./ChatLoader";
 import { ChatMessage } from "./ChatMessage";
 
 export default function ChatBox() {
@@ -62,25 +61,7 @@ export default function ChatBox() {
                             <ChatMessage message={message} />
                           ))}
 
-                          {processing && (
-                            <div className="flex items-center justify-center">
-                              <div className="flex flex-col max-w-8xl lg:w-[61%] md:w-[97%] w-[100%]">
-                                <div className="flex">
-                                  <div className="flex w-[95%] h-[20%] mt-4">
-                                    <DarkLogo />
-                                  </div>
-                                </div>
-                                <div className="flex w-full px-4 py-2">
-                                  <div className="flex flex-col w-[100%]">
-                                    <div className="mb-4">
-                                      <LinearIndeterminate />
-                                    </div>
-                                    <LinearIndeterminate />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          )}
+                          <ChatLoader />
 
                           {/* Invisible div to help with scrolling */}
                           <div ref={messagesEndRef} />

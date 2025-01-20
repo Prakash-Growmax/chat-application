@@ -7,6 +7,7 @@ import Typewriter from "typewriter-effect";
 import PaperCard from "../Custom-UI/PaperCard";
 import { Dialog, DialogContent } from "../ui/dialog";
 import SwitchButton from "../ui/Switchbutton";
+import ChatAssistantHeader from "./ChatMessage/ChatAssistantHeader";
 import ChatTypeInfo from "./ChatMessage/ChatTypeInfo";
 import { DataChart } from "./DataChat";
 import DataTable from "./DataTable";
@@ -34,18 +35,12 @@ export function ChatMessage({ message }: ChatMessageProps) {
             </div>
           </motion.div>
         ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="flex w-full items-center justify-center py-2">
-              <PaperCard className="w-full border-none rounded-3xl p-3">
-                <ChatTypeInfo isUser={isUser} />
-                <RenderContent message={message} />
-              </PaperCard>
-            </div>
-          </motion.div>
+          <div className="flex w-full items-center justify-center py-2">
+            <PaperCard className="w-full border-none rounded-3xl p-3">
+              <ChatAssistantHeader />
+              <RenderContent message={message} />
+            </PaperCard>
+          </div>
         )}
       </div>
 

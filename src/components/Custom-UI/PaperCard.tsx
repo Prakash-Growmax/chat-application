@@ -5,9 +5,17 @@ const PaperCard = ({
   className,
 }: {
   children: ReactNode;
-  className: string;
+  className?: string;
 }) => {
-  return <div className={"bg-gray-50 shadow " + className}>{children}</div>;
+  return (
+    <div
+      className={
+        "bg-gray-50 shadow w-full border-none rounded-3xl p-3 " + className
+      }
+    >
+      {children}
+    </div>
+  );
 };
 
 export default PaperCard;

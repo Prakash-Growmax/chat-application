@@ -1,5 +1,6 @@
 import DarkLogo from "@/assets/Logo/DarkLogo";
 import { useAuth } from "@/hooks/useAuth";
+import { BodyText } from "@/Theme/Typography";
 import { Avatar } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 
@@ -32,7 +33,7 @@ function ChatTypeInfo({ isUser }: { isUser: boolean }) {
             {initials}
           </Avatar>
           {/* <UserIcon className="w-8 h-8" /> */}
-          <p className="ml-2 font-normal text-sm">You</p>
+          <BodyText className="ml-2 ">You</BodyText>
         </>
       ) : (
         <>
