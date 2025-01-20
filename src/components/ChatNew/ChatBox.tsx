@@ -1,7 +1,5 @@
-import { ChatState } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef } from "react";
-import { Alert, AlertDescription } from "../ui/alert";
 import { ScrollArea } from "../ui/scroll-area";
 
 import DarkLogo from "@/assets/Logo/DarkLogo";
@@ -9,31 +7,23 @@ import { useChatContext } from "@/context/ChatContext";
 import LinearIndeterminate from "../ui/LinearProgress";
 import { ChatMessage } from "./ChatMessage";
 
-interface ChatBoxProps {
-  state: ChatState;
-  setState: (state: ChatState) => void;
-  isUploading: boolean;
-  setIsUploading: (state: boolean) => void;
-}
-
-export default function ChatBox({ state }: ChatBoxProps) {
-  const { queue } = useChatContext();
+export default function ChatBox() {
+  const { queue, processing } = useChatContext();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = useCallback(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({
-        behavior: "smooth", // Smooth scrolling
-        block: "nearest", // Subtle alignment
+        behavior: "smooth",
+        block: "nearest",
       });
     }
   }, []);
 
-  // Effect to scroll to the bottom when messages change
   useEffect(() => {
     scrollToBottom();
-  }, [state.messages, scrollToBottom]);
+  }, [queue, scrollToBottom]);
 
   return (
     <>
@@ -72,7 +62,7 @@ export default function ChatBox({ state }: ChatBoxProps) {
                             <ChatMessage message={message} />
                           ))}
 
-                          {state.isLoading && (
+                          {processing && (
                             <div className="flex items-center justify-center">
                               <div className="flex flex-col max-w-8xl lg:w-[61%] md:w-[97%] w-[100%]">
                                 <div className="flex">
@@ -103,15 +93,6 @@ export default function ChatBox({ state }: ChatBoxProps) {
             </main>
           </div>
         </div>
-
-        {state.error && (
-          <Alert
-            variant="destructive"
-            className="fixed bottom-4 right-4 w-auto"
-          >
-            <AlertDescription>{state.error}</AlertDescription>
-          </Alert>
-        )}
       </div>
     </>
   );

@@ -60,7 +60,7 @@ function Chat({ message }: ChatProps) {
 
           <div className="w-full max-w-4xl px-4">
             <ChatInput
-              // onSend={handleSendMessage}
+              onSend={() => {}}
               disabled={state.isLoading || !state.s3Key}
               onError={handleError}
               isUploading={isUploading}
@@ -79,6 +79,7 @@ function Chat({ message }: ChatProps) {
                       role: "assistant",
                       timestamp: new Date(),
                       type: "text",
+                      isTyping: false,
                     },
                   ],
                 });
@@ -99,24 +100,17 @@ function Chat({ message }: ChatProps) {
 
   return (
     <div className="h-[calc(100vh-64px)]  flex flex-col">
-      {/* Messages section - scrollable */}
       <div className="flex-1 overflow-y-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <ChatBox
-            state={state}
-            setState={setState}
-            isUploading={isUploading}
-            setIsUploading={setIsUploading}
-          />
+          <ChatBox />
         </div>
       </div>
 
-      {/* Footer section with input and disclaimer - fixed at bottom */}
       <div className="mt-auto">
         <div className="px-4 py-4">
           <div className="max-w-4xl mx-auto">
             <ChatInput
-              // onSend={handleSendMessage}
+              onSend={() => {}}
               disabled={state.isLoading || !state.s3Key}
               onError={handleError}
               isUploading={isUploading}
@@ -135,6 +129,7 @@ function Chat({ message }: ChatProps) {
                       role: "assistant",
                       timestamp: new Date(),
                       type: "text",
+                      isTyping: false,
                     },
                   ],
                 });
@@ -143,7 +138,6 @@ function Chat({ message }: ChatProps) {
           </div>
         </div>
 
-        {/* Disclaimer */}
         <div className="px-2 pb-2 text-center">
           <div className="text-xs text-gray-500">
             Ansight can make mistakes. Check important info.

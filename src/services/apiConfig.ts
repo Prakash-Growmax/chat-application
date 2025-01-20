@@ -42,7 +42,6 @@ export class ApiClient {
       if (!response.ok) {
         if (response.status === 404) {
           const errorData = await response.json();
-          console.log("🚀 ~ ApiClient ~ errorData:", errorData);
         }
         throw new ApiError(response.status, response.statusText, data);
       }
@@ -53,7 +52,6 @@ export class ApiClient {
         statusText: response.statusText,
       };
     } catch (error: any) {
-      console.log("🚀 ~ ApiClient ~ error:", error?.message);
       if (error instanceof ApiError) {
         throw error;
       }

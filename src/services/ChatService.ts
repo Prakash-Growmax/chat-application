@@ -2,6 +2,7 @@ import { ApiResponse } from "@/types/api.types";
 import {
   analyseDataset,
   AnalyzeChatRequest,
+  AnalyzeChatResponse,
   ChatHistory,
   ChatSession,
   CreateSessionRequest,
@@ -75,8 +76,8 @@ class ChatService {
     options?: {
       headers: Record<string, string>;
     }
-  ): Promise<ApiResponse<AnalyzeChatRequest>> {
-    return this.apiClient.post<AnalyzeChatRequest>(
+  ): Promise<ApiResponse<AnalyzeChatResponse>> {
+    return this.apiClient.post<AnalyzeChatResponse>(
       `analytics/analyze?chat_id=${chatId}`,
       reqBody,
       options

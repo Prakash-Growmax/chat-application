@@ -30,3 +30,11 @@ export interface AnalyzeChatRequest {
   user_id: string;
   chat_id: string;
 }
+
+export interface AnalyzeChatResponse {
+  error?: string;
+  response?: string;
+  id: string;
+  status: string | "failed";
+  token_usage: any;
+}

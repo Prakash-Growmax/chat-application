@@ -24,8 +24,7 @@ interface ChatInputProps {
 export function ChatInput({ onFileUploaded, s3Key, bucket }: ChatInputProps) {
   const { user } = useAuth();
   const { profile } = useProfile();
-  const { addToQueue } = useChatContext();
-
+  const { addToQueue, processing, queue, processQueue } = useChatContext();
   const [input, setInput] = useState("");
   const containerRef = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -42,26 +41,39 @@ export function ChatInput({ onFileUploaded, s3Key, bucket }: ChatInputProps) {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    const value = input.trim();
+    if (!value) return;
+
+    setInput("");
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      content: value,
+      role: "user",
+      timestamp: new Date(),
+      type: "text",
+      isTyping: false,
+    };
+    addToQueue(userMessage);
+  };
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
+  const processMessage = async (message: Message) => {
     try {
-      const value = input.trim();
-      setInput("");
-      const userMessage: Message = {
-        id: Date.now().toString(),
-        content: value,
-        role: "user",
-        timestamp: new Date(),
-        type: "text",
-        isTyping: false,
-      };
-      addToQueue(userMessage);
+      if (queue[queue.length - 1]?.role !== "user") return; // Add this check
       if (profile?.organization_id && user?.id) {
         const chatId = getChatId() || "";
         const org_id = profile.organization_id;
+
         const result = await chatService.analyzeQuery(
           chatId,
           {
             org_id,
-            query: input.trim(),
+            query: message.content, // Use message content instead of input
             user_id: user?.id,
             chat_id: chatId,
           },
@@ -73,19 +85,22 @@ export function ChatInput({ onFileUploaded, s3Key, bucket }: ChatInputProps) {
             },
           }
         );
-        console.log("🚀 ~ handleSubmit ~ result:", result);
-        // const userMessage: Message = {
-        //   id: Date.now().toString(),
-        //   content: input.trim(),
-        //   role: "user",
-        //   timestamp: new Date(),
-        //   type: "text",
-        //   isTyping: false,
-        // };
-        // addToQueue(userMessage);
+        if (result?.data?.error) {
+          throw new Error(result?.data?.error);
+        }
+
+        const assistantMessage: Message = {
+          id: Date.now().toString(),
+          content: result?.data?.response || "",
+          role: "assistant",
+          timestamp: new Date(),
+          type: "text",
+          isTyping: false,
+        };
+        addToQueue(assistantMessage);
       }
     } catch (error) {
-      const userMessage: Message = {
+      const errorMessage: Message = {
         id: Date.now().toString(),
         content: error?.message || "Facing some issues",
         role: "assistant",
@@ -93,9 +108,20 @@ export function ChatInput({ onFileUploaded, s3Key, bucket }: ChatInputProps) {
         type: "text",
         isTyping: false,
       };
-      addToQueue(userMessage);
+      addToQueue(errorMessage);
     }
   };
+
+  useEffect(() => {
+    let mounted = true;
+    if (!processing && queue.length > 0 && mounted) {
+      processQueue(processMessage);
+    }
+
+    return () => {
+      mounted = false;
+    };
+  }, [processing, processQueue]);
 
   useEffect(() => {
     adjustTextareaHeight();
@@ -106,13 +132,6 @@ export function ChatInput({ onFileUploaded, s3Key, bucket }: ChatInputProps) {
       containerRef.current?.scrollIntoView({ behavior: "auto" });
     }
   }, [s3Key]);
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e);
-    }
-  };
 
   return (
     <div className="w-full">
