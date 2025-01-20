@@ -21,8 +21,8 @@ export default function MyRecent({
   isMobile,
 }) {
   const { setSideDrawerOpen } = useContext(AppContext);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [activeDropdownIndex, setActiveDropdownIndex] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState(null); // Tracks the currently hovered index
+  const [activeDropdownIndex, setActiveDropdownIndex] = useState(null);
   const [optionsPosition, setOptionsPosition] = useState({ top: 0, left: 0 });
   const [sessionList, setSessionList] = useState([]);
   const { profile } = useProfile();
@@ -43,9 +43,7 @@ export default function MyRecent({
       if (response.status === 200) {
         const updatedSessionList = {
           ...sessionList,
-          data: sessionList?.data?.filter(
-            (session) => session.id !== sessionId
-          ),
+          data: sessionList?.data?.filter((session) => session.id !== sessionId),
         };
         setSessionList(updatedSessionList);
       }
@@ -86,7 +84,7 @@ export default function MyRecent({
 
     setActiveDropdownIndex(index);
   };
-
+  console.log(sessionList)
   return (
     <div className="relative cursor-pointer">
       <div
@@ -129,8 +127,8 @@ export default function MyRecent({
                 onMouseLeave={() => setHoveredIndex(null)}
               >
                 <div
-                  className={`flex items-center rounded-lg px-2 py-1 ${
-                    hoveredIndex === index || activeDropdownIndex === index
+                  className={`flex items-center rounded-lg px-2 py-1 w-full ${
+                    hoveredIndex === index || index === 0 || activeDropdownIndex === index
                       ? "bg-gray-200"
                       : ""
                   }`}
@@ -139,7 +137,7 @@ export default function MyRecent({
                     <ListItemText
                       className="leading-4 truncate"
                       onClick={() => {
-                        navigate(`/chat/${chat.chat_id}`);
+                        navigate(`/chat/${chat.id}`);
                         if (isMobile) {
                           setSideDrawerOpen(false);
                         }
@@ -148,8 +146,7 @@ export default function MyRecent({
                       {chat.name}
                     </ListItemText>
 
-                    {(hoveredIndex === index ||
-                      activeDropdownIndex === index) && (
+                    {(hoveredIndex === index || activeDropdownIndex === index) && (
                       <button onClick={(e) => toggleDropdown(index, e)}>
                         <EllipsisVertical size={12} className="m-1" />
                       </button>
@@ -189,9 +186,7 @@ export default function MyRecent({
                 onClick={async () => {
                   setHoveredIndex(null);
                   setActiveDropdownIndex(null);
-                  await sessionDelete(
-                    sessionList?.data[activeDropdownIndex]?.id
-                  );
+                  await sessionDelete(sessionList?.data[activeDropdownIndex]?.id);
                 }}
               >
                 <DeleteIcon />

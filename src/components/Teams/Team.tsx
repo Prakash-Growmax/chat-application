@@ -25,9 +25,9 @@ const Team = () => {
   const { sideDrawerOpen } = useContext(AppContext);
   return (
     <div
-      className={`container mx-auto py-8 ${
+      className={`container mx-auto py-8 px-8 ${
         sideDrawerOpen
-          ? "lg:max-w-screen-lg md:max-w-screen-md md:pl-36 lg:pl-36"
+          ? "lg:max-w-screen-xl md:max-w-screen-md md:pl-36 lg:pl-14"
           : ""
       }`}
     >

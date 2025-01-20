@@ -59,7 +59,7 @@ export const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
       <DialogTrigger asChild>
         {isOwner && <Button>Invite Member</Button>}
       </DialogTrigger>
-      <DialogContent className="h-[300px]">
+      <DialogContent className="h-[300px] bg-white">
         <DialogHeader>
           <DialogTitle>Invite Team Member</DialogTitle>
           <DialogDescription>

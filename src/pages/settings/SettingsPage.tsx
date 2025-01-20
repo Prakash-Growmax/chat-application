@@ -37,9 +37,9 @@ export function SettingsPage() {
   return (
     <Main
       open={sideDrawerOpen}
-      className={`min-h-screen bg-white from-slate-50 to-white pt-12 `}
+      className={`min-h-[80vh] bg-white from-slate-50 to-white pt-12 `}
     >
-      <div className="container py-10">
+      <div className="container py-4">
         <div
           className={`mx-auto max-w-6xl space-y-8 ${
             sideDrawerOpen ? "lg:max-w-5xl" : ""
