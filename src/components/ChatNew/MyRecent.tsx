@@ -19,6 +19,7 @@ export default function MyRecent({
   isDropdownOpen,
   setDropdownOpen,
   isMobile,
+  isTab
 }) {
   const { setSideDrawerOpen } = useContext(AppContext);
   const [hoveredIndex, setHoveredIndex] = useState(null); // Tracks the currently hovered index
@@ -115,14 +116,14 @@ export default function MyRecent({
 
       {isDropdownOpen && (
         <div
-          className="absolute z-10 bg-transparent lg:w-44 md:w-full w-56 max-h-40 overflow-y-auto"
+          className="absolute z-10 bg-transparent w-44 max-h-40 overflow-y-auto"
           style={{ paddingLeft: "4.8px", paddingRight: "4.8px" }}
         >
           {sessionList?.data ? (
             sessionList?.data?.map((chat, index) => (
               <div
                 key={index}
-                className="relative my-2 lg:ml-4 ml-8"
+                className="relative my-2 ml-4"
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
               >
@@ -138,7 +139,7 @@ export default function MyRecent({
                       className="leading-4 truncate"
                       onClick={() => {
                         navigate(`/chat/${chat.id}`);
-                        if (isMobile) {
+                        if (isMobile || isTab) {
                           setSideDrawerOpen(false);
                         }
                       }}
