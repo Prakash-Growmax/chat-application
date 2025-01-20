@@ -7,7 +7,6 @@ const chatId = localStorage.getItem("chatId");
 
 export function useCreateChatId() {
   const { profile } = useProfile();
-  console.log("🚀 ~ useCreateChatId ~ profile:", profile);
 
   async function getChatId() {
     if (profile?.organization_id) {

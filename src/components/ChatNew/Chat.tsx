@@ -23,7 +23,7 @@ function Chat({ message }: ChatProps) {
   });
   const [isUploading, setIsUploading] = useState(false);
   const { openRight } = useContext(AppContext);
-  
+
   useEffect(() => {
     if (message?.length) {
       const mappedMessages = message?.map((msg) => ({
@@ -47,7 +47,7 @@ function Chat({ message }: ChatProps) {
   const handleError = (error: string) => {
     setState((prev) => ({ ...prev, error, csvData: null }));
   };
-  
+
   const hasMessages = Boolean(queue?.length > 0);
 
   if (!hasMessages) {
@@ -74,7 +74,8 @@ function Chat({ message }: ChatProps) {
                   messages: [
                     {
                       id: Date.now().toString(),
-                      content: 'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
+                      content:
+                        'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
                       role: "assistant",
                       timestamp: new Date(),
                       type: "text",
@@ -122,7 +123,8 @@ function Chat({ message }: ChatProps) {
                   messages: [
                     {
                       id: Date.now().toString(),
-                      content: 'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
+                      content:
+                        'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
                       role: "assistant",
                       timestamp: new Date(),
                       type: "text",

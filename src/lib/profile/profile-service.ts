@@ -43,3 +43,19 @@ export const getProfileById = async (profileId: string) => {
     throw error;
   }
 };
+
+export async function fetchProfile() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("No user found");
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
+
+  if (error) throw error;
+  return data;
+}

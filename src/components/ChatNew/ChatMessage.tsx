@@ -2,9 +2,9 @@ import { Message } from "@/types";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
-import Typewriter from "typewriter-effect";
 
 import PaperCard from "../Custom-UI/PaperCard";
+import TextResponse from "../layout/ChatSection/ChatMessage/TextResponse";
 import { Dialog, DialogContent } from "../ui/dialog";
 import SwitchButton from "../ui/Switchbutton";
 import ChatAssistantHeader from "./ChatMessage/ChatAssistantHeader";
@@ -61,29 +61,6 @@ const RenderContent = ({ message }: { message: Message }) => {
   if (message.type === "chart") {
     return <ChartTableResponse message={message} />;
   }
-};
-
-const TextResponse = ({
-  message,
-}: {
-  message: { content: string; isTyping: boolean };
-}) => {
-  return (
-    <div className={`flex m-auto text-base py-2`}>
-      {message.isTyping ? (
-        <Typewriter
-          options={{
-            strings: [message.content],
-            autoStart: true,
-            delay: 30,
-            cursor: "",
-          }}
-        />
-      ) : (
-        <ChatTextMessage content={message.content} />
-      )}
-    </div>
-  );
 };
 
 const ChartTableResponse = ({ message }) => {
@@ -222,19 +199,5 @@ const ChartTableResponse = ({ message }) => {
         </div>
       </div>
     </motion.div>
-  );
-};
-
-const ChatTextMessage = ({ content }: { content: string }) => {
-  return (
-    <p
-      className="text-base leading-6 font-normal text-[rgb(13,13,13)] justify-end"
-      style={{
-        fontFamily:
-          'ui-sans-serif, -apple-system, system-ui, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"',
-      }}
-    >
-      {content}
-    </p>
   );
 };
