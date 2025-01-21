@@ -2,6 +2,7 @@ import { useChatContext } from "@/context/ChatContext";
 import { ChatState } from "@/types";
 import { lazy, useContext, useEffect, useState } from "react";
 import AppContext from "../context/AppContext";
+import ChatStarterText from "../layout/ChatSection/ChatStarterText";
 import ChatBox from "./ChatBox";
 
 const ChatInput = lazy(() =>
@@ -54,9 +55,7 @@ function Chat({ message }: ChatProps) {
     return (
       <div className="h-[calc(100vh-64px)] flex flex-col">
         <div className="flex-1 flex flex-col items-center justify-center">
-          <h1 className="text-lg lg:text-3xl md:text-3xl font-semibold text-gray-900 mb-8 px-4 text-center">
-            What do you want to analyze today?
-          </h1>
+          <ChatStarterText />
 
           <div className="w-full max-w-4xl px-2 sm:px-4 mx-auto">
             <ChatInput

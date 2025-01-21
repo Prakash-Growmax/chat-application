@@ -1,5 +1,4 @@
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
-import { GlobalLoadingIndicator } from "@/components/layout/GlobalLoadingIndicator";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/theme-provider";
@@ -29,7 +28,7 @@ function App() {
                 <div className="flex flex-col min-h-screen">
                   <AppRoutes />
                   <Toaster />
-                  <GlobalLoadingIndicator />
+                  {/* <GlobalLoadingIndicator /> */}
                 </div>
               </AppContext.Provider>
             </QueryClientProvider>
