@@ -14,16 +14,18 @@ import ChatUploadBtn from "../layout/ChatSection/ChatUpload/ChatUploadBtn";
 interface ChatInputProps {
   onFileUploaded: (s3Key: string) => void;
   s3Key: string;
+  bucket: string;
+  
 }
 
-export function ChatInput({ onFileUploaded, s3Key }: ChatInputProps) {
+export function ChatInput({ onFileUploaded,bucket }: ChatInputProps) {
   const { user } = useAuth();
   const { profile } = useProfile();
   const { addToQueue, processing, queue, processQueue } = useChatContext();
   const [input, setInput] = useState("");
   const containerRef = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
+  const [s3Key,setS3Key]=useState("");
   const adjustTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -150,7 +152,7 @@ export function ChatInput({ onFileUploaded, s3Key }: ChatInputProps) {
 
                   <div className="flex h-[44px] items-center justify-between">
                     <div className="flex gap-x-1">
-                      <ChatUploadBtn onFileUploaded={onFileUploaded} />
+                      <ChatUploadBtn onFileUploaded={onFileUploaded} setS3Key={setS3Key}/>
 
                       {s3Key && (
                         <div>

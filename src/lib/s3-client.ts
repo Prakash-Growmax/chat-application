@@ -103,7 +103,7 @@ const getFileMetadata = async (
   bucket: string,
   key: string
 ): Promise<FileMetadata> => {
-  const command = new HeadObjectCommand({ Bucket: bucket, Key: key });
+  const command = new HeadObjectCommand({ Bucket: bucket, Key:`analytics/${key}` });
   const response = await s3Client.send(command);
 
   return {
@@ -119,12 +119,12 @@ export const fetchCSVPreview = async (
   rowLimit?: number
 ): Promise<{ data: CSVPreviewData; metadata: FileMetadata }> => {
   const cacheKey = `${bucket}:${key}:${rowLimit || "all"}`;
-
+  const Keys = `analytics/${key}`;
   // Clear existing cache to ensure fresh data
   previewCache.delete(cacheKey);
 
   try {
-    const command = new GetObjectCommand({ Bucket: bucket, Key: key });
+    const command = new GetObjectCommand({ Bucket: bucket, Key: Keys });
     const response = await s3Client.send(command);
 
     if (!response.Body) {

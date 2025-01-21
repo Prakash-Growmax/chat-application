@@ -29,7 +29,7 @@ function Chat() {
         role: msg.role,
         type: msg.type,
       }));
-      const s3ky = "Recents";
+      const s3ky = "";
       setState((prev) => ({
         ...prev,
         messages: mappedMessages,
@@ -61,7 +61,8 @@ function Chat() {
               onError={handleError}
               isUploading={isUploading}
               setIsUploading={setIsUploading}
-              s3Key={state.s3Key || ""}
+              // s3Key={state.s3Key || ""}
+             
               onFileUploaded={(key) => {
                 setState({
                   ...state,
