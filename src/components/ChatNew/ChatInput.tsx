@@ -12,17 +12,11 @@ import { CSVPreview } from "../CSVPreview/CSVPreview";
 import ChatUploadBtn from "../layout/ChatSection/ChatUpload/ChatUploadBtn";
 
 interface ChatInputProps {
-  onSend: (message: string) => void;
-  disabled: boolean;
   onFileUploaded: (s3Key: string) => void;
-  onError: (error: string) => void;
-  isUploading: boolean;
-  setIsUploading: (state: boolean) => void;
   s3Key: string;
-  bucket: string;
 }
 
-export function ChatInput({ onFileUploaded, s3Key, bucket }: ChatInputProps) {
+export function ChatInput({ onFileUploaded, s3Key }: ChatInputProps) {
   const { user } = useAuth();
   const { profile } = useProfile();
   const { addToQueue, processing, queue, processQueue } = useChatContext();
@@ -86,8 +80,6 @@ export function ChatInput({ onFileUploaded, s3Key, bucket }: ChatInputProps) {
             },
           }
         );
-
-        console.log("🚀 ~ processMessage ~ result:", result);
 
         if (result?.data?.error) {
           throw new Error(result?.data?.error);

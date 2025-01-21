@@ -1,17 +1,11 @@
-import Chat from "@/components/ChatNew/Chat";
 import { ChatContext } from "@/context/ChatContext";
-import { useGetChatHistory } from "@/hooks/useGetChatHistory";
 import { Message } from "@/types";
-import { useCallback, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useCallback, useState } from "react";
 
-function ChatSection() {
-  const { id } = useParams();
-  const { data } = useGetChatHistory(id);
-
+function ChatLayout({ children }: { children: React.ReactNode }) {
   const [isUploading, setIsUploading] = useState(false);
-  const [queue, setQueue] = useState<Message[]>(data);
-  const [messages, setMessages] = useState<Message[]>(data || []);
+  const [queue, setQueue] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [processing, setProcessing] = useState(false);
 
   const addToQueue = useCallback((message: Message) => {
@@ -50,11 +44,12 @@ function ChatSection() {
         setProcessing,
         addToQueue,
         processQueue,
+        messages,
       }}
     >
-      <Chat message={messages} />
+      {children}
     </ChatContext.Provider>
   );
 }
 
-export default ChatSection;
+export default ChatLayout;

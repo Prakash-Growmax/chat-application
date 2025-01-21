@@ -3,11 +3,15 @@ import { MessageSquarePlus } from "lucide-react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-function NewChatButton({ isMobile,isTab}: { isMobile: boolean,isTab:boolean }) {
+function NewChatButton({
+  isMobile,
+  isTab,
+}: {
+  isMobile: boolean;
+  isTab: boolean;
+}) {
   const navigate = useNavigate();
   const { setSideDrawerOpen } = useContext(AppContext);
-  console.log(isMobile);
-  console.log(isTab)
   return (
     <div className="flex items-center justify-center">
       <button

@@ -1,6 +1,11 @@
-import { Button } from '@/components/ui/button';
-import { ArrowRight, Building2, FileSpreadsheet, MessageSquare } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
+import {
+  ArrowRight,
+  Building2,
+  FileSpreadsheet,
+  MessageSquare,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 function WelcomePage() {
   return (
@@ -14,15 +19,16 @@ function WelcomePage() {
               <span className="text-sm font-medium">CSV Insight AI</span>
             </div>
             <h1 className="max-w-3xl text-4xl font-bold md:text-6xl">
-              Analyze your CSV data with{' '}
+              Analyze your CSV data with{" "}
               <span className="text-primary">AI-powered insights</span>
             </h1>
             <p className="max-w-2xl text-muted-foreground md:text-lg">
-              Upload your CSV files and get instant insights through natural conversations.
-              Perfect for data analysis, reporting, and decision making.
+              Upload your CSV files and get instant insights through natural
+              conversations. Perfect for data analysis, reporting, and decision
+              making.
             </p>
             <Button asChild size="lg" className="gap-2 bg-black text-white">
-              <Link to="/login">
+              <Link to="/chat/new">
                 Get Started
                 <ArrowRight className="h-4 w-4" />
               </Link>
@@ -37,7 +43,9 @@ function WelcomePage() {
               >
                 <feature.icon className="mb-4 h-10 w-10 text-primary" />
                 <h3 className="mb-2 font-semibold">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
+                <p className="text-sm text-muted-foreground">
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
@@ -49,21 +57,23 @@ function WelcomePage() {
 
 export default WelcomePage;
 
-
 const features = [
   {
-    title: 'CSV Analysis',
-    description: 'Upload any CSV file and get instant insights through natural language conversations.',
+    title: "CSV Analysis",
+    description:
+      "Upload any CSV file and get instant insights through natural language conversations.",
     icon: FileSpreadsheet,
   },
   {
-    title: 'AI Chat Interface',
-    description: 'Ask questions about your data in plain English and get accurate, detailed responses.',
+    title: "AI Chat Interface",
+    description:
+      "Ask questions about your data in plain English and get accurate, detailed responses.",
     icon: MessageSquare,
   },
   {
-    title: 'Team Collaboration',
-    description: 'Share insights and analysis with your team members in real-time.',
+    title: "Team Collaboration",
+    description:
+      "Share insights and analysis with your team members in real-time.",
     icon: Building2,
   },
 ];

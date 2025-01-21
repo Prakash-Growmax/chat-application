@@ -33,7 +33,7 @@ function LoginPage() {
     attemptsLeft,
   } = useOTP();
 
-  const returnUrl = location.state?.from?.pathname || "/chat";
+  const returnUrl = location.state?.from?.pathname || "/chat/new";
 
   useEffect(() => {
     if (user) {
@@ -60,13 +60,9 @@ function LoginPage() {
     }
   };
 
-  // if (authLoading || persistenceLoading) {
-  //   return (
-  //     <div className="flex justify-center items-center h-screen w-screen">
-  //       <LoadingScreen fullScreen={false} />
-  //     </div>
-  //   );
-  // }
+  if (authLoading || persistenceLoading) {
+    return null;
+  }
 
   if (isVerifying) {
     return (

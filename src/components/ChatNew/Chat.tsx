@@ -2,19 +2,14 @@ import { useChatContext } from "@/context/ChatContext";
 import { ChatState } from "@/types";
 import { lazy, useContext, useEffect, useState } from "react";
 import AppContext from "../context/AppContext";
-import ChatStarterText from "../layout/ChatSection/ChatStarterText";
 import ChatBox from "./ChatBox";
 
 const ChatInput = lazy(() =>
   import("./ChatInput").then((module) => ({ default: module.ChatInput }))
 );
 
-interface ChatProps {
-  message: (chat: string) => void;
-}
-
-function Chat({ message }: ChatProps) {
-  const { queue } = useChatContext();
+function Chat() {
+  const { messages: message } = useChatContext();
   const [state, setState] = useState<ChatState>({
     messages: [],
     isLoading: false,
@@ -48,53 +43,6 @@ function Chat({ message }: ChatProps) {
   const handleError = (error: string) => {
     setState((prev) => ({ ...prev, error, csvData: null }));
   };
-
-  const hasMessages = Boolean(queue?.length > 0);
-
-  if (!hasMessages) {
-    return (
-      <div className="h-[calc(100vh-64px)] flex flex-col">
-        <div className="flex-1 flex flex-col items-center justify-center">
-          <ChatStarterText />
-
-          <div className="w-full max-w-4xl px-2 sm:px-4 mx-auto">
-            <ChatInput
-              onSend={() => {}}
-              disabled={state.isLoading || !state.s3Key}
-              onError={handleError}
-              isUploading={isUploading}
-              setIsUploading={setIsUploading}
-              s3Key={state.s3Key || ""}
-              bucket={import.meta.env.VITE_S3_BUCKET_NAME}
-              onFileUploaded={(key) => {
-                setState({
-                  ...state,
-                  s3Key: key,
-                  messages: [
-                    {
-                      id: Date.now().toString(),
-                      content:
-                        'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
-                      role: "assistant",
-                      timestamp: new Date(),
-                      type: "text",
-                      isTyping: false,
-                    },
-                  ],
-                });
-              }}
-            />
-          </div>
-        </div>
-
-        <div className="px-2 pb-2 text-center">
-          <div className="text-xs text-gray-500">
-            Ansight can make mistakes. Check important info.
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="h-[calc(100vh-64px)]  flex flex-col">

@@ -34,8 +34,6 @@ export async function uploadToS3(
 ): Promise<string> {
   try {
     const Key = `analytics/${file.name}`;
-    console.log("🚀 ~ Key:", Key);
-
     const upload = new Upload({
       client: s3Client,
       params: {
@@ -45,8 +43,6 @@ export async function uploadToS3(
         ContentType: file.type,
       },
     });
-    console.log("🚀 ~ upload:", upload);
-
     // Add progress listener
     upload.on("httpUploadProgress", (progress) => {
       if (progress.loaded && progress.total) {

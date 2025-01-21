@@ -7,7 +7,6 @@ const LogoIcon = ({
   width?: string;
   height?: string;
 }) => {
-  console.log("🚀 ~ LogoIcon ~ className:", className);
   return (
     <div
       style={{

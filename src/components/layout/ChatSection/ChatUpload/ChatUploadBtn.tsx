@@ -67,7 +67,6 @@ function ChatUploadBtn(onFileUploaded: (s3Key: string) => void) {
       } catch (error) {
         // Handle errors accordingly
         if (error instanceof S3UploadError) {
-          console.log(error);
         } else {
         }
       } finally {

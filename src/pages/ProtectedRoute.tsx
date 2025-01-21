@@ -7,27 +7,9 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const {
-    user,
-    // loading
-  } = useAuth();
-  //   const navigate = useNavigate();
-  //   const location = useLocation();
+  const { user, loading } = useAuth();
 
-  //   useEffect(() => {
-  //     if (!loading && !user) {
-  //       navigate("/login", {
-  //         replace: true,
-  //         state: { from: location },
-  //       });
-  //     }
-  //   }, [user, loading, navigate, location]);
-
-  //   if (loading) {
-  //     return <LoadingScreen />;
-  //   }
-
-  if (!user) {
+  if (!user && !loading) {
     return <Navigate to="/login" replace />;
   }
 

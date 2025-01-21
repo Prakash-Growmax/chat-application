@@ -8,7 +8,6 @@ import Drawer from "@mui/material/Drawer";
 import { styled, useTheme } from "@mui/material/styles";
 import * as React from "react";
 
-import { useAuth } from "@/hooks/useAuth";
 import MyRecent from "../ChatNew/MyRecent";
 import Resources from "../ChatNew/Resources";
 import AppContext from "../context/AppContext";
@@ -40,14 +39,12 @@ export default function Sidebar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
-  console.log(isTab)
   const { sideDrawerOpen, setSideDrawerOpen } = React.useContext(AppContext);
 
   const handleDrawerClose = () => {
     setSideDrawerOpen(false);
   };
   const [isDropdownOpen, setDropdownOpen] = React.useState(true);
-  const { user } = useAuth();
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState(null);
   React.useEffect(() => {
     const handleClickOutside = (event: any) => {
@@ -79,7 +76,7 @@ export default function Sidebar() {
         sx={{
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width:drawerWidth,
+            width: drawerWidth,
             backgroundColor: "#F9F9F9",
             display: "flex",
             flexDirection: "column",
@@ -122,7 +119,7 @@ export default function Sidebar() {
             paddingRight: "7.6px",
           }}
         >
-          <NewChatButton isMobile={isMobile} isTab={isTab}/>
+          <NewChatButton isMobile={isMobile} isTab={isTab} />
           <SideBarListItemHeader icon={Layers} title="Workspace" />
           <div className="w-full">
             <List>

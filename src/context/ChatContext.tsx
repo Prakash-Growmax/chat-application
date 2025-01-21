@@ -6,6 +6,7 @@ interface ChatContextType {
   setIsUploading: (value: boolean) => void;
   queue: Message[];
   setQueue: (value: (prev: Message[]) => Message[]) => void;
+  messages: Message[];
   processing: boolean;
   setProcessing: (value: boolean) => void;
   addToQueue: (message: Message) => void;

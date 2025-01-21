@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const REDIRECT_DELAY = 5000;
 const suggestedLinks = [
-  { title: "Chat", path: "/chat/chat_1" },
+  { title: "Chat", path: "/chat/new" },
   { title: "Settings", path: "/settings" },
   { title: "Plans", path: "/plans" },
 ];
@@ -27,7 +27,7 @@ function NotFoundPage() {
     }, 1000);
 
     const redirect = setTimeout(() => {
-      navigate(user ? "/chat/chat_1" : "/login", { replace: true });
+      navigate(user ? "/chat/new" : "/login", { replace: true });
     }, REDIRECT_DELAY);
 
     return () => {
@@ -91,7 +91,9 @@ function NotFoundPage() {
         <Button
           size="lg"
           className="gap-2"
-          onClick={() => navigate(user ? "/chat" : "/login", { replace: true })}
+          onClick={() =>
+            navigate(user ? "/chat/new" : "/login", { replace: true })
+          }
         >
           {user ? (
             <>

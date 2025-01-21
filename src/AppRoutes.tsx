@@ -1,9 +1,10 @@
 import { Route, Routes } from "react-router-dom";
-import ChatSection from "./components/layout/ChatSection/ChatSection";
+import Chat from "./components/ChatNew/Chat";
 import Team from "./components/Teams/Team";
-import { useAuth } from "./hooks/useAuth";
 import LoginPage from "./pages/auth/LoginPage";
 import CancelPayment from "./pages/Cancel-Payment/CancelPayment";
+import ChatLayout from "./pages/Chat/ChatWrapper/ChatLayout";
+import NewChat from "./pages/Chat/NewChat/NewChat";
 import NotFoundPage from "./pages/error/NotFoundPage";
 import WelcomePage from "./pages/home/WelcomePage";
 import InviteAcceptedPage from "./pages/InviteAcceptedPage";
@@ -14,15 +15,32 @@ import PublicLayout from "./pages/PublicRoutes";
 import SettingsPage from "./pages/settings/SettingsPage";
 
 const AppRoutes = () => {
-  const { loading: authLoading } = useAuth();
-
-  if (authLoading) {
-    return null;
-  }
-
   return (
     <Routes>
       {/* Public Routes */}
+      <Route path="/" element={<WelcomePage />} />
+      <Route
+        path="/chat/new"
+        element={
+          <ProtectedRoute>
+            <ChatLayout>
+              <NewChat />
+            </ChatLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/chat/:id"
+        element={
+          <ProtectedRoute>
+            <ChatLayout>
+              <Chat />
+            </ChatLayout>
+          </ProtectedRoute>
+        }
+      />
+
       <Route
         path="/login"
         element={
@@ -31,17 +49,9 @@ const AppRoutes = () => {
           </PublicLayout>
         }
       />
-      <Route path="/" element={<WelcomePage />} />
 
       {/* Protected Routes */}
-      <Route
-        path="/chat/:id?"
-        element={
-          <ProtectedRoute>
-            <ChatSection />
-          </ProtectedRoute>
-        }
-      />
+
       <Route
         path="/teams"
         element={
