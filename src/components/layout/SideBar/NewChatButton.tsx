@@ -17,7 +17,6 @@ function NewChatButton({
       <button
         className="group bg-white w-full py-2 px-1 border border-gray-200 rounded-md text-sm flex items-center justify-center hover:border-gray-300 hover:shadow-md transition duration-200 ease-in-out"
         onClick={async () => {
-          // localStorage.removeItem("chatId");
           navigate(`/chat/new`);
           if (isMobile || isTab) {
             setSideDrawerOpen(false);

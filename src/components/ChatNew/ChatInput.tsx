@@ -155,7 +155,7 @@ export function ChatInput({ onFileUploaded, s3Key }: ChatInputProps) {
                       {s3Key && (
                         <div>
                           <Tooltip title="Preview CSV">
-                            <CSVPreview s3Key={s3Key} bucket={bucket} />
+                            <CSVPreview s3Key={s3Key} />
                           </Tooltip>
                         </div>
                       )}

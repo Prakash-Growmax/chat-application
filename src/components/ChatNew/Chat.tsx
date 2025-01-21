@@ -62,7 +62,6 @@ function Chat() {
               isUploading={isUploading}
               setIsUploading={setIsUploading}
               s3Key={state.s3Key || ""}
-              bucket={import.meta.env.VITE_S3_BUCKET_NAME}
               onFileUploaded={(key) => {
                 setState({
                   ...state,
