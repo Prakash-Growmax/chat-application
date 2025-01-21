@@ -7,7 +7,7 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
   const [queue, setQueue] = useState<Message[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [processing, setProcessing] = useState(false);
-
+  const [s3Key,setS3Key]=useState("")
   const addToQueue = useCallback((message: Message) => {
     setQueue((prev: Message[]) => [...prev, message]);
     setMessages((prev) => [...prev, message]);

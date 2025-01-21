@@ -96,7 +96,7 @@ function ChatUploadBtn({
 
   return (
     <div className="flex">
-    
+      {/* Hidden input for file selection */}
       <input
         type="file"
         accept=".csv"

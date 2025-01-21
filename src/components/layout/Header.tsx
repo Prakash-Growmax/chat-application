@@ -6,6 +6,7 @@ import { PanelLeftOpen } from "lucide-react";
 import AppContext from "../context/AppContext";
 import TooltipNew from "../ui/tooltipnew";
 import MyAccountDetails from "./MyAccountDetails";
+import { Drawer_Open } from "@/constants/storage.constant";
 
 export function Header() {
   const { user } = useAuth();
@@ -13,6 +14,7 @@ export function Header() {
 
   const handleDrawer = () => {
     setSideDrawerOpen(true);
+    localStorage.setItem(Drawer_Open,JSON.stringify(true))
   };
 
   return (

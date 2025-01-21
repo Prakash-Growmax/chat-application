@@ -86,7 +86,7 @@ export function ChatInput({ onFileUploaded,bucket }: ChatInputProps) {
         if (result?.data?.error) {
           throw new Error(result?.data?.error);
         }
-
+       console.log(result);
         let assistantMessage;
         assistantMessage = formQueueMessage(result?.data?.response || "", true);
         addToQueue(assistantMessage);
