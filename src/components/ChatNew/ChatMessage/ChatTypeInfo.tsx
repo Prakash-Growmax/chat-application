@@ -18,7 +18,7 @@ function ChatTypeInfo({ isUser }: { isUser: boolean }) {
   return (
     <div className="flex flex-row mb-2 items-center justify-start">
       {isUser ? (
-        <>
+        <div className="flex gap-2">
           <Avatar
             sx={{
               bgcolor: deepOrange[500],
@@ -34,7 +34,7 @@ function ChatTypeInfo({ isUser }: { isUser: boolean }) {
           </Avatar>
           {/* <UserIcon className="w-8 h-8" /> */}
           <BodyText className="ml-2 ">You</BodyText>
-        </>
+        </div>
       ) : (
         <>
           <DarkLogo />

@@ -18,7 +18,7 @@ import { drawerWidth } from "@/constants/general.constant";
 import { CloudCog, Layers, PanelRightOpen } from "lucide-react";
 import LogoutButton from "../auth/LogoutButton";
 import TooltipNew from "./tooltipnew";
-import { Drawer_Open } from "@/constants/storage.constant";
+import { DrawerOpen_LocalKey } from "@/constants/storage.constant";
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -44,7 +44,7 @@ export default function Sidebar() {
 
   const handleDrawerClose = () => {
     setSideDrawerOpen(false);
-    localStorage.setItem(Drawer_Open,JSON.stringify(false))
+    localStorage.setItem(DrawerOpen_LocalKey,JSON.stringify(false))
   };
   const [isDropdownOpen, setDropdownOpen] = React.useState(true);
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState(null);

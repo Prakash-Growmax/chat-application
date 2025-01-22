@@ -46,7 +46,7 @@ function Chat() {
 
   return (
     <div className="h-[calc(100vh-64px)]  flex flex-col">
-      <div className="flex-1 overflow-y-auto px-4">
+      <div className="flex-1 overflow-y-auto px-4 mr-8">
         <div className="max-w-4xl mx-auto px-2 sm:px-4">
           <ChatBox />
         </div>

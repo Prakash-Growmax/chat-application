@@ -11,13 +11,17 @@ import ChatAssistantHeader from "./ChatMessage/ChatAssistantHeader";
 import ChatTypeInfo from "./ChatMessage/ChatTypeInfo";
 import { DataChart } from "./DataChat";
 import DataTable from "./DataTable";
+import InsighttResponse from "../layout/ChatSection/ChatMessage/InsightResponse";
+import ChartResponse from "../layout/ChatSection/ChatMessage/ChartResponse";
+import DatasetUploadResponse from "../layout/ChatSection/ChatMessage/DatasetUploadResponse";
 interface ChatMessageProps {
   message: Message;
 }
 export function ChatMessage({ message }: ChatMessageProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const isUser = message.role === "user";
-
+//   const data = message.messageObject.content.data
+// const layout = message.messageObject.content.layout
   return (
     <>
       <div className="mx-auto max-w-4xl h-full">
@@ -54,12 +58,23 @@ export function ChatMessage({ message }: ChatMessageProps) {
 }
 
 const RenderContent = ({ message }: { message: Message }) => {
-  if (message.type === "text") {
+  if (message?.type === "text") {
     return <TextResponse message={message} />;
   }
-
-  if (message.type === "chart") {
-    return <ChartTableResponse message={message} />;
+  if (message?.messageObject?.content?.type === "text") {
+    return <DatasetUploadResponse message={message?.messageObject?.content?.data?.response} />;
+  }
+  // if (message?.type === "chart") {
+  //   return <ChartTableResponse message={message} />;
+  // }
+  if(message?.messageObject?.content?.type === "insights"){
+     return <InsighttResponse data={message.messageObject.content.data }/>
+  }
+  if(message?.messageObject?.content?.type === "bar"){
+    return <ChartResponse 
+    data={message.messageObject.content.data} 
+    layout={message.messageObject.content.layout}
+    summary={message.messageObject.content.summary}/>
   }
 };
 
@@ -93,67 +108,8 @@ const ChartTableResponse = ({ message }) => {
     // Cleanup event listener on component unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const data = [
-    {
-      x: [
-        "Premium Coconut Oil",
-        "Extra Virgin Olive Oil",
-        "Sunflower Cooking Oil",
-        "Cold-Pressed Sesame Oil",
-        "Organic Almond Oil",
-        "Mustard Oil",
-        "Blended Vegetable Oil",
-        "Flaxseed Oil",
-        "Peanut Oil",
-        "Rice Bran Oil",
-      ],
-      y: [
-        120000.0, 95000.0, 78000.0, 68000.0, 60000.0, 55000.0, 50000.0, 48000.0,
-        42000.0, 38000.0,
-      ],
-      type: "bar",
-      text: [
-        120000, 95000, 78000, 68000, 60000, 55000, 50000, 48000, 42000, 38000,
-      ],
-      textposition: "auto",
-      marker: {
-        color: [
-          "#4CAF50",
-          "#2196F3",
-          "#FFC107",
-          "#9C27B0",
-          "#FF5722",
-          "#607D8B",
-          "#FFEB3B",
-          "#3F51B5",
-          "#009688",
-          "#795548",
-        ],
-      },
-    },
-  ];
-
-  const layout = {
-    title: {
-      text: "Top Selling Oils",
-      font: {
-        size: 18,
-      },
-    },
-    xaxis: {
-      title: "Oil Types",
-      tickangle: -45,
-      automargin: true,
-    },
-    yaxis: {
-      title: "Sales Volume",
-    },
-    margin: {
-      b: 100,
-    },
-    height: layoutDimensions.height,
-    width: layoutDimensions.width,
-  };
+ 
+ 
   return (
     <motion.div
       initial={{ opacity: 0, transform: "scale(0.95)" }}

@@ -67,12 +67,12 @@ export function ChatInput({ onFileUploaded,bucket }: ChatInputProps) {
         const org_id = profile.organization_id;
 
         const result = await chatService.analyzeQuery(
-          chatId,
+          "a68ddc9c-f52f-47ca-b524-700852e2a429",
           {
             org_id,
             query: message.content, // Use message content instead of input
             user_id: user?.id,
-            chat_id: chatId,
+            chat_id:"a68ddc9c-f52f-47ca-b524-700852e2a429",
           },
           {
             headers: {
@@ -86,9 +86,9 @@ export function ChatInput({ onFileUploaded,bucket }: ChatInputProps) {
         if (result?.data?.error) {
           throw new Error(result?.data?.error);
         }
-       console.log(result);
+      
         let assistantMessage;
-        assistantMessage = formQueueMessage(result?.data?.response || "", true);
+        assistantMessage = formQueueMessage(result?.data?.results?.response?.charts ? result?.data?.results?.response?.charts : result?.data?.results?.response || "", true);
         addToQueue(assistantMessage);
       }
     } catch (error) {

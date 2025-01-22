@@ -10,7 +10,7 @@ const TypingChatMessage = ({
 }) => {
   // Only show typing effect for assistant messages
   const shouldShowTyping = isAssistant && message.isTyping;
-
+  
   return (
     <div className="flex m-auto text-base py-2">
       {shouldShowTyping ? (
