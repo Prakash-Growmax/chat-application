@@ -28,7 +28,7 @@ export default function ChatBox({
   }, [queue, scrollToBottom]);
 
   return (
-    <div className="flex-1 overflow-y-auto px-4">
+    <div className="flex-1 overflow-y-auto">
       <div className="max-w-4xl mx-auto px-2 sm:px-4">
         <div className="min-h-screen">
           <div className="flex h-screen">
@@ -38,7 +38,7 @@ export default function ChatBox({
                   <div className="w-full md:w-full max-w-[100%] mx-auto h-full items-center justify-center">
                     <ScrollArea
                       ref={scrollAreaRef}
-                      className="flex-1 px-4 overflow-auto my-4 items-center scroll-container"
+                      className="flex-1 px-1 overflow-auto my-4 items-center scroll-container"
                     >
                       {queue?.map((message) => (
                         <ChatMessage message={message} />

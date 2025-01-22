@@ -32,7 +32,6 @@ function App() {
                 <div className="flex flex-col min-h-screen">
                   <AppRoutes />
                   <Toaster />
-                  {/* <GlobalLoadingIndicator /> */}
                 </div>
               </AppContext.Provider>
             </QueryClientProvider>

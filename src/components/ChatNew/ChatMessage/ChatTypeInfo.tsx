@@ -16,7 +16,7 @@ function ChatTypeInfo({ isUser }: { isUser: boolean }) {
 
   const initials = getInitials(user?.name);
   return (
-    <div className="flex flex-row mb-2 items-center justify-start">
+    <div className="flex flex-row mb-1 items-center justify-start">
       {isUser ? (
         <div className="flex gap-2">
           <Avatar
@@ -32,13 +32,10 @@ function ChatTypeInfo({ isUser }: { isUser: boolean }) {
           >
             {initials}
           </Avatar>
-          {/* <UserIcon className="w-8 h-8" /> */}
-          <BodyText className="ml-2 ">You</BodyText>
+          <BodyText className="ml-1">You</BodyText>
         </div>
       ) : (
-        <>
-          <DarkLogo />
-        </>
+        <DarkLogo />
       )}
     </div>
   );

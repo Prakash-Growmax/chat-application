@@ -15,15 +15,15 @@ import NewChatButton from "../layout/SideBar/NewChatButton";
 import SideBarListItemHeader from "../layout/SideBar/SideBarListItemHeader";
 
 import { drawerWidth } from "@/constants/general.constant";
+import { DrawerOpen_LocalKey } from "@/constants/storage.constant";
 import { CloudCog, Layers, PanelRightOpen } from "lucide-react";
 import LogoutButton from "../auth/LogoutButton";
 import TooltipNew from "./tooltipnew";
-import { DrawerOpen_LocalKey } from "@/constants/storage.constant";
+
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(2, 1),
-  // ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
 const Backdrop = styled("div")`
@@ -44,8 +44,9 @@ export default function Sidebar() {
 
   const handleDrawerClose = () => {
     setSideDrawerOpen(false);
-    localStorage.setItem(DrawerOpen_LocalKey,JSON.stringify(false))
+    localStorage.setItem(DrawerOpen_LocalKey, JSON.stringify(false));
   };
+
   const [isDropdownOpen, setDropdownOpen] = React.useState(true);
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState(null);
   React.useEffect(() => {
@@ -61,12 +62,6 @@ export default function Sidebar() {
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, [activeDropdownIndex]);
-
-  // React.useEffect(() => {
-  //   if (user) {
-  //     setSideDrawerOpen(true);
-  //   }
-  // }, [user]);
 
   return (
     <Box sx={{ display: "flex" }}>

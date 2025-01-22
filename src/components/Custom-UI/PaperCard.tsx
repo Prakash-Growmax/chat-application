@@ -8,11 +8,7 @@ const PaperCard = ({
   className?: string;
 }) => {
   return (
-    <div
-      className={
-        "bg-gray-50 shadow w-full border-none rounded-3xl p-3 " + className
-      }
-    >
+    <div className={`bg-gray-50 w-full rounded-3xl shadow-md ${className}`}>
       {children}
     </div>
   );

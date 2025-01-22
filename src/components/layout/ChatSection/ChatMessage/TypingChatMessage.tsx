@@ -8,9 +8,8 @@ const TypingChatMessage = ({
   message: Message;
   isAssistant?: boolean;
 }) => {
-  // Only show typing effect for assistant messages
   const shouldShowTyping = isAssistant && message.isTyping;
-  
+
   return (
     <div className="flex m-auto text-base py-2">
       {shouldShowTyping ? (
@@ -18,9 +17,9 @@ const TypingChatMessage = ({
           options={{
             strings: [message.content],
             autoStart: true,
-            delay: 30, // Adjust typing speed (milliseconds)
-            cursor: "", // Hide cursor
-            deleteSpeed: 9999999, // Prevent deletion
+            delay: 30,
+            cursor: "",
+            deleteSpeed: 9999999,
           }}
         />
       ) : (

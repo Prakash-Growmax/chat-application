@@ -2,22 +2,19 @@ import Typewriter from "typewriter-effect";
 
 const TypingChatInsights = ({
   data,
-
   isAssistant = true,
   isTyping = true,
 }: {
-  data: Record<string, any>; // Data object containing all keys and values
-
+  data: Record<string, any>;
   isAssistant?: boolean;
   isTyping?: boolean;
 }) => {
   const shouldShowTyping = isAssistant && isTyping;
-  //   const content = data[keyToRender] ?? "No data available for this key."; // Get value from the key
 
   return (
     <div className="flex m-auto text-base">
       {shouldShowTyping ? (
-        <div className="p-2">
+        <div className="py-2">
           {Object.entries(data).map(([key, value]) => (
             <div key={key} className="mb-4">
               <h3 className="font-bold capitalize">
