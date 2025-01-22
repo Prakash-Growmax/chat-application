@@ -7,15 +7,14 @@ import { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import AppRoutes from "./AppRoutes";
 import AppContext from "./components/context/AppContext";
-import { Drawer_Open } from "./constants/storage.constant";
+import { DrawerOpen_LocalKey } from "./constants/storage.constant";
 
 const queryClient = new QueryClient();
 
-const drawerState = JSON.parse(localStorage.getItem(Drawer_Open));
-
 function App() {
+  const drawerState = localStorage.getItem(DrawerOpen_LocalKey);
   const [sideDrawerOpen, setSideDrawerOpen] = useState(
-    drawerState === undefined ? true : drawerState
+    drawerState ? JSON.parse(drawerState) : true
   );
 
   return (

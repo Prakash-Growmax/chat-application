@@ -45,23 +45,26 @@ export function ChatInput({ onFileUploaded, isNewChat }: ChatInputProps) {
     textarea.style.height = `${newHeight}px`;
   }, [s3Key]);
 
+  function addUserQueue(value: any) {
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      content: value,
+      role: "user",
+      timestamp: new Date(),
+      type: "text",
+      isTyping: false,
+    };
+    addToQueue(userMessage);
+  }
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
+    const value = input.trim() || "";
+    setInput("");
     if (isNewChat && profile) {
       try {
         setIsNewChatCreating(true);
-        const value = input.trim() || "";
-        setInput("");
-        const userMessage: Message = {
-          id: Date.now().toString(),
-          content: value,
-          role: "user",
-          timestamp: new Date(),
-          type: "text",
-          isTyping: false,
-        };
-        addToQueue(userMessage);
+        addUserQueue(value);
         const ChatId = await createChatId(profile);
         setIsNewChatCreating(false);
         navigate(`/chat/${ChatId}`);
@@ -70,6 +73,8 @@ export function ChatInput({ onFileUploaded, isNewChat }: ChatInputProps) {
         setIsNewChatCreating(false);
         return;
       }
+    } else {
+      addUserQueue(value);
     }
   };
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -82,16 +87,16 @@ export function ChatInput({ onFileUploaded, isNewChat }: ChatInputProps) {
     try {
       if (queue[queue.length - 1]?.role !== "user") return; // Add this check
       if (profile?.organization_id && user?.id) {
-        const chatId = getChatId() || "";
+        const chat_id = getChatId() || "";
         const org_id = profile.organization_id;
 
         const result = await chatService.analyzeQuery(
-          chatId,
+          chat_id,
           {
             org_id,
-            query: message.content, // Use message content instead of input
+            query: message.content,
             user_id: user?.id,
-            chat_id: chatId,
+            chat_id,
           },
           {
             headers: {
@@ -105,9 +110,14 @@ export function ChatInput({ onFileUploaded, isNewChat }: ChatInputProps) {
         if (result?.data?.error) {
           throw new Error(result?.data?.error);
         }
-        console.log(result);
+
         let assistantMessage;
-        assistantMessage = formQueueMessage(result?.data?.response || "", true);
+        assistantMessage = formQueueMessage(
+          result?.data?.results?.response?.charts
+            ? result?.data?.results?.response?.charts
+            : result?.data?.results?.response || "",
+          true
+        );
         addToQueue(assistantMessage);
       }
     } catch (error) {

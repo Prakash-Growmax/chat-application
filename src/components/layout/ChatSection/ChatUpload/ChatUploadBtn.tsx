@@ -35,19 +35,12 @@ function ChatUploadBtn({
       setIsUploading(true);
 
       try {
-     
-        const s3Key = await uploadToS3(file, () => {});
-    
-
-       
         if (profile?.organization_id) {
-        
-
           const result = await chatService.uploadDataset(
             {
               s3_path: `s3://growmax-dev-app-assets/analytics/${file.name}`,
               org_id: profile.organization_id,
-              type: "unknown",
+              type: "sales",
             },
             chatId,
             {
@@ -60,27 +53,26 @@ function ChatUploadBtn({
           );
 
           if (result.status !== 200) {
-           
             throw new Error("Failed to upload dataset info");
           }
-
-          // Create and add a success message to the chat queue
-          const queueMsg = formQueueMessage(
-            "Success! Your file has been uploaded successfully. Ask questions regarding the uploaded file.",
-            true,
-            result.data
-          );
-          addToQueue(queueMsg);
+          const response = {
+            data: {
+              response:
+                "Success! Your file has been uploaded successfully. Ask questions regarding the uploaded file.",
+            },
+            type: "text",
+          };
+          let assistantMessage;
+          assistantMessage = formQueueMessage(response || "", true);
+          addToQueue(assistantMessage);
         } else {
           console.warn("Profile or organization ID is missing.");
         }
+        const s3Key = await uploadToS3(file, () => {});
 
-       
         setS3Key(file.name);
-     
 
         onFileUploaded(s3Key);
-       
       } catch (error) {
         if (error instanceof S3UploadError) {
           console.error("S3 Upload Error:", error.message);
