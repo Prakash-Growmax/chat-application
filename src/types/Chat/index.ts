@@ -33,6 +33,16 @@ export interface AnalyzeChatRequest {
 
 //Api Response Types.....
 
+export interface CreateChatResponse {
+  id: string;
+  uuid_changed: boolean;
+  name: string;
+  org_id: string;
+  status: string;
+
+  // Add other session properties
+}
+
 export interface UploadDatasetResponse {
   error?: string;
   response?: string;

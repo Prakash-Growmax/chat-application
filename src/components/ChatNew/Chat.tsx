@@ -45,43 +45,37 @@ function Chat() {
   };
 
   return (
-    <div className="h-[calc(100vh-64px)]  flex flex-col">
-      <div className="flex-1 overflow-y-auto px-4">
-        <div className="max-w-4xl mx-auto px-2 sm:px-4">
-          <ChatBox />
-        </div>
-      </div>
+    <div className="h-[calc(100vh-64px)] flex flex-col w-full">
+      <ChatBox />
 
       <div className="mt-auto">
         <div className="py-4">
-          <div className="max-w-4xl mx-auto px-2 sm:px-4">
-            <ChatInput
-              onSend={() => {}}
-              disabled={state.isLoading || !state.s3Key}
-              onError={handleError}
-              isUploading={isUploading}
-              setIsUploading={setIsUploading}
-              // s3Key={state.s3Key || ""}
-             
-              onFileUploaded={(key) => {
-                setState({
-                  ...state,
-                  s3Key: key,
-                  messages: [
-                    {
-                      id: Date.now().toString(),
-                      content:
-                        'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
-                      role: "assistant",
-                      timestamp: new Date(),
-                      type: "text",
-                      isTyping: false,
-                    },
-                  ],
-                });
-              }}
-            />
-          </div>
+          <ChatInput
+            onSend={() => {}}
+            disabled={state.isLoading || !state.s3Key}
+            onError={handleError}
+            isUploading={isUploading}
+            setIsUploading={setIsUploading}
+            // s3Key={state.s3Key || ""}
+
+            onFileUploaded={(key) => {
+              setState({
+                ...state,
+                s3Key: key,
+                messages: [
+                  {
+                    id: Date.now().toString(),
+                    content:
+                      'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
+                    role: "assistant",
+                    timestamp: new Date(),
+                    type: "text",
+                    isTyping: false,
+                  },
+                ],
+              });
+            }}
+          />
         </div>
 
         <div className="px-2 pb-2 text-center">

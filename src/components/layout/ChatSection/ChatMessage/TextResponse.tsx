@@ -2,7 +2,13 @@ import { Message } from "@/types";
 import { useEffect, useState } from "react";
 import TypingChatMessage from "./TypingChatMessage";
 
-const TextResponse = ({ message }: { message: Message }) => {
+const TextResponse = ({
+  message,
+  isAssistant,
+}: {
+  message: Message;
+  isAssistant: boolean;
+}) => {
   const [isTyping, setIsTyping] = useState(true);
 
   useEffect(() => {
@@ -13,7 +19,12 @@ const TextResponse = ({ message }: { message: Message }) => {
     return () => clearTimeout(timer);
   }, [message.content]);
 
-  return <TypingChatMessage message={{ ...message, isTyping }} />;
+  return (
+    <TypingChatMessage
+      message={{ ...message, isTyping }}
+      isAssistant={isAssistant}
+    />
+  );
 };
 
 export default TextResponse;

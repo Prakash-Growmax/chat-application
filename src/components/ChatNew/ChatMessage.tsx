@@ -22,18 +22,12 @@ export function ChatMessage({ message }: ChatMessageProps) {
     <>
       <div className="mx-auto max-w-4xl h-full">
         {isUser ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="flex w-full items-center justify-center py-2">
-              <PaperCard className="w-full border-none rounded-3xl p-3">
-                <ChatTypeInfo isUser={isUser} />
-                <RenderContent message={message} />
-              </PaperCard>
-            </div>
-          </motion.div>
+          <div className="flex w-full items-center justify-center py-2">
+            <PaperCard className="w-full border-none rounded-3xl p-3">
+              <ChatTypeInfo isUser={isUser} />
+              <RenderContent message={message} isAssistant={!isUser} />
+            </PaperCard>
+          </div>
         ) : (
           <div className="flex w-full items-center justify-center py-2">
             <PaperCard className="w-full border-none rounded-3xl p-3">
@@ -53,9 +47,15 @@ export function ChatMessage({ message }: ChatMessageProps) {
   );
 }
 
-const RenderContent = ({ message }: { message: Message }) => {
+const RenderContent = ({
+  message,
+  isAssistant = false,
+}: {
+  message: Message;
+  isAssistant?: boolean;
+}) => {
   if (message.type === "text") {
-    return <TextResponse message={message} />;
+    return <TextResponse message={message} isAssistant={isAssistant} />;
   }
 
   if (message.type === "chart") {

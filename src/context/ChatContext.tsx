@@ -10,6 +10,7 @@ interface ChatContextType {
   processing: boolean;
   setProcessing: (value: boolean) => void;
   addToQueue: (message: Message) => void;
+  emptyQueue: () => void;
   processQueue: (handler: (message: Message) => Promise<void>) => void;
 }
 

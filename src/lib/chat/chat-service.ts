@@ -1,7 +1,10 @@
-import { supabase } from '../supabase';
-import { ChatMessage, User } from '@/types';
-import { deductTokens } from '../token/token-service';
-import { toast } from 'sonner';
+import { chatService } from "@/services/ChatService";
+import { ApiError } from "@/services/apiConfig";
+import { ChatMessage } from "@/types";
+import { Profile } from "@/types/profile";
+import { getAccessToken } from "@/utils/storage.utils";
+import { v4 as uuidv4 } from "uuid";
+import { supabase } from "../supabase";
 
 export async function saveChatMessage(
   userId: string,
@@ -9,18 +12,18 @@ export async function saveChatMessage(
   fileId: string
 ): Promise<void> {
   try {
-    const { error } = await supabase.from('chats').insert({
+    const { error } = await supabase.from("chats").insert({
       user_id: userId,
       content: message.content,
       role: message.role,
       token_usage: message.tokenUsage,
       csv_file_id: fileId,
-      timestamp: message.timestamp.toISOString()
+      timestamp: message.timestamp.toISOString(),
     });
 
     if (error) throw error;
   } catch (error) {
-    console.error('Failed to save chat message:', error);
+    console.error("Failed to save chat message:", error);
     throw error;
   }
 }
@@ -31,81 +34,66 @@ export async function getChatHistory(
 ): Promise<ChatMessage[]> {
   try {
     const { data, error } = await supabase
-      .from('chats')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('csv_file_id', fileId)
-      .order('timestamp', { ascending: true });
+      .from("chats")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("csv_file_id", fileId)
+      .order("timestamp", { ascending: true });
 
     if (error) throw error;
 
-    return data.map(chat => ({
+    return data.map((chat) => ({
       id: chat.id,
       content: chat.content,
       role: chat.role,
       tokenUsage: chat.token_usage,
-      timestamp: new Date(chat.timestamp)
+      timestamp: new Date(chat.timestamp),
     }));
   } catch (error) {
-    console.error('Failed to fetch chat history:', error);
+    console.error("Failed to fetch chat history:", error);
     throw error;
   }
 }
 
-export async function processMessage(
-  user: User,
-  content: string,
-  fileId: string
-): Promise<{ response: string; tokenUsage: number }> {
+export async function createChatId(profile: Profile) {
   try {
-    const estimatedTokens = Math.ceil(content.length / 4); // Simple estimation
-    
-    // Deduct tokens before processing
-    const tokenCost = await deductTokens(user.id, {
-      actionType: 'chat_message',
-      tokens: estimatedTokens
-    });
+    if (profile?.organization_id) {
+      const clientGeneratedId = uuidv4();
+      const requestBody = {
+        name: "New Thread",
+        chat_metadata: {
+          message: "Trying the chat API...",
+        },
+        session_id: clientGeneratedId,
+      };
 
-    // Save user message
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      content,
-      role: 'user',
-      tokenUsage: tokenCost,
-      timestamp: new Date()
-    };
-    await saveChatMessage(user.id, userMessage, fileId);
+      try {
+        const token = getAccessToken();
+        const response = await chatService.createSession(requestBody, {
+          headers: {
+            "x-organization-id": profile.organization_id,
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response?.status !== 200)
+          throw new Error("Error while creating session");
+        let chatId = clientGeneratedId;
 
-    // Simulate AI processing - Replace with actual AI processing
-    const response = `This is a simulated response to: ${content}`;
-    const responseTokens = Math.ceil(response.length / 4);
-
-    // Deduct tokens for response
-    const responseTokenCost = await deductTokens(user.id, {
-      actionType: 'chat_response',
-      tokens: responseTokens
-    });
-
-    // Save AI response
-    const aiMessage: ChatMessage = {
-      id: (Date.now() + 1).toString(),
-      content: response,
-      role: 'assistant',
-      tokenUsage: responseTokenCost,
-      timestamp: new Date()
-    };
-    await saveChatMessage(user.id, aiMessage, fileId);
-
-    return {
-      response,
-      tokenUsage: tokenCost + responseTokenCost
-    };
-  } catch (error) {
-    if (error instanceof Error) {
-      toast.error(error.message);
+        if (response?.data?.uuid_changed) {
+          chatId = response?.data?.id;
+        }
+        localStorage.setItem("chatId", chatId);
+        return chatId;
+      } catch (error) {
+        if (error instanceof ApiError) {
+          console.error(`API Error: ${error.status} - ${error.statusText}`);
+        }
+      }
     } else {
-      toast.error('Failed to process message');
+      console.error("Organization ID is missing.");
+      throw new Error("Organization ID is required");
     }
-    throw error;
+  } catch (error) {
+    console.log(error);
   }
 }

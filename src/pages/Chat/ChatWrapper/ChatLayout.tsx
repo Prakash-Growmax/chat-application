@@ -1,16 +1,24 @@
 import { ChatContext } from "@/context/ChatContext";
 import { Message } from "@/types";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 function ChatLayout({ children }: { children: React.ReactNode }) {
   const [isUploading, setIsUploading] = useState(false);
   const [queue, setQueue] = useState<Message[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [processing, setProcessing] = useState(false);
-  const [s3Key,setS3Key]=useState("")
+
+  useEffect(() => {
+    emptyQueue();
+  }, []);
+
   const addToQueue = useCallback((message: Message) => {
     setQueue((prev: Message[]) => [...prev, message]);
     setMessages((prev) => [...prev, message]);
+  }, []);
+
+  const emptyQueue = useCallback(() => {
+    setQueue([]);
   }, []);
 
   const processQueue = useCallback(
@@ -45,6 +53,7 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
         addToQueue,
         processQueue,
         messages,
+        emptyQueue,
       }}
     >
       {children}

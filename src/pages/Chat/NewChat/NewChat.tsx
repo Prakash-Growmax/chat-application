@@ -1,33 +1,25 @@
+import ChatBox from "@/components/ChatNew/ChatBox";
 import { ChatInput } from "@/components/ChatNew/ChatInput";
 import ChatStarterText from "@/components/layout/ChatSection/ChatStarterText";
+import { useChatContext } from "@/context/ChatContext";
+import { useEffect } from "react";
 
 function NewChat() {
-  return (
-    <div className="h-[calc(100vh-64px)] flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center">
-        <ChatStarterText />
+  const { queue, emptyQueue } = useChatContext();
 
-        <div className="w-full max-w-4xl px-2 sm:px-4 mx-auto">
-          <ChatInput
-          // onFileUploaded={(key) => {
-          //   setState({
-          //     ...state,
-          //     s3Key: key,
-          //     messages: [
-          //       {
-          //         id: Date.now().toString(),
-          //         content:
-          //           'CSV data loaded successfully! Try asking me questions about the data. Type "help" to see what I can do.',
-          //         role: "assistant",
-          //         timestamp: new Date(),
-          //         type: "text",
-          //         isTyping: false,
-          //       },
-          //     ],
-          //   });
-          // }}
-          />
-        </div>
+  useEffect(() => {
+    emptyQueue();
+  }, []);
+  return (
+    <div className="h-[calc(100vh-64px)] flex flex-col w-full">
+      {queue?.length > 0 && <ChatBox isNewChat={true} />}
+      <div
+        className={`${
+          queue?.length ? "" : "flex-1"
+        } flex flex-col items-center justify-center w-full mt-4 py-4`}
+      >
+        {queue?.length === 0 && <ChatStarterText />}
+        <ChatInput isNewChat={true} />
       </div>
 
       <div className="px-2 pb-2 text-center">

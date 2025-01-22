@@ -5,6 +5,7 @@ import {
   AnalyzeChatResponse,
   ChatHistory,
   ChatSession,
+  CreateChatResponse,
   CreateSessionRequest,
   uploadDataSetRequest,
 } from "@/types/Chat";
@@ -18,8 +19,12 @@ class ChatService {
     options?: {
       headers: Record<string, string>;
     }
-  ): Promise<ApiResponse<ChatSession>> {
-    return this.apiClient.post<ChatSession>("chat/sessions", reqBody, options);
+  ): Promise<ApiResponse<CreateChatResponse>> {
+    return this.apiClient.post<CreateChatResponse>(
+      "chat/sessions",
+      reqBody,
+      options
+    );
   }
   async uploadDataset(
     reqBody: uploadDataSetRequest,

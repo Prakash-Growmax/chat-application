@@ -1,6 +1,7 @@
 import { useChatContext } from "@/context/ChatContext";
 import { useProfile } from "@/hooks/profile/useProfile";
 import { useAuth } from "@/hooks/useAuth";
+import { createChatId } from "@/lib/chat/chat-service";
 import { chatService } from "@/services/ChatService";
 import { Message } from "@/types";
 import { formQueueMessage } from "@/utils/chat.utils";
@@ -8,24 +9,32 @@ import { getAccessToken, getChatId, tokenType } from "@/utils/storage.utils";
 import { Tooltip } from "@mui/material";
 import { ArrowUp } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CSVPreview } from "../CSVPreview/CSVPreview";
 import ChatUploadBtn from "../layout/ChatSection/ChatUpload/ChatUploadBtn";
 
 interface ChatInputProps {
-  onFileUploaded: (s3Key: string) => void;
-  s3Key: string;
-  bucket: string;
-  
+  onFileUploaded?: (s3Key: string) => void;
+  s3Key?: string;
+  isNewChat: boolean;
 }
 
-export function ChatInput({ onFileUploaded,bucket }: ChatInputProps) {
+export function ChatInput({ onFileUploaded, isNewChat }: ChatInputProps) {
+  //hooks...
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { profile } = useProfile();
   const { addToQueue, processing, queue, processQueue } = useChatContext();
+
+  //state...
+  const [s3Key, setS3Key] = useState("");
   const [input, setInput] = useState("");
+  const [isNewChatCreating, setIsNewChatCreating] = useState<boolean>(false);
+
+  //ref...
   const containerRef = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [s3Key,setS3Key]=useState("");
+
   const adjustTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -38,20 +47,30 @@ export function ChatInput({ onFileUploaded,bucket }: ChatInputProps) {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const value = input.trim();
-    if (!value) return;
 
-    setInput("");
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      content: value,
-      role: "user",
-      timestamp: new Date(),
-      type: "text",
-      isTyping: false,
-    };
-    addToQueue(userMessage);
+    if (isNewChat && profile) {
+      try {
+        setIsNewChatCreating(true);
+        const value = input.trim() || "";
+        setInput("");
+        const userMessage: Message = {
+          id: Date.now().toString(),
+          content: value,
+          role: "user",
+          timestamp: new Date(),
+          type: "text",
+          isTyping: false,
+        };
+        addToQueue(userMessage);
+        const ChatId = await createChatId(profile);
+        setIsNewChatCreating(false);
+        navigate(`/chat/${ChatId}`);
+        return;
+      } catch (error) {
+        setIsNewChatCreating(false);
+        return;
+      }
+    }
   };
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -86,7 +105,7 @@ export function ChatInput({ onFileUploaded,bucket }: ChatInputProps) {
         if (result?.data?.error) {
           throw new Error(result?.data?.error);
         }
-       console.log(result);
+        console.log(result);
         let assistantMessage;
         assistantMessage = formQueueMessage(result?.data?.response || "", true);
         addToQueue(assistantMessage);
@@ -126,7 +145,7 @@ export function ChatInput({ onFileUploaded,bucket }: ChatInputProps) {
   }, [s3Key]);
 
   return (
-    <div className="w-full">
+    <div className="max-w-4xl mx-auto px-2 sm:px-4 w-full">
       <div className="flex justify-center">
         <form className="w-full" onSubmit={handleSubmit} ref={containerRef}>
           <div className="relative flex h-full max-w-full flex-1 flex-col">
@@ -152,7 +171,10 @@ export function ChatInput({ onFileUploaded,bucket }: ChatInputProps) {
 
                   <div className="flex h-[44px] items-center justify-between">
                     <div className="flex gap-x-1">
-                      <ChatUploadBtn onFileUploaded={onFileUploaded} setS3Key={setS3Key}/>
+                      <ChatUploadBtn
+                        onFileUploaded={onFileUploaded}
+                        setS3Key={setS3Key}
+                      />
 
                       {s3Key && (
                         <div>
@@ -162,7 +184,6 @@ export function ChatInput({ onFileUploaded,bucket }: ChatInputProps) {
                         </div>
                       )}
                     </div>
-                    {/* Attachment button */}
 
                     <button
                       type="submit"
