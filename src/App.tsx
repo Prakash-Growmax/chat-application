@@ -23,7 +23,7 @@ function App() {
   useEffect(() => {
     const updateWidth = () => {
       const width = window.innerWidth;
-      setSideDrawerWidth(width * 0.175);
+      setSideDrawerWidth(Math.max(width * 0.175, 200));
     };
 
     updateWidth();

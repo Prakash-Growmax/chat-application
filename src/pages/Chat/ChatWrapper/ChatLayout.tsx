@@ -1,20 +1,23 @@
 import { ChatContext } from "@/context/ChatContext";
+import { useProfile } from "@/hooks/profile/useProfile";
+import { chatService } from "@/services/ChatService";
 import { Message } from "@/types";
+import { getAccessToken } from "@/utils/storage.utils";
 import React, { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 function ChatLayout({ children }: { children: React.ReactNode }) {
+  const { id: chatId } = useParams();
+  console.log("🚀 ~ ChatLayout ~ chatId:", chatId);
+  const { profile } = useProfile();
+
   const [isUploading, setIsUploading] = useState(false);
   const [queue, setQueue] = useState<Message[]>([]);
-  const [messages, setMessages] = useState<Message[]>([]);
   const [processing, setProcessing] = useState(false);
-
-  useEffect(() => {
-    emptyQueue();
-  }, []);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const addToQueue = useCallback((message: Message) => {
     setQueue((prev: Message[]) => [...prev, message]);
-    setMessages((prev) => [...prev, message]);
   }, []);
 
   const emptyQueue = useCallback(() => {
@@ -31,7 +34,6 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
       try {
         await handler(message);
         // setQueue((prev) => prev.slice(1));
-        // setMessages((prev) => prev.slice(1));
       } catch (error) {
         console.error("Error processing message:", error);
       } finally {
@@ -40,6 +42,35 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
     },
     [queue, processing]
   );
+
+  console.log(profile, "profile");
+  useEffect(() => {
+    const loadChatHistory = async () => {
+      if (!chatId || !profile) return;
+
+      try {
+        console.log("Adfas");
+        setIsLoading(true);
+        const response = await chatService.getChatHistory(chatId, {
+          headers: {
+            "x-organization-id": profile.organization_id,
+            Authorization: `Bearer ${getAccessToken()}`,
+          },
+        });
+        console.log("🚀 ~ loadChatHistory ~ response:", response);
+
+        // if (response?.data) {
+        //   setQueue(response.data);
+        // }
+      } catch (error) {
+        console.error("Error loading chat history:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadChatHistory();
+  }, [chatId, profile]);
 
   return (
     <ChatContext.Provider
@@ -52,7 +83,6 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
         setProcessing,
         addToQueue,
         processQueue,
-        messages,
         emptyQueue,
       }}
     >

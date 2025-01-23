@@ -1,12 +1,8 @@
 import { useChatContext } from "@/context/ChatContext";
 import { ChatState } from "@/types";
-import { lazy, useContext, useEffect, useState } from "react";
-import AppContext from "../context/AppContext";
+import { useEffect, useState } from "react";
 import ChatBox from "./ChatBox";
-
-const ChatInput = lazy(() =>
-  import("./ChatInput").then((module) => ({ default: module.ChatInput }))
-);
+import { ChatInput } from "./ChatInput";
 
 function Chat() {
   const { messages: message } = useChatContext();
@@ -18,7 +14,6 @@ function Chat() {
     s3Key: null,
   });
   const [isUploading, setIsUploading] = useState(false);
-  const { openRight } = useContext(AppContext);
 
   useEffect(() => {
     if (message?.length) {
@@ -51,13 +46,6 @@ function Chat() {
       <div className="mt-auto">
         <div className="py-4">
           <ChatInput
-            onSend={() => {}}
-            disabled={state.isLoading || !state.s3Key}
-            onError={handleError}
-            isUploading={isUploading}
-            setIsUploading={setIsUploading}
-            // s3Key={state.s3Key || ""}
-
             onFileUploaded={(key) => {
               setState({
                 ...state,

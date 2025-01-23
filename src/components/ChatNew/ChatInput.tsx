@@ -5,22 +5,25 @@ import { createChatId } from "@/lib/chat/chat-service";
 import { chatService } from "@/services/ChatService";
 import { Message } from "@/types";
 import { formQueueMessage } from "@/utils/chat.utils";
-import { getAccessToken, getChatId, tokenType } from "@/utils/storage.utils";
+import { getAccessToken, tokenType } from "@/utils/storage.utils";
 import { Tooltip } from "@mui/material";
 import { ArrowUp } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CSVPreview } from "../CSVPreview/CSVPreview";
 import ChatUploadBtn from "../layout/ChatSection/ChatUpload/ChatUploadBtn";
 
 interface ChatInputProps {
   onFileUploaded?: (s3Key: string) => void;
-  s3Key?: string;
-  isNewChat: boolean;
+  isNewChat?: boolean;
 }
 
-export function ChatInput({ onFileUploaded, isNewChat }: ChatInputProps) {
+export function ChatInput({
+  onFileUploaded,
+  isNewChat = false,
+}: ChatInputProps) {
   //hooks...
+  const { id: chat_id } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { profile } = useProfile();
@@ -85,9 +88,9 @@ export function ChatInput({ onFileUploaded, isNewChat }: ChatInputProps) {
   };
   const processMessage = async (message: Message) => {
     try {
+      if (!chat_id) return;
       if (queue[queue.length - 1]?.role !== "user") return; // Add this check
       if (profile?.organization_id && user?.id) {
-        const chat_id = getChatId() || "";
         const org_id = profile.organization_id;
 
         const result = await chatService.analyzeQuery(

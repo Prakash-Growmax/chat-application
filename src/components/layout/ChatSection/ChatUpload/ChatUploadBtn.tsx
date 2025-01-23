@@ -4,10 +4,11 @@ import { useProfile } from "@/hooks/profile/useProfile";
 import { S3UploadError, uploadToS3 } from "@/lib/s3-client";
 import { chatService } from "@/services/ChatService";
 import { formQueueMessage } from "@/utils/chat.utils";
-import { getAccessToken, getChatId } from "@/utils/storage.utils";
+import { getAccessToken } from "@/utils/storage.utils";
 import { Tooltip } from "@mui/material";
 import { Paperclip } from "lucide-react";
 import { useCallback, useState } from "react";
+import { useParams } from "react-router-dom";
 
 function ChatUploadBtn({
   onFileUploaded,
@@ -20,7 +21,7 @@ function ChatUploadBtn({
   const { addToQueue } = useChatContext();
 
   const [isUploading, setIsUploading] = useState(false);
-  const chatId = getChatId() || "";
+  const { id: chatId } = useParams();
   const token = getAccessToken();
 
   const handleFileUpload = useCallback(
@@ -35,7 +36,7 @@ function ChatUploadBtn({
       setIsUploading(true);
 
       try {
-        if (profile?.organization_id) {
+        if (profile?.organization_id && chatId) {
           const result = await chatService.uploadDataset(
             {
               s3_path: `s3://growmax-dev-app-assets/analytics/${file.name}`,
