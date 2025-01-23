@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppContext from "../context/AppContext";
-
+import { motion, AnimatePresence } from 'framer-motion';
 import { useProfile } from "@/hooks/profile/useProfile";
 import { useChatList } from "@/hooks/useChatList";
 import { chatService } from "@/services/ChatService";
@@ -14,12 +14,14 @@ import {
   MessageSquareMore,
 } from "lucide-react";
 import DeleteIcon from "../ui/delete-icon";
+import Spinner from "../ui/Spinner";
 
 export default function MyRecent({
   isDropdownOpen,
   setDropdownOpen,
   isMobile,
   isTab,
+  setRecentData
 }) {
   const { setSideDrawerOpen } = useContext(AppContext);
   const [hoveredIndex, setHoveredIndex] = useState(null); // Tracks the currently hovered index
@@ -87,7 +89,23 @@ export default function MyRecent({
 
     setActiveDropdownIndex(index);
   };
-
+  const listVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: (index) => ({
+      opacity: 1, 
+      y: 0,
+      transition: {
+        delay: index * 0.1, // Staggered animation
+        duration: 0.3
+      }
+    }),
+    exit: { opacity: 0, x: -20 }
+  };
+  useEffect(()=>{
+   if(sessionList?.data){
+    setRecentData(false)
+   }
+  },[sessionList?.data])
   return (
     <div className="relative cursor-pointer">
       <div
@@ -121,58 +139,66 @@ export default function MyRecent({
           className="absolute z-10 bg-transparent w-full max-h-40 overflow-y-auto"
           style={{ paddingLeft: "4.8px", paddingRight: "4.8px" }}
         >
-          {sessionList?.data ? (
-            sessionList?.data?.map((chat, index) => (
+         <AnimatePresence>
+        {sessionList?.data ? (
+          sessionList.data.map((chat, index) => (
+            <motion.div
+              key={chat.id}
+              custom={index}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={listVariants}
+              className="relative my-2 ml-4"
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
               <div
-                key={index}
-                className="relative my-2 ml-4"
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
+                className={`flex items-center rounded-lg px-2 py-1 w-full transition-colors duration-200 ${
+                  hoveredIndex === index ||
+                  index === 0 ||
+                  activeDropdownIndex === index
+                    ? "bg-gray-200"
+                    : ""
+                }`}
               >
-                <div
-                  className={`flex items-center rounded-lg px-2 py-1 w-full ${
-                    hoveredIndex === index ||
-                    index === 0 ||
-                    activeDropdownIndex === index
-                      ? "bg-gray-200"
-                      : ""
-                  }`}
-                >
-                  <div className="flex justify-between w-full items-center">
-                    <ListItemText
-                      className="leading-4 truncate"
-                      onClick={() => {
-                        navigate(`/chat/${chat.id}`);
-                        if (isMobile || isTab) {
-                          setSideDrawerOpen(false);
-                        }
-                      }}
+                <div className="flex justify-between w-full items-center">
+                <ListItemText
+  className="leading-4 truncate"
+  onClick={() => {
+    navigate(`/chat/${chat.id}`);
+    if (isMobile || isTab) {
+      setSideDrawerOpen(false);
+    }
+  }}
+>
+  {chat.name}
+</ListItemText>
+ 
+                  
+                  {(hoveredIndex === index ||
+                    activeDropdownIndex === index) && (
+                    <motion.button 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      onClick={(e) => toggleDropdown(index, e)}
                     >
-                      {chat.name}
-                    </ListItemText>
-
-                    {(hoveredIndex === index ||
-                      activeDropdownIndex === index) && (
-                      <button onClick={(e) => toggleDropdown(index, e)}>
-                        <EllipsisVertical size={12} className="m-1" />
-                      </button>
-                    )}
-                  </div>
+                      <EllipsisVertical size={12} className="m-1" />
+                    </motion.button>
+                  )}
                 </div>
               </div>
-            ))
-          ) : (
-            <div className="relative my-2 lg:ml-4 ml-8">
-              <div role="status" className="space-y-2.5 animate-pulse max-w-lg">
-                {Array.from({ length: 6 }).map((_, index) => (
-                  <div
-                    key={index}
-                    className="h-5 bg-gray-200 rounded-full dark:bg-gray-700 w-full px-2"
-                  ></div>
-                ))}
-              </div>
+            </motion.div>
+          ))
+        ) : (
+          <div className="relative my-2 lg:ml-24 ml-16 mt-4">
+            <div role="status" className="space-y-2.5 animate-pulse max-w-lg">
+              <Spinner/>
             </div>
-          )}
+          </div>
+        )}
+      </AnimatePresence>
         </div>
       )}
 
