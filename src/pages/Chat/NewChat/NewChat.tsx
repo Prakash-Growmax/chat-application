@@ -15,8 +15,8 @@ function NewChat() {
       {queue?.length > 0 && <ChatBox isNewChat={true} />}
       <div
         className={`${
-          queue?.length ? "" : "flex-1"
-        } flex flex-col items-center justify-center w-full mt-4 py-4`}
+          queue?.length ? "" : "flex-1 pb-24"
+        } flex flex-col items-center justify-center w-full  py-4`}
       >
         {queue?.length === 0 && <ChatStarterText />}
         <ChatInput isNewChat={true} />

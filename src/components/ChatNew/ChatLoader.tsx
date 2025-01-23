@@ -9,7 +9,6 @@ function ChatLoader() {
       <PaperCard className="mt-4 mb-4">
         <ChatAssistantHeader />
 
-        {/* Enhanced Loading Animation */}
         <div className="flex flex-col gap-2 mt-4">
           <div className="flex gap-2">
             <div className="h-2 w-16 bg-gradient-to-r from-blue-100 to-blue-200 rounded-full animate-pulse"></div>

@@ -24,12 +24,12 @@ export function ChatInput({ onFileUploaded, isNewChat }: ChatInputProps) {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { profile } = useProfile();
-  const { addToQueue, processing, queue, processQueue } = useChatContext();
+  const { addToQueue, processing, setProcessing, queue, processQueue } =
+    useChatContext();
 
   //state...
   const [s3Key, setS3Key] = useState("");
   const [input, setInput] = useState("");
-  const [isNewChatCreating, setIsNewChatCreating] = useState<boolean>(false);
 
   //ref...
   const containerRef = useRef<HTMLFormElement>(null);
@@ -63,14 +63,14 @@ export function ChatInput({ onFileUploaded, isNewChat }: ChatInputProps) {
     setInput("");
     if (isNewChat && profile) {
       try {
-        setIsNewChatCreating(true);
+        setProcessing(true);
         addUserQueue(value);
         const ChatId = await createChatId(profile);
-        setIsNewChatCreating(false);
+        setProcessing(false);
         navigate(`/chat/${ChatId}`);
         return;
       } catch (error) {
-        setIsNewChatCreating(false);
+        setProcessing(false);
         return;
       }
     } else {

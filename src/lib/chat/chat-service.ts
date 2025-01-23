@@ -93,7 +93,5 @@ export async function createChatId(profile: Profile) {
       console.error("Organization ID is missing.");
       throw new Error("Organization ID is required");
     }
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }

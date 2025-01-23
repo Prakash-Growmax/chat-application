@@ -10,10 +10,9 @@ export default function ChatBox({
 }: {
   isNewChat?: boolean;
 }) {
-  const { queue } = useChatContext();
+  const { queue, processing } = useChatContext();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  console.log(queue);
   const scrollToBottom = useCallback(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({

@@ -19,7 +19,7 @@ export default function MyRecent({
   isDropdownOpen,
   setDropdownOpen,
   isMobile,
-  isTab
+  isTab,
 }) {
   const { setSideDrawerOpen } = useContext(AppContext);
   const [hoveredIndex, setHoveredIndex] = useState(null); // Tracks the currently hovered index
@@ -44,7 +44,9 @@ export default function MyRecent({
       if (response.status === 200) {
         const updatedSessionList = {
           ...sessionList,
-          data: sessionList?.data?.filter((session) => session.id !== sessionId),
+          data: sessionList?.data?.filter(
+            (session) => session.id !== sessionId
+          ),
         };
         setSessionList(updatedSessionList);
       }
@@ -85,7 +87,7 @@ export default function MyRecent({
 
     setActiveDropdownIndex(index);
   };
- 
+
   return (
     <div className="relative cursor-pointer">
       <div
@@ -116,7 +118,7 @@ export default function MyRecent({
 
       {isDropdownOpen && (
         <div
-          className="absolute z-10 bg-transparent w-44 max-h-40 overflow-y-auto"
+          className="absolute z-10 bg-transparent w-full max-h-40 overflow-y-auto"
           style={{ paddingLeft: "4.8px", paddingRight: "4.8px" }}
         >
           {sessionList?.data ? (
@@ -129,7 +131,9 @@ export default function MyRecent({
               >
                 <div
                   className={`flex items-center rounded-lg px-2 py-1 w-full ${
-                    hoveredIndex === index || index === 0 || activeDropdownIndex === index
+                    hoveredIndex === index ||
+                    index === 0 ||
+                    activeDropdownIndex === index
                       ? "bg-gray-200"
                       : ""
                   }`}
@@ -147,7 +151,8 @@ export default function MyRecent({
                       {chat.name}
                     </ListItemText>
 
-                    {(hoveredIndex === index || activeDropdownIndex === index) && (
+                    {(hoveredIndex === index ||
+                      activeDropdownIndex === index) && (
                       <button onClick={(e) => toggleDropdown(index, e)}>
                         <EllipsisVertical size={12} className="m-1" />
                       </button>
@@ -165,7 +170,6 @@ export default function MyRecent({
                     className="h-5 bg-gray-200 rounded-full dark:bg-gray-700 w-full px-2"
                   ></div>
                 ))}
-               
               </div>
             </div>
           )}
@@ -188,7 +192,9 @@ export default function MyRecent({
                 onClick={async () => {
                   setHoveredIndex(null);
                   setActiveDropdownIndex(null);
-                  await sessionDelete(sessionList?.data[activeDropdownIndex]?.id);
+                  await sessionDelete(
+                    sessionList?.data[activeDropdownIndex]?.id
+                  );
                 }}
               >
                 <DeleteIcon />

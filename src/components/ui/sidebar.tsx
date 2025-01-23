@@ -14,7 +14,6 @@ import AppContext from "../context/AppContext";
 import NewChatButton from "../layout/SideBar/NewChatButton";
 import SideBarListItemHeader from "../layout/SideBar/SideBarListItemHeader";
 
-import { drawerWidth } from "@/constants/general.constant";
 import { DrawerOpen_LocalKey } from "@/constants/storage.constant";
 import { CloudCog, Layers, PanelRightOpen } from "lucide-react";
 import LogoutButton from "../auth/LogoutButton";
@@ -40,7 +39,8 @@ export default function Sidebar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
-  const { sideDrawerOpen, setSideDrawerOpen } = React.useContext(AppContext);
+  const { sideDrawerOpen, setSideDrawerOpen, sideDrawerWidth } =
+    React.useContext(AppContext);
 
   const handleDrawerClose = () => {
     setSideDrawerOpen(false);
@@ -73,7 +73,7 @@ export default function Sidebar() {
         sx={{
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: drawerWidth,
+            width: sideDrawerWidth,
             backgroundColor: "#F9F9F9",
             display: "flex",
             flexDirection: "column",
