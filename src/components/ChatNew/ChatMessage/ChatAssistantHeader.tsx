@@ -6,9 +6,9 @@ function ChatAssistantHeader({
   isGenerating?: boolean;
 }) {
   return (
-    <div className="flex items-center gap-3">
-      <div className="rounded-full">
-        <LogoIcon width="32px" height="32px" />
+    <div className="flex items-center gap-1">
+      <div className="rounded-full pt-2">
+        <LogoIcon width="24px" height="24px" />
       </div>
       <div className="flex flex-col">
         <span className="text-sm font-medium text-gray-800">

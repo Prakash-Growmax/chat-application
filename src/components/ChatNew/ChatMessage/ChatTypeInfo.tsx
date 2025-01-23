@@ -18,13 +18,13 @@ function ChatTypeInfo({ isUser }: { isUser: boolean }) {
   return (
     <div className="flex flex-row mb-1 items-center justify-start">
       {isUser ? (
-        <div className="flex gap-2">
+        <div className="flex gap-1 pt-2">
           <Avatar
             sx={{
               bgcolor: deepOrange[500],
               padding: 1.5,
-              width: 20,
-              height: 20,
+              width:"24px",
+              height:"24px",
               fontSize: "0.7rem",
             }}
             alt="Remy Sharp"
