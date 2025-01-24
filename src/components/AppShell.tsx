@@ -5,6 +5,7 @@ export const AppShell = ({ dom }: { dom: boolean }) => {
         width: "100%",
         backgroundColor: "#fff",
         zIndex: 1000,
+        position: "fixed",
       }}
     >
       <h1>App Shell of the application....</h1>

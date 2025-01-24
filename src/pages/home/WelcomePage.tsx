@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 
 function WelcomePage() {
   return (
-    <div className="relative min-h-[calc(100vh-4rem)] pl-16">
+    <div className="relative min-h-[calc(100vh-4rem)]">
       <div className="absolute inset-0 bg-white" />
       <div className="relative">
-        <div className="container flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-12 px-4 py-16 md:py-24">
+        <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-12 py-16 md:py-24">
           <div className="flex flex-col items-center gap-6 text-center">
             <div className="flex items-center gap-2 rounded-2xl bg-primary/10 px-4 py-2">
               <LucideIcon name="Building2" />

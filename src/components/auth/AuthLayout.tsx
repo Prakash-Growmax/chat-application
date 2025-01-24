@@ -16,8 +16,8 @@ interface AuthLayoutProps {
 
 export function AuthLayout({ children, title, description }: AuthLayoutProps) {
   return (
-    <div className="min-h-[80vh] bg-gradient-to-br from-background to-primary/5">
-      <div className="relative flex min-h-[80vh] items-center justify-center p-4">
+    <div className="min-h-[100vh] bg-gradient-to-br from-background to-primary/5 flex justify-center items-center">
+      <div className="relative flex items-center justify-center p-4 min-w-96">
         <Card className="w-full max-w-md backdrop-blur-sm bg-card/80">
           <CardHeader className="space-y-3">
             <div className="flex items-center justify-center">

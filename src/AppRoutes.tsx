@@ -11,7 +11,6 @@ import InviteAcceptedPage from "./pages/InviteAcceptedPage";
 import SuccessPayment from "./pages/Payments/SuccessPayment";
 import PlansPage from "./pages/plans/PlansPage";
 import ProtectedRoute from "./pages/ProtectedRoute";
-import PublicLayout from "./pages/PublicRoutes";
 import SettingsPage from "./pages/settings/SettingsPage";
 
 const AppRoutes = () => {
@@ -41,14 +40,7 @@ const AppRoutes = () => {
         }
       />
 
-      <Route
-        path="/login"
-        element={
-          <PublicLayout>
-            <LoginPage />
-          </PublicLayout>
-        }
-      />
+      <Route path="/login" element={<LoginPage />} />
 
       {/* Protected Routes */}
 

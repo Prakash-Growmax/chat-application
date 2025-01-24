@@ -90,7 +90,7 @@ function SuccessPayment() {
           updateSubscription(
             data.subscription.plan.amount === 1000 ? "Pro Plan" : "Free Plan"
           );
-          navigate("/");
+          navigate("/chat/new");
         }
         //
       })

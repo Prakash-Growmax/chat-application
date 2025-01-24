@@ -8,7 +8,7 @@ const CancelPayment = () => {
               Something Went Wrong
             </h3>
             <a
-              href="/"
+              href="/chat/new"
               className="w-auto uppercase bg-slate-900 text-white text-xl my-16 px-8 py-3 rounded"
             >
               Go To Homepage
