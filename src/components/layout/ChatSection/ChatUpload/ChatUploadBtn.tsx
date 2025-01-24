@@ -56,6 +56,7 @@ function ChatUploadBtn({
           if (result.status !== 200) {
             throw new Error("Failed to upload dataset info");
           }
+          setIsUploading(false)
           const response = {
             data: {
               response:
@@ -81,7 +82,7 @@ function ChatUploadBtn({
           console.error("Error uploading file:", error);
         }
       } finally {
-        setIsUploading(false);
+        // setIsUploading(false);
       }
     },
     [onFileUploaded, setS3Key, profile, chatId, token, addToQueue]
