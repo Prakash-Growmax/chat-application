@@ -6,7 +6,7 @@ function ChatLoader() {
   const { processing } = useChatContext();
   return (
     processing && (
-      <PaperCard className="mt-4 mb-4">
+      <PaperCard className="w-full border-none rounded-3xl p-3">
         <ChatAssistantHeader />
 
         <div className="flex flex-col gap-2 mt-4">

@@ -49,6 +49,7 @@ export default function Sidebar() {
 
   const [isDropdownOpen, setDropdownOpen] = React.useState(true);
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState(null);
+  const [recentData,setRecentData] = React.useState(true);
   React.useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (
@@ -126,10 +127,11 @@ export default function Sidebar() {
                   setDropdownOpen={setDropdownOpen}
                   isMobile={isMobile}
                   isTab={isTab}
+                  setRecentData={setRecentData}
                 />
                 <div
                   className={`overflow-hidden transition-all duration-100 ease-in-out ${
-                    isDropdownOpen ? "mt-40" : ""
+                    isDropdownOpen && !recentData ? "mt-40" : "mt-8"
                   }`}
                 ></div>
               </div>
