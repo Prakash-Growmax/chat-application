@@ -13,10 +13,12 @@ import { DataChart } from "./DataChat";
 
 interface ChatMessageProps {
   message: Message;
+  onContentChange: (content: any) => void
 }
-export function ChatMessage({ message }: ChatMessageProps) {
+export function ChatMessage({ message, onContentChange }: ChatMessageProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const isUser = message.role === "user";
+
   return (
     <>
       <div className="mx-auto max-w-4xl h-full">
@@ -26,7 +28,12 @@ export function ChatMessage({ message }: ChatMessageProps) {
               <div className="w-full border-none">
                 <ChatTypeInfo isUser={isUser} />
                 <div className="ml-1">
-                  <RenderContent message={message} isAssistant={!isUser} />
+                  {/* Pass onContentChange here */}
+                  <RenderContent
+                    message={message}
+                    isAssistant={!isUser}
+                    onContentChange={onContentChange}
+                  />
                 </div>
               </div>
             </PaperCard>
@@ -36,7 +43,8 @@ export function ChatMessage({ message }: ChatMessageProps) {
             <PaperCard className="w-full border-none rounded-3xl p-3">
               <ChatAssistantHeader />
               <div className="ml-1">
-                <RenderContent message={message} />
+                {/* Pass onContentChange here */}
+                <RenderContent message={message} onContentChange={onContentChange} />
               </div>
             </PaperCard>
           </div>
@@ -55,9 +63,11 @@ export function ChatMessage({ message }: ChatMessageProps) {
 const RenderContent = ({
   message,
   isAssistant = false,
+  onContentChange,
 }: {
   message: Message;
   isAssistant?: boolean;
+  onContentChange: (content: any) => void;
 }) => {
   if (message.type === "text") {
     return <TextResponse message={message} isAssistant={isAssistant} />;
@@ -70,7 +80,12 @@ const RenderContent = ({
     );
   }
   if (message?.messageObject?.content?.type === "insights") {
-    return <InsighttResponse data={message.messageObject.content.data} />;
+    return (
+      <InsighttResponse
+        data={message.messageObject.content.data}
+        onContentChange={onContentChange}
+      />
+    );
   }
   if (message?.messageObject?.content?.type === "bar") {
     return (
@@ -78,6 +93,7 @@ const RenderContent = ({
         data={message.messageObject.content.data}
         layout={message.messageObject.content.layout}
         summary={message.messageObject.content.summary}
+        onContentChange={onContentChange}
       />
     );
   }

@@ -39,9 +39,13 @@ export default function ChatBox({
                       ref={scrollAreaRef}
                       className="flex-1 px-1 overflow-auto my-4 items-center scroll-container"
                     >
-                      {queue?.map((message) => (
-                        <ChatMessage message={message} />
-                      ))}
+                      {queue?.map((message, index) => (
+    <ChatMessage
+      key={index}
+      message={message}
+      onContentChange={scrollToBottom} // Trigger scroll on content change
+    />
+  ))}
                       {!isNewChat && <ChatLoader />}
                       <div ref={messagesEndRef} />
                     </ScrollArea>
