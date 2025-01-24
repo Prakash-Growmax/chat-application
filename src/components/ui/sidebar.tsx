@@ -15,8 +15,8 @@ import NewChatButton from "../layout/SideBar/NewChatButton";
 import SideBarListItemHeader from "../layout/SideBar/SideBarListItemHeader";
 
 import { DrawerOpen_LocalKey } from "@/constants/storage.constant";
-import { CloudCog, Layers, PanelRightOpen } from "lucide-react";
 import LogoutButton from "../auth/LogoutButton";
+import LucideIcon from "../Custom-UI/LucideIcon";
 import TooltipNew from "./tooltipnew";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -102,7 +102,7 @@ export default function Sidebar() {
               onClick={handleDrawerClose}
             >
               <TooltipNew title="Close Menu" placement="top-start">
-                <PanelRightOpen size={24} />
+                <LucideIcon name={"PanelRightOpen"} size={24} />
               </TooltipNew>
             </div>
           </div>
@@ -117,7 +117,7 @@ export default function Sidebar() {
           }}
         >
           <NewChatButton isMobile={isMobile} isTab={isTab} />
-          <SideBarListItemHeader icon={Layers} title="Workspace" />
+          <SideBarListItemHeader icon={"Layers"} title="Workspace" />
           <div className="w-full">
             <List>
               <div className="flex flex-col">
@@ -136,7 +136,7 @@ export default function Sidebar() {
             </List>
             <div>
               <div className="flex items-center gap-2">
-                <SideBarListItemHeader icon={CloudCog} title="Resources" />
+                <SideBarListItemHeader icon={"CloudCog"} title="Resources" />
               </div>
               <Divider />
               <div className="flex">

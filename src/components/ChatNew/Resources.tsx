@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import { ListItemText } from "@/Theme/Typography";
-import { SquareUser, Users, Wallet } from "lucide-react";
+import LucideIcon from "../Custom-UI/LucideIcon";
 
 export default function Resources() {
   const navigate = useNavigate();
@@ -9,17 +9,17 @@ export default function Resources() {
   const resources_items = [
     {
       path: "/plans",
-      icon: <Wallet size={12} color="#64748B" />,
+      icon: "Wallet",
       name: "Subscription",
     },
     {
       path: "/teams",
-      icon: <Users size={12} color="#64748B" />,
+      icon: "Users",
       name: "Teams",
     },
     {
       path: "/settings",
-      icon: <SquareUser size={12} color="#64748B" />,
+      icon: "SquareUser",
       name: "Profile",
     },
   ];
@@ -31,7 +31,7 @@ export default function Resources() {
           className="flex items-center rounded-lg hover:bg-gray-200 cursor-pointer gap-3 w-full px-2 py-1"
           onClick={() => navigate(o.path)}
         >
-          {o.icon}
+          <LucideIcon name={o.icon} size={12} color="#64748B" />
           <ListItemText> {o.name}</ListItemText>
         </div>
       ))}

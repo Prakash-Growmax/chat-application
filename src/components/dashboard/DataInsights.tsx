@@ -1,7 +1,15 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Download } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import LucideIcon from "../Custom-UI/LucideIcon";
 
 interface DataInsightsProps {
   data: any[]; // Replace with your data type
@@ -14,7 +22,7 @@ export function DataInsights({ data, onExport }: DataInsightsProps) {
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Data Insights</CardTitle>
         <Button variant="outline" size="sm" onClick={onExport}>
-          <Download className="mr-2 h-4 w-4" />
+          <LucideIcon name={"Download"} className="h-4 w-4" mr-2 />
           Export
         </Button>
       </CardHeader>

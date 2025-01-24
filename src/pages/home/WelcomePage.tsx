@@ -1,10 +1,5 @@
+import LucideIcon from "@/components/Custom-UI/LucideIcon";
 import { Button } from "@/components/ui/button";
-import {
-  ArrowRight,
-  Building2,
-  FileSpreadsheet,
-  MessageSquare,
-} from "lucide-react";
 import { Link } from "react-router-dom";
 
 function WelcomePage() {
@@ -15,7 +10,7 @@ function WelcomePage() {
         <div className="container flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-12 px-4 py-16 md:py-24">
           <div className="flex flex-col items-center gap-6 text-center">
             <div className="flex items-center gap-2 rounded-2xl bg-primary/10 px-4 py-2">
-              <Building2 className="h-5 w-5" />
+              <LucideIcon name="Building2" />
               <span className="text-sm font-medium">CSV Insight AI</span>
             </div>
             <h1 className="max-w-3xl text-4xl font-bold md:text-6xl">
@@ -30,7 +25,7 @@ function WelcomePage() {
             <Button asChild size="lg" className="gap-2 bg-black text-white">
               <Link to="/chat/new">
                 Get Started
-                <ArrowRight className="h-4 w-4" />
+                <LucideIcon name="ArrowRight" />
               </Link>
             </Button>
           </div>
@@ -41,7 +36,7 @@ function WelcomePage() {
                 key={feature.title}
                 className="rounded-lg border bg-card p-6 shadow-sm"
               >
-                <feature.icon className="mb-4 h-10 w-10 text-primary" />
+                <LucideIcon name={feature.icon ? feature.icon : ""} />
                 <h3 className="mb-2 font-semibold">{feature.title}</h3>
                 <p className="text-sm text-muted-foreground">
                   {feature.description}
@@ -62,18 +57,18 @@ const features = [
     title: "CSV Analysis",
     description:
       "Upload any CSV file and get instant insights through natural language conversations.",
-    icon: FileSpreadsheet,
+    icon: "FileSpreadsheet",
   },
   {
     title: "AI Chat Interface",
     description:
       "Ask questions about your data in plain English and get accurate, detailed responses.",
-    icon: MessageSquare,
+    icon: "MessageSquare",
   },
   {
     title: "Team Collaboration",
     description:
       "Share insights and analysis with your team members in real-time.",
-    icon: Building2,
+    icon: "Building2",
   },
 ];

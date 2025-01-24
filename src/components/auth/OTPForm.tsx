@@ -1,7 +1,7 @@
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Loader2, ArrowRight, RefreshCw } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import LucideIcon from "../Custom-UI/LucideIcon";
 
 interface OTPFormProps {
   otp: string;
@@ -33,7 +33,9 @@ export function OTPForm({
         maxLength={6}
         placeholder="Enter 6-digit code"
         value={otp}
-        onChange={(e) => onOTPChange(e.target.value.replace(/\D/g, '').slice(0, 6))}
+        onChange={(e) =>
+          onOTPChange(e.target.value.replace(/\D/g, "").slice(0, 6))
+        }
         className="h-12 text-center text-lg tracking-widest"
         required
         autoComplete="one-time-code"
@@ -45,19 +47,19 @@ export function OTPForm({
           ? `Resend available in ${timeLeft}s`
           : canResend
           ? `${attemptsLeft} attempts remaining`
-          : 'Maximum resend attempts reached'}
+          : "Maximum resend attempts reached"}
       </p>
       <Button
         type="submit"
-        className={cn('h-12 w-full space-x-2 bg-black text-white')}
+        className={cn("h-12 w-full space-x-2 bg-black text-white")}
         disabled={loading || otp.length !== 6}
       >
         {loading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <LucideIcon name={"Loader2"} className="h-4 w-4 animate-spin" />
         ) : (
           <>
             <span>Verify Code</span>
-            <ArrowRight className="h-4 w-4" />
+            <LucideIcon name={"ArrowRight"} className="h-4 w-4" />
           </>
         )}
       </Button>
@@ -69,11 +71,11 @@ export function OTPForm({
         disabled={!canResend || loading || timeLeft > 0}
       >
         {loading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <LucideIcon name={"Loader2"} className="h-4 w-4" />
         ) : (
           <>
-            <RefreshCw className="h-4 w-4" />
-            <span className='cursor-pointer'>Resend Code</span>
+            <LucideIcon name={"RefreshCw"} className="h-4 w-4" />
+            <span className="cursor-pointer">Resend Code</span>
           </>
         )}
       </Button>

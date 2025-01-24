@@ -1,17 +1,18 @@
+import LucideIcon from "@/components/Custom-UI/LucideIcon";
 import { ListItemHeaderText } from "@/Theme/Typography";
 import { Divider } from "@mui/material";
 
 function SideBarListItemHeader({
-  icon: Icon,
+  icon,
   title,
 }: {
-  icon: React.ElementType;
+  icon: string;
   title: string;
 }) {
   return (
     <>
       <div className="my-2 flex items-center gap-2">
-        <Icon size={12} />
+        <LucideIcon name={icon} size={12} />
         <ListItemHeaderText>{title}</ListItemHeaderText>
       </div>
       <Divider />

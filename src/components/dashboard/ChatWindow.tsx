@@ -5,9 +5,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from "@/hooks/useAuth";
 import { useTokens } from "@/hooks/useTokens";
 import { cn } from "@/lib/utils";
-import { Loader2, MessageSquare, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import LucideIcon from "../Custom-UI/LucideIcon";
 
 interface Message {
   id: string;
@@ -104,7 +104,7 @@ export function ChatWindow({ fileName, onSendMessage }: ChatWindowProps) {
     <Card className="flex h-[600px] flex-col">
       <div className="flex items-center justify-between border-b p-4">
         <div className="flex items-center space-x-2">
-          <MessageSquare className="h-5 w-5" />
+          <LucideIcon name={"MessageSquare"} className="h-5 w-5" />
           <span className="font-medium">Chat Assistant</span>
         </div>
         {fileName && (
@@ -180,9 +180,9 @@ export function ChatWindow({ fileName, onSendMessage }: ChatWindowProps) {
           />
           <Button type="submit" disabled={loading}>
             {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <LucideIcon name={"Loader2"} className="h-4 w-4 animate-spin" />
             ) : (
-              <Send className="h-4 w-4" />
+              <LucideIcon name={"Send"} className="h-4 w-4" />
             )}
           </Button>
         </div>

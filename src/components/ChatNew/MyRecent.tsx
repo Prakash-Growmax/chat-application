@@ -7,12 +7,7 @@ import { useChatList } from "@/hooks/useChatList";
 import { chatService } from "@/services/ChatService";
 import { ListItemText } from "@/Theme/Typography";
 import { getAccessToken } from "@/utils/storage.utils";
-import {
-  ChevronDown,
-  ChevronRight,
-  EllipsisVertical,
-  MessageSquareMore,
-} from "lucide-react";
+import LucideIcon from "../Custom-UI/LucideIcon";
 import DeleteIcon from "../ui/delete-icon";
 
 export default function MyRecent({
@@ -97,7 +92,7 @@ export default function MyRecent({
         }}
       >
         <div className="flex items-center gap-3">
-          <MessageSquareMore size={12} color="#64748B" />
+        <LucideIcon name={"MessageSquareMore"} size={12}  color="#64748B" />
           <ListItemText
             onClick={(e) => {
               e.stopPropagation();
@@ -109,9 +104,9 @@ export default function MyRecent({
         </div>
         <div>
           {isDropdownOpen ? (
-            <ChevronDown size={12} />
+            <LucideIcon name={"ChevronDown"} size={12} />
           ) : (
-            <ChevronRight size={12} />
+            <LucideIcon name={"ChevronDown"} size={12} />
           )}
         </div>
       </div>
@@ -154,7 +149,11 @@ export default function MyRecent({
                     {(hoveredIndex === index ||
                       activeDropdownIndex === index) && (
                       <button onClick={(e) => toggleDropdown(index, e)}>
-                        <EllipsisVertical size={12} className="m-1" />
+                        <LucideIcon
+                          name={"EllipsisVertical"}
+                          size={12}
+                          className="m-1"
+                        />
                       </button>
                     )}
                   </div>

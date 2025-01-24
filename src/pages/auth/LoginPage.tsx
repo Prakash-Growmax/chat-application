@@ -1,11 +1,11 @@
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { EmailForm } from "@/components/auth/EmailForm";
 import { OTPForm } from "@/components/auth/OTPForm";
+import LucideIcon from "@/components/Custom-UI/LucideIcon";
 import { LoadingScreen } from "@/components/layout/LoadingScreen";
 import { useAuth } from "@/hooks/useAuth";
 import { useOTP } from "@/hooks/useOTP";
 import { useOTPPersistence } from "@/hooks/useOTPPersistence";
-import { Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -67,7 +67,7 @@ function LoginPage() {
   if (isVerifying) {
     return (
       <AuthLayout
-        icon={<Mail className="h-6 w-6" />}
+        icon={<LucideIcon name="Mail" className="h-6 w-6" />}
         title="Check your email"
         description="We sent you a login code. Enter it below to verify."
       >

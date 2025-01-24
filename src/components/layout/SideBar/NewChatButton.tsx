@@ -1,5 +1,5 @@
 import AppContext from "@/components/context/AppContext";
-import { MessageSquarePlus } from "lucide-react";
+import LucideIcon from "@/components/Custom-UI/LucideIcon";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -24,7 +24,7 @@ function NewChatButton({
         }}
       >
         <span className="flex items-center gap-2">
-          <MessageSquarePlus size={20} />
+          <LucideIcon name={"MessageSquarePlus"} size={20} />
           <span className="lg:text-xs md:text-base text-black text-base">
             New Thread
           </span>

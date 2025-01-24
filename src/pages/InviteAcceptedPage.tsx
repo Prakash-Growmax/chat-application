@@ -1,9 +1,9 @@
+import LucideIcon from "@/components/Custom-UI/LucideIcon";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/lib/supabase";
 import { acceptInvitation } from "@/lib/team/teams-service";
-import { ArrowRight, CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function InviteAcceptedPage() {
@@ -41,7 +41,10 @@ export function InviteAcceptedPage() {
           <>
             <CardHeader className="text-center pb-4">
               <div className="flex justify-center mb-6">
-                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                <LucideIcon
+                  name={"Loader2"}
+                  className="h-12 w-12 animate-spin text-primary"
+                />
               </div>
               <CardTitle className="text-2xl">Setting Up Your Access</CardTitle>
             </CardHeader>
@@ -60,7 +63,10 @@ export function InviteAcceptedPage() {
           <>
             <CardHeader className="text-center pb-4">
               <div className="flex justify-center mb-6">
-                <XCircle className="h-12 w-12 text-destructive" />
+                <LucideIcon
+                  name={"XCircle"}
+                  className="h-12 w-12 text-destructive"
+                />
               </div>
               <CardTitle className="text-2xl text-destructive">
                 Oops! Something Went Wrong
@@ -90,7 +96,10 @@ export function InviteAcceptedPage() {
               <div className="flex justify-center mb-6">
                 <div className="relative">
                   <div className="absolute -inset-1 rounded-full bg-green-100 animate-pulse" />
-                  <CheckCircle2 className="relative h-12 w-12 text-green-500" />
+                  <LucideIcon
+                    name={"CheckCircle2"}
+                    className="relative h-12 w-12 text-green-500"
+                  />
                 </div>
               </div>
               <CardTitle className="text-2xl bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
@@ -113,7 +122,7 @@ export function InviteAcceptedPage() {
                   className="mt-4 gap-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
                 >
                   Go to Chat
-                  <ArrowRight className="h-4 w-4" />
+                  <LucideIcon name={"ArrowRight"} className="h-4 w-4" />
                 </Button>
               </div>
             </CardContent>

@@ -27,7 +27,7 @@
     }
   },
   "include": [
-    "src",
+    "src", "public/sw.js",
   ],
   "references": [
     {

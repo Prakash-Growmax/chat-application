@@ -7,10 +7,10 @@ import { Message } from "@/types";
 import { formQueueMessage } from "@/utils/chat.utils";
 import { getAccessToken, tokenType } from "@/utils/storage.utils";
 import { Tooltip } from "@mui/material";
-import { ArrowUp } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { CSVPreview } from "../CSVPreview/CSVPreview";
+import LucideIcon from "../Custom-UI/LucideIcon";
 import ChatUploadBtn from "../layout/ChatSection/ChatUpload/ChatUploadBtn";
 
 interface ChatInputProps {
@@ -206,7 +206,7 @@ export function ChatInput({
                           : "bg-[#D7D7D7] text-[#f4f4f4]"
                       }`}
                     >
-                      <ArrowUp size={20} />
+                      <LucideIcon name={"ArrowUp"} size={20} />
                     </button>
                   </div>
                 </div>

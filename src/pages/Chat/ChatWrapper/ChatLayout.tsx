@@ -49,7 +49,6 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
       if (!chatId || !profile) return;
 
       try {
-        console.log("Adfas");
         setIsLoading(true);
         const response = await chatService.getChatHistory(chatId, {
           headers: {

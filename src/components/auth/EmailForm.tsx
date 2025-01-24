@@ -1,6 +1,6 @@
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Loader2, ArrowRight } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import LucideIcon from "../Custom-UI/LucideIcon";
 
 interface EmailFormProps {
   email: string;
@@ -9,7 +9,12 @@ interface EmailFormProps {
   onSubmit: (e: React.FormEvent) => Promise<void>;
 }
 
-export function EmailForm({ email, loading, onEmailChange, onSubmit }: EmailFormProps) {
+export function EmailForm({
+  email,
+  loading,
+  onEmailChange,
+  onSubmit,
+}: EmailFormProps) {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <Input
@@ -28,11 +33,11 @@ export function EmailForm({ email, loading, onEmailChange, onSubmit }: EmailForm
         disabled={loading}
       >
         {loading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <LucideIcon name={"Loader2"} />
         ) : (
           <>
             <span>Continue with Email</span>
-            <ArrowRight className="h-4 w-4" />
+            <LucideIcon name={"ArrowRight"} />
           </>
         )}
       </Button>

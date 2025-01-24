@@ -11,11 +11,11 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { createOrganization } from "@/lib/organizations/organization-service";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Building2, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
+import LucideIcon from "../Custom-UI/LucideIcon";
 
 const schema = z.object({
   name: z.string().min(3, "Organization name must be at least 3 characters"),
@@ -66,7 +66,7 @@ export function CreateOrganizationDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="gap-2">
-          <Building2 className="h-4 w-4" />
+          <LucideIcon name={"Building2"} className="h-4 w-4" />
           Create Organization
         </Button>
       </DialogTrigger>
@@ -88,7 +88,7 @@ export function CreateOrganizationDialog({
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <LucideIcon name={"Loader2"} className="h-4 w-4 animate-spin" />
             ) : (
               "Create Organization12"
             )}

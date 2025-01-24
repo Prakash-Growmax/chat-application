@@ -1,9 +1,9 @@
+import LucideIcon from "@/components/Custom-UI/LucideIcon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { useDebounce } from "@/hooks/useDebounce";
 import { cn } from "@/lib/utils";
-import { FileQuestion, Home, LogIn, MoveRight, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -47,7 +47,10 @@ function NotFoundPage() {
       <div className="relative mb-8 flex items-center justify-center">
         <div className="absolute animate-ping rounded-full bg-primary/10 p-16" />
         <div className="relative rounded-full bg-primary/10 p-8">
-          <FileQuestion className="h-12 w-12 animate-bounce text-primary" />
+          <LucideIcon
+            name="FileQuestion"
+            className="h-12 w-12 animate-bounce text-primary"
+          />
         </div>
       </div>
 
@@ -67,7 +70,7 @@ function NotFoundPage() {
           className="h-12"
         />
         <Button size="icon" className="h-12 w-12">
-          <Search className="h-5 w-5" />
+          <LucideIcon name="Search" className="h-5 w-5" />
         </Button>
       </div>
 
@@ -98,19 +101,19 @@ function NotFoundPage() {
           {user ? (
             <>
               Go to Chat
-              <Home className="h-4 w-4" />
+              <LucideIcon name="Home" className="h-4 w-4" />
             </>
           ) : (
             <>
               Go to Login
-              <LogIn className="h-4 w-4" />
+              <LucideIcon name="LogIn" className="h-4 w-4" />
             </>
           )}
         </Button>
 
         <p className="flex items-center gap-2 text-sm text-muted-foreground">
           Redirecting in {countdown} seconds
-          <MoveRight className="h-4 w-4 animate-pulse" />
+          <LucideIcon name="MoveRight" className="h-4 w-4 animate-pulse" />
         </p>
       </div>
     </div>

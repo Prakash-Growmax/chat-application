@@ -6,9 +6,9 @@ import {
   getUserOrganizations,
 } from "@/lib/organizations/organization-service";
 import { Organization } from "@/types";
-import { Building2, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import LucideIcon from "../Custom-UI/LucideIcon";
 import { CreateOrganizationDialog } from "./CreateOrganizationDialog";
 
 export function OrganizationList() {
@@ -60,7 +60,7 @@ export function OrganizationList() {
           <Card key={org.id}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Building2 className="h-5 w-5" />
+                <LucideIcon name={"Building2"} className="h-5 w-5" />
                 {org.name}
               </CardTitle>
             </CardHeader>
@@ -75,7 +75,7 @@ export function OrganizationList() {
                     size="icon"
                     onClick={() => handleDelete(org.id)}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <LucideIcon name={"Trash2"} className="h-4 w-4" />
                   </Button>
                 </div>
               </div>

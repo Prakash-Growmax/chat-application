@@ -1,4 +1,5 @@
 import AppContext from "@/components/context/AppContext";
+import LucideIcon from "@/components/Custom-UI/LucideIcon";
 import { EditOrgDialog } from "@/components/organizations/EditOrganizationDialog";
 import { CurrentPlan } from "@/components/subscription/CurrentPlan";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -9,7 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useOrganization } from "@/hooks/organization/useOrganization";
 import { useProfile } from "@/hooks/profile/useProfile";
 import Main from "@/Theme/MainAnimation";
-import { CreditCard, Loader2, Settings2, User } from "lucide-react";
 import { useContext, useState } from "react";
 
 export function SettingsPage() {
@@ -27,7 +27,10 @@ export function SettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <LucideIcon
+          name="Loader2"
+          className="h-8 w-8 animate-spin text-primary"
+        />
       </div>
     );
   }
@@ -68,14 +71,14 @@ export function SettingsPage() {
                 value="subscription"
                 className="inline-flex items-center gap-2"
               >
-                <CreditCard className="h-4 w-4" />
+                <LucideIcon name="CreditCard" className="h-4 w-4" />
                 Subscription
               </TabsTrigger>
               <TabsTrigger
                 value="profile"
                 className="inline-flex items-center gap-2"
               >
-                <User className="h-4 w-4" />
+                <LucideIcon name="User" className="h-4 w-4" />
                 Profile
               </TabsTrigger>
             </TabsList>
@@ -90,7 +93,10 @@ export function SettingsPage() {
               <Card>
                 <CardHeader>
                   <div className="flex items-center gap-2">
-                    <Settings2 className="h-5 w-5 text-primary" />
+                    <LucideIcon
+                      name="Settings2"
+                      className="h-5 w-5 text-primary"
+                    />
                     <CardTitle>Profile Settings</CardTitle>
                   </div>
                 </CardHeader>

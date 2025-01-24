@@ -11,10 +11,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { getAvailablePlans } from "@/lib/plans/plans-service";
 import { Plan } from "@/types/plans";
-import { Check, Loader2 } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
 import AppContext from "@/components/context/AppContext";
+import LucideIcon from "@/components/Custom-UI/LucideIcon";
 import { createSubscriptionCheckoutSession } from "@/lib/stripe/stripe-service";
 
 const classNames = (...classes: (string | boolean | undefined)[]) => {
@@ -134,7 +134,10 @@ export function PlansPage() {
                         className="flex items-start gap-3 group"
                       >
                         <div className="mt-1">
-                          <Check className="h-4 w-4 text-primary group-hover:scale-110 transition-transform" />
+                          <LucideIcon
+                            name="Check"
+                            className="h-4 w-4 text-primary group-hover:scale-110 transition-transform"
+                          />
                         </div>
                         <span className="text-sm text-muted-foreground leading-tight">
                           {feature}
@@ -159,10 +162,13 @@ export function PlansPage() {
                     onClick={() => handleSubscribe(plan)}
                   >
                     {loading === plan.name ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <LucideIcon
+                        name="Loader2"
+                        className="h-4 w-4 animate-spin"
+                      />
                     ) : planId === plan.id ? (
                       <span className="flex items-center gap-2">
-                        <Check className="h-4 w-4" />
+                        <LucideIcon name="Check" className="h-4 w-4" />
                         Current Plan
                       </span>
                     ) : (

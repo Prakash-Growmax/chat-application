@@ -1,3 +1,4 @@
+import LucideIcon from "@/components/Custom-UI/LucideIcon";
 import Spinner from "@/components/ui/Spinner";
 import { useChatContext } from "@/context/ChatContext";
 import { useProfile } from "@/hooks/profile/useProfile";
@@ -6,7 +7,6 @@ import { chatService } from "@/services/ChatService";
 import { formQueueMessage } from "@/utils/chat.utils";
 import { getAccessToken } from "@/utils/storage.utils";
 import { Tooltip } from "@mui/material";
-import { Paperclip } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -104,7 +104,7 @@ function ChatUploadBtn({
           className="flex items-center gap-2 text-black hover:bg-gray-100 rounded p-2 transition-colors"
           onClick={() => document.getElementById("csv-upload")?.click()}
         >
-          {isUploading ? <Spinner /> : <Paperclip />}
+          {isUploading ? <Spinner /> : <LucideIcon name={"Paperclip"} />}
         </button>
       </Tooltip>
     </div>

@@ -1,22 +1,34 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import { initSupabase } from "./lib/supabase";
 
+// if ("serviceWorker" in navigator) {
+//   navigator.serviceWorker
+//     .register("/sw.js")
+//     .then((registration) => {
+//       console.log("SW registered:", registration);
+//     })
+//     .catch((error) => {
+//       console.log("SW registration failed:", error);
+//     });
+// }
+
 async function initApp() {
   try {
-    await initSupabase();
-
     const root = document.getElementById("root");
     if (!root) {
       throw new Error("Root element not found");
     }
 
-    createRoot(root).render(
-      <StrictMode>
+    const DOM_Root = createRoot(root);
+
+    await initSupabase();
+
+    DOM_Root.render(
+      <>
         <App />
-      </StrictMode>
+      </>
     );
   } catch (error) {
     console.error("Failed to initialize application:", error);

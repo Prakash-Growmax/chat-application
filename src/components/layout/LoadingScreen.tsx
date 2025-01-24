@@ -1,6 +1,6 @@
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { Building2 } from "lucide-react";
+import LucideIcon from "../Custom-UI/LucideIcon";
 
 interface LoadingScreenProps {
   message?: string;
@@ -30,7 +30,10 @@ export function LoadingScreen({
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center">
             <div className="rounded-full bg-primary/10 p-3">
-              <Building2 className="h-6 w-6 animate-pulse" />
+              <LucideIcon
+                name={"Building2"}
+                className="h-6 w-6 animate-pulse"
+              />
             </div>
           </div>
           <Progress value={progress} className="h-2 w-[200px]" />

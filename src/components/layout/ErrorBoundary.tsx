@@ -1,6 +1,5 @@
-import React from 'react';
-import { AlertCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
+import React from "react";
 
 interface Props {
   children: React.ReactNode;
@@ -22,20 +21,18 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+    console.error("Error caught by boundary:", error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
       return (
         <div className="flex min-h-[400px] flex-col items-center justify-center space-y-4 text-center">
-          <div className="rounded-full bg-destructive/10 p-3">
-            <AlertCircle className="h-6 w-6 text-destructive" />
-          </div>
+          <div className="rounded-full bg-destructive/10 p-3"></div>
           <div className="space-y-2">
             <h3 className="text-lg font-semibold">Something went wrong</h3>
             <p className="text-sm text-muted-foreground">
-              {this.state.error?.message || 'An unexpected error occurred'}
+              {this.state.error?.message || "An unexpected error occurred"}
             </p>
           </div>
           <Button

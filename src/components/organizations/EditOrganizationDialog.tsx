@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, PencilLine } from "lucide-react";
 import { useState } from "react";
+import LucideIcon from "../Custom-UI/LucideIcon";
 
 interface EditOrgDialogProps {
   organizationId?: string;
@@ -56,7 +56,7 @@ export function EditOrgDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-          <PencilLine className="h-4 w-4" />
+          <LucideIcon name={"PencilLine"} className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -91,7 +91,10 @@ export function EditOrgDialog({
           >
             {isLoading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <LucideIcon
+                  name={"Loader2"}
+                  className="mr-2 h-4 w-4 animate-spin"
+                />
                 Updating...
               </>
             ) : (

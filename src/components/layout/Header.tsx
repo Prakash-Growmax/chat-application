@@ -2,11 +2,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { useContext } from "react";
 
 import DarkLogo from "@/assets/Logo/DarkLogo";
-import { PanelLeftOpen } from "lucide-react";
+import { DrawerOpen_LocalKey } from "@/constants/storage.constant";
 import AppContext from "../context/AppContext";
+import LucideIcon from "../Custom-UI/LucideIcon";
 import TooltipNew from "../ui/tooltipnew";
 import MyAccountDetails from "./MyAccountDetails";
-import { DrawerOpen_LocalKey } from "@/constants/storage.constant";
 
 export function Header() {
   const { user } = useAuth();
@@ -14,7 +14,7 @@ export function Header() {
 
   const handleDrawer = () => {
     setSideDrawerOpen(true);
-    localStorage.setItem(DrawerOpen_LocalKey,JSON.stringify(true))
+    localStorage.setItem(DrawerOpen_LocalKey, JSON.stringify(true));
   };
 
   return (
@@ -28,8 +28,7 @@ export function Header() {
                 className="p-2 hover:bg-gray-100 rounded-md"
                 onClick={handleDrawer}
               >
-                <PanelLeftOpen size={24} />
-                {/* <MenuNew /> */}
+                <LucideIcon name={"PanelLeftOpen"} size={24} />
               </button>
             </TooltipNew>
           )}
