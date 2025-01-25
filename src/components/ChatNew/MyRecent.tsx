@@ -23,6 +23,7 @@ export default function MyRecent({
   const [activeDropdownIndex, setActiveDropdownIndex] = useState(null);
   const [optionsPosition, setOptionsPosition] = useState({ top: 0, left: 0 });
   const [sessionList, setSessionList] = useState([]);
+  console.log("🚀 ~ sessionList:", sessionList);
   const { profile } = useProfile();
   const navigate = useNavigate();
   useChatList(setSessionList);
