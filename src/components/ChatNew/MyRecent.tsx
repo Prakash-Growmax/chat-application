@@ -1,5 +1,4 @@
 import { useProfile } from "@/hooks/profile/useProfile";
-import { useChatList } from "@/hooks/useChatList";
 import { chatService } from "@/services/ChatService";
 import { ListItemText } from "@/Theme/Typography";
 import { getAccessToken } from "@/utils/storage.utils";
@@ -18,15 +17,42 @@ export default function MyRecent({
   isTab,
   setRecentData,
 }) {
+  const { profile } = useProfile();
   const { setSideDrawerOpen } = useContext(AppContext);
   const [hoveredIndex, setHoveredIndex] = useState(null); // Tracks the currently hovered index
   const [activeDropdownIndex, setActiveDropdownIndex] = useState(null);
   const [optionsPosition, setOptionsPosition] = useState({ top: 0, left: 0 });
   const [sessionList, setSessionList] = useState([]);
   console.log("🚀 ~ sessionList:", sessionList);
-  const { profile } = useProfile();
   const navigate = useNavigate();
-  useChatList(setSessionList);
+
+  async function getSessionList() {
+    if (profile?.organization_id) {
+      try {
+        const token = getAccessToken();
+        const response = await chatService.getSession({
+          headers: {
+            "Content-Type": "application/json",
+            "x-organization-id": profile.organization_id,
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response?.status !== 200)
+          throw new Error("Error while creating session");
+
+        setSessionList(response);
+        return response;
+      } catch (error) {
+        if (error instanceof ApiError) {
+          console.error(`API Error: ${error.status} - ${error.statusText}`);
+        }
+      }
+    } else {
+      console.error("Organization ID is missing.");
+      throw new Error("Organization ID is required");
+    }
+  }
 
   async function sessionDelete(sessionId) {
     if (profile?.organization_id) {
@@ -97,6 +123,13 @@ export default function MyRecent({
     }),
     exit: { opacity: 0, x: -20 },
   };
+
+  useEffect(() => {
+    if (profile?.organization_id) {
+      getSessionList();
+    }
+  }, [profile]);
+
   useEffect(() => {
     if (sessionList?.data) {
       setRecentData(false);
