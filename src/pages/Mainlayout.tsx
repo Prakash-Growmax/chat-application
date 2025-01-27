@@ -23,7 +23,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       <div
         className={`flex-1 flex flex-col  transition-all duration-300 h-[90%] w-[80%]`}
         style={{
-          marginLeft: (sideDrawerOpen&&!(location.pathname == "/login")) ? MainLayout_MarginLeft : "130px",
+          marginLeft: sideDrawerOpen? MainLayout_MarginLeft : "",
         }}
       >
         {!hideHeader && (
