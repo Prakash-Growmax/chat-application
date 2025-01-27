@@ -10,7 +10,7 @@ const TextResponse = ({
   isAssistant: boolean;
 }) => {
   const [isTyping, setIsTyping] = useState(true);
-
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsTyping(false);

@@ -11,6 +11,7 @@ import ChatAssistantHeader from "./ChatMessage/ChatAssistantHeader";
 import ChatTimeStamp from "./ChatMessage/ChatTimeStamp";
 import ChatTypeInfo from "./ChatMessage/ChatTypeInfo";
 import { DataChart } from "./DataChat";
+import GreetingResponse from "../layout/ChatSection/ChatMessage/GreatingResponse";
 
 interface ChatMessageProps {
   message: Message;
@@ -25,7 +26,7 @@ export function ChatMessage({ message, onContentChange }: ChatMessageProps) {
   const timeStamp = message?.timestamp
     ? message?.timestamp
     : message?.messageObject?.timestamp || "";
-
+   
   return (
     <>
       <div className="mx-auto max-w-4xl h-full">
@@ -96,7 +97,12 @@ const RenderContent = ({
   if (message.type === "text") {
     return <TextResponse message={message} isAssistant={isAssistant} />;
   }
-  if (message?.messageObject?.content?.type === "text") {
+  if(message?.messageObject?.content?.type === "text"){
+    return(
+      <GreetingResponse message={message?.messageObject?.content?.data?.response}/>
+    )
+  }
+  if (message?.messageObject?.content?.type === "datasetres") {
     return (
       <DatasetUploadResponse
         message={message?.messageObject?.content?.data?.response}

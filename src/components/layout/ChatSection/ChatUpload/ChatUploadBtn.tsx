@@ -41,7 +41,6 @@ function ChatUploadBtn({
 
       try {
         if (!ID) {
-          console.log(ID)
           setIsUploading(true);
           setProcessing(true);
           ID = await createChatId(profile);
@@ -50,11 +49,12 @@ function ChatUploadBtn({
       } catch (error) {
         console.log("🚀 ~ error:", error);
       }
-
+      
      
 
       try {
         if (profile?.organization_id && ID) {
+          setIsUploading(true)
           const result = await chatService.uploadDataset(
             {
               s3_path: `s3://growmax-dev-app-assets/analytics/${file.name}`,
@@ -84,7 +84,7 @@ function ChatUploadBtn({
               }
              
             },
-            type: "text",
+            type: "datasetres",
           };
           let assistantMessage;
           assistantMessage = formQueueMessage(response || "", true);
