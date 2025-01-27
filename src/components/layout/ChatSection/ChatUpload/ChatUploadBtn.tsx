@@ -41,6 +41,7 @@ function ChatUploadBtn({
 
       try {
         if (!ID) {
+          console.log(ID)
           setIsUploading(true);
           setProcessing(true);
           ID = await createChatId(profile);
@@ -50,7 +51,7 @@ function ChatUploadBtn({
         console.log("🚀 ~ error:", error);
       }
 
-      console.log("🚀 ~ ID:", ID);
+     
 
       try {
         if (profile?.organization_id && ID) {
@@ -73,11 +74,15 @@ function ChatUploadBtn({
           if (result.status !== 200) {
             throw new Error("Failed to upload dataset info");
           }
+         
           setIsUploading(false);
           const response = {
             data: {
-              response:
-                "Success! Your file has been uploaded successfully. Ask questions regarding the uploaded file.",
+              response:{
+                text:"Success! Your file has been uploaded successfully. Ask questions regarding the uploaded file.",
+                suggested_questions:result?.data.suggested_questions
+              }
+             
             },
             type: "text",
           };
@@ -103,7 +108,6 @@ function ChatUploadBtn({
     },
     [onFileUploaded, setS3Key, profile, chatId, token, addToQueue]
   );
-
   return (
     <div className="flex">
       {/* Hidden input for file selection */}
