@@ -122,12 +122,17 @@ export const BodySmall = ({
 export const Caption = ({
   children,
   className = "",
+  ...props
 }: {
   children: ReactNode;
   className?: string;
+  props?: any;
 }) => (
   // 0.75rem = 12px, line-height: 1.4
-  <p className={`text-caption text-gray-600 dark:text-gray-400 ${className}`}>
+  <p
+    className={`text-caption text-gray-600 dark:text-gray-400 ${className}`}
+    {...props}
+  >
     {children}
   </p>
 );

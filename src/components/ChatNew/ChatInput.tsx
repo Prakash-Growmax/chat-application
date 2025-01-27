@@ -109,6 +109,7 @@ export function ChatInput({
             },
           }
         );
+        console.log("🚀 ~ processMessage ~ result:", result?.data);
 
         if (result?.data?.error) {
           throw new Error(result?.data?.error);
@@ -124,6 +125,7 @@ export function ChatInput({
         addToQueue(assistantMessage);
       }
     } catch (error) {
+      console.log("🚀 ~ processMessage ~ error:", error);
       const errorMessage: Message = {
         id: Date.now().toString(),
         content: error?.message || "Facing some issues",

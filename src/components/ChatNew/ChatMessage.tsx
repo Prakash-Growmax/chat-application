@@ -8,16 +8,23 @@ import InsighttResponse from "../layout/ChatSection/ChatMessage/InsightResponse"
 import TextResponse from "../layout/ChatSection/ChatMessage/TextResponse";
 import { Dialog, DialogContent } from "../ui/dialog";
 import ChatAssistantHeader from "./ChatMessage/ChatAssistantHeader";
+import ChatTimeStamp from "./ChatMessage/ChatTimeStamp";
 import ChatTypeInfo from "./ChatMessage/ChatTypeInfo";
 import { DataChart } from "./DataChat";
 
 interface ChatMessageProps {
   message: Message;
-  onContentChange: (content: any) => void
+  onContentChange: (content: any) => void;
 }
 export function ChatMessage({ message, onContentChange }: ChatMessageProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+
   const isUser = message.role === "user";
+
+  const timeStamp = message?.timestamp
+    ? message?.timestamp
+    : message?.messageObject?.timestamp || "";
 
   return (
     <>
@@ -25,14 +32,21 @@ export function ChatMessage({ message, onContentChange }: ChatMessageProps) {
         {isUser ? (
           <div className="flex w-full items-center justify-center py-2">
             <PaperCard className="w-full border-none rounded-3xl p-3">
-              <div className="w-full border-none">
+              <div
+                className="w-full border-none"
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+              >
                 <ChatTypeInfo isUser={isUser} />
                 <div className="ml-1">
-                  {/* Pass onContentChange here */}
                   <RenderContent
                     message={message}
                     isAssistant={!isUser}
                     onContentChange={onContentChange}
+                  />
+                  <ChatTimeStamp
+                    timeStamp={timeStamp || ""}
+                    isHovering={isHovering}
                   />
                 </div>
               </div>
@@ -42,9 +56,19 @@ export function ChatMessage({ message, onContentChange }: ChatMessageProps) {
           <div className="flex w-full items-center justify-center py-2">
             <PaperCard className="w-full border-none rounded-3xl p-3">
               <ChatAssistantHeader />
-              <div className="ml-1">
-                {/* Pass onContentChange here */}
-                <RenderContent message={message} onContentChange={onContentChange} />
+              <div
+                className="ml-1"
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+              >
+                <RenderContent
+                  message={message}
+                  onContentChange={onContentChange}
+                />
+                <ChatTimeStamp
+                  timeStamp={timeStamp || ""}
+                  isHovering={isHovering}
+                />
               </div>
             </PaperCard>
           </div>
