@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import Plot from "react-plotly.js";
 import Typewriter from "typewriter-effect";
 
-// Format the summary function
 const formatSummary = (text) => {
   // Remove all unnecessary asterisks
   let cleanText = text
@@ -17,29 +16,27 @@ const formatSummary = (text) => {
   // Split into lines for processing
   const lines = cleanText.split("\n");
 
-  // Process each line
   const formattedLines = lines
     .map((line) => {
-      // Remove any existing bullet points or dashes
       let cleanLine = line.replace(/^[-•*]\s*/, "").trim();
-
-      // Check if this is a main section header (numbered)
       if (/^\d+\./.test(line)) {
-        return line; // Keep headers as is, without extra spacing
+        return line;
       }
-
-      // Add bullet points to non-header lines that aren't empty
       if (cleanLine && !/^\d+\./.test(line)) {
         return `• ${cleanLine}`;
       }
-
       return line;
     })
-    .filter((line) => line.trim()); // Remove empty lines
+    .filter((line) => line.trim());
 
-  // Join with single newlines
-  return formattedLines.join("\n");
+  // Remove the '###' from the summary
+  const cleanedFormattedLines = formattedLines.map((line) =>
+    line.replace(/^###\s*/, "")
+  );
+
+  return cleanedFormattedLines.join("\n");
 };
+
 
 const ChartResponse = ({ data, layout, summary, onContentChange }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -88,7 +85,7 @@ const ChartResponse = ({ data, layout, summary, onContentChange }) => {
   const dynamicLayout = {
     ...layout,
     width: dimensions.width,
-    height: dimensions.height,
+    height:600,
   };
 
   useEffect(() => {
@@ -123,7 +120,7 @@ const ChartResponse = ({ data, layout, summary, onContentChange }) => {
     <div
       ref={chatBoxRef}
       className="chatBox overflow-auto max-h-screen"
-      style={{ maxHeight: "100vh", overflowY: "auto" }}
+      style={{ maxHeight: "150vh", overflowY: "auto" }}
     >
       <div className="chatMessage flex flex-col m-auto text-base py-2">
         {/* Plotly Component */}

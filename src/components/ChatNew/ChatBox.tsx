@@ -13,6 +13,7 @@ export default function ChatBox({
   const { queue, processing } = useChatContext();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
   const scrollToBottom = useCallback(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({
@@ -24,7 +25,13 @@ export default function ChatBox({
 
   useEffect(() => {
     scrollToBottom();
-  }, [queue, scrollToBottom]);
+  }, [queue, processing, scrollToBottom]);
+
+  useEffect(() => {
+    if (!isNewChat && !processing) {
+      scrollToBottom();
+    }
+  }, [processing, isNewChat, scrollToBottom]);
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -43,7 +50,7 @@ export default function ChatBox({
                         <ChatMessage
                           key={index}
                           message={message}
-                          onContentChange={scrollToBottom} // Trigger scroll on content change
+                          onContentChange={scrollToBottom}
                         />
                       ))}
                       {!isNewChat && <ChatLoader />}

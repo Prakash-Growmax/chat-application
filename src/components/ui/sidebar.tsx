@@ -99,11 +99,16 @@ export default function Sidebar() {
               <DarkLogo />
             </div>
             <div
-              className="flex-none cursor-pointer"
-              onClick={handleDrawerClose}
+              className="flex-none"
+             
             >
               <TooltipNew title="Close Menu" placement="top-start">
+              <button
+                className="p-2 hover:bg-gray-100 rounded-md cursor-pointer"
+                onClick={handleDrawerClose}
+              >
                 <LucideIcon name={"PanelRightOpen"} size={24} />
+                </button>
               </TooltipNew>
             </div>
           </div>

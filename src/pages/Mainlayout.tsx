@@ -2,6 +2,7 @@ import AppContext from "@/components/context/AppContext";
 import { Header } from "@/components/layout/Header";
 import Sidebar from "@/components/ui/sidebar";
 import { useContext } from "react";
+import { useLocation } from "react-router-dom";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -13,7 +14,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   hideHeader = false,
 }) => {
   const { sideDrawerOpen, MainLayout_MarginLeft } = useContext(AppContext);
-
+  const location = useLocation();
+  
   return (
     <div className="flex min-h-screen">
       {!hideHeader && <Sidebar />}
@@ -21,7 +23,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       <div
         className={`flex-1 flex flex-col  transition-all duration-300 h-[90%] w-[80%]`}
         style={{
-          marginLeft: sideDrawerOpen ? MainLayout_MarginLeft : 0,
+          marginLeft: sideDrawerOpen? MainLayout_MarginLeft : "",
         }}
       >
         {!hideHeader && (
