@@ -125,10 +125,21 @@ export function ChatInput({
         addToQueue(assistantMessage);
       }
     } catch (error) {
-      console.log("🚀 ~ processMessage ~ error:", error);
+      console.log(error instanceof Error, error?.message);
+
+      let ErrorMsg =
+        error instanceof Error
+          ? error?.message === "500: "
+            ? `I apologize, but I encountered an error while processing your request. You can:\n
+            • Try sending your message again\n
+            • Rephrase your question\n
+            • Start a new conversation`
+            : "An unexpected error occurred."
+          : "An unexpected error occurred.";
+
       const errorMessage: Message = {
         id: Date.now().toString(),
-        content: error?.message || "Facing some issues",
+        content: ErrorMsg,
         role: "assistant",
         timestamp: new Date(),
         type: "text",
