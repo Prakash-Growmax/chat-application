@@ -8,7 +8,6 @@ import { useParams } from "react-router-dom";
 
 function ChatLayout({ children }: { children: React.ReactNode }) {
   const { id: chatId } = useParams();
-  console.log("🚀 ~ ChatLayout ~ chatId:", chatId);
   const { profile } = useProfile();
 
   const [isUploading, setIsUploading] = useState(false);
@@ -43,7 +42,6 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
     [queue, processing]
   );
 
-  console.log(profile, "profile");
   useEffect(() => {
     const loadChatHistory = async () => {
       if (!chatId || !profile) return;
@@ -56,8 +54,6 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
             Authorization: `Bearer ${getAccessToken()}`,
           },
         });
-        console.log("🚀 ~ loadChatHistory ~ response:", response);
-
         // if (response?.data) {
         //   setQueue(response.data);
         // }

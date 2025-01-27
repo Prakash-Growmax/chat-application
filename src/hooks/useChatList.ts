@@ -6,7 +6,6 @@ import { useProfile } from "./profile/useProfile";
 
 export function useChatList(setSessionList) {
   const { profile } = useProfile();
-  console.log("🚀 ~ useChatList ~ profile:", profile);
   async function getSessionList() {
     if (profile?.organization_id) {
       try {

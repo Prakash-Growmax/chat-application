@@ -2,13 +2,14 @@ import LucideIcon from "@/components/Custom-UI/LucideIcon";
 import Spinner from "@/components/ui/Spinner";
 import { useChatContext } from "@/context/ChatContext";
 import { useProfile } from "@/hooks/profile/useProfile";
+import { createChatId } from "@/lib/chat/chat-service";
 import { S3UploadError, uploadToS3 } from "@/lib/s3-client";
 import { chatService } from "@/services/ChatService";
 import { formQueueMessage } from "@/utils/chat.utils";
 import { getAccessToken } from "@/utils/storage.utils";
 import { Tooltip } from "@mui/material";
 import { useCallback, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function ChatUploadBtn({
   onFileUploaded,
@@ -17,8 +18,9 @@ function ChatUploadBtn({
   onFileUploaded: (s3Key: string) => void;
   setS3Key: (fileName: string) => void;
 }) {
+  const navigate = useNavigate();
   const { profile } = useProfile();
-  const { addToQueue } = useChatContext();
+  const { addToQueue, setProcessing } = useChatContext();
 
   const [isUploading, setIsUploading] = useState(false);
   const { id: chatId } = useParams();
@@ -33,17 +35,32 @@ function ChatUploadBtn({
         return;
       }
 
-      setIsUploading(true);
+      if (!profile) return true;
+
+      let ID = chatId;
 
       try {
-        if (profile?.organization_id && chatId) {
+        if (!ID) {
+          setIsUploading(true);
+          setProcessing(true);
+          ID = await createChatId(profile);
+          setProcessing(false);
+        }
+      } catch (error) {
+        console.log("🚀 ~ error:", error);
+      }
+
+      console.log("🚀 ~ ID:", ID);
+
+      try {
+        if (profile?.organization_id && ID) {
           const result = await chatService.uploadDataset(
             {
               s3_path: `s3://growmax-dev-app-assets/analytics/${file.name}`,
               org_id: profile.organization_id,
               type: "sales",
             },
-            chatId,
+            ID,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -56,7 +73,7 @@ function ChatUploadBtn({
           if (result.status !== 200) {
             throw new Error("Failed to upload dataset info");
           }
-          setIsUploading(false)
+          setIsUploading(false);
           const response = {
             data: {
               response:
@@ -70,11 +87,10 @@ function ChatUploadBtn({
         } else {
           console.warn("Profile or organization ID is missing.");
         }
-        const s3Key = await uploadToS3(file, () => {});
-
+        await uploadToS3(file, () => {});
         setS3Key(file.name);
 
-        onFileUploaded(s3Key);
+        navigate(`/chat/${ID}`);
       } catch (error) {
         if (error instanceof S3UploadError) {
           console.error("S3 Upload Error:", error.message);
