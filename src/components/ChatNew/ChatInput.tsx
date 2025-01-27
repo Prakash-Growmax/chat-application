@@ -27,13 +27,13 @@ export function ChatInput({
   const { user } = useAuth();
   const navigate = useNavigate();
   const { profile } = useProfile();
-  const { addToQueue, processing, setProcessing, queue, processQueue } =
+  const { addToQueue, processing, setProcessing, queue, processQueue,s3Key,setS3Key } =
     useChatContext();
 
   //state...
-  const [s3Key, setS3Key] = useState("");
+  // const [s3Key, setS3Key] = useState("");
   const [input, setInput] = useState("");
-
+  
   //ref...
   const containerRef = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -199,7 +199,7 @@ export function ChatInput({
                     <div className="flex gap-x-1">
                       <ChatUploadBtn
                         onFileUploaded={onFileUploaded}
-                        setS3Key={setS3Key}
+                        // setS3Key={setS3Key}
                       />
 
                       {s3Key && (

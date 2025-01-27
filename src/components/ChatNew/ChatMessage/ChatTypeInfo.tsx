@@ -3,6 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { BodyText } from "@/Theme/Typography";
 import { Avatar } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
+import { name } from "plotly.js/lib/scatter";
 
 function ChatTypeInfo({ isUser }: { isUser: boolean }) {
   const { user } = useAuth();
@@ -13,11 +14,10 @@ function ChatTypeInfo({ isUser }: { isUser: boolean }) {
       ? nameParts[0][0].toUpperCase() + nameParts[1][0].toUpperCase()
       : nameParts[0][0].toUpperCase();
   };
-
   const initials = getInitials(user?.name);
   return (
     <div className="flex flex-row mb-1 items-center justify-start">
-      {isUser ? (
+     
         <div className="flex gap-1 pt-2">
           <Avatar
             sx={{
@@ -34,9 +34,7 @@ function ChatTypeInfo({ isUser }: { isUser: boolean }) {
           </Avatar>
           <BodyText className="ml-1">You</BodyText>
         </div>
-      ) : (
-        <DarkLogo />
-      )}
+     
     </div>
   );
 }

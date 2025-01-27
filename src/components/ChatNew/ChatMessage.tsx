@@ -106,6 +106,7 @@ const RenderContent = ({
     return (
       <DatasetUploadResponse
         message={message?.messageObject?.content?.data?.response}
+        onContentChange={onContentChange}
       />
     );
   }

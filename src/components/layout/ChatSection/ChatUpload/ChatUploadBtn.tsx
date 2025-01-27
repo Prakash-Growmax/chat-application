@@ -13,14 +13,14 @@ import { useNavigate, useParams } from "react-router-dom";
 
 function ChatUploadBtn({
   onFileUploaded,
-  setS3Key,
+  // setS3Key,
 }: {
   onFileUploaded: (s3Key: string) => void;
-  setS3Key: (fileName: string) => void;
+  // setS3Key: (fileName: string) => void;
 }) {
   const navigate = useNavigate();
   const { profile } = useProfile();
-  const { addToQueue, setProcessing } = useChatContext();
+  const { addToQueue, setProcessing,setS3Key} = useChatContext();
 
   const [isUploading, setIsUploading] = useState(false);
   const { id: chatId } = useParams();
@@ -29,7 +29,7 @@ function ChatUploadBtn({
   const handleFileUpload = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
-
+      setS3Key(file.name);
       if (!file) {
         console.error("No file selected");
         return;
@@ -75,7 +75,9 @@ function ChatUploadBtn({
             throw new Error("Failed to upload dataset info");
           }
          
-          setIsUploading(false);
+         
+  
+          navigate(`/chat/${ID}`);
           const response = {
             data: {
               response:{
@@ -89,13 +91,13 @@ function ChatUploadBtn({
           let assistantMessage;
           assistantMessage = formQueueMessage(response || "", true);
           addToQueue(assistantMessage);
+          setIsUploading(false);
+          await uploadToS3(file, () => {});
+          
         } else {
           console.warn("Profile or organization ID is missing.");
         }
-        await uploadToS3(file, () => {});
-        setS3Key(file.name);
-
-        navigate(`/chat/${ID}`);
+       
       } catch (error) {
         if (error instanceof S3UploadError) {
           console.error("S3 Upload Error:", error.message);
