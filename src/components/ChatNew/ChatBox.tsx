@@ -13,6 +13,8 @@ export default function ChatBox({
   const { queue, processing } = useChatContext();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Function to scroll to the bottom of the chat
   const scrollToBottom = useCallback(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({
@@ -22,9 +24,17 @@ export default function ChatBox({
     }
   }, []);
 
+  // Scroll to bottom when new message or loader appears
   useEffect(() => {
     scrollToBottom();
-  }, [queue, scrollToBottom]);
+  }, [queue, processing, scrollToBottom]); // triggers scroll when queue or processing changes
+
+  // Scroll to bottom when `processing` state changes (ChatLoader visibility)
+  useEffect(() => {
+    if (!isNewChat && !processing) {
+      scrollToBottom();  // Scroll to bottom when loader is shown or when processing ends
+    }
+  }, [processing, isNewChat, scrollToBottom]);
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -40,14 +50,14 @@ export default function ChatBox({
                       className="flex-1 px-1 overflow-auto my-4 items-center scroll-container"
                     >
                       {queue?.map((message, index) => (
-    <ChatMessage
-      key={index}
-      message={message}
-      onContentChange={scrollToBottom} // Trigger scroll on content change
-    />
-  ))}
-                      {!isNewChat && <ChatLoader />}
-                      <div ref={messagesEndRef} />
+                        <ChatMessage
+                          key={index}
+                          message={message}
+                          onContentChange={scrollToBottom} // Trigger scroll on content change
+                        />
+                      ))}
+                      {!isNewChat && <ChatLoader />}  {/* Show loader when not a new chat */}
+                      <div ref={messagesEndRef} />  {/* Ensure scroll to bottom when content ends */}
                     </ScrollArea>
                   </div>
                 </div>

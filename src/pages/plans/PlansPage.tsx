@@ -63,15 +63,18 @@ export function PlansPage() {
   };
 
   useEffect(() => {
-    loadOrganizations();
-    // Disable scrolling
-    document.body.style.overflow = "hidden";
-    return () => {
-      // Re-enable scrolling on cleanup
-      document.body.style.overflow = "";
-    };
+    if(user){
+      loadOrganizations();
+      // Disable scrolling
+      document.body.style.overflow = "hidden";
+      return () => {
+        // Re-enable scrolling on cleanup
+        document.body.style.overflow = "";
+      };
+    }
+  
   }, [user]);
-
+  console.log(user)
   return (
     <div className="fixed inset-0 overflow-y-auto bg-white from-slate-50 to-white pl-24">
       <div className="container py-16 h-full flex flex-col justify-center">
