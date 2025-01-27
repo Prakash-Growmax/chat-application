@@ -1,4 +1,5 @@
 import { useProfile } from "@/hooks/profile/useProfile";
+import { ApiError } from "@/services/apiConfig";
 import { chatService } from "@/services/ChatService";
 import { ListItemText } from "@/Theme/Typography";
 import { getAccessToken } from "@/utils/storage.utils";
