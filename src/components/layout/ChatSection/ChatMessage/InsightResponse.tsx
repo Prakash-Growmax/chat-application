@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Typewriter from "typewriter-effect";
 
-const InsightResponse = ({ data, onContentChange }) => {
+const InsightResponse = ({ data, isTyping, isAssistant, onContentChange }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completedEntries, setCompletedEntries] = useState([]);
 
@@ -11,15 +11,16 @@ const InsightResponse = ({ data, onContentChange }) => {
     if (Array.isArray(value)) {
       return [`${formattedKey}:`, ...value.map((item) => `• ${item}`)];
     } else if (typeof value === "string") {
-      // Split paragraphs into individual lines for typing
       return [`${formattedKey}:`, ...value.split("\n")];
     } else {
       return [`${formattedKey}:`, `${value}`];
     }
   });
 
+  const showTyping = isTyping && isAssistant;
+
   useEffect(() => {
-    if (currentIndex < entries.length) {
+    if (currentIndex < entries.length && showTyping) {
       const timer = setTimeout(() => {
         setCompletedEntries((prev) => [...prev, entries[currentIndex]]);
         setCurrentIndex((prevIndex) => prevIndex + 1);
@@ -27,25 +28,33 @@ const InsightResponse = ({ data, onContentChange }) => {
       }, entries[currentIndex].length * 10 + 200); // Faster timing
       return () => clearTimeout(timer);
     }
-  }, [currentIndex, entries, onContentChange]);
+  }, [currentIndex, entries, onContentChange, showTyping]);
 
   return (
     <div className="flex flex-col m-auto text-base py-2">
-      {completedEntries.map((entry, index) => (
-        <div key={`completed-${index}`}>{entry}</div>
-      ))}
-      {currentIndex < entries.length && (
-        <div>
-          <Typewriter
-            options={{
-              strings: [entries[currentIndex]],
-              autoStart: true,
-              loop: false,
-              delay: 15, // Faster typing speed
-              cursor: "",
-            }}
-          />
-        </div>
+      {showTyping ? (
+        <>
+          {completedEntries.map((entry, index) => (
+            <div key={`completed-${index}`}>{entry}</div>
+          ))}
+          {currentIndex < entries.length && (
+            <div>
+              <Typewriter
+                options={{
+                  strings: [entries[currentIndex]],
+                  autoStart: true,
+                  loop: false,
+                  delay: 15, // Faster typing speed
+                  cursor: "",
+                }}
+              />
+            </div>
+          )}
+        </>
+      ) : (
+        entries.map((entry, index) => (
+          <div key={`entry-${index}`}>{entry}</div>
+        ))
       )}
     </div>
   );

@@ -38,42 +38,40 @@ const formatSummary = (text) => {
 };
 
 
-const ChartResponse = ({ data, layout, summary, onContentChange }) => {
+const ChartResponse = ({ data, layout, summary, onContentChange, isTyping, isAssistant }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completedEntries, setCompletedEntries] = useState([]);
   const chatBoxRef = useRef(null);
-  const [isPlotRendered, setIsPlotRendered] = useState(false); // Track Plotly rendering
+  const [isPlotRendered, setIsPlotRendered] = useState(false);
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   // Preprocess the summary with the formatting function
   const formattedSummary = formatSummary(summary);
-  const entries = formattedSummary.split("\n"); // Split formatted summary into lines
+  const entries = formattedSummary.split("\n");
+  const showTyping = isTyping && isAssistant;
 
   useEffect(() => {
     const updateDimensions = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.offsetWidth;
-        const aspectRatio = 0.6; // Maintain aspect ratio
+        const aspectRatio = 0.6;
         const calculatedHeight = containerWidth * aspectRatio;
 
         setDimensions({
           width: containerWidth,
-          height: Math.min(calculatedHeight, 400), // Cap maximum height
+          height: Math.min(calculatedHeight, 400),
         });
       }
     };
 
-    // Initial measurement
     updateDimensions();
 
-    // Add resize listener
     const resizeObserver = new ResizeObserver(updateDimensions);
     if (containerRef.current) {
       resizeObserver.observe(containerRef.current);
     }
 
-    // Cleanup
     return () => {
       if (containerRef.current) {
         resizeObserver.unobserve(containerRef.current);
@@ -81,39 +79,35 @@ const ChartResponse = ({ data, layout, summary, onContentChange }) => {
     };
   }, []);
 
-  // Merge layoutDimensions into the layout object
   const dynamicLayout = {
     ...layout,
     width: dimensions.width,
-    height:600,
+    height:dimensions.height,
   };
 
   useEffect(() => {
-    // After Plotly chart has rendered, start the typing effect
-    if (isPlotRendered && currentIndex < entries.length) {
+    if (showTyping && isPlotRendered && currentIndex < entries.length) {
       const timer = setTimeout(() => {
         setCompletedEntries((prev) => [...prev, entries[currentIndex]]);
         setCurrentIndex((prevIndex) => prevIndex + 1);
-        onContentChange?.(); // Notify parent of content change
-      }, entries[currentIndex].length * 20 + 500); // Adjust typing speed
-      return () => clearTimeout(timer);
-    }
-  }, [currentIndex, entries, isPlotRendered, onContentChange]);
+        onContentChange?.();
+      }, entries[currentIndex].length * 20 + 500);
 
-  // Scroll to bottom function
-  const scrollToBottom = () => {
+      return () => clearTimeout(timer);
+    } else if (!showTyping && completedEntries.length === 0) {
+      // When showTyping is false, immediately add all entries
+      setCompletedEntries(entries);
+    }
+  }, [currentIndex, entries, isPlotRendered, onContentChange, showTyping]);
+
+  useEffect(() => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
-  };
-
-  // Automatically scroll to bottom on content change
-  useEffect(() => {
-    scrollToBottom();
   }, [completedEntries]);
 
   const handlePlotRender = () => {
-    setIsPlotRendered(true); // Mark Plotly render as complete
+    setIsPlotRendered(true);
   };
 
   return (
@@ -127,8 +121,8 @@ const ChartResponse = ({ data, layout, summary, onContentChange }) => {
         <Plot
           data={data}
           layout={dynamicLayout}
-          onInitialized={handlePlotRender} // Handle when Plotly is initialized
-          onUpdate={handlePlotRender} // Handle when Plotly updates
+          onInitialized={handlePlotRender}
+          onUpdate={handlePlotRender}
           config={{
             responsive: true,
             displaylogo: false,
@@ -147,21 +141,25 @@ const ChartResponse = ({ data, layout, summary, onContentChange }) => {
           }}
         />
 
-        {/* Typewriter Effect */}
+        {/* Summary Display */}
         <div className="prose">
           {completedEntries.map((entry, index) => (
             <div key={`completed-${index}`}>{entry}</div>
           ))}
-          {currentIndex < entries.length && (
+          {showTyping && currentIndex < entries.length && (
             <div>
               <Typewriter
                 options={{
                   strings: [entries[currentIndex]],
                   autoStart: true,
                   loop: false,
-                  delay: 20, // Adjust delay for typing speed
+                  delay: 20,
                   cursor: "",
-                  onStringTyped: scrollToBottom, // Scroll to bottom after each string is typed
+                  onStringTyped: () => {
+                    if (chatBoxRef.current) {
+                      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+                    }
+                  },
                 }}
               />
             </div>
@@ -173,3 +171,4 @@ const ChartResponse = ({ data, layout, summary, onContentChange }) => {
 };
 
 export default ChartResponse;
+

@@ -2,6 +2,7 @@ import { ChatContext } from "@/context/ChatContext";
 import { useProfile } from "@/hooks/profile/useProfile";
 import { chatService } from "@/services/ChatService";
 import { Message } from "@/types";
+import { formQueueMessage } from "@/utils/chat.utils";
 import { getAccessToken } from "@/utils/storage.utils";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -54,9 +55,32 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
             Authorization: `Bearer ${getAccessToken()}`,
           },
         });
-        // if (response?.data) {
-        //   setQueue(response.data);
-        // }
+       if(response.status === 200){
+        setQueue([])
+       }
+      
+        response?.data?.items?.forEach((item) => {
+          if (item.query_text) {
+            const userMessage: Message = {
+              id: Date.now().toString(),
+              content: item.query_text,
+              role: "user",
+              timestamp: new Date(),
+              type: "text",
+              isTyping: false,
+            };
+            addToQueue(userMessage);
+          }
+  
+          if (item?.results?.results?.response) {
+            const assistantMessage = formQueueMessage(
+              item.results.results.response.charts ? item.results.results.response.charts : item.results.results.response || "",
+              true,
+              false
+            );
+            addToQueue(assistantMessage);
+          }
+        });
       } catch (error) {
         console.error("Error loading chat history:", error);
       } finally {

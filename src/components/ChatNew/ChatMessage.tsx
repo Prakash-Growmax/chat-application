@@ -20,7 +20,6 @@ interface ChatMessageProps {
 export function ChatMessage({ message, onContentChange }: ChatMessageProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
-
   const isUser = message.role === "user";
 
   const timeStamp = message?.timestamp
@@ -99,7 +98,7 @@ const RenderContent = ({
   }
   if(message?.messageObject?.content?.type === "text"){
     return(
-      <GreetingResponse message={message?.messageObject?.content?.data?.response}/>
+      <GreetingResponse message={message?.messageObject?.content?.data?.response} isTyping={message?.messageObject?.isTyping} isAssistant={message?.messageObject?.role}/>
     )
   }
   if (message?.messageObject?.content?.type === "datasetres") {
@@ -114,16 +113,20 @@ const RenderContent = ({
     return (
       <InsighttResponse
         data={message.messageObject.content.data}
+        isTyping={message?.messageObject?.isTyping} 
+        isAssistant={message?.messageObject?.role}
         onContentChange={onContentChange}
       />
     );
   }
-  if (message?.messageObject?.content?.type === "bar") {
+  if (message?.messageObject?.content?.type === "chart") {
     return (
       <ChartResponse
         data={message.messageObject.content.data}
         layout={message.messageObject.content.layout}
         summary={message.messageObject.content.summary}
+        isTyping={message?.messageObject?.isTyping} 
+        isAssistant={message?.messageObject?.role}
         onContentChange={onContentChange}
       />
     );

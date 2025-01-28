@@ -3,6 +3,7 @@ import { Header } from "@/components/layout/Header";
 import Sidebar from "@/components/ui/sidebar";
 import { useContext } from "react";
 import { useLocation } from "react-router-dom";
+import ChatLayout from "./Chat/ChatWrapper/ChatLayout";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -18,7 +19,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   
   return (
     <div className="flex min-h-screen">
-      {!hideHeader && <Sidebar />}
+      {!hideHeader &&<ChatLayout> <Sidebar /></ChatLayout>}
 
       <div
         className={`flex-1 flex flex-col  transition-all duration-300 h-[90%] w-[80%]`}
