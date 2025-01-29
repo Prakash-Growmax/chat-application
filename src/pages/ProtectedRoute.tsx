@@ -1,6 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { Navigate } from "react-router-dom";
 import MainLayout from "./Mainlayout";
+import ChatLayout from "./Chat/ChatWrapper/ChatLayout";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -13,5 +14,5 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     return <Navigate to="/login" replace />;
   }
 
-  return <MainLayout>{children}</MainLayout>;
+  return <ChatLayout><MainLayout>{children}</MainLayout></ChatLayout> ;
 }

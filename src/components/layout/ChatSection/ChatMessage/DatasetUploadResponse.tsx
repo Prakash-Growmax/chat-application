@@ -3,6 +3,7 @@ import { MessageCircle } from 'lucide-react';
 import { useRef, useState } from "react";
 import { Message } from "@/types";
 import { useChatContext } from "@/context/ChatContext";
+import { BodySmall } from "@/Theme/Typography";
 const DatasetUploadResponse = ({ message, onContentChange }) => {
   const { addToQueue, queue } = useChatContext();
   const [showHeading, setShowHeading] = useState(false);
@@ -31,7 +32,7 @@ const DatasetUploadResponse = ({ message, onContentChange }) => {
 
   return (
     <div className="flex flex-col m-auto text-base py-2" ref={containerRef}>
-      <div className="mb-1">
+      <div className="mb-3">
         <Typewriter
           onInit={(typewriter) => {
             typewriter
@@ -50,13 +51,13 @@ const DatasetUploadResponse = ({ message, onContentChange }) => {
           }}
         />
       </div>
-      <div className="mb-1">
+      <div className="mb-3">
         {showHeading && (
           <div className="text-base font-bold">
             <Typewriter
               onInit={(typewriter) => {
                 typewriter
-                  .typeString('Frequently Asked Questions')
+                  .typeString('Suggested Questions')
                   .callFunction(() => {
                     setCurrentQuestionIndex(0);
                     scrollToBottom();
@@ -73,7 +74,7 @@ const DatasetUploadResponse = ({ message, onContentChange }) => {
           </div>
         )}
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         {message?.suggested_questions?.map((question, index) => (
           <>
             {index <= currentQuestionIndex && (
@@ -83,8 +84,9 @@ const DatasetUploadResponse = ({ message, onContentChange }) => {
                 onClick={() => { addUserQueue(question) }}
               >
                 <MessageCircle className="w-5 h-5 mt-1 flex-shrink-0" />
-                <div className="flex-1">
-                  <Typewriter
+                {/* <div className="flex-1"> */}
+                <BodySmall>
+                <Typewriter
                     onInit={(typewriter) => {
                       typewriter
                         .typeString(question)
@@ -103,7 +105,9 @@ const DatasetUploadResponse = ({ message, onContentChange }) => {
                       loop: false
                     }}
                   />
-                </div>
+                </BodySmall>
+               
+                {/* </div> */}
               </div>
             )}
           </>

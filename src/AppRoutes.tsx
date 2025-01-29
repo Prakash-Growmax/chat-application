@@ -22,9 +22,9 @@ const AppRoutes = () => {
         path="/chat/new"
         element={
           <ProtectedRoute>
-            <ChatLayout>
+          
               <NewChat />
-            </ChatLayout>
+          
           </ProtectedRoute>
         }
       />
@@ -32,11 +32,13 @@ const AppRoutes = () => {
       <Route
         path="/chat/:id"
         element={
+     
           <ProtectedRoute>
-            <ChatLayout>
-              <Chat />
-            </ChatLayout>
+       
+       <Chat />
+       
           </ProtectedRoute>
+       
         }
       />
 

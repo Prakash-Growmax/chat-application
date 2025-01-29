@@ -10,6 +10,7 @@ import AppContext from "../context/AppContext";
 import LucideIcon from "../Custom-UI/LucideIcon";
 import DeleteIcon from "../ui/delete-icon";
 import Spinner from "../ui/Spinner";
+import { useChatContext } from "@/context/ChatContext";
 
 export default function MyRecent({
   isDropdownOpen,
@@ -25,7 +26,7 @@ export default function MyRecent({
   const [optionsPosition, setOptionsPosition] = useState({ top: 0, left: 0 });
   const [sessionList, setSessionList] = useState([]);
   const navigate = useNavigate();
-
+  const {emptyQueue} = useChatContext();
   async function getSessionList() {
     if (profile?.organization_id) {
       try {
@@ -195,6 +196,7 @@ export default function MyRecent({
                       <ListItemText
                         className="leading-4 truncate"
                         onClick={() => {
+                          emptyQueue();
                           navigate(`/chat/${chat.id}`);
                           if (isMobile || isTab) {
                             setSideDrawerOpen(false);

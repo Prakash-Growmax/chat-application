@@ -29,7 +29,7 @@ function ChatUploadBtn({
   const handleFileUpload = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
-      setS3Key(file.name);
+     
       if (!file) {
         console.error("No file selected");
         return;
@@ -93,6 +93,7 @@ function ChatUploadBtn({
           addToQueue(assistantMessage);
           setIsUploading(false);
           await uploadToS3(file, () => {});
+          setS3Key(file.name);
           
         } else {
           console.warn("Profile or organization ID is missing.");

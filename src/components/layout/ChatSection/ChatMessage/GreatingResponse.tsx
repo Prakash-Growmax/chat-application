@@ -1,7 +1,13 @@
+import React, { useEffect } from "react";
 import Typewriter from "typewriter-effect";
 
-const GreetingResponse = ({ message, isTyping, isAssistant }) => {
+const GreetingResponse = ({ message, isTyping, isAssistant, onContentType }) => {
   const showTyping = isAssistant && isTyping;
+
+  useEffect(() => {
+    // Notify parent whenever `showTyping` changes
+    onContentType?.(showTyping);
+  }, [showTyping, onContentType]);
 
   return (
     <>
@@ -23,3 +29,4 @@ const GreetingResponse = ({ message, isTyping, isAssistant }) => {
 };
 
 export default GreetingResponse;
+

@@ -19,7 +19,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   
   return (
     <div className="flex min-h-screen">
-      {!hideHeader &&<ChatLayout> <Sidebar /></ChatLayout>}
+      {!hideHeader && <Sidebar />}
 
       <div
         className={`flex-1 flex flex-col  transition-all duration-300 h-[90%] w-[80%]`}

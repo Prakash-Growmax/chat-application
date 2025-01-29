@@ -33,11 +33,11 @@ export function ChatInput({
   //state...
   // const [s3Key, setS3Key] = useState("");
   const [input, setInput] = useState("");
-  console.log(queue);
+
   //ref...
   const containerRef = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  console.log(queue);
+
   const adjustTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;

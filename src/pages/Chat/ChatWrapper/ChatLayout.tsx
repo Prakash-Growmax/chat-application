@@ -20,9 +20,10 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
     setQueue((prev: Message[]) => [...prev, message]);
   }, []);
 
-  const emptyQueue = useCallback(() => {
+  const emptyQueue = () => {
     setQueue([]);
-  }, []);
+    setS3Key("")
+  }
 
   const processQueue = useCallback(
     async (handler: (message: Message) => Promise<void>) => {
@@ -55,9 +56,7 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
             Authorization: `Bearer ${getAccessToken()}`,
           },
         });
-       if(response.status === 200){
-        setQueue([])
-       }
+      
       
         response?.data?.items?.forEach((item) => {
           if (item.query_text) {

@@ -98,7 +98,7 @@ const RenderContent = ({
   }
   if(message?.messageObject?.content?.type === "text"){
     return(
-      <GreetingResponse message={message?.messageObject?.content?.data?.response} isTyping={message?.messageObject?.isTyping} isAssistant={message?.messageObject?.role}/>
+      <GreetingResponse message={message?.messageObject?.content?.data?.response} isTyping={message?.messageObject?.isTyping} isAssistant={message?.messageObject?.role} onContentChange={onContentChange}/>
     )
   }
   if (message?.messageObject?.content?.type === "datasetres") {
