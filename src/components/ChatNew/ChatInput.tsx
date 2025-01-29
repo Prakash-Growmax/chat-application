@@ -29,7 +29,6 @@ export function ChatInput({
   const { profile } = useProfile();
   const { addToQueue, processing, setProcessing, queue, processQueue, s3Key } =
     useChatContext();
-
   const [input, setInput] = useState("");
 
   //ref...
@@ -107,7 +106,7 @@ export function ChatInput({
             },
           }
         );
-        console.log("🚀 ~ processMessage ~ result:", result?.data);
+      
 
         if (result?.data?.error) {
           throw new Error(result?.data?.error);

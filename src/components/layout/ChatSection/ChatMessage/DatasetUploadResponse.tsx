@@ -1,5 +1,5 @@
 import Typewriter from "typewriter-effect";
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, Sheet } from 'lucide-react';
 import { useRef, useState } from "react";
 import { Message } from "@/types";
 import { useChatContext } from "@/context/ChatContext";
@@ -29,9 +29,17 @@ const DatasetUploadResponse = ({ message, onContentChange }) => {
     };
     addToQueue(userMessage);
   }
-
+  
   return (
     <div className="flex flex-col m-auto text-base py-2" ref={containerRef}>
+        <div className="relative flex items-center justify-between bg-gray-100 rounded-lg p-2 mb-2 w-80">
+     <div className="flex items-center gap-x-2">
+      <button className="w-[40px] h-[40px] bg-[#10A37F] rounded-lg flex justify-center items-center p-2">
+        <Sheet size={30} color="white" />
+      </button>
+      <span className="text-base font-semibold">{`${message?.name}.csv`}</span>
+    </div>
+  </div>
       <div className="mb-3">
         <Typewriter
           onInit={(typewriter) => {

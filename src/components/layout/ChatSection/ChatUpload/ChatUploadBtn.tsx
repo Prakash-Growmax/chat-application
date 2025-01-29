@@ -52,6 +52,66 @@ function ChatUploadBtn({
       } catch (error) {
         console.log("🚀 ~ error:", error);
       }
+      
+     
+
+      try {
+        if (profile?.organization_id && ID) {
+          setIsUploading(true)
+          const result = await chatService.uploadDataset(
+            {
+              s3_path: `s3://growmax-dev-app-assets/analytics/${file.name}`,
+              org_id: profile.organization_id,
+              type: "sales",
+            },
+            ID,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "x-organization-id": profile.organization_id,
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (result.status !== 200) {
+            throw new Error("Failed to upload dataset info");
+          }
+         
+         
+  
+          navigate(`/chat/${ID}`);
+          const response = {
+            data: {
+              response:{
+                text:"Success! Your file has been uploaded successfully. Ask questions regarding the uploaded file.",
+                name:result?.data?.name,
+                suggested_questions:result?.data?.suggested_questions
+              }
+             
+            },
+            type: "datasetres",
+          };
+          let assistantMessage;
+          assistantMessage = formQueueMessage(response || "", true);
+          addToQueue(assistantMessage);
+          setIsUploading(false);
+          await uploadToS3(file, () => {});
+          setS3Key(file.name);
+          
+        } else {
+          console.warn("Profile or organization ID is missing.");
+        }
+       
+      } catch (error) {
+        if (error instanceof S3UploadError) {
+          console.error("S3 Upload Error:", error.message);
+        } else {
+          console.error("Error uploading file:", error);
+        }
+      } finally {
+        // setIsUploading(false);
+      }
     },
     [onFileUploaded, setS3Key, profile, chatId, token, addToQueue]
   );
