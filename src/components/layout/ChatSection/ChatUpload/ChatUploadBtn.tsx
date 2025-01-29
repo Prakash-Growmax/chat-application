@@ -4,6 +4,7 @@ import { useChatContext } from "@/context/ChatContext";
 import { useProfile } from "@/hooks/profile/useProfile";
 import { createChatId } from "@/lib/chat/chat-service";
 import { uploadToS3 } from "@/lib/s3-client";
+import { chatService } from "@/services/ChatService";
 import { getAccessToken } from "@/utils/storage.utils";
 import { Tooltip } from "@mui/material";
 import { useCallback } from "react";
@@ -73,13 +74,13 @@ function ChatUploadBtn({
               },
             }
           );
-
+        
           if (result.status !== 200) {
             throw new Error("Failed to upload dataset info");
           }
          
-         
-  
+           
+       
           navigate(`/chat/${ID}`);
           const response = {
             data: {
