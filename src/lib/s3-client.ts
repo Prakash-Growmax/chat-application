@@ -103,7 +103,10 @@ const getFileMetadata = async (
   bucket: string,
   key: string
 ): Promise<FileMetadata> => {
-  const command = new HeadObjectCommand({ Bucket: bucket, Key:`analytics/${key}` });
+  const command = new HeadObjectCommand({
+    Bucket: bucket,
+    Key: `analytics/${key}`,
+  });
   const response = await s3Client.send(command);
 
   return {
@@ -113,13 +116,33 @@ const getFileMetadata = async (
   };
 };
 
+const cleanKey = (inputKey: string): string => {
+  // Remove s3:// prefix and bucket name if present
+  let cleaned = inputKey.replace(/^s3:\/\/[^/]+\//, "");
+
+  // Remove any leading/trailing slashes
+  cleaned = cleaned.replace(/^\/+|\/+$/g, "");
+
+  cleaned = cleaned.replace(/^analytics\/analytics\//, "analytics/");
+
+  if (!cleaned.startsWith("analytics/")) {
+    cleaned = `analytics/${cleaned}`;
+  }
+
+  return cleaned;
+};
+
 export const fetchCSVPreview = async (
   bucket: string,
   key: string,
   rowLimit?: number
 ): Promise<{ data: CSVPreviewData; metadata: FileMetadata }> => {
+  const cleanedKey = cleanKey(key);
+
+  const Keys = `analytics/${cleanedKey}`;
+
   const cacheKey = `${bucket}:${key}:${rowLimit || "all"}`;
-  const Keys = `analytics/${key}`;
+
   // Clear existing cache to ensure fresh data
   previewCache.delete(cacheKey);
 
@@ -131,56 +154,77 @@ export const fetchCSVPreview = async (
       throw new Error("No data received from S3");
     }
 
-    const csvString = await response.Body.transformToString();
+    const fileSize = response.ContentLength || 0;
 
+    const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+    if (fileSize > MAX_FILE_SIZE) {
+      throw new Error("File too large for preview");
+    }
+
+    const csvString = await response.Body.transformToString();
     // Use worker: false to prevent web worker usage which might limit rows
     const parseResult = await new Promise<Papa.ParseResult<string[]>>(
       (resolve, reject) => {
         Papa.parse(csvString, {
-          complete: (results) => {
+          complete: (results: any) => {
             resolve(results);
           },
-          error: (error) => {
-            reject(error);
+          error: (error: any) => {
+            reject(new Error(`CSV parsing failed: ${error.message}`));
           },
-          delimiter: ",",
-          skipEmptyLines: "greedy", // More aggressive empty line skipping
-          worker: false, // Disable worker to prevent row limitations
-          header: false, // Ensure we get raw rows
-          dynamicTyping: false, // Keep everything as strings
+          delimiter: ",", // Auto-detect delimiter
+          skipEmptyLines: "greedy",
+          worker: false,
+          header: false,
+          dynamicTyping: false,
+          // Add error handling for malformed rows
+          transform: (value: string) => {
+            return value.trim();
+          },
+          transformHeader: (header: string) => {
+            return header.trim();
+          },
         });
       }
     );
 
-    // Filter out any empty rows
-    const filteredData = parseResult.data.filter(
-      (row) => row.length > 0 && row.some((cell) => cell !== "")
-    );
+    if (!parseResult.data || parseResult.data.length === 0) {
+      throw new Error("CSV file is empty or contains no valid data");
+    }
+
+    const filteredData = parseResult.data.filter((row) => {
+      return row.length > 0 && row.some((cell) => cell.trim() !== "");
+    });
+
+    if (filteredData.length < 2) {
+      // At least headers and one data row
+      throw new Error("CSV file contains no valid data rows");
+    }
 
     const headers = filteredData[0];
     const allRows = filteredData.slice(1);
 
-    // If rowLimit is specified and less than available rows, slice the array
-    const rows =
-      rowLimit && rowLimit < allRows.length
-        ? allRows.slice(0, rowLimit)
-        : allRows;
-
+    // Apply row limit if specified
+    const rows = rowLimit ? allRows.slice(0, rowLimit) : allRows;
     const previewData: CSVPreviewData = {
       headers,
       rows,
       totalRows: allRows.length,
     };
 
+    // Cache the preview data
     previewCache.set(cacheKey, {
       data: previewData,
       timestamp: Date.now(),
     });
 
     const metadata: FileMetadata = {
-      filename: key.split("/").pop() || key,
-      size: response.ContentLength || 0,
+      filename: cleanedKey.split("/").pop() || cleanedKey,
+      size: fileSize,
       lastModified: response.LastModified || new Date(),
+      contentType: response.ContentType || "text/csv",
+      rowCount: allRows.length,
+      columnCount: headers.length,
     };
 
     return { data: previewData, metadata };
