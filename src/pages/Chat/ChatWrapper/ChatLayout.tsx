@@ -15,15 +15,15 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
   const [queue, setQueue] = useState<Message[]>([]);
   const [processing, setProcessing] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [s3Key,setS3Key]=useState("");
+  const [s3Key, setS3Key] = useState("");
   const addToQueue = useCallback((message: Message) => {
     setQueue((prev: Message[]) => [...prev, message]);
   }, []);
 
   const emptyQueue = () => {
     setQueue([]);
-    setS3Key("")
-  }
+    setS3Key("");
+  };
 
   const processQueue = useCallback(
     async (handler: (message: Message) => Promise<void>) => {
@@ -56,8 +56,7 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
             Authorization: `Bearer ${getAccessToken()}`,
           },
         });
-      
-      
+
         response?.data?.items?.forEach((item) => {
           if (item.query_text) {
             const userMessage: Message = {
@@ -70,10 +69,12 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
             };
             addToQueue(userMessage);
           }
-  
+
           if (item?.results?.results?.response) {
             const assistantMessage = formQueueMessage(
-              item.results.results.response.charts ? item.results.results.response.charts : item.results.results.response || "",
+              item.results.results.response.charts
+                ? item.results.results.response.charts
+                : item.results.results.response || "",
               true,
               false
             );
@@ -103,7 +104,7 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
         processQueue,
         emptyQueue,
         s3Key,
-        setS3Key
+        setS3Key,
       }}
     >
       {children}

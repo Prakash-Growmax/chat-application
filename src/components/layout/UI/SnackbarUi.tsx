@@ -1,19 +1,18 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
+import * as React from "react";
 
-export default function SnackbarUi({open,setOpen}) {
-//   const [open, setOpen] = React.useState(false);
+export default function SnackbarUi({ open, setOpen }) {
+  //   const [open, setOpen] = React.useState(false);
 
-//   const handleClick = () => {
-//     setOpen(true);
-//   };
+  //   const handleClick = () => {
+  //     setOpen(true);
+  //   };
 
   const handleClose = (
     event: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason,
+    reason?: SnackbarCloseReason
   ) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -22,7 +21,6 @@ export default function SnackbarUi({open,setOpen}) {
 
   return (
     <div>
-     
       <Snackbar
         open={open}
         autoHideDuration={5000}

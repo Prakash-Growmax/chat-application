@@ -1,11 +1,23 @@
 import { useChatContext } from "@/context/ChatContext";
+import { useProfile } from "@/hooks/profile/useProfile";
+import { uploadDocumentToChat } from "@/lib/chat/chat-service";
 import { ChatState } from "@/types";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import ChatBox from "./ChatBox";
 import { ChatInput } from "./ChatInput";
 
 function Chat() {
-  const { messages: message } = useChatContext();
+  const { profile } = useProfile();
+  const { id: chatId } = useParams();
+  const {
+    messages: message,
+    s3Key,
+    addToQueue,
+    isUploading,
+    setIsUploading,
+  } = useChatContext();
+
   const [state, setState] = useState<ChatState>({
     messages: [],
     isLoading: false,
@@ -13,8 +25,6 @@ function Chat() {
     error: null,
     s3Key: null,
   });
-  const [isUploading, setIsUploading] = useState(false);
-
   useEffect(() => {
     if (message?.length) {
       const mappedMessages = message?.map((msg) => ({
@@ -35,9 +45,23 @@ function Chat() {
     }
   }, [message]);
 
-  const handleError = (error: string) => {
-    setState((prev) => ({ ...prev, error, csvData: null }));
-  };
+  async function uploadDatasetAgainstChat() {
+    try {
+      if (!chatId || !profile) return null;
+      setIsUploading(true);
+      const message_res = await uploadDocumentToChat(chatId, s3Key, profile);
+      addToQueue(message_res);
+      setIsUploading(false);
+    } catch (error) {
+      setIsUploading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (s3Key && isUploading) {
+      uploadDatasetAgainstChat();
+    }
+  }, [s3Key, isUploading]);
 
   return (
     <div className="h-[calc(100vh-64px)] flex flex-col w-full">

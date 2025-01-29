@@ -27,11 +27,9 @@ export function ChatInput({
   const { user } = useAuth();
   const navigate = useNavigate();
   const { profile } = useProfile();
-  const { addToQueue, processing, setProcessing, queue, processQueue,s3Key,setS3Key } =
+  const { addToQueue, processing, setProcessing, queue, processQueue, s3Key } =
     useChatContext();
 
-  //state...
-  // const [s3Key, setS3Key] = useState("");
   const [input, setInput] = useState("");
 
   //ref...
@@ -125,8 +123,6 @@ export function ChatInput({
         addToQueue(assistantMessage);
       }
     } catch (error) {
-      console.log(error instanceof Error, error?.message);
-
       let ErrorMsg =
         error instanceof Error
           ? error?.message === "500: "

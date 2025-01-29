@@ -3,110 +3,54 @@ import Spinner from "@/components/ui/Spinner";
 import { useChatContext } from "@/context/ChatContext";
 import { useProfile } from "@/hooks/profile/useProfile";
 import { createChatId } from "@/lib/chat/chat-service";
-import { S3UploadError, uploadToS3 } from "@/lib/s3-client";
-import { chatService } from "@/services/ChatService";
-import { formQueueMessage } from "@/utils/chat.utils";
+import { uploadToS3 } from "@/lib/s3-client";
 import { getAccessToken } from "@/utils/storage.utils";
 import { Tooltip } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function ChatUploadBtn({
   onFileUploaded,
-  // setS3Key,
 }: {
   onFileUploaded: (s3Key: string) => void;
-  // setS3Key: (fileName: string) => void;
 }) {
   const navigate = useNavigate();
   const { profile } = useProfile();
-  const { addToQueue, setProcessing,setS3Key} = useChatContext();
+  const { addToQueue, setProcessing, setS3Key, isUploading, setIsUploading } =
+    useChatContext();
 
-  const [isUploading, setIsUploading] = useState(false);
   const { id: chatId } = useParams();
   const token = getAccessToken();
 
   const handleFileUpload = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
-     
       if (!file) {
         console.error("No file selected");
         return;
       }
+      uploadToS3(file, () => {});
 
       if (!profile) return true;
 
       let ID = chatId;
+      const s3_key = `s3://growmax-dev-app-assets/analytics/${file.name}`;
 
       try {
         if (!ID) {
-          setIsUploading(true);
           setProcessing(true);
+          setIsUploading(true); // so that in chat page the upload will get called....(false)
           ID = await createChatId(profile);
+          setS3Key(s3_key);
           setProcessing(false);
+          navigate(`/chat/${ID}`);
+          return;
+        } else {
+          setIsUploading(true); // so that in chat page the upload will get called....(false)
+          setS3Key(s3_key);
         }
       } catch (error) {
         console.log("🚀 ~ error:", error);
-      }
-      
-     
-
-      try {
-        if (profile?.organization_id && ID) {
-          setIsUploading(true)
-          const result = await chatService.uploadDataset(
-            {
-              s3_path: `s3://growmax-dev-app-assets/analytics/${file.name}`,
-              org_id: profile.organization_id,
-              type: "sales",
-            },
-            ID,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                "x-organization-id": profile.organization_id,
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          if (result.status !== 200) {
-            throw new Error("Failed to upload dataset info");
-          }
-         
-         
-  
-          navigate(`/chat/${ID}`);
-          const response = {
-            data: {
-              response:{
-                text:"Success! Your file has been uploaded successfully. Ask questions regarding the uploaded file.",
-                suggested_questions:result?.data.suggested_questions
-              }
-             
-            },
-            type: "datasetres",
-          };
-          let assistantMessage;
-          assistantMessage = formQueueMessage(response || "", true);
-          addToQueue(assistantMessage);
-          setIsUploading(false);
-          await uploadToS3(file, () => {});
-          setS3Key(file.name);
-          
-        } else {
-          console.warn("Profile or organization ID is missing.");
-        }
-       
-      } catch (error) {
-        if (error instanceof S3UploadError) {
-          console.error("S3 Upload Error:", error.message);
-        } else {
-          console.error("Error uploading file:", error);
-        }
-      } finally {
-        // setIsUploading(false);
       }
     },
     [onFileUploaded, setS3Key, profile, chatId, token, addToQueue]

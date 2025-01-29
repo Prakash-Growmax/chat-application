@@ -2,6 +2,7 @@ import { chatService } from "@/services/ChatService";
 import { ApiError } from "@/services/apiConfig";
 import { ChatMessage } from "@/types";
 import { Profile } from "@/types/profile";
+import { formQueueMessage } from "@/utils/chat.utils";
 import { getAccessToken } from "@/utils/storage.utils";
 import { v4 as uuidv4 } from "uuid";
 import { supabase } from "../supabase";
@@ -93,5 +94,49 @@ export async function createChatId(profile: Profile) {
       console.error("Organization ID is missing.");
       throw new Error("Organization ID is required");
     }
+  } catch (error) {}
+}
+
+export async function uploadDocumentToChat(
+  chatId: string,
+  s3Key: string,
+  profile: Profile
+) {
+  try {
+    const token = getAccessToken();
+
+    const result = await chatService.uploadDataset(
+      {
+        s3_path: s3Key,
+        org_id: profile.organization_id,
+        type: "sales",
+      },
+      chatId,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "x-organization-id": profile.organization_id,
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (result.status !== 200) {
+      throw new Error("Failed to upload dataset info");
+    }
+
+    const response = {
+      data: {
+        response: {
+          text: "Success! Your file has been uploaded successfully. Ask questions regarding the uploaded file.",
+          suggested_questions: result?.data.suggested_questions,
+        },
+      },
+      type: "datasetres",
+    };
+
+    let assistantMessage;
+    assistantMessage = formQueueMessage(response || "", true);
+
+    return assistantMessage;
   } catch (error) {}
 }
