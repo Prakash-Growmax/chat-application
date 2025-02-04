@@ -3,15 +3,15 @@ import { Message } from "@/types";
 export const formQueueMessage = (
   content: object,
   isAssistant: boolean,
-
   isTyping: boolean = true,
+  timestamp: Date = new Date(),
   additionalParams?: object, 
 ): { messageObject: Message; messageStringOrObject: string | object } => {
   const message: Message = {
     id: Date.now().toString(),
     content: content,
     role: isAssistant ? "assistant" : "user",
-    timestamp: new Date(),
+    timestamp:timestamp,
     isTyping:isTyping,
     type: "text",
     ...additionalParams,

@@ -4,7 +4,7 @@ import { chatService } from "@/services/ChatService";
 import { ListItemText } from "@/Theme/Typography";
 import { getAccessToken } from "@/utils/storage.utils";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppContext from "../context/AppContext";
 import LucideIcon from "../Custom-UI/LucideIcon";
@@ -26,7 +26,16 @@ export default function MyRecent({
   const [optionsPosition, setOptionsPosition] = useState({ top: 0, left: 0 });
   const [sessionList, setSessionList] = useState([]);
   const navigate = useNavigate();
-  const {emptyQueue} = useChatContext();
+  const {queue,emptyQueue,setPrevMessage} = useChatContext();
+  const handleClickRoute = useCallback((id)=>{
+     if(queue.length === 0){
+
+      navigate(`/chat/${id}`);
+      if (isMobile || isTab) {
+        setSideDrawerOpen(false);
+      }
+     }
+  },[queue])
   async function getSessionList() {
     if (profile?.organization_id) {
       try {
@@ -193,18 +202,20 @@ export default function MyRecent({
                     }`}
                   >
                     <div className="flex justify-between w-full items-center">
+                      <div  onClick={() => {
+                          setPrevMessage([])
+                          emptyQueue();
+                        
+                          handleClickRoute(chat.id)
+                        }}>
                       <ListItemText
                         className="leading-4 truncate"
-                        onClick={() => {
-                          emptyQueue();
-                          navigate(`/chat/${chat.id}`);
-                          if (isMobile || isTab) {
-                            setSideDrawerOpen(false);
-                          }
-                        }}
+                       
                       >
                         {chat.name}
                       </ListItemText>
+                      </div>
+                   
 
                       {(hoveredIndex === index ||
                         activeDropdownIndex === index) && (

@@ -8,7 +8,7 @@ import { formQueueMessage } from "@/utils/chat.utils";
 import { getAccessToken, tokenType } from "@/utils/storage.utils";
 import { Tooltip } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CSVPreview } from "../CSVPreview/CSVPreview";
 import LucideIcon from "../Custom-UI/LucideIcon";
 import ChatUploadBtn from "../layout/ChatSection/ChatUpload/ChatUploadBtn";
@@ -27,11 +27,11 @@ export function ChatInput({
   const { user } = useAuth();
   const navigate = useNavigate();
   const { profile } = useProfile();
-  const { addToQueue, processing, setProcessing, queue, processQueue, s3Key } =
+  const { addToQueue, processing, setProcessing, queue, processQueue, s3Key,setPrevMessage } =
     useChatContext();
   const [input, setInput] = useState("");
+  const location =useLocation();
 
-  //ref...
   const containerRef = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -55,6 +55,10 @@ export function ChatInput({
       isTyping: false,
     };
     addToQueue(userMessage);
+    if(location.pathname == "/chat/new"){
+      setPrevMessage((prev: Message[]) => [...prev,userMessage]);
+    }
+   
   }
 
   const handleSubmit = async (e: any) => {

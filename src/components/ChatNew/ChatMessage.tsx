@@ -25,7 +25,7 @@ export function ChatMessage({ message, onContentChange }: ChatMessageProps) {
   const timeStamp = message?.timestamp
     ? message?.timestamp
     : message?.messageObject?.timestamp || "";
-   console.log(message)
+
   return (
     <>
       <div className="mx-auto max-w-4xl h-full">

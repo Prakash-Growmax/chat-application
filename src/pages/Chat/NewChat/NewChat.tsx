@@ -5,10 +5,13 @@ import { useChatContext } from "@/context/ChatContext";
 import { useEffect } from "react";
 
 function NewChat() {
-  const { queue, emptyQueue } = useChatContext();
+  const { queue, emptyQueue,setPrevMessage,setS3Key } = useChatContext();
 
   useEffect(() => {
     emptyQueue();
+    setS3Key("")
+    setPrevMessage([]);
+
   }, []);
   return (
     <div className="h-[calc(100vh-64px)] flex flex-col w-full">

@@ -19,12 +19,13 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
   const addToQueue = useCallback((message: Message) => {
     setQueue((prev: Message[]) => [...prev, message]);
   }, []);
-
+  const [prevMessage,setPrevMessage]=useState<Message[]>([])
   const emptyQueue = () => {
     setQueue([]);
-    setS3Key("");
+    // setS3Key("");
   };
-
+ console.log(prevMessage.length)
+ 
   const processQueue = useCallback(
     async (handler: (message: Message) => Promise<void>) => {
       if (processing || queue.length === 0) return;
@@ -43,11 +44,13 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
     },
     [queue, processing]
   );
-
+  
   useEffect(() => {
     const loadChatHistory = async () => {
       if (!chatId || !profile) return;
-
+      if(prevMessage.length == 0){
+        emptyQueue();
+      }
       try {
         setIsLoading(true);
         const response = await chatService.getChatHistory(chatId, {
@@ -56,14 +59,15 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
             Authorization: `Bearer ${getAccessToken()}`,
           },
         });
-
+      
         response?.data?.items?.forEach((item) => {
+         
           if (item.query_text) {
             const userMessage: Message = {
               id: Date.now().toString(),
               content: item.query_text,
               role: "user",
-              timestamp: new Date(),
+              timestamp:item.processed_query.created_at,
               type: "text",
               isTyping: false,
             };
@@ -76,7 +80,8 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
                 ? item.results.results.response.charts
                 : item.results.results.response || "",
               true,
-              false
+              false,
+              item?.results?.timestamp
             );
             addToQueue(assistantMessage);
           }
@@ -104,6 +109,8 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
         processQueue,
         emptyQueue,
         s3Key,
+        prevMessage,
+        setPrevMessage,
         setS3Key,
       }}
     >

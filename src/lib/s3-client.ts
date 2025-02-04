@@ -139,7 +139,7 @@ export const fetchCSVPreview = async (
 ): Promise<{ data: CSVPreviewData; metadata: FileMetadata }> => {
   const cleanedKey = cleanKey(key);
 
-  const Keys = `analytics/${cleanedKey}`;
+  const Keys = `${cleanedKey}`;
 
   const cacheKey = `${bucket}:${key}:${rowLimit || "all"}`;
 
