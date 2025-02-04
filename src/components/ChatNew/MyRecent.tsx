@@ -29,7 +29,7 @@ export default function MyRecent({
   const {queue,emptyQueue,setPrevMessage} = useChatContext();
   const handleClickRoute = useCallback((id)=>{
      if(queue.length === 0){
-
+    
       navigate(`/chat/${id}`);
       if (isMobile || isTab) {
         setSideDrawerOpen(false);

@@ -24,7 +24,7 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
     setQueue([]);
     // setS3Key("");
   };
- console.log(prevMessage.length)
+ 
  
   const processQueue = useCallback(
     async (handler: (message: Message) => Promise<void>) => {
@@ -44,11 +44,11 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
     },
     [queue, processing]
   );
-  
+
   useEffect(() => {
     const loadChatHistory = async () => {
       if (!chatId || !profile) return;
-      if(prevMessage.length == 0){
+      if (prevMessage.length === 0) {
         emptyQueue();
       }
       try {
@@ -60,20 +60,38 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
           },
         });
       
-        response?.data?.items?.forEach((item) => {
+        if (prevMessage.length === 0 && !s3Key && response?.data?.items.length === 0) {
          
+          const emptyChatResponse = {
+            data: {
+              response: {
+                text: "It looks like there’s no history yet. Let’s spark up a new conversation and make something great!",
+              },
+            },
+            type: "datasetres",
+          };
+  
+          // Formulate the assistant message and add it to the queue
+          const assistantMessage = formQueueMessage(emptyChatResponse, true);
+          addToQueue(assistantMessage);
+          return; // Early return to stop further processing
+        }
+  
+        // Process existing chat history
+        response?.data?.items.forEach((item) => {
+           
           if (item.query_text) {
             const userMessage: Message = {
               id: Date.now().toString(),
               content: item.query_text,
               role: "user",
-              timestamp:item.processed_query.created_at,
+              timestamp: item.processed_query.created_at,
               type: "text",
               isTyping: false,
             };
             addToQueue(userMessage);
           }
-
+  
           if (item?.results?.results?.response) {
             const assistantMessage = formQueueMessage(
               item.results.results.response.charts
@@ -85,16 +103,19 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
             );
             addToQueue(assistantMessage);
           }
+         
         });
+      
       } catch (error) {
         console.error("Error loading chat history:", error);
       } finally {
         setIsLoading(false);
       }
     };
-
+  
     loadChatHistory();
   }, [chatId, profile]);
+  
 
   return (
     <ChatContext.Provider

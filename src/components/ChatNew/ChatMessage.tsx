@@ -12,6 +12,7 @@ import ChatTimeStamp from "./ChatMessage/ChatTimeStamp";
 import ChatTypeInfo from "./ChatMessage/ChatTypeInfo";
 import { DataChart } from "./DataChat";
 import GreetingResponse from "../layout/ChatSection/ChatMessage/GreatingResponse";
+import { useChatContext } from "@/context/ChatContext";
 
 interface ChatMessageProps {
   message: Message;
@@ -21,11 +22,11 @@ export function ChatMessage({ message, onContentChange }: ChatMessageProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const isUser = message.role === "user";
-
+   const { queue} = useChatContext();
   const timeStamp = message?.timestamp
     ? message?.timestamp
     : message?.messageObject?.timestamp || "";
-
+  
   return (
     <>
       <div className="mx-auto max-w-4xl h-full">

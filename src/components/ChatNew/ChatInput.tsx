@@ -200,14 +200,14 @@ export function ChatInput({
                         onFileUploaded={onFileUploaded}
                         // setS3Key={setS3Key}
                       />
-
+{/* 
                       {s3Key && (
                         <div>
                           <Tooltip title="Preview CSV">
                             <CSVPreview s3Key={s3Key} />
                           </Tooltip>
                         </div>
-                      )}
+                      )} */}
                     </div>
 
                     <button
