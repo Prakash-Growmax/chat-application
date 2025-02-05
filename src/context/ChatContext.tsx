@@ -7,6 +7,8 @@ interface ChatContextType {
   queue: Message[];
   setQueue: (value: (prev: Message[]) => Message[]) => void;
   processing: boolean;
+  prevMessage:Message[];
+  setPrevMessage: (value: (prev: Message[]) => Message[]) => void;
   setProcessing: (value: boolean) => void;
   addToQueue: (message: Message) => void;
   emptyQueue: () => void;

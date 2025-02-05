@@ -2,8 +2,8 @@ import AppContext from "@/components/context/AppContext";
 import { Header } from "@/components/layout/Header";
 import Sidebar from "@/components/ui/sidebar";
 import { useContext } from "react";
-import { useLocation } from "react-router-dom";
-import ChatLayout from "./Chat/ChatWrapper/ChatLayout";
+import { useMediaQuery } from "@mui/system";
+import { useTheme } from "@mui/material";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -15,7 +15,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   hideHeader = false,
 }) => {
   const { sideDrawerOpen, MainLayout_MarginLeft } = useContext(AppContext);
-  const location = useLocation();
+   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
   
   return (
     <div className="flex min-h-screen">
@@ -24,7 +26,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       <div
         className={`flex-1 flex flex-col  transition-all duration-300 h-[90%] w-[80%]`}
         style={{
-          marginLeft: sideDrawerOpen? MainLayout_MarginLeft : "",
+          marginLeft: !isMobile && !isTab && sideDrawerOpen? MainLayout_MarginLeft : "",
         }}
       >
         {!hideHeader && (
@@ -36,7 +38,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           className={`flex-1 pt-16 justify-center items-center  
             duration-200 ease-in-out`}
           style={{
-            width: sideDrawerOpen
+            width: !isMobile && !isTab && sideDrawerOpen
               ? `calc(100vw - ${MainLayout_MarginLeft}px)`
               : `100%`,
           }}

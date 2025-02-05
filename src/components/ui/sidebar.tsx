@@ -46,7 +46,7 @@ export default function Sidebar() {
     setSideDrawerOpen(false);
     localStorage.setItem(DrawerOpen_LocalKey, JSON.stringify(false));
   };
-
+  
   const [isDropdownOpen, setDropdownOpen] = React.useState(true);
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState(null);
   const [recentData,setRecentData] = React.useState(true);
@@ -147,7 +147,7 @@ export default function Sidebar() {
               </div>
               <Divider />
               <div className="flex">
-                <Resources />
+                <Resources isMobile={isMobile} isTab={isTab}/>
               </div>
             </div>
           </div>

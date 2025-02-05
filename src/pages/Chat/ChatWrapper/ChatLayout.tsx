@@ -19,12 +19,13 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
   const addToQueue = useCallback((message: Message) => {
     setQueue((prev: Message[]) => [...prev, message]);
   }, []);
-
+  const [prevMessage,setPrevMessage]=useState<Message[]>([])
   const emptyQueue = () => {
     setQueue([]);
-    setS3Key("");
+    // setS3Key("");
   };
-
+ 
+ 
   const processQueue = useCallback(
     async (handler: (message: Message) => Promise<void>) => {
       if (processing || queue.length === 0) return;
@@ -47,7 +48,9 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const loadChatHistory = async () => {
       if (!chatId || !profile) return;
-
+      if (prevMessage.length === 0) {
+        emptyQueue();
+      }
       try {
         setIsLoading(true);
         const response = await chatService.getChatHistory(chatId, {
@@ -56,40 +59,63 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
             Authorization: `Bearer ${getAccessToken()}`,
           },
         });
-
-        response?.data?.items?.forEach((item) => {
+      
+        if (prevMessage.length === 0 && !s3Key && response?.data?.items.length === 0) {
+         
+          const emptyChatResponse = {
+            data: {
+              response: {
+                text: "It looks like there’s no history yet. Let’s spark up a new conversation and make something great!",
+              },
+            },
+            type: "datasetres",
+          };
+  
+          // Formulate the assistant message and add it to the queue
+          const assistantMessage = formQueueMessage(emptyChatResponse, true);
+          addToQueue(assistantMessage);
+          return; // Early return to stop further processing
+        }
+  
+        // Process existing chat history
+        response?.data?.items.forEach((item) => {
+           
           if (item.query_text) {
             const userMessage: Message = {
               id: Date.now().toString(),
               content: item.query_text,
               role: "user",
-              timestamp: new Date(),
+              timestamp: item.processed_query.created_at,
               type: "text",
               isTyping: false,
             };
             addToQueue(userMessage);
           }
-
+  
           if (item?.results?.results?.response) {
             const assistantMessage = formQueueMessage(
               item.results.results.response.charts
                 ? item.results.results.response.charts
                 : item.results.results.response || "",
               true,
-              false
+              false,
+              item?.results?.timestamp
             );
             addToQueue(assistantMessage);
           }
+         
         });
+      
       } catch (error) {
         console.error("Error loading chat history:", error);
       } finally {
         setIsLoading(false);
       }
     };
-
+  
     loadChatHistory();
   }, [chatId, profile]);
+  
 
   return (
     <ChatContext.Provider
@@ -104,6 +130,8 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
         processQueue,
         emptyQueue,
         s3Key,
+        prevMessage,
+        setPrevMessage,
         setS3Key,
       }}
     >

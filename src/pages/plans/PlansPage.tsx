@@ -74,23 +74,26 @@ export function PlansPage() {
     }
   
   }, [user]);
-  console.log(user)
+  
   return (
-    <div className="fixed inset-0 overflow-y-auto bg-white from-slate-50 to-white pl-24">
+    <div className="fixed inset-0 overflow-y-auto bg-white from-slate-50 to-white pt-96 lg:pt-0">
+
+
       <div className="container py-16 h-full flex flex-col justify-center">
         <div
           className={`mx-auto max-w-4xl space-y-12 ${
-            sideDrawerOpen ? "lg:max-w-3xl md:pl-16 lg:pt-12" : ""
+            sideDrawerOpen ? "lg:max-w-3xl lg:pt-12" : ""
           }`}
         >
           <div className="text-center space-y-4">
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-[#0A0A0A]">
-              Choose Your Plan
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-              Get started with the perfect plan for your needs. Upgrade or
-              downgrade at any time.
-            </p>
+          <h1 className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-[#0A0A0A]">
+  Choose Your Plan
+</h1>
+
+<p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto">
+  Get started with the perfect plan for your needs. Upgrade or downgrade at any time.
+</p>
+
           </div>
 
           {error && (

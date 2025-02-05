@@ -228,18 +228,18 @@ export default function MyRecent({
                     }`}
                   >
                     <div className="flex justify-between w-full items-center">
-                      <ListItemText
-                        className="leading-4 truncate"
+                      <div
                         onClick={() => {
+                          setPrevMessage([]);
                           emptyQueue();
-                          navigate(`/chat/${chat.id}`);
-                          if (isMobile || isTab) {
-                            setSideDrawerOpen(false);
-                          }
+
+                          handleClickRoute(chat.id);
                         }}
                       >
-                        {chat.name}
-                      </ListItemText>
+                        <ListItemText className="leading-4 truncate">
+                          {chat.name}
+                        </ListItemText>
+                      </div>
 
                       {(hoveredIndex === index ||
                         activeDropdownIndex === index) && (
