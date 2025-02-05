@@ -53,7 +53,7 @@ export default function ChatBox({
                           onContentChange={scrollToBottom}
                         />
                       ))}
-                      {!isNewChat && <ChatLoader />}
+                      <ChatLoader />
                       <div ref={messagesEndRef} />
                     </ScrollArea>
                   </div>

@@ -1,16 +1,64 @@
+import { useChatContext } from "@/context/ChatContext";
 import { useProfile } from "@/hooks/profile/useProfile";
-import { ApiError } from "@/services/apiConfig";
 import { chatService } from "@/services/ChatService";
 import { ListItemText } from "@/Theme/Typography";
 import { getAccessToken } from "@/utils/storage.utils";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppContext from "../context/AppContext";
 import LucideIcon from "../Custom-UI/LucideIcon";
 import DeleteIcon from "../ui/delete-icon";
 import Spinner from "../ui/Spinner";
-import { useChatContext } from "@/context/ChatContext";
+
+// Query key factory
+const queryKeys = {
+  sessions: (orgId: string) => ["sessions", orgId],
+};
+
+// API functions
+const fetchSessions = async (orgId: string) => {
+  if (!orgId) throw new Error("Organization ID is required");
+
+  const token = getAccessToken();
+  const response = await chatService.getSession({
+    headers: {
+      "Content-Type": "application/json",
+      "x-organization-id": orgId,
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response?.status !== 200) {
+    throw new Error("Error while fetching sessions");
+  }
+
+  return response;
+};
+
+const deleteSession = async ({
+  sessionId,
+  orgId,
+}: {
+  sessionId: string;
+  orgId: string;
+}) => {
+  const token = getAccessToken();
+  const response = await chatService.deleteSession(sessionId, {
+    headers: {
+      "Content-Type": "application/json",
+      "x-organization-id": orgId,
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response.status !== 200) {
+    throw new Error("Error while deleting session");
+  }
+
+  return response;
+};
 
 export default function MyRecent({
   isDropdownOpen,
@@ -18,69 +66,55 @@ export default function MyRecent({
   isMobile,
   isTab,
   setRecentData,
+}: {
+  isDropdownOpen: boolean;
+  setDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isMobile: boolean;
+  isTab: boolean;
+  setRecentData: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { profile } = useProfile();
   const { setSideDrawerOpen } = useContext(AppContext);
-  const [hoveredIndex, setHoveredIndex] = useState(null); // Tracks the currently hovered index
-  const [activeDropdownIndex, setActiveDropdownIndex] = useState(null);
-  const [optionsPosition, setOptionsPosition] = useState({ top: 0, left: 0 });
-  const [sessionList, setSessionList] = useState([]);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [activeDropdownIndex, setActiveDropdownIndex] = useState<number | null>(
+    null
+  );
+  const [optionsPosition, setOptionsPosition] = useState<{
+    top: number;
+    left: number;
+  }>({ top: 0, left: 0 });
   const navigate = useNavigate();
-  const {emptyQueue} = useChatContext();
-  async function getSessionList() {
-    if (profile?.organization_id) {
-      try {
-        const token = getAccessToken();
-        const response = await chatService.getSession({
-          headers: {
-            "Content-Type": "application/json",
-            "x-organization-id": profile.organization_id,
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  const { emptyQueue } = useChatContext();
+  const queryClient = useQueryClient();
 
-        if (response?.status !== 200)
-          throw new Error("Error while creating session");
+  // Query hook for fetching sessions
+  const { data: sessionList, isLoading } = useQuery({
+    queryKey: queryKeys.sessions(profile?.organization_id),
+    queryFn: () => fetchSessions(profile?.organization_id),
+    enabled: !!profile?.organization_id,
+    staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
+    cacheTime: 1000 * 60 * 30, // Keep data in cache for 30 minutes
+  });
 
-        setSessionList(response);
-        return response;
-      } catch (error) {
-        if (error instanceof ApiError) {
-          console.error(`API Error: ${error.status} - ${error.statusText}`);
-        }
-      }
-    } else {
-      console.error("Organization ID is missing.");
-      throw new Error("Organization ID is required");
-    }
-  }
-
-  async function sessionDelete(sessionId) {
-    if (profile?.organization_id) {
-      const token = getAccessToken();
-      const headers = {
-        "Content-Type": "application/json",
-        "x-organization-id": profile.organization_id,
-        Authorization: `Bearer ${token}`,
-      };
-
-      const response = await chatService.deleteSession(sessionId, { headers });
-
-      if (response.status === 200) {
-        const updatedSessionList = {
-          ...sessionList,
-          data: sessionList?.data?.filter(
-            (session) => session.id !== sessionId
+  // Mutation hook for deleting sessions
+  const deleteMutation = useMutation({
+    mutationFn: deleteSession,
+    onSuccess: (_, variables) => {
+      // Optimistically update the cache
+      queryClient.setQueryData(
+        queryKeys.sessions(profile?.organization_id),
+        (old) => ({
+          ...old,
+          data: old.data.filter(
+            (session) => session.id !== variables.sessionId
           ),
-        };
-        setSessionList(updatedSessionList);
-      }
-      return response;
-    }
-  }
+        })
+      );
+    },
+  });
 
   React.useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: React.MouseEvent) => {
       if (
         activeDropdownIndex !== null &&
         !event.target.closest(".dropdown-container")
@@ -93,7 +127,7 @@ export default function MyRecent({
     return () => document.removeEventListener("click", handleClickOutside);
   }, [activeDropdownIndex]);
 
-  const toggleDropdown = (index, e) => {
+  const toggleDropdown = (index: number, e: React.MouseEvent) => {
     e.stopPropagation();
 
     if (activeDropdownIndex === index) {
@@ -112,55 +146,47 @@ export default function MyRecent({
 
     setActiveDropdownIndex(index);
   };
+
   const listVariants = {
     hidden: { opacity: 0, y: -10 },
-    visible: (index) => ({
+    visible: (index: number) => ({
       opacity: 1,
       y: 0,
       transition: {
-        delay: index * 0.1, // Staggered animation
+        delay: index * 0.1,
         duration: 0.3,
       },
     }),
     exit: { opacity: 0, x: -20 },
   };
 
-  useEffect(() => {
-    if (profile?.organization_id) {
-      getSessionList();
-    }
-  }, [profile]);
-
-  useEffect(() => {
+  React.useEffect(() => {
     if (sessionList?.data) {
       setRecentData(false);
     }
   }, [sessionList?.data]);
+
+  const handleDelete = async (sessionId: string) => {
+    setHoveredIndex(null);
+    setActiveDropdownIndex(null);
+    await deleteMutation.mutateAsync({
+      sessionId,
+      orgId: profile?.organization_id,
+    });
+  };
+
   return (
     <div className="relative cursor-pointer">
       <div
         className="flex items-center justify-between rounded-lg hover:bg-gray-200 cursor-pointer p-1"
-        onClick={() => {
-          setDropdownOpen(!isDropdownOpen);
-        }}
+        onClick={() => setDropdownOpen(!isDropdownOpen)}
       >
         <div className="flex items-center gap-3">
-          <LucideIcon name={"MessageSquareMore"} size={12} color="#64748B" />
-          <ListItemText
-            onClick={(e) => {
-              e.stopPropagation();
-              setDropdownOpen(!isDropdownOpen);
-            }}
-          >
-            My Threads
-          </ListItemText>
+          <LucideIcon name="MessageSquareMore" size={12} color="#64748B" />
+          <ListItemText>My Threads</ListItemText>
         </div>
         <div>
-          {isDropdownOpen ? (
-            <LucideIcon name={"ChevronDown"} size={12} />
-          ) : (
-            <LucideIcon name={"ChevronDown"} size={12} />
-          )}
+          <LucideIcon name="ChevronDown" size={12} />
         </div>
       </div>
 
@@ -170,8 +196,17 @@ export default function MyRecent({
           style={{ paddingLeft: "4.8px", paddingRight: "4.8px" }}
         >
           <AnimatePresence>
-            {sessionList?.data ? (
-              sessionList.data.map((chat, index) => (
+            {isLoading ? (
+              <div className="relative my-2 lg:ml-24 ml-16 mt-4">
+                <div
+                  role="status"
+                  className="space-y-2.5 animate-pulse max-w-lg"
+                >
+                  <Spinner />
+                </div>
+              </div>
+            ) : (
+              sessionList?.data?.map((chat, index) => (
                 <motion.div
                   key={chat.id}
                   custom={index}
@@ -225,15 +260,6 @@ export default function MyRecent({
                   </div>
                 </motion.div>
               ))
-            ) : (
-              <div className="relative my-2 lg:ml-24 ml-16 mt-4">
-                <div
-                  role="status"
-                  className="space-y-2.5 animate-pulse max-w-lg"
-                >
-                  <Spinner />
-                </div>
-              </div>
             )}
           </AnimatePresence>
         </div>
@@ -252,13 +278,9 @@ export default function MyRecent({
             <li>
               <button
                 className="flex gap-3 w-full text-left px-2 py-2 hover:bg-gray-100 text-red-600"
-                onClick={async () => {
-                  setHoveredIndex(null);
-                  setActiveDropdownIndex(null);
-                  await sessionDelete(
-                    sessionList?.data[activeDropdownIndex]?.id
-                  );
-                }}
+                onClick={() =>
+                  handleDelete(sessionList?.data[activeDropdownIndex]?.id)
+                }
               >
                 <DeleteIcon />
                 Delete

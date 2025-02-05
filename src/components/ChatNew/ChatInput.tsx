@@ -106,7 +106,6 @@ export function ChatInput({
             },
           }
         );
-      
 
         if (result?.data?.error) {
           throw new Error(result?.data?.error);

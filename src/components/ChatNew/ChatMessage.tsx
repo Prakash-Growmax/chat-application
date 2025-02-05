@@ -4,6 +4,7 @@ import { useState } from "react";
 import PaperCard from "../Custom-UI/PaperCard";
 import ChartResponse from "../layout/ChatSection/ChatMessage/ChartResponse";
 import DatasetUploadResponse from "../layout/ChatSection/ChatMessage/DatasetUploadResponse";
+import GreetingResponse from "../layout/ChatSection/ChatMessage/GreatingResponse";
 import InsighttResponse from "../layout/ChatSection/ChatMessage/InsightResponse";
 import TextResponse from "../layout/ChatSection/ChatMessage/TextResponse";
 import { Dialog, DialogContent } from "../ui/dialog";
@@ -11,7 +12,6 @@ import ChatAssistantHeader from "./ChatMessage/ChatAssistantHeader";
 import ChatTimeStamp from "./ChatMessage/ChatTimeStamp";
 import ChatTypeInfo from "./ChatMessage/ChatTypeInfo";
 import { DataChart } from "./DataChat";
-import GreetingResponse from "../layout/ChatSection/ChatMessage/GreatingResponse";
 
 interface ChatMessageProps {
   message: Message;
@@ -20,12 +20,11 @@ interface ChatMessageProps {
 export function ChatMessage({ message, onContentChange }: ChatMessageProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
-  const isUser = message.role === "user";
+  const isUser = message?.role === "user";
 
   const timeStamp = message?.timestamp
     ? message?.timestamp
     : message?.messageObject?.timestamp || "";
-   console.log(message)
   return (
     <>
       <div className="mx-auto max-w-4xl h-full">
@@ -96,10 +95,15 @@ const RenderContent = ({
   if (message.type === "text") {
     return <TextResponse message={message} isAssistant={isAssistant} />;
   }
-  if(message?.messageObject?.content?.type === "text"){
-    return(
-      <GreetingResponse message={message?.messageObject?.content?.data?.response} isTyping={message?.messageObject?.isTyping} isAssistant={message?.messageObject?.role} onContentChange={onContentChange}/>
-    )
+  if (message?.messageObject?.content?.type === "text") {
+    return (
+      <GreetingResponse
+        message={message?.messageObject?.content?.data?.response}
+        isTyping={message?.messageObject?.isTyping}
+        isAssistant={message?.messageObject?.role}
+        onContentChange={onContentChange}
+      />
+    );
   }
   if (message?.messageObject?.content?.type === "datasetres") {
     return (
@@ -113,7 +117,7 @@ const RenderContent = ({
     return (
       <InsighttResponse
         data={message.messageObject.content.data}
-        isTyping={message?.messageObject?.isTyping} 
+        isTyping={message?.messageObject?.isTyping}
         isAssistant={message?.messageObject?.role}
         onContentChange={onContentChange}
       />
@@ -125,7 +129,7 @@ const RenderContent = ({
         data={message.messageObject.content.data}
         layout={message.messageObject.content.layout}
         summary={message.messageObject.content.summary}
-        isTyping={message?.messageObject?.isTyping} 
+        isTyping={message?.messageObject?.isTyping}
         isAssistant={message?.messageObject?.role}
         onContentChange={onContentChange}
       />

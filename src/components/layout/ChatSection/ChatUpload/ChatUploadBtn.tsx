@@ -60,7 +60,7 @@ function ChatUploadBtn({
       {/* Hidden input for file selection */}
       <input
         type="file"
-        accept=".csv"
+        accept=".csv,.xls,.xlsx"
         onChange={handleFileUpload}
         className="hidden"
         id="csv-upload"

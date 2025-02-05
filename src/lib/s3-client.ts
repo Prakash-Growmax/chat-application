@@ -116,7 +116,7 @@ const getFileMetadata = async (
   };
 };
 
-const cleanKey = (inputKey: string): string => {
+export const cleanKey = (inputKey: string): string => {
   // Remove s3:// prefix and bucket name if present
   let cleaned = inputKey.replace(/^s3:\/\/[^/]+\//, "");
 
