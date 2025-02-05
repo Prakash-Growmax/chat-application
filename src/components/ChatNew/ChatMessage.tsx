@@ -17,7 +17,17 @@ interface ChatMessageProps {
   message: Message;
   onContentChange: (content: any) => void;
 }
-export function ChatMessage({ message, onContentChange }: ChatMessageProps) {
+export function ChatMessage({
+  message = {
+    role: "assistant",
+    timestamp: new Date(),
+    messageObject: {
+      timeStamp: new Date(),
+    },
+    type: "text",
+  },
+  onContentChange,
+}: ChatMessageProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const isUser = message?.role === "user";
@@ -76,7 +86,7 @@ export function ChatMessage({ message, onContentChange }: ChatMessageProps) {
 
       <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
         <DialogContent className="max-w-[90vw] w-[90vw] h-[90vh] overflow-auto">
-          {message.type === "chart" && <DataChart data={message.data} />}
+          {message?.type === "chart" && <DataChart data={message?.data} />}
         </DialogContent>
       </Dialog>
     </>
@@ -92,7 +102,7 @@ const RenderContent = ({
   isAssistant?: boolean;
   onContentChange: (content: any) => void;
 }) => {
-  if (message.type === "text") {
+  if (message?.type === "text") {
     return <TextResponse message={message} isAssistant={isAssistant} />;
   }
   if (message?.messageObject?.content?.type === "text") {
@@ -116,7 +126,7 @@ const RenderContent = ({
   if (message?.messageObject?.content?.type === "insights") {
     return (
       <InsighttResponse
-        data={message.messageObject.content.data}
+        data={message?.messageObject.content.data}
         isTyping={message?.messageObject?.isTyping}
         isAssistant={message?.messageObject?.role}
         onContentChange={onContentChange}
@@ -126,9 +136,9 @@ const RenderContent = ({
   if (message?.messageObject?.content?.type === "chart") {
     return (
       <ChartResponse
-        data={message.messageObject.content.data}
-        layout={message.messageObject.content.layout}
-        summary={message.messageObject.content.summary}
+        data={message?.messageObject.content.data}
+        layout={message?.messageObject.content.layout}
+        summary={message?.messageObject.content.summary}
         isTyping={message?.messageObject?.isTyping}
         isAssistant={message?.messageObject?.role}
         onContentChange={onContentChange}

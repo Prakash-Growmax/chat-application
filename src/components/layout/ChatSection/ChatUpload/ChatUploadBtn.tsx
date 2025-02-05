@@ -29,7 +29,11 @@ function ChatUploadBtn({
         console.error("No file selected");
         return;
       }
-      uploadToS3(file, () => {});
+      setIsUploading(true);
+      const key = await uploadToS3(file, (progress) => {
+        console.log(`Upload progress: ${progress.percentage}%`);
+      });
+      console.log("🚀 ~ key ~ key:", key);
 
       if (!profile) return true;
 
@@ -39,14 +43,12 @@ function ChatUploadBtn({
       try {
         if (!ID) {
           setProcessing(true);
-          setIsUploading(true); // so that in chat page the upload will get called....(false)
           ID = await createChatId(profile);
           setS3Key(s3_key);
           setProcessing(false);
           navigate(`/chat/${ID}`);
           return;
         } else {
-          setIsUploading(true); // so that in chat page the upload will get called....(false)
           setS3Key(s3_key);
         }
       } catch (error) {

@@ -1,13 +1,18 @@
+import { UploadProgress } from "@/types/s3";
+import { cleanKey } from "@/utils/s3.utils";
 import {
   GetObjectCommand,
-  HeadObjectCommand,
+  PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { Upload } from "@aws-sdk/lib-storage";
-
 import Papa from "papaparse";
 import { CSVPreviewData, FileMetadata, PreviewError } from "./types/csv";
 const BUCKET_NAME = import.meta.env.VITE_S3_BUCKET_NAME;
+
+export const previewCache = new Map<
+  string,
+  { data: CSVPreviewData; timestamp: number }
+>();
 
 const s3Client = new S3Client({
   region: import.meta.env.VITE_S3_REGION,
@@ -16,11 +21,7 @@ const s3Client = new S3Client({
     secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
   },
 });
-export interface UploadProgress {
-  loaded: number;
-  total: number;
-  percentage: number;
-}
+
 export class S3UploadError extends Error {
   constructor(message: string, public code?: string) {
     super(message);
@@ -34,103 +35,28 @@ export async function uploadToS3(
 ): Promise<string> {
   try {
     const Key = `analytics/${file.name}`;
-    const upload = new Upload({
-      client: s3Client,
-      params: {
-        Bucket: BUCKET_NAME,
-        Key,
-        Body: file,
-        ContentType: file.type,
-      },
-    });
-    // Add progress listener
-    upload.on("httpUploadProgress", (progress) => {
-      if (progress.loaded && progress.total) {
-        const uploadProgress: UploadProgress = {
-          loaded: progress.loaded,
-          total: progress.total,
-          percentage: Math.round((progress.loaded * 100) / progress.total),
-        };
-        onProgress?.(uploadProgress);
-      }
-    });
-    //working....
-    // const params = {
-    //   Bucket: "growmax-dev-app-assets",
-    //   Key: `analytics/${file.name}`,
-    //   Body: file,
-    //   ContentType: file.type,
-    // };
 
-    // const command = new PutObjectCommand(params);
-    // const response = await s3Client.send(command);
+    // Convert File to ArrayBuffer
+    const fileBuffer = await file.arrayBuffer();
 
-    await upload.done();
+    // Create the PutObjectCommand
+    const command = new PutObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key,
+      Body: new Uint8Array(fileBuffer),
+      ContentType: file.type,
+    });
+
+    // Upload the file
+    await s3Client.send(command);
+
+    // Return the S3 object key
     return Key;
   } catch (error) {
     console.error("S3 upload error:", error);
-    if (error instanceof S3UploadError) {
-      throw error;
-    }
-    throw new S3UploadError("Failed to upload file to S3");
+    throw new Error("Failed to upload file to S3");
   }
 }
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-
-const previewCache = new Map<
-  string,
-  { data: CSVPreviewData; timestamp: number }
->();
-
-interface FileMetadata {
-  filename: string;
-  size: number;
-  lastModified: Date;
-}
-
-interface CSVPreviewData {
-  headers: string[];
-  rows: string[][];
-  totalRows: number;
-}
-
-interface PreviewError {
-  message: string;
-  code: string;
-}
-
-const getFileMetadata = async (
-  bucket: string,
-  key: string
-): Promise<FileMetadata> => {
-  const command = new HeadObjectCommand({
-    Bucket: bucket,
-    Key: `analytics/${key}`,
-  });
-  const response = await s3Client.send(command);
-
-  return {
-    filename: key.split("/").pop() || key,
-    size: response.ContentLength || 0,
-    lastModified: response.LastModified || new Date(),
-  };
-};
-
-export const cleanKey = (inputKey: string): string => {
-  // Remove s3:// prefix and bucket name if present
-  let cleaned = inputKey.replace(/^s3:\/\/[^/]+\//, "");
-
-  // Remove any leading/trailing slashes
-  cleaned = cleaned.replace(/^\/+|\/+$/g, "");
-
-  cleaned = cleaned.replace(/^analytics\/analytics\//, "analytics/");
-
-  if (!cleaned.startsWith("analytics/")) {
-    cleaned = `analytics/${cleaned}`;
-  }
-
-  return cleaned;
-};
 
 export const fetchCSVPreview = async (
   bucket: string,
@@ -237,81 +163,3 @@ export const fetchCSVPreview = async (
     throw previewError;
   }
 };
-
-// const PREVIEW_ROWS = 20;
-// // const TIMEOUT = 30000; // 30 seconds
-// const previewCache = new Map<
-//   string,
-//   { data: CSVPreviewData; timestamp: number }
-// >();
-// const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-
-// const getFileMetadata = async (
-//   bucket: string,
-//   key: string
-// ): Promise<FileMetadata> => {
-//   const command = new HeadObjectCommand({ Bucket: bucket, Key: key });
-//   const response = await s3Client.send(command);
-
-//   return {
-//     filename: key.split("/").pop() || key,
-//     size: response.ContentLength || 0,
-//     lastModified: response.LastModified || new Date(),
-//   };
-// };
-
-// export const fetchCSVPreview = async (
-//   bucket: string,
-//   key: string
-// ): Promise<{ data: CSVPreviewData; metadata: FileMetadata }> => {
-//   const cacheKey = `${bucket}:${key}`;
-//   const cached = previewCache.get(cacheKey);
-
-//   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-//     return { data: cached.data, metadata: await getFileMetadata(bucket, key) };
-//   }
-
-//   try {
-//     const command = new GetObjectCommand({ Bucket: bucket, Key: key });
-//     const response = await s3Client.send(command);
-
-//     if (!response.Body) {
-//       throw new Error("No data received from S3");
-//     }
-
-//     const csvString = await response.Body.transformToString();
-//     const parseResult = await new Promise<Papa.ParseResult<string[]>>(
-//       (resolve) => {
-//         Papa.parse(csvString, {
-//           preview: PREVIEW_ROWS,
-//           complete: resolve,
-//         });
-//       }
-//     );
-
-//     const previewData: CSVPreviewData = {
-//       headers: parseResult.data[0],
-//       rows: parseResult.data.slice(1),
-//       totalRows: parseResult.data.length - 1,
-//     };
-
-//     previewCache.set(cacheKey, {
-//       data: previewData,
-//       timestamp: Date.now(),
-//     });
-
-//     const metadata: FileMetadata = {
-//       filename: key.split("/").pop() || key,
-//       size: response.ContentLength || 0,
-//       lastModified: response.LastModified || new Date(),
-//     };
-
-//     return { data: previewData, metadata };
-//   } catch (error) {
-//     const previewError: PreviewError = {
-//       message: "Failed to fetch CSV preview",
-//       code: (error as any).code,
-//     };
-//     throw previewError;
-//   }
-// };

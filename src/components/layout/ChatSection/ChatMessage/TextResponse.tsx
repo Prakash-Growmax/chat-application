@@ -10,14 +10,14 @@ const TextResponse = ({
   isAssistant: boolean;
 }) => {
   const [isTyping, setIsTyping] = useState(true);
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsTyping(false);
-    }, message.content.length * 30 + 500);
+    }, message?.content?.length * 30 + 500);
 
     return () => clearTimeout(timer);
-  }, [message.content]);
+  }, [message?.content]);
 
   return (
     <TypingChatMessage
