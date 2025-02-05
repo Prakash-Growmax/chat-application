@@ -5,8 +5,10 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import Papa from "papaparse";
 import { CSVPreviewData, FileMetadata, PreviewError } from "./types/csv";
+
 const BUCKET_NAME = import.meta.env.VITE_S3_BUCKET_NAME;
 
 export const previewCache = new Map<
@@ -49,6 +51,47 @@ export async function uploadToS3(
 
     // Upload the file
     await s3Client.send(command);
+
+    const signedUrl = await getSignedUrl(s3Client, command, {
+      expiresIn: 3600,
+    });
+
+    // Return a promise that resolves when the upload is complete
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+
+      // Setup progress handler
+      xhr.upload.onprogress = (event) => {
+        if (onProgress) {
+          const progress: UploadProgress = {
+            loaded: event.loaded,
+            total: event.total,
+            percentage: Math.round((event.loaded / event.total) * 100),
+          };
+          console.log("🚀 ~ returnnewPromise ~ progress:", progress);
+          onProgress(progress);
+        }
+      };
+
+      // Setup completion handler
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          resolve(Key);
+        } else {
+          reject(new Error(`Upload failed with status ${xhr.status}`));
+        }
+      };
+
+      // Setup error handler
+      xhr.onerror = () => {
+        reject(new Error("Upload failed"));
+      };
+
+      // Start the upload
+      xhr.open("PUT", signedUrl);
+      xhr.setRequestHeader("Content-Type", file.type);
+      xhr.send(file);
+    });
 
     // Return the S3 object key
     return Key;

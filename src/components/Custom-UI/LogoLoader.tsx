@@ -7,7 +7,7 @@ const LogoLoader = ({ alt = "Loading...", className = "" }) => {
       <img
         src={loaderGif} // Replace this with your GIF path like: "/path/to/your/loader.gif"
         alt={alt}
-        className={`w-24 h-24 object-contain ${className}`} // Adjust size as needed
+        className={`w-12 h-12 object-contain ${className}`} // Adjust size as needed
       />
     </div>
   );
