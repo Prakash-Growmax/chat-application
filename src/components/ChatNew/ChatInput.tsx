@@ -114,7 +114,7 @@ export function ChatInput({
         if (result?.data?.error) {
           throw new Error(result?.data?.error);
         }
-
+       console.log(result)
         let assistantMessage;
         assistantMessage = formQueueMessage(
           result?.data?.results?.response?.charts

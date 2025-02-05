@@ -81,7 +81,7 @@ const DatasetUploadResponse = ({ message, onContentChange }) => {
               .start();
           }}
           options={{
-            delay: 20,
+            delay: 10,
             cursor: '',
             deleteSpeed: null,
             loop: false
@@ -103,7 +103,7 @@ const DatasetUploadResponse = ({ message, onContentChange }) => {
                   .start();
               }}
               options={{
-                delay: 20,
+                delay: 10,
                 cursor: '',
                 deleteSpeed: null,
                 loop: false
@@ -113,43 +113,43 @@ const DatasetUploadResponse = ({ message, onContentChange }) => {
         )}
       </div>
       <div className="flex flex-col gap-3">
-        {message?.suggested_questions?.map((question, index) => (
-          <>
-            {index <= currentQuestionIndex && (
-              <div
-                key={index}
-                className="flex space-x-2 items-center border border-gray-200 rounded-md p-2 cursor-pointer"
-                onClick={() => { addUserQueue(question) }}
-              >
-                <MessageCircle className="w-5 h-5 mt-1 flex-shrink-0" />
-                {/* <div className="flex-1"> */}
-                <BodySmall>
-                <Typewriter
-                    onInit={(typewriter) => {
-                      typewriter
-                        .typeString(question)
-                        .callFunction(() => {
-                          if (index < message?.suggested_questions.length - 1) {
-                            setCurrentQuestionIndex(index + 1);
-                          }
-                          scrollToBottom();
-                        })
-                        .start();
-                    }}
-                    options={{
-                      delay: 20,
-                      cursor: '',
-                      deleteSpeed: null,
-                      loop: false
-                    }}
-                  />
-                </BodySmall>
-               
-                {/* </div> */}
-              </div>
-            )}
-          </>
-        ))}
+      {message?.suggested_questions?.map((question, index) => (
+  <>
+    {index <= currentQuestionIndex && (
+      <TooltipNew title="Click to ask a query" placement="top-start">
+        <div
+          key={index}
+          className="flex space-x-2 items-center border border-gray-200 rounded-md p-2 cursor-pointer"
+          onClick={() => { addUserQueue(question) }}
+        >
+          <MessageCircle className="w-5 h-5 mt-1 flex-shrink-0" />
+          <BodySmall>
+            <Typewriter
+              onInit={(typewriter) => {
+                typewriter
+                  .typeString(question)
+                  .callFunction(() => {
+                    if (index < message?.suggested_questions.length - 1) {
+                      setCurrentQuestionIndex(index + 1);
+                    }
+                    scrollToBottom();
+                  })
+                  .start();
+              }}
+              options={{
+                delay: 10,
+                cursor: '',
+                deleteSpeed: null,
+                loop: false
+              }}
+            />
+          </BodySmall>
+        </div>
+      </TooltipNew>
+    )}
+  </>
+))}
+
       </div>
       </>)}
    

@@ -12,10 +12,12 @@ import ChatAssistantHeader from "./ChatMessage/ChatAssistantHeader";
 import ChatTimeStamp from "./ChatMessage/ChatTimeStamp";
 import ChatTypeInfo from "./ChatMessage/ChatTypeInfo";
 import { DataChart } from "./DataChat";
+import GeneralResponse from "../layout/ChatSection/ChatMessage/GeneralResponse";
 
 interface ChatMessageProps {
   message: Message;
   onContentChange: (content: any) => void;
+ 
 }
 export function ChatMessage({
   message = {
@@ -31,7 +33,7 @@ export function ChatMessage({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const isUser = message?.role === "user";
-
+  console.log(message);
   const timeStamp = message?.timestamp
     ? message?.timestamp
     : message?.messageObject?.timestamp || "";
@@ -104,6 +106,17 @@ const RenderContent = ({
 }) => {
   if (message?.type === "text") {
     return <TextResponse message={message} isAssistant={isAssistant} />;
+  }
+  if(message?.messageObject?.content?.type == "generic_summary"){
+    return( 
+      <GeneralResponse
+      message={message?.messageObject?.content?.analysis}
+      isTyping={message?.messageObject?.isTyping}
+      isAssistant={message?.messageObject?.role}
+      onContentChange={onContentChange}
+      />
+    )
+   
   }
   if (message?.messageObject?.content?.type === "text") {
     return (

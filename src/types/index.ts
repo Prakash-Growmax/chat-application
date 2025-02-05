@@ -12,6 +12,7 @@ export interface Message {
   role: "user" | "assistant";
   timestamp: Date;
   type: "text" | "chart" | "table";
+  messageObject?:any;
   data?: any;
   error?: boolean;
   isTyping?: boolean;
