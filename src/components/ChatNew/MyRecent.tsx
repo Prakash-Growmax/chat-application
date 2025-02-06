@@ -5,8 +5,8 @@ import { ListItemText } from "@/Theme/Typography";
 import { getAccessToken } from "@/utils/storage.utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useCallback, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import AppContext from "../context/AppContext";
 import LucideIcon from "../Custom-UI/LucideIcon";
 import DeleteIcon from "../ui/delete-icon";
@@ -73,6 +73,7 @@ export default function MyRecent({
   isTab: boolean;
   setRecentData: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const { id } = useParams();
   const { profile } = useProfile();
   const { setSideDrawerOpen } = useContext(AppContext);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -96,17 +97,12 @@ export default function MyRecent({
     cacheTime: 1000 * 60 * 30, // Keep data in cache for 30 minutes
   });
 
-  const handleClickRoute = useCallback(
-    (id) => {
-      if (queue.length === 0) {
-        navigate(`/chat/${id}`);
-        if (isMobile || isTab) {
-          setSideDrawerOpen(false);
-        }
-      }
-    },
-    [queue]
-  );
+  const handleClickRoute = (id: string) => {
+    navigate(`/chat/${id}`);
+    if (isMobile || isTab) {
+      setSideDrawerOpen(false);
+    }
+  };
 
   // Mutation hook for deleting sessions
   const deleteMutation = useMutation({
@@ -237,8 +233,8 @@ export default function MyRecent({
                   <div
                     className={`flex items-center rounded-lg px-2 py-1 w-full transition-colors duration-200 ${
                       hoveredIndex === index ||
-                      index === 0 ||
-                      activeDropdownIndex === index
+                      activeDropdownIndex === index ||
+                      id === chat?.id
                         ? "bg-gray-200"
                         : ""
                     }`}
