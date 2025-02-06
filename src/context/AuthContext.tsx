@@ -27,6 +27,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let mounted = true;
 
+    const handleSession = async (session: any) => {
+      try {
+        if (session?.user) {
+          const userData = await buildUserProfile(session.user);
+          setUser(userData);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Failed to handle session:", error);
+        if (error instanceof Error) {
+          setError(error);
+        }
+        await clearAllTokens();
+      }
+    };
+
     const initAuth = async () => {
       try {
         loadingState.startLoading("Initializing authentication...");
@@ -36,12 +53,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         if (!mounted) return;
 
-        if (session?.user) {
-          const userData = await buildUserProfile(session.user);
-          if (mounted) {
-            setUser(userData);
+        supabase.auth.onAuthStateChange(async (event, session) => {
+          if (event === "TOKEN_REFRESHED") {
+            console.log("Token refreshed");
+            await handleSession(session);
           }
-        }
+        });
+
+        await handleSession(session);
       } catch (error) {
         if (mounted) {
           if (error instanceof Error) {

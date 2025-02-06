@@ -5,7 +5,7 @@ import { ListItemText } from "@/Theme/Typography";
 import { getAccessToken } from "@/utils/storage.utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppContext from "../context/AppContext";
 import LucideIcon from "../Custom-UI/LucideIcon";
@@ -75,6 +75,7 @@ export default function MyRecent({
 }) {
   const { profile } = useProfile();
   const { setSideDrawerOpen } = useContext(AppContext);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [activeDropdownIndex, setActiveDropdownIndex] = useState<number | null>(
     null
@@ -84,10 +85,9 @@ export default function MyRecent({
     left: number;
   }>({ top: 0, left: 0 });
   const navigate = useNavigate();
-  const { emptyQueue } = useChatContext();
+  const { queue, emptyQueue, setPrevMessage } = useChatContext();
   const queryClient = useQueryClient();
 
-  // Query hook for fetching sessions
   const { data: sessionList, isLoading } = useQuery({
     queryKey: queryKeys.sessions(profile?.organization_id),
     queryFn: () => fetchSessions(profile?.organization_id),
@@ -96,11 +96,22 @@ export default function MyRecent({
     cacheTime: 1000 * 60 * 30, // Keep data in cache for 30 minutes
   });
 
+  const handleClickRoute = useCallback(
+    (id) => {
+      if (queue.length === 0) {
+        navigate(`/chat/${id}`);
+        if (isMobile || isTab) {
+          setSideDrawerOpen(false);
+        }
+      }
+    },
+    [queue]
+  );
+
   // Mutation hook for deleting sessions
   const deleteMutation = useMutation({
     mutationFn: deleteSession,
     onSuccess: (_, variables) => {
-      // Optimistically update the cache
       queryClient.setQueryData(
         queryKeys.sessions(profile?.organization_id),
         (old) => ({
@@ -110,6 +121,7 @@ export default function MyRecent({
           ),
         })
       );
+      navigate("/chat/new");
     },
   });
 
@@ -166,13 +178,17 @@ export default function MyRecent({
     }
   }, [sessionList?.data]);
 
-  const handleDelete = async (sessionId: string) => {
+  const [deleteIndex, setDeleteIndex] = useState(0);
+  const handleDelete = async (sessionId: string, index: number) => {
+    setDeleteIndex(index);
     setHoveredIndex(null);
+    setIsDeleting(true);
     setActiveDropdownIndex(null);
     await deleteMutation.mutateAsync({
       sessionId,
       orgId: profile?.organization_id,
     });
+    setIsDeleting(false);
   };
 
   return (
@@ -240,9 +256,9 @@ export default function MyRecent({
                           {chat.name}
                         </ListItemText>
                       </div>
-
-                      {(hoveredIndex === index ||
-                        activeDropdownIndex === index) && (
+                      {Boolean(deleteIndex === index) && isDeleting ? (
+                        <Spinner />
+                      ) : (
                         <motion.button
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
@@ -279,7 +295,10 @@ export default function MyRecent({
               <button
                 className="flex gap-3 w-full text-left px-2 py-2 hover:bg-gray-100 text-red-600"
                 onClick={() =>
-                  handleDelete(sessionList?.data[activeDropdownIndex]?.id)
+                  handleDelete(
+                    sessionList?.data[activeDropdownIndex]?.id,
+                    activeDropdownIndex
+                  )
                 }
               >
                 <DeleteIcon />
