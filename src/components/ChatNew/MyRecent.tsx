@@ -86,7 +86,7 @@ export default function MyRecent({
     left: number;
   }>({ top: 0, left: 0 });
   const navigate = useNavigate();
-  const { queue, emptyQueue, setPrevMessage } = useChatContext();
+  const { emptyQueue,setPrevMessage } = useChatContext();
   const queryClient = useQueryClient();
 
   const { data: sessionList, isLoading } = useQuery({
@@ -186,7 +186,7 @@ export default function MyRecent({
     });
     setIsDeleting(false);
   };
-
+ 
   return (
     <div className="relative cursor-pointer">
       <div

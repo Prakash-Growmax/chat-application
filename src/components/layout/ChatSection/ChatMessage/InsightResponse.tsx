@@ -25,7 +25,7 @@ const InsightResponse = ({ data, isTyping, isAssistant, onContentChange }) => {
         setCompletedEntries((prev) => [...prev, entries[currentIndex]]);
         setCurrentIndex((prevIndex) => prevIndex + 1);
         onContentChange?.(); // Notify parent of content change
-      }, entries[currentIndex].length * 10 + 200); // Faster timing
+      }, entries[currentIndex].length * 2 + 50); // Faster timing
       return () => clearTimeout(timer);
     }
   }, [currentIndex, entries, onContentChange, showTyping]);
@@ -44,7 +44,7 @@ const InsightResponse = ({ data, isTyping, isAssistant, onContentChange }) => {
                   strings: [entries[currentIndex]],
                   autoStart: true,
                   loop: false,
-                  delay: 15, // Faster typing speed
+                  delay: 1, // Faster typing speed
                   cursor: "",
                 }}
               />

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Plot from "react-plotly.js";
 import Typewriter from "typewriter-effect";
 
+// Function to format summary text
 const formatSummary = (text) => {
   let cleanText = text
     .replace(/\*\*/g, "")
@@ -25,11 +26,7 @@ const formatSummary = (text) => {
     })
     .filter((line) => line.trim());
 
-  const cleanedFormattedLines = formattedLines.map((line) =>
-    line.replace(/^###\s*/, "")
-  );
-
-  return cleanedFormattedLines.join("\n");
+  return formattedLines.map((line) => line.replace(/^###\s*/, "")).join("\n");
 };
 
 const ChartResponse = ({ data, layout, summary, onContentChange, isTyping, isAssistant }) => {
@@ -46,6 +43,7 @@ const ChartResponse = ({ data, layout, summary, onContentChange, isTyping, isAss
   const entries = formattedSummary.split("\n");
   const showTyping = isTyping && isAssistant;
 
+  // Function to calculate chart dimensions
   const calculateDimensions = () => {
     if (!containerRef.current) return;
 
@@ -81,6 +79,7 @@ const ChartResponse = ({ data, layout, summary, onContentChange, isTyping, isAss
     return { width, height };
   };
 
+  // Resize effect
   useEffect(() => {
     const handleResize = () => {
       const newDimensions = calculateDimensions();
@@ -105,6 +104,7 @@ const ChartResponse = ({ data, layout, summary, onContentChange, isTyping, isAss
     };
   }, []);
 
+  // Dynamic layout adjustments for the plot
   const dynamicLayout = {
     ...layout,
     width: dimensions.width,
@@ -122,33 +122,37 @@ const ChartResponse = ({ data, layout, summary, onContentChange, isTyping, isAss
     },
   };
 
+  // Function to handle plot rendering
   const handlePlotRender = () => {
     if (!isPlotRendered) {
       setIsPlotRendered(true);
       setTimeout(() => {
         setShouldStartTyping(true);
-      }, 500);
+        scrollToBottom(); // Scroll to summary after plot renders
+      }, 100);
     }
   };
 
+  // Function to smoothly scroll to the bottom
   const scrollToBottom = () => {
     if (chatBoxRef.current) {
-      const scrollOptions = {
+      chatBoxRef.current.scrollTo({
         top: chatBoxRef.current.scrollHeight,
-        behavior: 'smooth'
-      };
-      chatBoxRef.current.scrollTo(scrollOptions);
+        behavior: "smooth",
+      });
     }
   };
 
+  // Effect to handle typing line by line and scroll smoothly
   useEffect(() => {
     if (showTyping && isPlotRendered && shouldStartTyping && currentIndex < entries.length) {
       const timer = setTimeout(() => {
         setCompletedEntries((prev) => {
           const newEntries = [...prev, entries[currentIndex]];
-          setTimeout(scrollToBottom, 100);
+          setTimeout(scrollToBottom, 100); // Scroll to new line
           return newEntries;
         });
+
         setCurrentIndex((prevIndex) => prevIndex + 1);
         onContentChange?.();
       }, 1000);
@@ -157,19 +161,15 @@ const ChartResponse = ({ data, layout, summary, onContentChange, isTyping, isAss
     } else if (!showTyping && completedEntries.length === 0) {
       setCompletedEntries(entries);
       setIsTypingComplete(true);
+      scrollToBottom(); // Scroll when summary appears instantly
     }
   }, [currentIndex, entries, isPlotRendered, shouldStartTyping, onContentChange, showTyping]);
-
-  useEffect(() => {
-    if (completedEntries.length > 0) {
-      scrollToBottom();
-    }
-  }, [completedEntries]);
 
   return (
     <div className="w-full flex flex-col items-center">
       <div className="chatBox w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="chatMessage flex flex-col w-full py-2">
+          {/* Chart container */}
           <div ref={containerRef} className="relative w-full flex justify-center mb-4">
             <div className="w-full">
               <Plot
@@ -198,6 +198,7 @@ const ChartResponse = ({ data, layout, summary, onContentChange, isTyping, isAss
             </div>
           </div>
 
+          {/* Summary with auto-scroll */}
           <div 
             ref={chatBoxRef} 
             className="prose w-full max-w-none overflow-y-auto"

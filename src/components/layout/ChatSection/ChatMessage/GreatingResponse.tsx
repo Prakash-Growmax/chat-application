@@ -16,7 +16,7 @@ const GreetingResponse = ({ message, isTyping, isAssistant, onContentType }) => 
           options={{
             strings: [String(message)],
             autoStart: true,
-            delay: 30,
+            delay:2,
             cursor: "",
             deleteSpeed: 9999999,
           }}

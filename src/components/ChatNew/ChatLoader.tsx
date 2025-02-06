@@ -8,7 +8,7 @@ function ChatLoader({ fileName = "", progress = 100 }) {
   const { processing, isUploading } = useChatContext();
   return (
     <>
-      {processing && (
+      {/* {processing && (
         <PaperCard className="w-full border-none rounded-3xl p-3">
           <ChatAssistantHeader />
 
@@ -36,7 +36,7 @@ function ChatLoader({ fileName = "", progress = 100 }) {
             </div>
           </div>
         </PaperCard>
-      )}
+      )} */}
       {(isUploading || processing) && (
         <>
           <div className="flex flex-col w-full my-4 mx-2">
