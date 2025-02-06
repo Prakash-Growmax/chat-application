@@ -1,11 +1,10 @@
 import { useChatContext } from "@/context/ChatContext";
 import { BodySmall } from "@/Theme/Typography";
 import LogoLoader from "../Custom-UI/LogoLoader";
-import PaperCard from "../Custom-UI/PaperCard";
-import ChatAssistantHeader from "./ChatMessage/ChatAssistantHeader";
+
 
 function ChatLoader({ fileName = "", progress = 100 }) {
-  const { processing, isUploading } = useChatContext();
+  const { processing, isUploading,isLoading,prevMessage,s3Key} = useChatContext();
   return (
     <>
       {/* {processing && (
@@ -37,6 +36,15 @@ function ChatLoader({ fileName = "", progress = 100 }) {
           </div>
         </PaperCard>
       )} */}
+      {(isLoading && prevMessage.length === 0 && !s3Key) && (<>   <div className="flex flex-col w-full my-4 mx-2">
+            <div className="flex-1">
+              <div className="flex items-center justify-center">
+                <LogoLoader  className="w-40 h-40"/>
+                
+              </div>
+            </div>
+          </div></>)}
+      
       {(isUploading || processing) && (
         <>
           <div className="flex flex-col w-full my-4 mx-2">

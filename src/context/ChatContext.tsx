@@ -4,6 +4,8 @@ import { createContext, useContext } from "react";
 interface ChatContextType {
   isUploading: boolean;
   setIsUploading: (value: boolean) => void;
+  isLoading:boolean;
+  setIsLoading:(value: boolean) => void;
   queue: Message[];
   setQueue: (value: (prev: Message[]) => Message[]) => void;
   processing: boolean;

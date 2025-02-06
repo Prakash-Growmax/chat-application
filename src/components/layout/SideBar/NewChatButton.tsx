@@ -25,7 +25,7 @@ function NewChatButton({
       >
         <span className="flex items-center gap-2">
           <LucideIcon name={"MessageSquarePlus"} size={20} />
-          <span className="lg:text-xs md:text-base text-black text-base">
+          <span className="lg:text-sm md:text-base text-black text-base">
             New Thread
           </span>
         </span>

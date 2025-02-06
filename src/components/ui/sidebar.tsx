@@ -18,7 +18,16 @@ import { DrawerOpen_LocalKey } from "@/constants/storage.constant";
 import LogoutButton from "../auth/LogoutButton";
 import LucideIcon from "../Custom-UI/LucideIcon";
 import TooltipNew from "./tooltipnew";
-
+import UserResource from "../auth/UserResource";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -50,6 +59,7 @@ export default function Sidebar() {
   const [isDropdownOpen, setDropdownOpen] = React.useState(true);
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState(null);
   const [recentData,setRecentData] = React.useState(true);
+  const navigate = useNavigate();
   React.useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (
@@ -134,21 +144,21 @@ export default function Sidebar() {
                   isTab={isTab}
                   setRecentData={setRecentData}
                 />
-                <div
+                {/* <div
                   className={`overflow-hidden transition-all duration-100 ease-in-out ${
                     isDropdownOpen && !recentData ? "mt-40" : "mt-8"
                   }`}
-                ></div>
+                ></div> */}
               </div>
             </List>
             <div>
-              <div className="flex items-center gap-2">
+              {/* <div className="flex items-center gap-2">
                 <SideBarListItemHeader icon={"CloudCog"} title="Resources" />
               </div>
               <Divider />
               <div className="flex">
                 <Resources isMobile={isMobile} isTab={isTab}/>
-              </div>
+              </div> */}
             </div>
           </div>
         </Box>
@@ -165,7 +175,37 @@ export default function Sidebar() {
             alignItems: "center", // Vertically center items
           }}
         >
-          <LogoutButton />
+      <DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <div className="w-full" onClick={(e) => e.stopPropagation()}>
+      <UserResource />
+    </div>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent className="w-56 z-[1400] bg-white border-gray-200 rounded-lg shadow-xl" side="top" align="center"  portal>
+    <DropdownMenuGroup>
+      <DropdownMenuItem className="gap-3 cursor-pointer" onClick={()=>{ navigate(`/plans`)}}>
+        <LucideIcon name="Wallet" size={14} color="black" />
+        <span>Subscription</span>
+      </DropdownMenuItem>
+    </DropdownMenuGroup>
+    <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
+    <DropdownMenuGroup>
+      <DropdownMenuItem className="gap-3 cursor-pointer" onClick={()=>{ navigate(`/teams`)}}>
+        <LucideIcon name="Users" size={14} color="black" />
+        <span>Teams</span>
+      </DropdownMenuItem>
+    </DropdownMenuGroup>
+    <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200"  />
+    <DropdownMenuGroup>
+      <DropdownMenuItem className="gap-3 cursor-pointer" onClick={()=>{ navigate(`/settings`)}}>
+        <LucideIcon name="SquareUser" size={14} color="black" />
+        <span>Profile</span>
+      </DropdownMenuItem>
+    </DropdownMenuGroup>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+      
         </Box>
       </Drawer>
     </Box>

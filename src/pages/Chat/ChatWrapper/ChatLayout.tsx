@@ -44,7 +44,7 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
     },
     [queue, processing]
   );
-
+ 
   useEffect(() => {
     const loadChatHistory = async () => {
       if (!chatId || !profile) return;
@@ -133,6 +133,8 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
         prevMessage,
         setPrevMessage,
         setS3Key,
+        isLoading,
+        setIsLoading
       }}
     >
       {children}

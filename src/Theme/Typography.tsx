@@ -188,7 +188,7 @@ export const ListItemHeaderText = ({
   className?: string;
 }) => (
   <p
-    className={`text-sm font-semibold text-gray-900 dark:text-gray-100 ${className}`}
+    className={`text-base font-semibold text-gray-900 dark:text-gray-100 ${className}`}
   >
     {children}
   </p>
@@ -204,7 +204,7 @@ export const ListItemText = ({
 }) => (
   <p
     {...props}
-    className={`text-xs font-normal text-gray-700 dark:text-gray-300 ${className}`}
+    className={`text-sm font-normal text-gray-700 dark:text-gray-300 ${className}`}
   >
     {children}
   </p>

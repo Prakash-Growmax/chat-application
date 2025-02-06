@@ -12,7 +12,7 @@ function SideBarListItemHeader({
   return (
     <>
       <div className="my-2 flex items-center gap-2">
-        <LucideIcon name={icon} size={12} />
+        <LucideIcon name={icon} size={15} />
         <ListItemHeaderText>{title}</ListItemHeaderText>
       </div>
       <Divider />

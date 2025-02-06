@@ -5,7 +5,7 @@ import { ListItemText } from "@/Theme/Typography";
 import { getAccessToken } from "@/utils/storage.utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import AppContext from "../context/AppContext";
@@ -79,9 +79,7 @@ export default function MyRecent({
   const { setSideDrawerOpen } = useContext(AppContext);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [activeDropdownIndex, setActiveDropdownIndex] = useState<number | null>(
-    null
-  );
+  const [activeDropdownIndex, setActiveDropdownIndex] = useState<number | null>(null);
   const [optionsPosition, setOptionsPosition] = useState<{
     top: number;
     left: number;
@@ -105,16 +103,27 @@ export default function MyRecent({
     }
   };
 
+  // Calculate max height based on session list length
+  const getDropdownMaxHeight = () => {
+    const itemHeight = 60; // Height of each item in pixels
+    const maxItems = 8; // Maximum number of items to show before scrolling
+    const padding = 16; // Total padding (top + bottom)
+    const totalItems = sessionList?.data?.length || 0;
+    const minHeight = itemHeight + padding; // Minimum height for empty or loading state
+    const calculatedHeight = Math.min(totalItems, maxItems) * itemHeight + padding;
+    return Math.max(calculatedHeight, minHeight);
+  };
+
   // Mutation hook for deleting sessions
   const deleteMutation = useMutation({
     mutationFn: deleteSession,
     onSuccess: (_, variables) => {
       queryClient.setQueryData(
         queryKeys.sessions(profile?.organization_id),
-        (old) => ({
+        (old: any) => ({
           ...old,
           data: old.data.filter(
-            (session) => session.id !== variables.sessionId
+            (session: any) => session.id !== variables.sessionId
           ),
         })
       );
@@ -122,11 +131,11 @@ export default function MyRecent({
     },
   });
 
-  React.useEffect(() => {
-    const handleClickOutside = (event: React.MouseEvent) => {
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         activeDropdownIndex !== null &&
-        !event.target.closest(".dropdown-container")
+        !(event.target as Element).closest(".dropdown-container")
       ) {
         setActiveDropdownIndex(null);
       }
@@ -169,11 +178,11 @@ export default function MyRecent({
     exit: { opacity: 0, x: -20 },
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (sessionList?.data) {
       setRecentData(false);
     }
-  }, [sessionList?.data]);
+  }, [sessionList?.data, setRecentData]);
 
   const [deleteIndex, setDeleteIndex] = useState(0);
   const handleDelete = async (sessionId: string, index: number) => {
@@ -196,18 +205,31 @@ export default function MyRecent({
         onClick={() => setDropdownOpen(!isDropdownOpen)}
       >
         <div className="flex items-center gap-3">
-          <LucideIcon name="MessageSquareMore" size={12} color="#64748B" />
+          <LucideIcon name="MessageSquareMore" size={15} color="#64748B" />
           <ListItemText>My Threads</ListItemText>
         </div>
-        <div>
-          <LucideIcon name="ChevronDown" size={12} />
+        <div className="mr-3">
+          <LucideIcon 
+            name="ChevronDown" 
+            size={13}
+            style={{
+              transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s ease-in-out'
+            }}
+          />
         </div>
       </div>
 
       {isDropdownOpen && (
         <div
-          className="absolute z-10 bg-transparent w-full max-h-40 overflow-y-auto"
-          style={{ paddingLeft: "4.8px", paddingRight: "4.8px" }}
+          className="absolute z-10 bg-transparent w-full overflow-y-auto"
+          style={{
+            paddingLeft: "4.8px",
+            paddingRight: "4.8px",
+            maxHeight: `${getDropdownMaxHeight()}px`,
+            transition: 'max-height 0.3s ease-in-out',
+            overflowX: 'hidden'
+          }}
         >
           <AnimatePresence>
             {isLoading ? (
@@ -220,7 +242,7 @@ export default function MyRecent({
                 </div>
               </div>
             ) : (
-              sessionList?.data?.map((chat, index) => (
+              sessionList?.data?.map((chat: any, index: number) => (
                 <motion.div
                   key={chat.id}
                   custom={index}
@@ -228,7 +250,7 @@ export default function MyRecent({
                   animate="visible"
                   exit="exit"
                   variants={listVariants}
-                  className="relative my-2 ml-4"
+                  className="relative my-2 ml-4 dropdown-container"
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
@@ -246,9 +268,9 @@ export default function MyRecent({
                         onClick={() => {
                           setPrevMessage([]);
                           emptyQueue();
-
                           handleClickRoute(chat.id);
                         }}
+                        className="flex-1 min-w-0"
                       >
                         <ListItemText className="leading-4 truncate">
                           {chat.name}
@@ -259,14 +281,14 @@ export default function MyRecent({
                       ) : (
                         <motion.button
                           initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
+                          animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
                           exit={{ opacity: 0 }}
                           onClick={(e) => toggleDropdown(index, e)}
+                          className="p-1"
                         >
                           <LucideIcon
                             name="EllipsisVertical"
                             size={12}
-                            className="m-1"
                           />
                         </motion.button>
                       )}
