@@ -18,16 +18,9 @@ import { DrawerOpen_LocalKey } from "@/constants/storage.constant";
 import LogoutButton from "../auth/LogoutButton";
 import LucideIcon from "../Custom-UI/LucideIcon";
 import TooltipNew from "./tooltipnew";
-import UserResource from "../auth/UserResource";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { useNavigate } from "react-router-dom";
+import ResourcesNew from "../ChatNew/ResourcesNew";
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -175,35 +168,10 @@ export default function Sidebar() {
             alignItems: "center", // Vertically center items
           }}
         >
-      <DropdownMenu>
-  <DropdownMenuTrigger asChild>
-    <div className="w-full" onClick={(e) => e.stopPropagation()}>
-      <UserResource />
-    </div>
-  </DropdownMenuTrigger>
-  <DropdownMenuContent className="w-56 z-[1400] bg-white border-gray-200 rounded-lg shadow-xl" side="top" align="center"  portal>
-    <DropdownMenuGroup>
-      <DropdownMenuItem className="gap-3 cursor-pointer" onClick={()=>{ navigate(`/plans`)}}>
-        <LucideIcon name="Wallet" size={14} color="black" />
-        <span>Subscription</span>
-      </DropdownMenuItem>
-    </DropdownMenuGroup>
-    <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
-    <DropdownMenuGroup>
-      <DropdownMenuItem className="gap-3 cursor-pointer" onClick={()=>{ navigate(`/teams`)}}>
-        <LucideIcon name="Users" size={14} color="black" />
-        <span>Teams</span>
-      </DropdownMenuItem>
-    </DropdownMenuGroup>
-    <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200"  />
-    <DropdownMenuGroup>
-      <DropdownMenuItem className="gap-3 cursor-pointer" onClick={()=>{ navigate(`/settings`)}}>
-        <LucideIcon name="SquareUser" size={14} color="black" />
-        <span>Profile</span>
-      </DropdownMenuItem>
-    </DropdownMenuGroup>
-  </DropdownMenuContent>
-</DropdownMenu>
+          <div className="w-full">
+          <ResourcesNew/>
+          </div>
+   
 
       
         </Box>

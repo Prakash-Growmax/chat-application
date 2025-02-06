@@ -39,7 +39,8 @@ function ChatLoader({ fileName = "", progress = 100 }) {
       {(isLoading && prevMessage.length === 0 && !s3Key) && (<>   <div className="flex flex-col w-full my-4 mx-2">
             <div className="flex-1">
               <div className="flex items-center justify-center">
-                <LogoLoader  className="w-40 h-40"/>
+              <LogoLoader className="w-20 h-20" />
+
                 
               </div>
             </div>
