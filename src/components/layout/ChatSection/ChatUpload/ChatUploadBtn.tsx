@@ -8,6 +8,7 @@ import { getAccessToken } from "@/utils/storage.utils";
 import { Tooltip } from "@mui/material";
 import { useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 function ChatUploadBtn({
   onFileUploaded,
@@ -30,11 +31,9 @@ function ChatUploadBtn({
         return;
       }
       setIsUploading(true);
-      const key = await uploadToS3(file, (progress) => {
+      await uploadToS3(file, (progress) => {
         console.log(`Upload progress: ${progress.percentage}%`);
       });
-      console.log("🚀 ~ key ~ key:", key);
-
       if (!profile) return true;
 
       let ID = chatId;
@@ -52,7 +51,7 @@ function ChatUploadBtn({
           setS3Key(s3_key);
         }
       } catch (error) {
-        console.log("🚀 ~ error:", error);
+        toast.error("Error occurred while uploading. Try again");
       }
     },
     [onFileUploaded, setS3Key, profile, chatId, token, addToQueue]

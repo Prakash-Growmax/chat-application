@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 import AppContext from "../context/AppContext";
 import LucideIcon from "../Custom-UI/LucideIcon";
 import DeleteIcon from "../ui/delete-icon";
@@ -86,7 +87,7 @@ export default function MyRecent({
     left: number;
   }>({ top: 0, left: 0 });
   const navigate = useNavigate();
-  const { emptyQueue,setPrevMessage } = useChatContext();
+  const { emptyQueue, setPrevMessage } = useChatContext();
   const queryClient = useQueryClient();
 
   const { data: sessionList, isLoading } = useQuery({
@@ -184,9 +185,10 @@ export default function MyRecent({
       sessionId,
       orgId: profile?.organization_id,
     });
+    toast.success("Thread deleted successfully");
     setIsDeleting(false);
   };
- 
+
   return (
     <div className="relative cursor-pointer">
       <div

@@ -6,10 +6,8 @@ import { chatService } from "@/services/ChatService";
 import { Message } from "@/types";
 import { formQueueMessage } from "@/utils/chat.utils";
 import { getAccessToken, tokenType } from "@/utils/storage.utils";
-import { Tooltip } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { CSVPreview } from "../CSVPreview/CSVPreview";
 import LucideIcon from "../Custom-UI/LucideIcon";
 import ChatUploadBtn from "../layout/ChatSection/ChatUpload/ChatUploadBtn";
 
@@ -27,10 +25,18 @@ export function ChatInput({
   const { user } = useAuth();
   const navigate = useNavigate();
   const { profile } = useProfile();
-  const { addToQueue, processing, setProcessing, queue, processQueue, s3Key,setPrevMessage } =
-    useChatContext();
+  const {
+    addToQueue,
+    processing,
+    setProcessing,
+    queue,
+    processQueue,
+    s3Key,
+    setPrevMessage,
+    isUploading,
+  } = useChatContext();
   const [input, setInput] = useState("");
-  const location =useLocation();
+  const location = useLocation();
 
   const containerRef = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -55,10 +61,9 @@ export function ChatInput({
       isTyping: false,
     };
     addToQueue(userMessage);
-    if(location.pathname == "/chat/new"){
-      setPrevMessage((prev: Message[]) => [...prev,userMessage]);
+    if (location.pathname == "/chat/new") {
+      setPrevMessage((prev: Message[]) => [...prev, userMessage]);
     }
-   
   }
 
   const handleSubmit = async (e: any) => {
@@ -114,7 +119,7 @@ export function ChatInput({
         if (result?.data?.error) {
           throw new Error(result?.data?.error);
         }
-       console.log(result)
+        console.log(result);
         let assistantMessage;
         assistantMessage = formQueueMessage(
           result?.data?.results?.response?.charts
@@ -195,24 +200,13 @@ export function ChatInput({
 
                   <div className="flex h-[44px] items-center justify-between">
                     <div className="flex gap-x-1">
-                      <ChatUploadBtn
-                        onFileUploaded={onFileUploaded}
-                        // setS3Key={setS3Key}
-                      />
-{/* 
-                      {s3Key && (
-                        <div>
-                          <Tooltip title="Preview CSV">
-                            <CSVPreview s3Key={s3Key} />
-                          </Tooltip>
-                        </div>
-                      )} */}
+                      <ChatUploadBtn onFileUploaded={onFileUploaded} />
                     </div>
 
                     <button
                       type="submit"
                       className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
-                        input
+                        input && !isUploading
                           ? "bg-black text-white hover:opacity-70"
                           : "bg-[#D7D7D7] text-[#f4f4f4]"
                       }`}

@@ -4,6 +4,7 @@ import { uploadDocumentToChat } from "@/lib/chat/chat-service";
 import { ChatState } from "@/types";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 import ChatBox from "./ChatBox";
 import { ChatInput } from "./ChatInput";
 
@@ -51,6 +52,7 @@ function Chat() {
       setIsUploading(true);
       const message_res = await uploadDocumentToChat(chatId, s3Key, profile);
       addToQueue(message_res);
+      toast.success("File uploaded successfully.");
       setIsUploading(false);
     } catch (error) {
       setIsUploading(false);
