@@ -14,6 +14,7 @@ function Chat() {
   const {
     messages: message,
     s3Key,
+    setS3Key,
     addToQueue,
     isUploading,
     setIsUploading,
@@ -50,7 +51,7 @@ function Chat() {
     try {
       if (!chatId || !profile) return null;
       setIsUploading(true);
-      const message_res = await uploadDocumentToChat(chatId, s3Key, profile);
+      const message_res = await uploadDocumentToChat(chatId, s3Key, profile,setS3Key);
       addToQueue(message_res);
       toast.success("File uploaded successfully.");
       setIsUploading(false);

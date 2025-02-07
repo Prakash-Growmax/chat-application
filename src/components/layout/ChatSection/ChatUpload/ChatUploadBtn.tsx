@@ -26,16 +26,17 @@ function ChatUploadBtn({
   const handleFileUpload = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
+    
       if (!file) {
         console.error("No file selected");
         return;
       }
       setIsUploading(true);
       await uploadToS3(file, (progress) => {
-        console.log(`Upload progress: ${progress.percentage}%`);
+       
       });
       if (!profile) return true;
-
+     
       let ID = chatId;
       const s3_key = `s3://growmax-dev-app-assets/analytics/${file.name}`;
 

@@ -76,8 +76,9 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
           addToQueue(assistantMessage);
           return; // Early return to stop further processing
         }
-  
-        // Process existing chat history
+         if(response.status == 200){
+           setPrevMessage([])
+         }
         response?.data?.items.forEach((item) => {
            
           if (item.query_text) {

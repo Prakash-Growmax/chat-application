@@ -68,7 +68,7 @@ export async function uploadToS3(
             total: event.total,
             percentage: Math.round((event.loaded / event.total) * 100),
           };
-          console.log("🚀 ~ returnnewPromise ~ progress:", progress);
+        
           onProgress(progress);
         }
       };

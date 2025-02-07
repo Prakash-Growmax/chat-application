@@ -100,7 +100,8 @@ export async function createChatId(profile: Profile) {
 export async function uploadDocumentToChat(
   chatId: string,
   s3Key: string,
-  profile: Profile
+  profile: Profile,
+  setS3Key:string
 ) {
   try {
     const token = getAccessToken();
@@ -123,7 +124,9 @@ export async function uploadDocumentToChat(
     if (result.status !== 200) {
       throw new Error("Failed to upload dataset info");
     }
-
+   if(result.status === 200){
+     setS3Key("")
+   }
     const response = {
       data: {
         response: {

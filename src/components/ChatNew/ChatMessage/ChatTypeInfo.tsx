@@ -1,20 +1,14 @@
 import DarkLogo from "@/assets/Logo/DarkLogo";
 import { useAuth } from "@/hooks/useAuth";
 import { BodyText } from "@/Theme/Typography";
+import { getInitials } from "@/utils/general.utilis";
 import { Avatar } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import { name } from "plotly.js/lib/scatter";
 
 function ChatTypeInfo({ isUser }: { isUser: boolean }) {
   const { user } = useAuth();
-  const getInitials = (name) => {
-    if (!name) return "?";
-    const nameParts = name.trim().split(" ");
-    return nameParts.length > 1
-      ? nameParts[0][0].toUpperCase() + nameParts[1][0].toUpperCase()
-      : nameParts[0][0].toUpperCase();
-  };
-  const initials = getInitials(user?.name);
+  const userName = user?.name || "";
   return (
     <div className="flex flex-row mb-1 items-center justify-start">
      
@@ -30,7 +24,7 @@ function ChatTypeInfo({ isUser }: { isUser: boolean }) {
             alt="Remy Sharp"
             src="/broken-image.jpg"
           >
-            {initials}
+            {getInitials(userName)}
           </Avatar>
           <BodyText className="ml-1">You</BodyText>
         </div>

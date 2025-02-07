@@ -32,14 +32,10 @@ const DatasetUploadResponse = ({ message, onContentChange }) => {
     addToQueue(userMessage);
   }
 
-  const [showPreview, setShowPreview] = useState(false);
+  const [showPreview, setShowPreview] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const handlePreviewClick = (file) => {
-    const s3_key = `s3://growmax-dev-app-assets/analytics/${file}.csv`;
-    setS3Key(s3_key);
-    // setShowPreview((prev) => !prev); 
-  };
+ 
 
   return (
     <div className="flex flex-col m-auto text-base py-2" ref={containerRef}>
@@ -47,10 +43,7 @@ const DatasetUploadResponse = ({ message, onContentChange }) => {
         <>
           <div
             className="relative flex items-center justify-between bg-gray-100 rounded-lg p-2 mb-2 w-80"
-            onClick={() => {
-              setS3Key("");
-              handlePreviewClick(message.name);
-            }}
+           
           >
             <div className="flex items-center gap-x-2">
               <button
@@ -60,7 +53,7 @@ const DatasetUploadResponse = ({ message, onContentChange }) => {
               </button>
               <span className="text-base font-semibold">{`${message?.name}.csv`}</span>
             </div>
-            {s3Key && (
+            {showPreview && (
               <div>
                 <TooltipNew title="Preview CSV" placement="top-start">
                   <CSVPreview s3Key={`s3://growmax-dev-app-assets/analytics/${message.name}.csv`} />
