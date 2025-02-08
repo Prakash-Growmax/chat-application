@@ -64,15 +64,15 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
          
           const emptyChatResponse = {
             data: {
-              response: {
+             
                 text: "It looks like there’s no history yet. Let’s spark up a new conversation and make something great!",
-              },
+           
             },
-            type: "datasetres",
+          
           };
   
           // Formulate the assistant message and add it to the queue
-          const assistantMessage = formQueueMessage(emptyChatResponse, true);
+          const assistantMessage = formQueueMessage(emptyChatResponse, true,true,"datasetres");
           addToQueue(assistantMessage);
           return; // Early return to stop further processing
         }
@@ -86,12 +86,27 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
               id: Date.now().toString(),
               content: item.query_text,
               role: "user",
-              timestamp: item.processed_query.created_at,
+              timestamp: item.created_at,
               type: "text",
               isTyping: false,
             };
             addToQueue(userMessage);
           }
+          // if (item?.results?.file_name && item?.results?.suggested_questions){
+          //   const response = {
+          //     data: {
+              
+                 
+          //         file_name:item?.results?.file_name,
+          //         suggested_questions:item?.results?.suggested_questions,
+                
+          //     },
+             
+          //   };
+          //   let assistantMessage;
+          //   assistantMessage = formQueueMessage(response || "", true, false,"datasetres");
+          //   addToQueue(assistantMessage)
+          // }
   
           if (item?.results?.results?.response) {
             const assistantMessage = formQueueMessage(
@@ -100,7 +115,9 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
                 : item.results.results.response || "",
               true,
               false,
-              item?.results?.timestamp
+              item?.results?.results?.response?.data?.file_name && "datasetres" ,
+              item?.results?.timestamp,
+            
             );
             addToQueue(assistantMessage);
           }

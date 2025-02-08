@@ -4,8 +4,11 @@ export const formQueueMessage = (
   content: object,
   isAssistant: boolean,
   isTyping: boolean = true,
+  types:string="text",
   timestamp: Date = new Date(),
+ 
   additionalParams?: object, 
+  
 ): { messageObject: Message; messageStringOrObject: string | object } => {
   const message: Message = {
     id: Date.now().toString(),
@@ -13,7 +16,7 @@ export const formQueueMessage = (
     role: isAssistant ? "assistant" : "user",
     timestamp:timestamp,
     isTyping:isTyping,
-    type: "text",
+    type:types,
     ...additionalParams,
   };
 

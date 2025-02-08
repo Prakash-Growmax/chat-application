@@ -13,6 +13,7 @@ import ChatTimeStamp from "./ChatMessage/ChatTimeStamp";
 import ChatTypeInfo from "./ChatMessage/ChatTypeInfo";
 import { DataChart } from "./DataChat";
 import GeneralResponse from "../layout/ChatSection/ChatMessage/GeneralResponse";
+import { useChatContext } from "@/context/ChatContext";
 
 interface ChatMessageProps {
   message: Message;
@@ -33,10 +34,12 @@ export function ChatMessage({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const isUser = message?.role === "user";
-  console.log(message);
+  const {queue} = useChatContext();
+  console.log(queue)
   const timeStamp = message?.timestamp
     ? message?.timestamp
     : message?.messageObject?.timestamp || "";
+    
   return (
     <>
       <div className="mx-auto max-w-4xl h-full">
@@ -128,10 +131,12 @@ const RenderContent = ({
       />
     );
   }
-  if (message?.messageObject?.content?.type === "datasetres") {
+  if (message?.messageObject?.type === "datasetres") {
     return (
       <DatasetUploadResponse
-        message={message?.messageObject?.content?.data?.response}
+        message={message?.messageObject?.content?.data}
+        isTyping={message?.messageObject?.isTyping}
+        isAssistant={message?.messageObject?.role}
         onContentChange={onContentChange}
       />
     );

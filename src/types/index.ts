@@ -11,7 +11,7 @@ export interface Message {
   content: string | object;
   role: "user" | "assistant";
   timestamp: Date;
-  type: "text" | "chart" | "table";
+  type: "text" | "chart" | "table" ;
   messageObject?:any;
   data?: any;
   error?: boolean;

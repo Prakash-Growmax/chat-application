@@ -129,17 +129,17 @@ export async function uploadDocumentToChat(
    }
     const response = {
       data: {
-        response: {
+       
           text: "Success! Your file has been uploaded successfully. Ask questions regarding the uploaded file.",
-          name:result?.data?.name,
+          file_name:result?.data?.name,
           suggested_questions: result?.data.suggested_questions,
-        },
+       
       },
-      type: "datasetres",
+     
     };
 
     let assistantMessage;
-    assistantMessage = formQueueMessage(response || "", true);
+    assistantMessage = formQueueMessage(response || "", true,true,"datasetres");
 
     return assistantMessage;
   } catch (error) {}
