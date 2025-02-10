@@ -6,8 +6,10 @@ import { useChatContext } from "@/context/ChatContext";
 import { BodySmall } from "@/Theme/Typography";
 import TooltipNew from "@/components/ui/tooltipnew";
 import { CSVPreview } from "@/components/CSVPreview/CSVPreview";
+import { cleanFilename } from "@/utils/s3.utils";
 
 const DatasetUploadResponse = ({ message,isTyping,isAssistant,onContentChange}) => {
+
   const { addToQueue, queue, setS3Key, s3Key } = useChatContext();
   const [showHeading, setShowHeading] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1);
@@ -19,6 +21,7 @@ const DatasetUploadResponse = ({ message,isTyping,isAssistant,onContentChange}) 
     }
     onContentChange?.();
   };
+  const fileName = cleanFilename(message?.file_path);
 
   function addUserQueue(value) {
     const userMessage = {
@@ -39,7 +42,7 @@ const DatasetUploadResponse = ({ message,isTyping,isAssistant,onContentChange}) 
 
   return (
     <div className="flex flex-col m-auto text-base py-2" ref={containerRef}>
-      {message?.file_name && (
+      {fileName && (
         <>
           <div
             className="relative flex items-center justify-between bg-gray-100 rounded-lg p-2 mb-2 w-80"
@@ -51,12 +54,12 @@ const DatasetUploadResponse = ({ message,isTyping,isAssistant,onContentChange}) 
               >
                 <Sheet size={30} color="white" />
               </button>
-              <span className="text-base font-semibold">{`${message?.file_name}.csv`}</span>
+              <span className="text-base font-semibold">{`${fileName}`}</span>
             </div>
             {showPreview && (
               <div>
                 <TooltipNew title="Preview CSV" placement="top-start">
-                  <CSVPreview s3Key={`s3://growmax-dev-app-assets/analytics/${message.file_name}.csv`} />
+                  <CSVPreview s3Key={`s3://growmax-dev-app-assets/analytics/${fileName}`} />
                 </TooltipNew>
               </div>
             )}

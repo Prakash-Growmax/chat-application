@@ -13,6 +13,8 @@ import { capitalizeFirstName, getInitials } from "@/utils/general.utilis";
 import { Avatar } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import LogoutButton from "../auth/LogoutButton";
+import LucideIcon from "../Custom-UI/LucideIcon";
+import { useNavigate } from "react-router-dom";
 
 export default function MyAccountDetails() {
   const { user, signOut } = useAuth();
@@ -20,7 +22,7 @@ export default function MyAccountDetails() {
   const tokens_used = tokens?.data?.current_token_usage;
   const tokens_remaining = tokens?.data?.tokens_remaining;
   const userName = user?.name || "";
-
+  const navigate = useNavigate();
   return (
     <>
       <div className="flex items-cente  r">
@@ -41,16 +43,40 @@ export default function MyAccountDetails() {
             </ListItemHeaderText>
             <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
             <DropdownMenuGroup>
-              <DropdownMenuItem className="flex flex-col justify-start items-start p-2">
-                <Label className="pb-1">{capitalizeFirstName(userName)}</Label>
-                <Caption className="truncate pb-2">{user?.email}</Caption>
-                <Caption className="pb-1">
-                  {tokens_used}/{tokens_remaining} tokens used
-                </Caption>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
-            <LogoutButton />
+                        
+                        <DropdownMenuItem className="gap-3">
+                            <LucideIcon name="User" size={14} color="black" />
+                            <Label className="pb-1">{capitalizeFirstName(userName)}</Label>
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                      <DropdownMenuGroup>
+                      <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
+                                 <DropdownMenuItem className="gap-3 hover:bg-gray-200 cursor-pointer" onClick={() => navigate(`/plans`)}>
+                                     <LucideIcon name="Wallet" size={14} color="black" />
+                                     <span>Subscription</span>
+                                 </DropdownMenuItem>
+                             </DropdownMenuGroup>
+                             <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
+                             <DropdownMenuGroup>
+                                 <DropdownMenuItem className="gap-3 hover:bg-gray-200 cursor-pointer" onClick={() => navigate(`/teams`)}>
+                                     <LucideIcon name="Users" size={14} color="black" />
+                                     <span>Teams</span>
+                                 </DropdownMenuItem>
+                             </DropdownMenuGroup>
+                             <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
+                             <DropdownMenuGroup>
+                                 <DropdownMenuItem className="gap-3 hover:bg-gray-200 cursor-pointer" onClick={() => navigate(`/settings`)}>
+                                     <LucideIcon name="SquareUser" size={14} color="black" />
+                                     <span>Profile</span>
+                                 </DropdownMenuItem>
+                             </DropdownMenuGroup>
+                             <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
+                             <DropdownMenuGroup>
+                             <DropdownMenuItem className="gap-3 hover:bg-gray-200 cursor-pointer" onClick={() => signOut()}>
+                                 <LucideIcon name="LogOut" size={14} color="black" />
+                                 <span>Logout</span>
+                             </DropdownMenuItem>
+                             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

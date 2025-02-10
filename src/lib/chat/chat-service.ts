@@ -131,7 +131,7 @@ export async function uploadDocumentToChat(
       data: {
        
           text: "Success! Your file has been uploaded successfully. Ask questions regarding the uploaded file.",
-          file_name:result?.data?.name,
+          file_path:result?.data?.file_path,
           suggested_questions: result?.data.suggested_questions,
        
       },
