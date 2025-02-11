@@ -68,6 +68,7 @@ export function ChatInput({
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    if (!Boolean(input.trim())) return;
     const value = input.trim() || "";
     setInput("");
     if (isNewChat && profile) {

@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
 import { ListItemText } from "@/Theme/Typography";
-import LucideIcon from "../Custom-UI/LucideIcon";
 import { useContext } from "react";
 import AppContext from "../context/AppContext";
+import LucideIcon from "../Custom-UI/LucideIcon";
 
-export default function Resources({isMobile,isTab}) {
+export default function Resources({ isMobile, isTab }) {
   const navigate = useNavigate();
   const { setSideDrawerOpen } = useContext(AppContext);
   const resources_items = [

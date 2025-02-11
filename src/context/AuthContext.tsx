@@ -7,6 +7,9 @@ import { User } from "@/types";
 import { createContext, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
+/**
+ * Interface representing the authentication context type.
+ */
 interface AuthContextType {
   user: User | null;
   loading: boolean;
@@ -16,8 +19,15 @@ interface AuthContextType {
   signOut: () => Promise<void>;
 }
 
+/**
+ * Authentication context to be used by the application.
+ */
 export const AuthContext = createContext<AuthContextType | null>(null);
 
+/**
+ * Authentication provider component that wraps the application and provides authentication state and methods.
+ * @param children - The child components to be wrapped by the provider.
+ */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -27,6 +37,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let mounted = true;
 
+    /**
+     * Handles the user session.
+     * @param session - The user session object.
+     */
     const handleSession = async (session: any) => {
       try {
         if (session?.user) {
@@ -44,6 +58,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     };
 
+    /**
+     * Initializes the authentication process.
+     */
     const initAuth = async () => {
       try {
         loadingState.startLoading("Initializing authentication...");
@@ -75,6 +92,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
     };
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -97,6 +115,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
     });
+
     initAuth();
 
     return () => {
@@ -106,6 +125,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
+  /**
+   * Signs in the user with the provided email.
+   * @param email - The email address of the user.
+   */
   const signIn = async (email: string) => {
     setLoading(true);
     loadingState.startLoading("Sending login code...");
@@ -125,6 +148,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  /**
+   * Verifies the OTP code for the provided email.
+   * @param email - The email address of the user.
+   * @param otp - The OTP code sent to the user's email.
+   */
   const verifyOTP = async (email: string, otp: string) => {
     setLoading(true);
     loadingState.startLoading("Verifying login code...");
@@ -151,6 +179,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  /**
+   * Signs out the user.
+   */
   const signOut = async () => {
     setLoading(true);
     loadingState.startLoading("Signing out...");

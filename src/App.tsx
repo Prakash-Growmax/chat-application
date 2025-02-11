@@ -19,17 +19,13 @@ function App() {
   );
   const [sideDrawerWidth, setSideDrawerWidth] = useState<number>(drawerWidth);
   const MainLayout_MarginLeft = sideDrawerWidth + 16;
-  // const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    // Remove skeleton after hydration
     const skeleton = document.querySelector(".chat-skeleton");
     if (skeleton) {
       skeleton.classList.add("hidden");
-      // Remove skeleton after transition
       setTimeout(() => {
         skeleton.remove();
-        // setIsHydrated(true);
       }, 300);
     }
   }, []);
