@@ -23,7 +23,7 @@ const classNames = (...classes: (string | boolean | undefined)[]) => {
 
 export function PlansPage() {
   const { user } = useAuth();
-  const { upgradePlan, planId } = useSubscription();
+  const { planId } = useSubscription();
   const { sideDrawerOpen } = useContext(AppContext);
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState<string | null>(null);
@@ -39,15 +39,6 @@ export function PlansPage() {
       user?.email,
       user?.id
     );
-    // setLoading(plan?.name);
-    // try {
-    //   await upgradePlan(plan.name);
-    // } catch (error) {
-    //   console.error("Subscription error:", error);
-    //   setError("Failed to upgrade plan. Please try again.");
-    // } finally {
-    //   setLoading(null);
-    // }
   };
 
   const loadOrganizations = async () => {
@@ -63,7 +54,7 @@ export function PlansPage() {
   };
 
   useEffect(() => {
-    if(user){
+    if (user) {
       loadOrganizations();
       // Disable scrolling
       document.body.style.overflow = "hidden";
@@ -72,13 +63,10 @@ export function PlansPage() {
         document.body.style.overflow = "";
       };
     }
-  
   }, [user]);
-  
+
   return (
     <div className="fixed inset-0 overflow-y-auto bg-white from-slate-50 to-white pt-96 lg:pt-0">
-
-
       <div className="container py-16 h-full flex flex-col justify-center">
         <div
           className={`mx-auto max-w-4xl space-y-12 ${
@@ -86,14 +74,14 @@ export function PlansPage() {
           }`}
         >
           <div className="text-center space-y-4">
-          <h1 className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-[#0A0A0A]">
-  Choose Your Plan
-</h1>
+            <h1 className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-[#0A0A0A]">
+              Choose Your Plan
+            </h1>
 
-<p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto">
-  Get started with the perfect plan for your needs. Upgrade or downgrade at any time.
-</p>
-
+            <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto">
+              Get started with the perfect plan for your needs. Upgrade or
+              downgrade at any time.
+            </p>
           </div>
 
           {error && (
