@@ -35,7 +35,7 @@ export function ChatMessage({
   const [isHovering, setIsHovering] = useState(false);
   const isUser = message?.role === "user";
   const {queue} = useChatContext();
-  console.log(queue)
+ 
   const timeStamp = message?.timestamp
     ? message?.timestamp
     : message?.messageObject?.timestamp || "";

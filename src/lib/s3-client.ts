@@ -7,6 +7,7 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import Papa from "papaparse";
+import * as XLSX from "xlsx";
 import { CSVPreviewData, FileMetadata, PreviewError } from "./types/csv";
 
 const BUCKET_NAME = import.meta.env.VITE_S3_BUCKET_NAME;
@@ -109,7 +110,7 @@ export const fetchCSVPreview = async (
   const cleanedKey = cleanKey(key);
 
   const Keys = `${cleanedKey}`;
-
+  
   const cacheKey = `${bucket}:${key}:${rowLimit || "all"}`;
 
   // Clear existing cache to ensure fresh data
@@ -130,55 +131,78 @@ export const fetchCSVPreview = async (
       throw new Error("File too large for preview");
     }
 
-    const csvString = await response.Body.transformToString();
-    // Use worker: false to prevent web worker usage which might limit rows
-    const parseResult = await new Promise<Papa.ParseResult<string[]>>(
-      (resolve, reject) => {
-        Papa.parse(csvString, {
-          complete: (results: any) => {
-            resolve(results);
-          },
-          error: (error: any) => {
-            reject(new Error(`CSV parsing failed: ${error.message}`));
-          },
-          delimiter: ",", // Auto-detect delimiter
-          skipEmptyLines: "greedy",
-          worker: false,
-          header: false,
-          dynamicTyping: false,
-          // Add error handling for malformed rows
-          transform: (value: string) => {
-            return value.trim();
-          },
-          transformHeader: (header: string) => {
-            return header.trim();
-          },
-        });
+    const fileBuffer = await response.Body.transformToByteArray();
+    const fileType = key.endsWith('.xlsx') ? 'xlsx' : 'csv';
+
+    let parseResult: Papa.ParseResult<string[]> | XLSX.WorkBook;
+
+    if (fileType === 'csv') {
+      const csvString = new TextDecoder().decode(fileBuffer);
+      parseResult = await new Promise<Papa.ParseResult<string[]>>(
+        (resolve, reject) => {
+          Papa.parse(csvString, {
+            complete: (results: any) => {
+              resolve(results);
+            },
+            error: (error: any) => {
+              reject(new Error(`CSV parsing failed: ${error.message}`));
+            },
+            delimiter: ",", // Auto-detect delimiter
+            skipEmptyLines: "greedy",
+            worker: false,
+            header: false,
+            dynamicTyping: false,
+            // Add error handling for malformed rows
+            transform: (value: string) => {
+              return value.trim();
+            },
+            transformHeader: (header: string) => {
+              return header.trim();
+            },
+          });
+        }
+      );
+    } else if (fileType === 'xlsx') {
+      const workbook = XLSX.read(fileBuffer, { type: 'array' });
+      parseResult = workbook;
+    } else {
+      throw new Error("Unsupported file type");
+    }
+
+    let headers: string[] = [];
+    let rows: string[][] = [];
+
+    if (fileType === 'csv') {
+      const filteredData = (parseResult as Papa.ParseResult<string[]>).data.filter((row) => {
+        return row.length > 0 && row.some((cell) => cell.trim() !== "");
+      });
+
+      if (filteredData.length < 2) {
+        // At least headers and one data row
+        throw new Error("CSV file contains no valid data rows");
       }
-    );
 
-    if (!parseResult.data || parseResult.data.length === 0) {
-      throw new Error("CSV file is empty or contains no valid data");
+      headers = filteredData[0];
+      const allRows = filteredData.slice(1);
+      rows = rowLimit ? allRows.slice(0, rowLimit) : allRows;
+    } else if (fileType === 'xlsx') {
+      const sheetName = (parseResult as XLSX.WorkBook).SheetNames[0];
+      const worksheet = (parseResult as XLSX.WorkBook).Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as string[][];
+
+      if (jsonData.length < 2) {
+        throw new Error("XLSX file contains no valid data rows");
+      }
+
+      headers = jsonData[0];
+      const allRows = jsonData.slice(1);
+      rows = rowLimit ? allRows.slice(0, rowLimit) : allRows;
     }
 
-    const filteredData = parseResult.data.filter((row) => {
-      return row.length > 0 && row.some((cell) => cell.trim() !== "");
-    });
-
-    if (filteredData.length < 2) {
-      // At least headers and one data row
-      throw new Error("CSV file contains no valid data rows");
-    }
-
-    const headers = filteredData[0];
-    const allRows = filteredData.slice(1);
-
-    // Apply row limit if specified
-    const rows = rowLimit ? allRows.slice(0, rowLimit) : allRows;
     const previewData: CSVPreviewData = {
       headers,
       rows,
-      totalRows: allRows.length,
+      totalRows: rows.length,
     };
 
     // Cache the preview data
@@ -192,7 +216,7 @@ export const fetchCSVPreview = async (
       size: fileSize,
       lastModified: response.LastModified || new Date(),
       contentType: response.ContentType || "text/csv",
-      rowCount: allRows.length,
+      rowCount: rows.length,
       columnCount: headers.length,
     };
 

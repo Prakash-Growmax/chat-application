@@ -115,7 +115,7 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
                 : item.results.results.response || "",
               true,
               false,
-              item?.results?.results?.response?.data?.file_name && "datasetres" ,
+              item?.results?.results?.response?.data?.file_path && "datasetres" ,
               item?.results?.timestamp,
             
             );

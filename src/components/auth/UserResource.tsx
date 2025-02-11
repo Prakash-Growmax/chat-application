@@ -9,7 +9,9 @@ const UserResource = () =>{
     const { user} = useAuth();
    
  
-    const userName = user?.name || "";
+    const userName = user?.name 
+    ? user.name.charAt(0).toUpperCase() + user.name.slice(1) 
+    : "";
     
     return(
       <>

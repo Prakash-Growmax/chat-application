@@ -6,11 +6,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import UserResource from "../auth/UserResource";
 import LucideIcon from "../Custom-UI/LucideIcon";
+
 const ResourcesNew = () => {
   const navigate = useNavigate();
+  const { signOut } = useAuth();
+
   return (
     <div>
       <DropdownMenu>
@@ -27,10 +31,8 @@ const ResourcesNew = () => {
         >
           <DropdownMenuGroup>
             <DropdownMenuItem
-              className="gap-3 cursor-pointer"
-              onClick={() => {
-                navigate(`/plans`);
-              }}
+              className="gap-3 hover:bg-gray-200 cursor-pointer"
+              onClick={() => navigate(`/plans`)}
             >
               <LucideIcon name="Wallet" size={14} color="black" />
               <span>Subscription</span>
@@ -39,10 +41,8 @@ const ResourcesNew = () => {
           <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
           <DropdownMenuGroup>
             <DropdownMenuItem
-              className="gap-3 cursor-pointer"
-              onClick={() => {
-                navigate(`/teams`);
-              }}
+              className="gap-3 hover:bg-gray-200 cursor-pointer"
+              onClick={() => navigate(`/teams`)}
             >
               <LucideIcon name="Users" size={14} color="black" />
               <span>Teams</span>
@@ -51,13 +51,21 @@ const ResourcesNew = () => {
           <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
           <DropdownMenuGroup>
             <DropdownMenuItem
-              className="gap-3 cursor-pointer"
-              onClick={() => {
-                navigate(`/settings`);
-              }}
+              className="gap-3 hover:bg-gray-200 cursor-pointer"
+              onClick={() => navigate(`/settings`)}
             >
               <LucideIcon name="SquareUser" size={14} color="black" />
               <span>Profile</span>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              className="gap-3 hover:bg-gray-200 cursor-pointer"
+              onClick={() => signOut()}
+            >
+              <LucideIcon name="LogOut" size={14} color="black" />
+              <span>Logout</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
@@ -65,4 +73,5 @@ const ResourcesNew = () => {
     </div>
   );
 };
+
 export default ResourcesNew;
