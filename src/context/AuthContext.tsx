@@ -1,4 +1,5 @@
 import * as AuthService from "@/lib/auth/auth-service";
+import { refreshSession } from "@/lib/auth/auth-utils";
 import { buildUserProfile } from "@/lib/auth/subscription-service";
 import { loadingState } from "@/lib/loading-state";
 import { supabase } from "@/lib/supabase";
@@ -29,7 +30,6 @@ export const AuthContext = createContext<AuthContextType | null>(null);
  * @param children - The child components to be wrapped by the provider.
  */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
- 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -78,7 +78,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         });
 
-        await handleSession(session);
+        const refreshedSession = await refreshSession();
+        await handleSession(refreshedSession);
       } catch (error) {
         if (mounted) {
           if (error instanceof Error) {
@@ -131,7 +132,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    * @param email - The email address of the user.
    */
   const signIn = async (email: string) => {
-  
     setLoading(true);
     loadingState.startLoading("Sending login code...");
     try {
