@@ -3,7 +3,7 @@ import Plot from "react-plotly.js";
 import Typewriter from "typewriter-effect";
 
 // Function to format summary text
-const formatSummary = (text) => {
+const formatSummary = (text: string): string => {
   let cleanText = text
     .replace(/\*\*/g, "")
     .replace(/\n\s*\n/g, "\n")
@@ -29,7 +29,14 @@ const formatSummary = (text) => {
   return formattedLines.map((line) => line.replace(/^###\s*/, "")).join("\n");
 };
 
-const ChartResponse = ({ data, layout, summary, onContentChange, isTyping, isAssistant }) => {
+const ChartResponse: React.FC<{
+  data: any[];
+  layout: any;
+  summary: string;
+  onContentChange?: () => void;
+  isTyping: boolean;
+  isAssistant: boolean;
+}> = ({ data, layout, summary, onContentChange, isTyping, isAssistant }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completedEntries, setCompletedEntries] = useState([]);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
@@ -44,7 +51,7 @@ const ChartResponse = ({ data, layout, summary, onContentChange, isTyping, isAss
   const showTyping = isTyping && isAssistant;
 
   // Function to calculate chart dimensions
-  const calculateDimensions = () => {
+  const calculateDimensions = (): { width: number; height: number } => {
     if (!containerRef.current) return;
 
     const viewportWidth = window.innerWidth;
@@ -134,7 +141,7 @@ const ChartResponse = ({ data, layout, summary, onContentChange, isTyping, isAss
   };
 
   // Function to smoothly scroll to the bottom
-  const scrollToBottom = () => {
+  const scrollToBottom = (): void => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTo({
         top: chatBoxRef.current.scrollHeight,
@@ -146,7 +153,7 @@ const ChartResponse = ({ data, layout, summary, onContentChange, isTyping, isAss
   // Effect to handle typing line by line and scroll smoothly
   useEffect(() => {
     if (showTyping && isPlotRendered && shouldStartTyping && currentIndex < entries.length) {
-      const timer = setTimeout(() => {
+      const timer = setTimeout((): void => {
         setCompletedEntries((prev) => {
           const newEntries = [...prev, entries[currentIndex]];
           setTimeout(scrollToBottom, 100); // Scroll to new line
@@ -172,7 +179,7 @@ const ChartResponse = ({ data, layout, summary, onContentChange, isTyping, isAss
           {/* Chart container */}
           <div ref={containerRef} className="relative w-full flex justify-center mb-4">
             <div className="w-full">
-              <Plot
+              <Plot<any>
                 data={data}
                 layout={dynamicLayout}
                 onInitialized={handlePlotRender}

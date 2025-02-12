@@ -11,11 +11,14 @@ export interface Message {
   content: string | object;
   role: "user" | "assistant";
   timestamp: Date;
-  type: "text" | "chart" | "table" ;
-  messageObject?:any;
+  type: "text" | "chart" | "table";
+  messageObject?: any;
   data?: any;
   error?: boolean;
   isTyping?: boolean;
+  file_path?: string;
+  text?: string;
+  suggested_questions?: string[];
 }
 export interface Organization {
   id: string;
