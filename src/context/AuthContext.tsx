@@ -1,5 +1,4 @@
 import * as AuthService from "@/lib/auth/auth-service";
-import { refreshSession } from "@/lib/auth/auth-utils";
 import { buildUserProfile } from "@/lib/auth/subscription-service";
 import { loadingState } from "@/lib/loading-state";
 import { supabase } from "@/lib/supabase";
@@ -32,11 +31,12 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const isInitialAuth = useRef(true);
-
   useEffect(() => {
     let mounted = true;
+    setInitialLoading(true);
 
     /**
      * Handles the user session.
@@ -74,12 +74,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         supabase.auth.onAuthStateChange(async (event, session) => {
           if (event === "TOKEN_REFRESHED") {
             console.log("Token refreshed");
+            console.log(
+              "🚀 ~ supabase.auth.onAuthStateChange ~ session:",
+              session
+            );
             await handleSession(session);
           }
         });
-
-        const refreshedSession = await refreshSession();
-        await handleSession(refreshedSession);
       } catch (error) {
         if (mounted) {
           if (error instanceof Error) {
@@ -90,6 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } finally {
         if (mounted) {
           setLoading(false);
+          setInitialLoading(false);
           loadingState.stopLoading();
         }
       }
@@ -215,7 +217,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signOut,
       }}
     >
-      {children}
+      {!initialLoading ? children : <div className="hidden">{children}</div>}
     </AuthContext.Provider>
   );
 }
