@@ -15,14 +15,33 @@ import { deepOrange } from "@mui/material/colors";
 import LogoutButton from "../auth/LogoutButton";
 import LucideIcon from "../Custom-UI/LucideIcon";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 export default function MyAccountDetails() {
-  const { user, signOut } = useAuth();
+  const { user, signOut,resetAuth } = useAuth();
   const tokens = useTokenUsage();
   const tokens_used = tokens?.data?.current_token_usage;
   const tokens_remaining = tokens?.data?.tokens_remaining;
   const userName = user?.name || "";
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const handleLogout = async () => {
+    
+
+ 
+    try {
+      // Use resetAuth to ensure complete logout and token clearing
+      await resetAuth();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      toast({
+        title: 'Logout Failed',
+        description: 'Unable to log out. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
   return (
     <>
       <div className="flex items-cente  r">
@@ -72,7 +91,7 @@ export default function MyAccountDetails() {
                              </DropdownMenuGroup>
                              <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
                              <DropdownMenuGroup>
-                             <DropdownMenuItem className="gap-3 hover:bg-gray-200 cursor-pointer" onClick={() => signOut()}>
+                             <DropdownMenuItem className="gap-3 hover:bg-gray-200 cursor-pointer" onClick={handleLogout}>
                                  <LucideIcon name="LogOut" size={14} color="black" />
                                  <span>Logout</span>
                              </DropdownMenuItem>

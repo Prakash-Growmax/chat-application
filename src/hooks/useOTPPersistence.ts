@@ -60,6 +60,7 @@ export function useOTPPersistence() {
     email,
     setEmail,
     isVerifying,
+    setIsVerifying,
     isLoading,
     persistOTPState,
     clearPersistedState,

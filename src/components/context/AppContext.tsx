@@ -9,7 +9,7 @@ interface AppContextType {
 }
 
 const AppContext = React.createContext<AppContextType>({
-  sideDrawerOpen: false,
+  sideDrawerOpen:true,
   setSideDrawerOpen: () => {},
   sideDrawerWidth: drawerWidth,
   MainLayout_MarginLeft: drawerWidth + 16,

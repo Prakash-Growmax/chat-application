@@ -10,10 +10,32 @@ import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import UserResource from "../auth/UserResource";
 import LucideIcon from "../Custom-UI/LucideIcon";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const ResourcesNew = () => {
   const navigate = useNavigate();
-  const { signOut } = useAuth();
+  const { signOut, resetAuth } = useAuth();
+
+  const { toast } = useToast();
+
+  const handleLogout = async () => {
+    
+
+ 
+    try {
+      // Use resetAuth to ensure complete logout and token clearing
+      await resetAuth();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      toast({
+        title: 'Logout Failed',
+        description: 'Unable to log out. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
 
   return (
     <div>
@@ -27,7 +49,6 @@ const ResourcesNew = () => {
           className="w-56 z-[1400] bg-white border-gray-200 rounded-lg shadow-xl"
           side="top"
           align="center"
-          portal
         >
           <DropdownMenuGroup>
             <DropdownMenuItem
@@ -61,8 +82,9 @@ const ResourcesNew = () => {
           <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
           <DropdownMenuGroup>
             <DropdownMenuItem
-              className="gap-3 hover:bg-gray-200 cursor-pointer"
-              onClick={() => signOut()}
+              className={`gap-3 hover:bg-gray-200 cursor-pointer `}
+              onClick={handleLogout}
+             
             >
               <LucideIcon name="LogOut" size={14} color="black" />
               <span>Logout</span>

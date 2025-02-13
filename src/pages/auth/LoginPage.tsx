@@ -18,6 +18,7 @@ function LoginPage() {
     email,
     setEmail,
     isVerifying,
+    setIsVerifying,
     isLoading: persistenceLoading,
     persistOTPState,
     clearPersistedState,
@@ -79,6 +80,7 @@ function LoginPage() {
           attemptsLeft={attemptsLeft}
           onOTPChange={setOtp}
           onSubmit={onVerifyOTP}
+          setIsVerifying={setIsVerifying}
           onResend={onSendOTP}
         />
       </AuthLayout>

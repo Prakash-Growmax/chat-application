@@ -52,7 +52,7 @@ const DatasetUploadResponse = ({ message, isTyping, isAssistant, onContentChange
               >
                 <Sheet size={30} color="white" />
               </button>
-              <span className="text-base font-semibold">{`${fileName}`}</span>
+              <span className="font-semibold text-xs sm:text-base">{`${fileName}`}</span>
             </div>
             {showPreview && (
               <div>

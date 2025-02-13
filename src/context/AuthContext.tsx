@@ -4,7 +4,7 @@ import { loadingState } from "@/lib/loading-state";
 import { supabase } from "@/lib/supabase";
 import { clearAllTokens } from "@/lib/token-storage";
 import { User } from "@/types";
-import { createContext, useEffect, useRef, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 /**
@@ -13,6 +13,7 @@ import { toast } from "sonner";
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  loadingSet:boolean;
   error: Error | null;
   signIn: (email: string) => Promise<void>;
   verifyOTP: (email: string, otp: string) => Promise<void>;
@@ -33,55 +34,68 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const isInitialAuth = useRef(true);
+  const [loadingSet,setLoadingSet] = useState(false);
+
   useEffect(() => {
     let mounted = true;
-    setInitialLoading(true);
+    let subscription: { unsubscribe: () => void } | null = null;
 
-    /**
-     * Handles the user session.
-     * @param session - The user session object.
-     */
-    const handleSession = async (session: any) => {
+    const handleAuthStateChange = async (event: string, session: any) => {
+      if (!mounted) return;
+
       try {
-        if (session?.user) {
-          const userData = await buildUserProfile(session.user);
-          setUser(userData);
-        } else {
-          setUser(null);
+        switch (event) {
+          case "SIGNED_IN":
+            if (session?.user) {
+              loadingState.startLoading("Loading your profile...");
+              const userData = await buildUserProfile(session.user);
+              setUser(userData);
+            }
+            break;
+          case "SIGNED_OUT":
+            setUser(null);
+            break;
+          case "TOKEN_REFRESHED":
+            if (session?.user) {
+              const userData = await buildUserProfile(session.user);
+              setUser(userData);
+            }
+            break;
         }
       } catch (error) {
-        console.error("Failed to handle session:", error);
+        console.error(`Authentication state change error (${event}):`, error);
         if (error instanceof Error) {
           setError(error);
         }
         await clearAllTokens();
+      } finally {
+        loadingState.stopLoading();
       }
     };
 
-    /**
-     * Initializes the authentication process.
-     */
     const initAuth = async () => {
       try {
         loadingState.startLoading("Initializing authentication...");
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
+        
+        // First, check for an existing session
+        const { data: { session } } = await supabase.auth.getSession();
 
-        if (!mounted) return;
-
-        supabase.auth.onAuthStateChange(async (event, session) => {
-          if (event === "TOKEN_REFRESHED") {
-            console.log("Token refreshed");
-            console.log(
-              "🚀 ~ supabase.auth.onAuthStateChange ~ session:",
-              session
-            );
-            await handleSession(session);
+        // If a session exists, build and set user profile
+        if (session?.user) {
+          const userData = await buildUserProfile(session.user);
+          if (mounted) {
+            setUser(userData);
           }
+        }
+
+        // Set up auth state change listener
+        const authStateChangeResult = supabase.auth.onAuthStateChange(async (event, session) => {
+          await handleAuthStateChange(event, session);
         });
+        
+        subscription = authStateChangeResult.data.subscription;
       } catch (error) {
+        console.error("Authentication initialization error:", error);
         if (mounted) {
           if (error instanceof Error) {
             setError(error);
@@ -97,35 +111,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     };
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (!mounted) return;
-      if (event === "SIGNED_IN" && session?.user && isInitialAuth.current) {
-        try {
-          loadingState.startLoading("Loading your profile...");
-          const userData = await buildUserProfile(session.user);
-          if (mounted) {
-            setUser(userData);
-          }
-        } catch (error) {
-          console.error("Failed to build user profile:", error);
-        } finally {
-          loadingState.stopLoading();
-        }
-      } else if (event === "SIGNED_OUT") {
-        if (mounted) {
-          setUser(null);
-        }
-      }
-    });
-
     initAuth();
 
     return () => {
-      isInitialAuth.current = false;
       mounted = false;
-      subscription.unsubscribe();
+      subscription?.unsubscribe();
     };
   }, []);
 
@@ -159,6 +149,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    */
   const verifyOTP = async (email: string, otp: string) => {
     setLoading(true);
+    setLoadingSet(true)
     loadingState.startLoading("Verifying login code...");
     try {
       const { session } = await AuthService.verifyOTP(email, otp);
@@ -179,6 +170,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw error;
     } finally {
       setLoading(false);
+      setLoadingSet(false);
       loadingState.stopLoading();
     }
   };
@@ -210,7 +202,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
-        loading,
+        loading: initialLoading || loading,
+        loadingSet,
         error,
         signIn,
         verifyOTP,

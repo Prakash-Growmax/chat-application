@@ -9,6 +9,7 @@ interface OTPFormProps {
   timeLeft: number;
   canResend: boolean;
   attemptsLeft: number;
+  setIsVerifying:(verify: boolean) => void;
   onOTPChange: (otp: string) => void;
   onSubmit: (e: React.FormEvent) => Promise<void>;
   onResend: () => Promise<void>;
@@ -22,6 +23,7 @@ export function OTPForm({
   attemptsLeft,
   onOTPChange,
   onSubmit,
+  setIsVerifying,
   onResend,
 }: OTPFormProps) {
   return (
@@ -63,6 +65,19 @@ export function OTPForm({
           </>
         )}
       </Button>
+    
+      <div className="flex items-center justify-center">
+  <Button
+    type="button"
+    className="flex items-center justify-center"
+    onClick={()=>{setIsVerifying(false)}}
+  >
+    Back
+  </Button>
+</div>
+
+
+
       <Button
         type="button"
         variant="ghost"
@@ -79,6 +94,7 @@ export function OTPForm({
           </>
         )}
       </Button>
+       
     </form>
   );
 }

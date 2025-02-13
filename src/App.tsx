@@ -16,6 +16,7 @@ import AppRoutes from "./AppRoutes";
 import AppContext from "./components/context/AppContext";
 import { drawerWidth } from "./constants/general.constant";
 import { DrawerOpen_LocalKey } from "./constants/storage.constant";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 // Types for drawer configuration and context
 interface DrawerConfig {
@@ -40,10 +41,13 @@ const queryClient = new QueryClient({
  * Manages the application's global state and provider hierarchy
  */
 function App() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
   // Initialize drawer state from localStorage or default to true
   const [sideDrawerOpen, setSideDrawerOpen] = useState(() => {
     const savedState = localStorage.getItem(DrawerOpen_LocalKey);
-    return savedState ? JSON.parse(savedState) : true;
+    return savedState ? JSON.parse(savedState) : !(isMobile || isTab);
   });
 
   // Manage responsive drawer width

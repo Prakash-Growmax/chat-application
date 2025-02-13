@@ -14,6 +14,7 @@ import ChatTypeInfo from "./ChatMessage/ChatTypeInfo";
 import { DataChart } from "./DataChat";
 import GeneralResponse from "../layout/ChatSection/ChatMessage/GeneralResponse";
 import { useChatContext } from "@/context/ChatContext";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 interface ChatMessageProps {
   message: Message;
@@ -34,7 +35,10 @@ export function ChatMessage({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const isUser = message?.role === "user";
-  const {queue} = useChatContext();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
+
  
   const timeStamp = message?.timestamp
     ? message?.timestamp
@@ -58,10 +62,13 @@ export function ChatMessage({
                     isAssistant={!isUser}
                     onContentChange={onContentChange}
                   />
-                  <ChatTimeStamp
-                    timeStamp={timeStamp || ""}
-                    isHovering={isHovering}
-                  />
+                  {(!isMobile || isTab) && (
+                     <ChatTimeStamp
+                     timeStamp={timeStamp || ""}
+                     isHovering={isHovering}
+                   />
+                  )}
+                 
                 </div>
               </div>
             </PaperCard>
@@ -79,10 +86,11 @@ export function ChatMessage({
                   message={message}
                   onContentChange={onContentChange}
                 />
-                <ChatTimeStamp
+                {(!isMobile || isTab) && ( <ChatTimeStamp
                   timeStamp={timeStamp || ""}
                   isHovering={isHovering}
-                />
+                />)}
+               
               </div>
             </PaperCard>
           </div>
