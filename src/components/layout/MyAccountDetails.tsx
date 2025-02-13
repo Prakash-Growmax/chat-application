@@ -25,26 +25,26 @@ export default function MyAccountDetails() {
   const userName = user?.name || "";
   const navigate = useNavigate();
   const { toast } = useToast();
-  const handleLogout = async () => {
+  // const handleLogout = async () => {
     
 
  
-    try {
-      // Use resetAuth to ensure complete logout and token clearing
-      await resetAuth();
-      navigate('/login');
-    } catch (error) {
-      console.error('Logout failed:', error);
-      toast({
-        title: 'Logout Failed',
-        description: 'Unable to log out. Please try again.',
-        variant: 'destructive',
-      });
-    }
-  };
+  //   try {
+  //     // Use resetAuth to ensure complete logout and token clearing
+  //     await resetAuth();
+  //     navigate('/login');
+  //   } catch (error) {
+  //     console.error('Logout failed:', error);
+  //     toast({
+  //       title: 'Logout Failed',
+  //       description: 'Unable to log out. Please try again.',
+  //       variant: 'destructive',
+  //     });
+  //   }
+  // };
   return (
     <>
-      <div className="flex items-cente  r">
+      <div className="flex items-center">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Avatar
@@ -91,7 +91,7 @@ export default function MyAccountDetails() {
                              </DropdownMenuGroup>
                              <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
                              <DropdownMenuGroup>
-                             <DropdownMenuItem className="gap-3 hover:bg-gray-200 cursor-pointer" onClick={handleLogout}>
+                             <DropdownMenuItem className="gap-3 hover:bg-gray-200 cursor-pointer" onClick={signOut}>
                                  <LucideIcon name="LogOut" size={14} color="black" />
                                  <span>Logout</span>
                              </DropdownMenuItem>

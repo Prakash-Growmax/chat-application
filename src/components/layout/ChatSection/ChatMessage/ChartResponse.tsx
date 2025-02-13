@@ -174,10 +174,10 @@ const ChartResponse = ({
   }, [currentIndex, entries, isPlotRendered, shouldStartTyping, onContentChange, showTyping]);
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex flex-col w-full py-2">
-          <div ref={containerRef} className="relative w-full flex justify-center mb-4">
+    <div className="w-full flex flex-col items-center flexible-container">
+      <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flexible-container">
+        <div className="flex flex-col w-full py-2 flexible-container">
+          <div ref={containerRef} className="relative w-full flex justify-center mb-4 chart-container">
             <div className="w-full">
               <Plot
                 data={data}
@@ -207,9 +207,8 @@ const ChartResponse = ({
 
           <div
             ref={chatBoxRef}
-            className="prose w-full max-w-none px-2 sm:px-0"
+            className="prose w-full max-w-none px-2 sm:px-0 text-container"
             style={{
-              maxHeight: "80vh",
               fontSize: window.innerWidth < 640 ? "0.875rem" : "1rem",
             }}
           >

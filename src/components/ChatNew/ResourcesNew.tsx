@@ -19,23 +19,23 @@ const ResourcesNew = () => {
 
   const { toast } = useToast();
 
-  const handleLogout = async () => {
+  // const handleLogout = async () => {
     
 
  
-    try {
-      // Use resetAuth to ensure complete logout and token clearing
-      await resetAuth();
-      navigate('/login');
-    } catch (error) {
-      console.error('Logout failed:', error);
-      toast({
-        title: 'Logout Failed',
-        description: 'Unable to log out. Please try again.',
-        variant: 'destructive',
-      });
-    }
-  };
+  //   try {
+  //     // Use resetAuth to ensure complete logout and token clearing
+  //     await resetAuth();
+  //     navigate('/login');
+  //   } catch (error) {
+  //     console.error('Logout failed:', error);
+  //     toast({
+  //       title: 'Logout Failed',
+  //       description: 'Unable to log out. Please try again.',
+  //       variant: 'destructive',
+  //     });
+  //   }
+  // };
 
   return (
     <div>
@@ -83,7 +83,7 @@ const ResourcesNew = () => {
           <DropdownMenuGroup>
             <DropdownMenuItem
               className={`gap-3 hover:bg-gray-200 cursor-pointer `}
-              onClick={handleLogout}
+              onClick={signOut}
              
             >
               <LucideIcon name="LogOut" size={14} color="black" />
