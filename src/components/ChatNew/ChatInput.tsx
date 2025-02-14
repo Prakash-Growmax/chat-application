@@ -6,10 +6,11 @@ import { chatService } from "@/services/ChatService";
 import { Message } from "@/types";
 import { formQueueMessage } from "@/utils/chat.utils";
 import { getAccessToken, tokenType } from "@/utils/storage.utils";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import LucideIcon from "../Custom-UI/LucideIcon";
 import ChatUploadBtn from "../layout/ChatSection/ChatUpload/ChatUploadBtn";
+import AppContext from "../context/AppContext";
 
 interface ChatInputProps {
   onFileUploaded?: (s3Key: string) => void;
@@ -40,7 +41,7 @@ export function ChatInput({
 
   const containerRef = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
+  const {setHistoryList} = useContext(AppContext)
   const adjustTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -75,7 +76,7 @@ export function ChatInput({
       try {
         setProcessing(true);
         addUserQueue(value);
-        const ChatId = await createChatId(profile);
+        const ChatId = await createChatId(profile,setHistoryList);
         setProcessing(false);
         navigate(`/chat/${ChatId}`);
         return;

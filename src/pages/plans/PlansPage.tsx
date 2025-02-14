@@ -21,6 +21,8 @@ const classNames = (...classes: (string | boolean | undefined)[]) => {
   return classes.filter(Boolean).join(" ");
 };
 
+import { useCallback } from "react";
+
 export function PlansPage() {
   const { user } = useAuth();
   const { planId } = useSubscription();
@@ -29,6 +31,32 @@ export function PlansPage() {
   const [loading, setLoading] = useState<string | null>(null);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Use useCallback to memoize the function
+  const loadOrganizations = useCallback(async () => {
+    if (!user) return;
+
+    try {
+      const orgs = await getAvailablePlans();
+      setPlans(orgs);
+    } catch (error) {
+      console.error("Failed to load plans:", error);
+      setError("Failed to load plans. Please refresh the page.");
+    }
+  }, [user]);
+
+  // Refetch plans when user or planId changes
+  useEffect(() => {
+    if (user) {
+      loadOrganizations();
+    }
+
+    // Disable scrolling
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = ""; // Re-enable scrolling
+    };
+  }, [user, loadOrganizations, planId]); // Include dependencies
 
   const handleSubscribe = async (plan: any) => {
     if (!user?.id) {
@@ -40,30 +68,6 @@ export function PlansPage() {
       user?.id
     );
   };
-
-  const loadOrganizations = async () => {
-    if (!user) return;
-
-    try {
-      const orgs = await getAvailablePlans();
-      setPlans(orgs);
-    } catch (error) {
-      console.error("Failed to load plans:", error);
-      setError("Failed to load plans. Please refresh the page.");
-    }
-  };
-
-  useEffect(() => {
-    if (user) {
-      loadOrganizations();
-      // Disable scrolling
-      document.body.style.overflow = "hidden";
-      return () => {
-        // Re-enable scrolling on cleanup
-        document.body.style.overflow = "";
-      };
-    }
-  }, [user]);
 
   return (
     <div className="fixed inset-0 overflow-y-auto bg-white from-slate-50 to-white pt-96 lg:pt-0">
@@ -91,9 +95,7 @@ export function PlansPage() {
           )}
 
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 mx-auto justify-center">
-            {" "}
-            {/* Centering added here */}{" "}
-            {plans.map((plan) => (
+            {plans?.map((plan) => (
               <Card
                 key={plan.name}
                 className={classNames(
@@ -178,5 +180,6 @@ export function PlansPage() {
     </div>
   );
 }
+
 
 export default PlansPage;

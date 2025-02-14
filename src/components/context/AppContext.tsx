@@ -4,6 +4,8 @@ import React from "react";
 interface AppContextType {
   sideDrawerOpen: boolean;
   setSideDrawerOpen: (value: boolean) => void;
+  historyList:boolean;
+  setHistoryList: (value:boolean) => void;
   sideDrawerWidth: number;
   MainLayout_MarginLeft: number;
 }
@@ -11,6 +13,8 @@ interface AppContextType {
 const AppContext = React.createContext<AppContextType>({
   sideDrawerOpen:true,
   setSideDrawerOpen: () => {},
+  historyList:false,
+  setHistoryList: () => {},
   sideDrawerWidth: drawerWidth,
   MainLayout_MarginLeft: drawerWidth + 16,
 });

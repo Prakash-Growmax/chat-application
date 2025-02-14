@@ -56,7 +56,8 @@ export async function getChatHistory(
   }
 }
 
-export async function createChatId(profile: Profile) {
+export async function createChatId(profile: Profile , setHistoryList) {
+  console.log(profile);
   try {
     if (profile?.organization_id) {
       const clientGeneratedId = uuidv4();
@@ -84,6 +85,7 @@ export async function createChatId(profile: Profile) {
           chatId = response?.data?.id;
         }
         localStorage.setItem("chatId", chatId);
+        setHistoryList(true);
         return chatId;
       } catch (error) {
         if (error instanceof ApiError) {

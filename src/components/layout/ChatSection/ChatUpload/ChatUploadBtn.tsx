@@ -1,3 +1,4 @@
+import AppContext from "@/components/context/AppContext";
 import LucideIcon from "@/components/Custom-UI/LucideIcon";
 import Spinner from "@/components/ui/Spinner";
 import { useChatContext } from "@/context/ChatContext";
@@ -6,7 +7,7 @@ import { createChatId } from "@/lib/chat/chat-service";
 import { uploadToS3 } from "@/lib/s3-client";
 import { getAccessToken } from "@/utils/storage.utils";
 import { Tooltip } from "@mui/material";
-import { useCallback } from "react";
+import { useCallback, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -19,7 +20,7 @@ function ChatUploadBtn({
   const { profile } = useProfile();
   const { addToQueue, setProcessing, setS3Key, isUploading, setIsUploading } =
     useChatContext();
-
+  const {setHistoryList} = useContext(AppContext);
   const { id: chatId } = useParams();
   const token = getAccessToken();
 
@@ -43,7 +44,7 @@ function ChatUploadBtn({
       try {
         if (!ID) {
           setProcessing(true);
-          ID = await createChatId(profile);
+          ID = await createChatId(profile,setHistoryList);
           setS3Key(s3_key);
           setProcessing(false);
           navigate(`/chat/${ID}`);

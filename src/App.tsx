@@ -22,6 +22,8 @@ import { useMediaQuery, useTheme } from "@mui/material";
 interface DrawerConfig {
   sideDrawerOpen: boolean;
   setSideDrawerOpen: (open: boolean) => void;
+  historyList: boolean;
+  setHistoryList: (his: boolean) => void;
   sideDrawerWidth: number;
   MainLayout_MarginLeft: number;
 }
@@ -49,7 +51,7 @@ function App() {
     const savedState = localStorage.getItem(DrawerOpen_LocalKey);
     return savedState ? JSON.parse(savedState) : !(isMobile || isTab);
   });
-
+  const [historyList,setHistoryList] = useState(false);
   // Manage responsive drawer width
   const [sideDrawerWidth, setSideDrawerWidth] = useState<number>(drawerWidth);
 
@@ -93,10 +95,12 @@ function App() {
     () => ({
       sideDrawerOpen,
       setSideDrawerOpen,
+      historyList,
+      setHistoryList,
       sideDrawerWidth,
       MainLayout_MarginLeft,
     }),
-    [sideDrawerOpen, sideDrawerWidth, MainLayout_MarginLeft]
+    [sideDrawerOpen,historyList, sideDrawerWidth, MainLayout_MarginLeft]
   );
 
   // Memoize router configuration

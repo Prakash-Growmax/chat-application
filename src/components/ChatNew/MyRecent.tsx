@@ -120,6 +120,7 @@ const ChatItem: React.FC<ChatItemProps> = React.memo(({
         <div className="flex justify-between w-full items-center justify-center">
           <div onClick={onClick} className="flex-1 min-w-0 cursor-pointer">
             <div className="flex flex-col">
+              
               <ListItemText className="leading-5 truncate">
                 {chat.name || "Untitled Chat"}
               </ListItemText>
@@ -175,7 +176,7 @@ export default function MyRecent({
   const sevenDaysAgo = subDays(today, 7);
   const { id } = useParams();
   const { profile } = useProfile();
-  const { setSideDrawerOpen } = useContext(AppContext);
+  const { setSideDrawerOpen,historyList,setHistoryList } = useContext(AppContext);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [activeDropdownIndex, setActiveDropdownIndex] = useState<number | null>(null);
@@ -216,6 +217,24 @@ export default function MyRecent({
       older: []
     });
   }, []);
+  const fetchSessions = async (orgId: string) => {
+    if (!orgId) throw new Error("Organization ID is required");
+  
+    const token = getAccessToken();
+    const response = await chatService.getSession({
+      headers: {
+        "Content-Type": "application/json",
+        "x-organization-id": orgId,
+        Authorization: `Bearer ${token}`,
+      },
+    });
+     setHistoryList(false);
+    if (response?.status !== 200) {
+      throw new Error("Error while fetching sessions");
+    }
+  
+    return response;
+  };
 
   const { data: sessionList, isLoading } = useQuery({
     queryKey: queryKeys.sessions(profile?.organization_id),
@@ -224,7 +243,16 @@ export default function MyRecent({
     staleTime: 1000 * 60 * 5,
     cacheTime: 1000 * 60 * 30,
   });
-
+  useEffect(() => {
+    if (historyList && profile?.organization_id) {
+      queryClient.invalidateQueries(queryKeys.sessions(profile.organization_id));
+    }
+  }, [historyList, profile?.organization_id, queryClient]);
+   useEffect(()=>{
+     if(sessionList){
+      queryClient.invalidateQueries(queryKeys.sessions(profile.organization_id));
+     }
+   },[sessionList])
   const categorizedChats = React.useMemo(() => 
     getCategorizedChats(sessionList?.data || []),
     [sessionList?.data, getCategorizedChats]
@@ -242,6 +270,9 @@ export default function MyRecent({
           ),
         })
       );
+      if(isMobile || isTab){
+        setSideDrawerOpen(false)
+      }
       navigate("/chat/new");
       toast.success("Thread deleted successfully");
     },
