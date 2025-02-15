@@ -226,7 +226,7 @@ const ChartResponse = ({
                     strings: [entries[currentIndex]],
                     autoStart: true,
                     loop: false,
-                    delay: 30,
+                    delay:1,
                     cursor: "▋",
                     onStringTyped: () => {
                       if (currentIndex > 0) {

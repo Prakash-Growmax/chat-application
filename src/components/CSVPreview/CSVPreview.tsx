@@ -21,14 +21,13 @@ export const CSVPreview: React.FC<CSVPreviewProps> = ({ s3Key }) => {
   const [openSnackbar, setOpenSnackBar] = useState(true);
 
   const handlePreviewClick = async () => {
-    console.log(s3Key);
+  
     setIsLoading(true);
     setError(null);
     setOpenSnackBar(true);
     try {
       const { data, metadata } = await fetchCSVPreview(env_BUCKETNAME, s3Key);
-      console.log(data);
-      console.log(metadata)
+   
       setPreviewData(data);
       setMetadata(metadata);
       setIsModalOpen(true);

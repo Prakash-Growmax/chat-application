@@ -1,12 +1,17 @@
 import Typewriter from "typewriter-effect";
 import { MessageCircle, Sheet } from 'lucide-react';
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Message } from "@/types";
 import { useChatContext } from "@/context/ChatContext";
 import { BodySmall } from "@/Theme/Typography";
 import TooltipNew from "@/components/ui/tooltipnew";
 import { CSVPreview } from "@/components/CSVPreview/CSVPreview";
 import { cleanFilename } from "@/utils/s3.utils";
+import { CSVPreviewData, FileMetadata, PreviewError } from "@/lib/types/csv";
+import AppContext from "@/components/context/AppContext";
+import { fetchCSVPreview } from "@/lib/s3-client";
+import { env_BUCKETNAME } from "@/constants/env.constant";
+import PreviewModal from "@/components/CSVPreview/PreviewModal";
 
 const DatasetUploadResponse = ({ message, isTyping, isAssistant, onContentChange }: { message: Message; isTyping: boolean; isAssistant: boolean; onContentChange?: () => void }) => {
 
@@ -38,6 +43,31 @@ const DatasetUploadResponse = ({ message, isTyping, isAssistant, onContentChange
   const [showPreview, setShowPreview] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
   const showTyping = isAssistant && isTyping;
+  const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState<PreviewError | null>(null);
+  const [previewData, setPreviewData] = useState<CSVPreviewData | null>(null);
+  const [metadata, setMetadata] = useState<FileMetadata | null>(null);
+  const { setSideDrawerOpen } = useContext(AppContext);
+  const [openSnackbar, setOpenSnackBar] = useState(true);
+    const handlePreviewClick = async (s3Key) => {
+    
+      setIsLoading(true);
+      setError(null);
+      setOpenSnackBar(true);
+      try {
+        const { data, metadata } = await fetchCSVPreview(env_BUCKETNAME, s3Key);
+     
+        setPreviewData(data);
+        setMetadata(metadata);
+        setIsModalOpen(true);
+      } catch (err) {
+        setError(err as PreviewError);
+      } finally {
+        setIsLoading(false);
+      }
+      setSideDrawerOpen(false);
+    };
 
   return (
     <div className="flex flex-col m-auto text-base py-2 w-full max-w-full overflow-x-hidden px-4 sm:px-6 lg:px-8" ref={containerRef}>
@@ -45,22 +75,34 @@ const DatasetUploadResponse = ({ message, isTyping, isAssistant, onContentChange
         <>
           <div
             className="relative flex items-center justify-between bg-gray-100 rounded-lg p-2 mb-2 w-full"
+            onClick={() => handlePreviewClick(`s3://growmax-dev-app-assets/analytics/${fileName}`)}
           >
-            <div className="flex items-center gap-x-2 flex-wrap">
-              <button
-                className="w-[40px] h-[40px] bg-[#10A37F] rounded-lg flex justify-center items-center p-2"
-              >
-                <Sheet size={30} color="white" />
-              </button>
-              <span className="font-semibold text-xs sm:text-base">{`${fileName}`}</span>
-            </div>
-            {showPreview && (
+          <div
+  
+
+>
+<TooltipNew title="Click to open file" placement="top-start">
+  <div className="flex items-center gap-x-2 flex-wrap">
+    <button
+      className="w-[40px] h-[40px] bg-[#10A37F] rounded-lg flex justify-center items-center p-2"
+    >
+      <Sheet size={30} color="white" />
+    </button>
+    <span className="font-semibold text-xs sm:text-base">{fileName}</span>
+  </div>
+</TooltipNew>
+
+ 
+</div>
+
+            {/* {showPreview && (
               <div>
                 <TooltipNew title="Preview CSV" placement="top-start">
                   <CSVPreview s3Key={`s3://growmax-dev-app-assets/analytics/${fileName}`} />
                 </TooltipNew>
               </div>
-            )}
+            )} */}
+              
           </div>
         </>
       )}
@@ -183,6 +225,17 @@ const DatasetUploadResponse = ({ message, isTyping, isAssistant, onContentChange
           )}
         </>
       )}
+        {previewData && metadata && (
+                    <PreviewModal
+                      isOpen={isModalOpen}
+                      onClose={() => {
+                        setIsModalOpen(false);
+                        setSideDrawerOpen(true);
+                      }}
+                      data={previewData}
+                      metadata={metadata}
+                    />
+                  )}
     </div>
   );
 };
