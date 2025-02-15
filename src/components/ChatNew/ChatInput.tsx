@@ -117,15 +117,11 @@ export function ChatInput({
             },
           }
         );
-        const eventSource = new EventSource('https://analytics-production-88e7.up.railway.app/api/v1/streams/analytics');
-
-        eventSource.onmessage = (event) => {
-          console.log(event)
-        };
+     
         if (result?.data?.error) {
           throw new Error(result?.data?.error);
         }
-        console.log(result);
+    
         let assistantMessage;
         assistantMessage = formQueueMessage(
           result?.data?.results?.response?.charts
