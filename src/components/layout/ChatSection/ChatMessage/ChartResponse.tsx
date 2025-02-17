@@ -1,30 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
 import Plot from "react-plotly.js";
 import Typewriter from "typewriter-effect";
+import SwitchIcon from "./SwitchIcon";
+import TableResponse from "./tableResponse";
 
 const cleanSummaryText = (text) => {
   if (!text) return '';
   return text
     .split('\n')
     .map(line => {
-      // Check if the line is a heading (ends with ':')
       if (line.trim().endsWith(':')) {
-        const cleanedLine = line
-          .replace(/^[#*\-]+\s*/, '') // Remove leading '#', '*', or '-'
-          .trim();
-        return `**${cleanedLine}**`; // Add bold formatting for headings
+        const cleanedLine = line.replace(/^[#*\-]+\s*/, '').trim();
+        return `**${cleanedLine}**`;
       }
-      // For normal points, clean up and add a bullet
-      const cleanedLine = line
-        .replace(/^[#*\-]+\s*/, '') // Remove leading '#', '*', or '-'
-        .trim();
-      return cleanedLine ? ` ${cleanedLine}` : ''; // Add bullet for non-empty lines
+      const cleanedLine = line.replace(/^[#*\-]+\s*/, '').trim();
+      return cleanedLine ? ` ${cleanedLine}` : '';
     })
-    .filter(Boolean) // Remove empty lines
+    .filter(Boolean)
     .join('\n');
 };
-
-
 
 const ChartResponse = ({
   data = [],
@@ -42,41 +36,42 @@ const ChartResponse = ({
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [shouldStartTyping, setShouldStartTyping] = useState(false);
-
+ 
   const formattedSummary = summary ? cleanSummaryText(summary) : "";
   const entries = formattedSummary ? formattedSummary.split('\n') : [];
   const showTyping = isTyping && isAssistant;
-
-  const calculateDimensions = () => {
-    if (!containerRef.current) return { width: 0, height: 0 };
-
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    const containerWidth = containerRef.current.offsetWidth;
-
-    const isMobile = viewportWidth < 640;
-    const isTablet = viewportWidth >= 640 && viewportWidth < 1024;
-
-    let width = containerWidth;
-    let height;
-
-    if (isMobile) {
-      width = Math.min(containerWidth, viewportWidth - 32);
-      height = width * 1.2;
-    } else if (isTablet) {
-      width = Math.min(containerWidth, viewportWidth * 0.85);
-      height = width * 0.75;
-    } else {
-      width = Math.min(containerWidth, viewportWidth * 0.75);
-      height = width * 0.6;
-    }
-
-    width = Math.max(width, 280);
-    height = Math.max(height, 250);
-    height = Math.min(height, viewportHeight * 0.7);
-
-    return { width, height };
-  };
+    const [checked, setChecked] = React.useState(true);
+    const calculateDimensions = () => {
+      if (!containerRef.current) return { width: 0, height: 0 };
+    
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      const containerWidth = containerRef.current.offsetWidth;
+    
+      const isMobile = viewportWidth < 640;
+      const isTablet = viewportWidth >= 640 && viewportWidth < 1024;
+    
+      let width = containerWidth;
+      let height;
+    
+      if (isMobile) {
+        width = Math.min(containerWidth, viewportWidth - 32); // Padding for mobile view
+        height = viewportHeight * 0.4; // Take 40% of the viewport height
+      } else if (isTablet) {
+        width = Math.min(containerWidth, viewportWidth * 0.85);
+        height = width * 0.75;
+      } else {
+        width = Math.min(containerWidth, viewportWidth * 0.75);
+        height = width * 0.6;
+      }
+    
+      width = Math.max(width, 280); // Ensure minimum width
+      height = Math.max(height, 250); // Ensure minimum height
+      height = Math.min(height, viewportHeight * 0.7); // Avoid exceeding 70% of viewport height
+    
+      return { width, height };
+    };
+    
 
   const getDynamicLayout = (dimensions) => {
     const isMobile = window.innerWidth < 640;
@@ -174,11 +169,16 @@ const ChartResponse = ({
   }, [currentIndex, entries, isPlotRendered, shouldStartTyping, onContentChange, showTyping]);
 
   return (
-    <div className="w-full flex flex-col items-center flexible-container">
+    <div className="relative w-full flex flex-col items-center flexible-container">
+      {/* Fixed Icon at the Top Right */}
+      <div className="absolute top-2 right-2 z-10 -mt-12">
+        <SwitchIcon checked={checked} setChecked={setChecked}/>
+      </div>
+
       <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flexible-container">
         <div className="flex flex-col w-full py-2 flexible-container">
           <div ref={containerRef} className="relative w-full flex justify-center mb-4 chart-container">
-            <div className="w-full">
+            {checked ? ( <div className="w-full">
               <Plot
                 data={data}
                 layout={getDynamicLayout(dimensions)}
@@ -202,7 +202,13 @@ const ChartResponse = ({
                 }}
                 className="w-full"
               />
-            </div>
+            </div>) : (
+              <div className="w-full">
+                <TableResponse data={data}/>
+
+              </div>
+            )}
+           
           </div>
 
           <div
@@ -226,7 +232,7 @@ const ChartResponse = ({
                     strings: [entries[currentIndex]],
                     autoStart: true,
                     loop: false,
-                    delay:1,
+                    delay: 1,
                     cursor: "▋",
                     onStringTyped: () => {
                       if (currentIndex > 0) {
