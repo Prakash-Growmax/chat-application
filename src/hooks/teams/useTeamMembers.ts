@@ -5,17 +5,16 @@ import {
   inviteMember,
   removeMember,
 } from "@/lib/team/teams-service";
-import { TeamData, TeamMember, UseTeamMembersReturn } from "@/types/team";
+import { TeamData, UseTeamMembersReturn } from "@/types/team";
 import { useCallback, useEffect, useState } from "react";
 
 export const useTeamMembers = (): UseTeamMembersReturn => {
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [organizationId, setOrganizationId] = useState<string | null>();
   const [error, setError] = useState<any | null>(null);
   const [teamData, setTeamData] = useState<TeamData | null>(null);
 
-  const fetchTeamMembers = useCallback(async () => {
+  const fetchTeamMembers = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -32,13 +31,12 @@ export const useTeamMembers = (): UseTeamMembersReturn => {
       const data = await getTeamData(org_id?.organization_id);
       setTeamData(data);
       setOrganizationId(org_id?.organization_id);
-      // setTeamMembers(members);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   const inviteMemberByEmail = useCallback(
     async (email: string, role: "admin" | "member") => {
@@ -73,10 +71,9 @@ export const useTeamMembers = (): UseTeamMembersReturn => {
   useEffect(() => {
     fetchTeamMembers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Re-fetch when organizationId changes
+  }, []);
 
   return {
-    teamMembers,
     teamData,
     loading,
     error,

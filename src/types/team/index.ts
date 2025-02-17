@@ -30,7 +30,6 @@ export interface TeamData {
 }
 
 export interface UseTeamMembersReturn {
-  teamMembers: TeamMember[];
   teamData: TeamData | null;
   loading: boolean;
   error: string | null;
