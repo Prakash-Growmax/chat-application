@@ -14,6 +14,7 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
+import { useMediaQuery } from '@mui/material';
 
 interface TablePaginationActionsProps {
   count: number;
@@ -93,7 +94,8 @@ interface TableResponseProps {
 export default function TableResponse({ data }: TableResponseProps) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   function createData(name: string | number, value1: string | number): DataItem {
     return { name, value1 };
   }
@@ -123,7 +125,7 @@ export default function TableResponse({ data }: TableResponseProps) {
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{width: isMobile ? "60%" : "100%"}}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableBody>
           {(rowsPerPage > 0

@@ -57,7 +57,7 @@ export async function getChatHistory(
 }
 
 export async function createChatId(profile: Profile , setHistoryList) {
-  console.log(profile);
+
   try {
     if (profile?.organization_id) {
       const clientGeneratedId = uuidv4();
