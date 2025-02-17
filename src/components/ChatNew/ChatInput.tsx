@@ -38,7 +38,7 @@ export function ChatInput({
   } = useChatContext();
   const [input, setInput] = useState("");
   const location = useLocation();
-
+  console.log(isUploading)
   const containerRef = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const {setHistoryList} = useContext(AppContext)
@@ -68,12 +68,13 @@ export function ChatInput({
   }
 
   const handleSubmit = async (e: any) => {
+   
     e.preventDefault();
     if (!Boolean(input.trim())) return;
     const value = input.trim() || "";
     setInput("");
-    if (isNewChat && profile) {
-      try {
+    if (isNewChat && profile && !isUploading) {
+     try {
         setProcessing(true);
         addUserQueue(value);
         const ChatId = await createChatId(profile,setHistoryList);
@@ -85,13 +86,20 @@ export function ChatInput({
         return;
       }
     } else {
-      addUserQueue(value);
+      if(!isUploading){
+        addUserQueue(value);
+      }
+    
     }
   };
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
+    
       e.preventDefault();
-      handleSubmit(e);
+      if(!isUploading){
+        handleSubmit(e);
+      }
+    
     }
   };
   const processMessage = async (message: Message) => {
@@ -156,7 +164,7 @@ export function ChatInput({
 
   useEffect(() => {
     let mounted = true;
-    if (!processing && queue.length > 0 && mounted) {
+    if (!processing && queue.length > 0 && mounted && !isUploading) {
       processQueue(processMessage);
     }
 

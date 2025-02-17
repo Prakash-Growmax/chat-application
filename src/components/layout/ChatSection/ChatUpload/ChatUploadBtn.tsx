@@ -27,7 +27,7 @@ function ChatUploadBtn({
   const handleFileUpload = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
-      console.log(file)
+    
       if (!file) {
         console.error("No file selected");
         return;
