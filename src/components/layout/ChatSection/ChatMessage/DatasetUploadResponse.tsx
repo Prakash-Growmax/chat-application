@@ -12,10 +12,10 @@ import AppContext from "@/components/context/AppContext";
 import { fetchCSVPreview } from "@/lib/s3-client";
 import { env_BUCKETNAME } from "@/constants/env.constant";
 import PreviewModal from "@/components/CSVPreview/PreviewModal";
-
+import { toast } from "sonner";
 const DatasetUploadResponse = ({ message, isTyping, isAssistant, onContentChange }: { message: Message; isTyping: boolean; isAssistant: boolean; onContentChange?: () => void }) => {
 
-  const { addToQueue, queue, setS3Key, s3Key } = useChatContext();
+  const { addToQueue, queue, setS3Key, s3Key,analyze } = useChatContext();
   const [showHeading, setShowHeading] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -68,6 +68,14 @@ const DatasetUploadResponse = ({ message, isTyping, isAssistant, onContentChange
       }
       setSideDrawerOpen(false);
     };
+    const handleQueueMessage=(question:string)=>{
+      if(!analyze){
+        addUserQueue(question)
+      }
+      else{
+        toast.error("Please wait while we process your query")
+      }
+    }
 
   return (
     <div className="flex flex-col m-auto text-base py-2 w-full max-w-full overflow-x-hidden px-4 sm:px-6 lg:px-8" ref={containerRef}>
@@ -179,7 +187,7 @@ const DatasetUploadResponse = ({ message, isTyping, isAssistant, onContentChange
                   <TooltipNew key={index} title="Click to ask a query" placement="top-start">
                     <div
                       className="flex space-x-2 items-center border border-gray-200 rounded-md p-2 cursor-pointer"
-                      onClick={() => addUserQueue(question)}
+                      onClick={() => handleQueueMessage(question)}
                     >
                       <MessageCircle className="w-5 h-5 mt-1 flex-shrink-0" />
                       <BodySmall>
@@ -214,7 +222,7 @@ const DatasetUploadResponse = ({ message, isTyping, isAssistant, onContentChange
                 <TooltipNew key={index} title="Click to ask a query" placement="top-start">
                   <div
                     className="flex space-x-2 items-center border border-gray-200 rounded-md p-2 cursor-pointer"
-                    onClick={() => addUserQueue(question)}
+                    onClick={() => handleQueueMessage(question)}
                   >
                     <MessageCircle className="w-5 h-5 mt-1 flex-shrink-0" />
                     <BodySmall>{question}</BodySmall>

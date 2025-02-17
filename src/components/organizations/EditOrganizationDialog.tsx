@@ -59,7 +59,7 @@ export function EditOrgDialog({
           <LucideIcon name={"PencilLine"} className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-white">
         <DialogHeader>
           <DialogTitle>Edit Organization Name</DialogTitle>
           <DialogDescription>

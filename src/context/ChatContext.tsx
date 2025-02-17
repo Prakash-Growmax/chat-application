@@ -16,7 +16,9 @@ interface ChatContextType {
   emptyQueue: () => void;
   processQueue: (handler: (message: Message) => Promise<void>) => void;
   s3Key:string;
-  setS3Key:(key:string)=>void
+  setS3Key:(key:string)=>void;
+  analyze:boolean;
+  setAnalyze:(value:boolean)=>void;
 }
 
 export const ChatContext = createContext<ChatContextType | undefined>(
