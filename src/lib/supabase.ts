@@ -1,4 +1,4 @@
-import {AccessToken_LocalKey } from "@/constants/storage.constant";
+import { AccessToken_LocalKey } from "@/constants/storage.constant";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -10,11 +10,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    persistSession: true,
     autoRefreshToken: true,
-    detectSessionInUrl: true,
     storage: localStorage,
-    storageKey:AccessToken_LocalKey,
+    storageKey: AccessToken_LocalKey,
   },
 });
 

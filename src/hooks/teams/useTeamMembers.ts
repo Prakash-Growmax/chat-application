@@ -7,8 +7,10 @@ import {
 } from "@/lib/team/teams-service";
 import { TeamData, UseTeamMembersReturn } from "@/types/team";
 import { useCallback, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 export const useTeamMembers = (): UseTeamMembersReturn => {
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [organizationId, setOrganizationId] = useState<string | null>();
   const [error, setError] = useState<any | null>(null);
@@ -71,7 +73,7 @@ export const useTeamMembers = (): UseTeamMembersReturn => {
   useEffect(() => {
     fetchTeamMembers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [location.pathname]);
 
   return {
     teamData,
