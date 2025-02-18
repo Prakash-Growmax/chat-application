@@ -13,13 +13,16 @@ import { fetchCSVPreview } from "@/lib/s3-client";
 import { env_BUCKETNAME } from "@/constants/env.constant";
 import PreviewModal from "@/components/CSVPreview/PreviewModal";
 import { toast } from "sonner";
+import { useMediaQuery, useTheme } from "@mui/material";
 const DatasetUploadResponse = ({ message, isTyping, isAssistant, onContentChange }: { message: Message; isTyping: boolean; isAssistant: boolean; onContentChange?: () => void }) => {
 
   const { addToQueue, queue, setS3Key, s3Key,analyze } = useChatContext();
   const [showHeading, setShowHeading] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const scrollToBottom = () => {
     if (containerRef.current) {
       containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -73,7 +76,10 @@ const DatasetUploadResponse = ({ message, isTyping, isAssistant, onContentChange
         addUserQueue(question)
       }
       else{
-        toast.error("Please wait while we process your query")
+    
+        toast("Please wait while we process your query", {
+          position: (isMobile || isTab) ? "top-center" : "bottom-center", // Display at the top for mobile, bottom for others
+        });
       }
     }
 

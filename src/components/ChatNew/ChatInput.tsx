@@ -12,6 +12,7 @@ import LucideIcon from "../Custom-UI/LucideIcon";
 import ChatUploadBtn from "../layout/ChatSection/ChatUpload/ChatUploadBtn";
 import AppContext from "../context/AppContext";
 import { toast } from "sonner";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 interface ChatInputProps {
   onFileUploaded?: (s3Key: string) => void;
@@ -41,6 +42,9 @@ export function ChatInput({
   } = useChatContext();
   const [input, setInput] = useState("");
   const location = useLocation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
 
   const containerRef = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -93,7 +97,9 @@ export function ChatInput({
         addUserQueue(value);
       }
       else{
-        toast.error("Please wait while we process your query")
+        toast("Please wait while we process your query", {
+          position: (isMobile || isTab) ? "top-center" : "bottom-center", // Display at the top for mobile, bottom for others
+        });
       }
     
     }
@@ -223,10 +229,11 @@ export function ChatInput({
                     <button
                       type="submit"
                       className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
-                        input && !isUploading
+                        input && !isUploading && !analyze
                           ? "bg-black text-white hover:opacity-70"
                           : "bg-[#D7D7D7] text-[#f4f4f4]"
                       }`}
+                     
                     >
                       <LucideIcon name={"ArrowUp"} size={20} />
                     </button>
