@@ -171,13 +171,14 @@ const ChartResponse = ({
   return (
     <div className="relative w-full flex flex-col items-center flexible-container">
       {/* Fixed Icon at the Top Right */}
-      <div className="absolute top-2 right-2 z-10 -mt-12">
-        <SwitchIcon checked={checked} setChecked={setChecked}/>
-      </div>
+   
+<div className="absolute top-2 right-2 z-50 -mt-12"> {/* Increased z-index */}
+  <SwitchIcon checked={checked} setChecked={setChecked}/>
+</div>
 
       <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flexible-container">
         <div className="flex flex-col w-full py-2 flexible-container">
-          <div ref={containerRef} className="relative w-full flex justify-center mb-4 chart-container">
+        <div ref={containerRef} className="relative w-full flex justify-center mb-4 chart-container">
             {checked ? ( <div className="w-full">
               <Plot
                 data={data}
@@ -203,7 +204,7 @@ const ChartResponse = ({
                 className="w-full"
               />
             </div>) : (
-              <div className="w-full">
+              <div className="w-full overflow-x-auto">
                 <TableResponse data={data}/>
 
               </div>
@@ -211,13 +212,15 @@ const ChartResponse = ({
            
           </div>
 
-          <div
-            ref={chatBoxRef}
-            className="prose w-full max-w-none px-2 sm:px-0 text-container"
-            style={{
-              fontSize: window.innerWidth < 640 ? "0.875rem" : "1rem",
-            }}
-          >
+          
+<div
+  ref={chatBoxRef}
+  className="prose w-full max-w-none px-2 sm:px-0 text-container"
+  style={{
+    fontSize: window.innerWidth < 640 ? "0.875rem" : "1rem",
+    overflow: 'visible' // Ensure text doesn't get clipped
+  }}
+>
             {completedEntries.map((entry, index) => (
               <div
                 key={`completed-${index}`}

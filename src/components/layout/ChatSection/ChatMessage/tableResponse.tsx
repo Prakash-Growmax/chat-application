@@ -125,8 +125,20 @@ export default function TableResponse({ data }: TableResponseProps) {
   };
 
   return (
-    <TableContainer component={Paper} sx={{width: isMobile ? "60%" : "100%"}}>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+
+<TableContainer 
+  component={Paper} 
+  sx={{ 
+    width: "100%", 
+    overflowX: 'auto', // Add horizontal scrolling
+    maxWidth: '100vw' // Prevent container from exceeding viewport
+  }}
+>
+
+<Table sx={{ 
+  minWidth: isMobile ? 300 : 500, // Reduce minimum width for mobile
+  tableLayout: 'auto' // Allow responsive column widths
+}}>
         <TableBody>
           {(rowsPerPage > 0
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
