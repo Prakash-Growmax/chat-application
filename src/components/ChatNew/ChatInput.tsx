@@ -11,6 +11,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import LucideIcon from "../Custom-UI/LucideIcon";
 import ChatUploadBtn from "../layout/ChatSection/ChatUpload/ChatUploadBtn";
 import AppContext from "../context/AppContext";
+import { toast } from "sonner";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 interface ChatInputProps {
   onFileUploaded?: (s3Key: string) => void;
@@ -35,10 +37,15 @@ export function ChatInput({
     s3Key,
     setPrevMessage,
     isUploading,
+    analyze,
+    setAnalyze
   } = useChatContext();
   const [input, setInput] = useState("");
   const location = useLocation();
-  console.log(isUploading)
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
+
   const containerRef = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const {setHistoryList} = useContext(AppContext)
@@ -51,7 +58,7 @@ export function ChatInput({
     const newHeight = Math.min(textarea.scrollHeight, maxHeight);
     textarea.style.height = `${newHeight}px`;
   }, [s3Key]);
-
+ 
   function addUserQueue(value: any) {
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -73,7 +80,7 @@ export function ChatInput({
     if (!Boolean(input.trim())) return;
     const value = input.trim() || "";
     setInput("");
-    if (isNewChat && profile && !isUploading) {
+    if (isNewChat && profile && (!isUploading || !analyze)) {
      try {
         setProcessing(true);
         addUserQueue(value);
@@ -86,8 +93,13 @@ export function ChatInput({
         return;
       }
     } else {
-      if(!isUploading){
+      if(!isUploading && !analyze){
         addUserQueue(value);
+      }
+      else{
+        toast("Please wait while we process your query", {
+          position: (isMobile || isTab) ? "top-center" : "bottom-center", // Display at the top for mobile, bottom for others
+        });
       }
     
     }
@@ -108,7 +120,7 @@ export function ChatInput({
       if (queue[queue.length - 1]?.role !== "user") return; // Add this check
       if (profile?.organization_id && user?.id) {
         const org_id = profile.organization_id;
-
+         setAnalyze(true);
         const result = await chatService.analyzeQuery(
           chat_id,
           {
@@ -138,6 +150,7 @@ export function ChatInput({
           true
         );
         addToQueue(assistantMessage);
+        setAnalyze(false)
       }
     } catch (error) {
       let ErrorMsg =
@@ -216,10 +229,11 @@ export function ChatInput({
                     <button
                       type="submit"
                       className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
-                        input && !isUploading
+                        input && !isUploading && !analyze
                           ? "bg-black text-white hover:opacity-70"
                           : "bg-[#D7D7D7] text-[#f4f4f4]"
                       }`}
+                     
                     >
                       <LucideIcon name={"ArrowUp"} size={20} />
                     </button>

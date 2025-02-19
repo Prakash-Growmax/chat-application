@@ -57,17 +57,18 @@ export default function MyAccountDetails() {
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="min-w-[200px] max-w-[300px] bg-white border-1 shadow-md mr-2">
+            <div className="flex flex-col">
             <ListItemHeaderText className="truncate p-2">
               My Account
             </ListItemHeaderText>
-            <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
-            <DropdownMenuGroup>
-                        
-                        <DropdownMenuItem className="gap-3">
-                            <LucideIcon name="User" size={14} color="black" />
-                            <Label className="pb-1">{capitalizeFirstName(userName)}</Label>
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
+            <div className="flex gap-3 ml-2">
+            <LucideIcon name="User" size={14} color="black" />
+            <Label className="pb-1">{capitalizeFirstName(userName)}</Label>
+            </div>
+            </div>
+           
+
+          
                       <DropdownMenuGroup>
                       <DropdownMenuSeparator className="w-[95%] mx-auto h-[1px] bg-gray-200" />
                                  <DropdownMenuItem className="gap-3 hover:bg-gray-200 cursor-pointer" onClick={() => navigate(`/plans`)}>

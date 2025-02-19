@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 function ChatLayout({ children }: { children: React.ReactNode }) {
   const { id: chatId } = useParams();
   const { profile } = useProfile();
-
+  const [analyze,setAnalyze]= useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [queue, setQueue] = useState<Message[]>([]);
   const [processing, setProcessing] = useState(false);
@@ -152,7 +152,9 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
         setPrevMessage,
         setS3Key,
         isLoading,
-        setIsLoading
+        setIsLoading,
+        analyze,
+        setAnalyze
       }}
     >
       {children}

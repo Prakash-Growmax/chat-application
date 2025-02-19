@@ -31,32 +31,37 @@ export function PlansPage() {
   const [loading, setLoading] = useState<string | null>(null);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  // Use useCallback to memoize the function
+ 
   const loadOrganizations = useCallback(async () => {
-    if (!user) return;
-
+    if (!user?.id) return;
+  
     try {
+      const cachedPlans = localStorage.getItem("plans");
+      if (cachedPlans) {
+        setPlans(JSON.parse(cachedPlans));
+        return;
+      }
+  
       const orgs = await getAvailablePlans();
       setPlans(orgs);
+      localStorage.setItem("plans", JSON.stringify(orgs)); // Cache plans
     } catch (error) {
       console.error("Failed to load plans:", error);
       setError("Failed to load plans. Please refresh the page.");
     }
-  }, [user]);
-
-  // Refetch plans when user or planId changes
+  }, [user?.id]);
+  
   useEffect(() => {
-    if (user) {
+    if (user?.id) {
       loadOrganizations();
     }
-
+  
     // Disable scrolling
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = ""; // Re-enable scrolling
     };
-  }, [user, loadOrganizations, planId]); // Include dependencies
+  }, [user?.id, loadOrganizations]);
 
   const handleSubscribe = async (plan: any) => {
     if (!user?.id) {
@@ -68,9 +73,9 @@ export function PlansPage() {
       user?.id
     );
   };
-
+ 
   return (
-    <div className="fixed inset-0 overflow-y-auto bg-white from-slate-50 to-white pt-96 lg:pt-0">
+    <div className="fixed inset-0 overflow-y-auto bg-white from-slate-50 to-white pt-96 lg:pt-0 md:pt-40">
       <div className="container py-16 h-full flex flex-col justify-center">
         <div
           className={`mx-auto max-w-4xl space-y-12 ${
@@ -182,3 +187,4 @@ export function PlansPage() {
 }
 
 export default PlansPage;
+
