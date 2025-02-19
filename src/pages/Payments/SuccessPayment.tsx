@@ -1,3 +1,4 @@
+import { env_NODE_URL } from "@/constants/env.constant";
 import { updateSubscription } from "@/lib/subscription";
 import { getSubscriptionByUserId } from "@/lib/subscriptions/subscriptions-service";
 import { supabase } from "@/lib/supabase";
@@ -38,7 +39,7 @@ function SuccessPayment() {
 
   const handlePaymentSuccess = async () => {
     if (!subscription?.stripe_session_id) return null;
-    fetch("http://localhost:8080/api/v1/payment-success", {
+    fetch(`${env_NODE_URL}payment-success`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

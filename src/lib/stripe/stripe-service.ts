@@ -1,3 +1,4 @@
+import { env_NODE_URL } from "@/constants/env.constant";
 import { updateProfile_stripeCustomerId } from "../profile/profile-service";
 import {
   getSubscriptionByUserId,
@@ -10,7 +11,7 @@ export const createSubscriptionCheckoutSession = (
   userId: string
 ) => {
   try {
-    fetch("http://localhost:8080/api/v1/create-subscription-checkout-session", {
+    fetch(`${env_NODE_URL}create-subscription-checkout-session`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

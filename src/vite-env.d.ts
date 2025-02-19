@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   readonly VITE_S3_BUCKET_NAME: string;
   readonly VITE_S3_REGION: string;
   readonly VITE_ANALYSIS_URL: string;
+  readonly VITE_NODE_URL: string;
 }
 
 interface ImportMeta {
