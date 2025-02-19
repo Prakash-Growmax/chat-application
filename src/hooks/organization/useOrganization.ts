@@ -1,6 +1,7 @@
 // hooks/useOrganization.ts
 import { supabase } from "@/lib/supabase";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 interface Organization {
   id: string;
@@ -10,16 +11,12 @@ interface Organization {
 }
 
 export function useOrganization(organizationId?: string) {
+  const location = useLocation();
   const [organization, setOrganization] = useState<Organization | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchOrganization = useCallback(async () => {
-    if (!organizationId) {
-      setLoading(false);
-      return;
-    }
-
+  const fetchOrganization = async () => {
     try {
       setLoading(true);
       const { data, error: orgError } = await supabase
@@ -38,7 +35,7 @@ export function useOrganization(organizationId?: string) {
     } finally {
       setLoading(false);
     }
-  }, [organizationId]);
+  };
 
   const updateOrganizationName = async (name: string) => {
     if (!organization?.id) {
@@ -77,7 +74,7 @@ export function useOrganization(organizationId?: string) {
 
   useEffect(() => {
     fetchOrganization();
-  }, [fetchOrganization]);
+  }, [location.pathname, organizationId]);
 
   return {
     organization,

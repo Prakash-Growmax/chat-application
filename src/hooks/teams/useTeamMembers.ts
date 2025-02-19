@@ -6,7 +6,7 @@ import {
   removeMember,
 } from "@/lib/team/teams-service";
 import { TeamData, UseTeamMembersReturn } from "@/types/team";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 export const useTeamMembers = (): UseTeamMembersReturn => {
@@ -70,10 +70,23 @@ export const useTeamMembers = (): UseTeamMembersReturn => {
     [organizationId, fetchTeamMembers]
   );
 
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      fetchTeamMembers();
+    }
+
+    return () => {
+      isInitialMount.current = true;
+    };
+  }, [location.pathname, organizationId]);
+
   useEffect(() => {
     fetchTeamMembers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]);
+  }, []);
 
   return {
     teamData,
