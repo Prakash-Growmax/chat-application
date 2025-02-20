@@ -7,9 +7,13 @@ import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import ChatBox from "./ChatBox";
 import { ChatInput } from "./ChatInput";
+import { CardHeader } from "../ui/card";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { TriangleAlert } from "lucide-react";
 
 function Chat() {
   const { profile } = useProfile();
+  
   const { id: chatId } = useParams();
   const {
     messages: message,
@@ -18,6 +22,7 @@ function Chat() {
     addToQueue,
     isUploading,
     setIsUploading,
+    queue
   } = useChatContext();
 
   const [state, setState] = useState<ChatState>({
@@ -69,7 +74,18 @@ function Chat() {
   return (
     <div className="h-[calc(100vh-64px)] flex flex-col w-full">
       <ChatBox />
+      {queue.length > 0 && (profile?.tokens_remaining === 0 || profile?.tokens_remaining === null) && (
+  <div className="px-4">
+    <div className="flex max-w-3xl mx-auto bg-red-50 border border-red-200 rounded-lg p-2 flex items-center gap-3">
+      <TriangleAlert size={24} color="red" />
+      <p className="text-xs">
+        You've reached the maximum usage for your current plan. Please upgrade to continue exploring more features.
+      </p>
+    </div>
+  </div>
+)}
 
+  
       <div className="mt-auto">
         <div className="py-4">
           <ChatInput

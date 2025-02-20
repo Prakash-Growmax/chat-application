@@ -7,6 +7,8 @@ import {
   ChatSession,
   CreateChatResponse,
   CreateSessionRequest,
+  RenameSession,
+  renameSessionRequest,
   uploadDataSetRequest,
 } from "@/types/Chat";
 import { ApiClient, apiClient } from "./apiConfig";
@@ -65,6 +67,20 @@ class ChatService {
       `chat/sessions/${sessionId}/inactivate`,
       null, // No payload for the body
       options // Pass options containing headers as the config object
+    );
+  }
+  async renameSession(
+    chatId:string,
+    reqBody:renameSessionRequest,
+  
+    options?: {
+      headers: Record<string, string>;
+    }
+  ): Promise<ApiResponse<RenameSession>> {
+    return this.apiClient.put<RenameSession>(
+      `chat/sessions/${chatId}/name`,
+      reqBody,
+      options
     );
   }
 

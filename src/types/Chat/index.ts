@@ -2,12 +2,32 @@ export interface ChatSession {
   id: string;
   // Add other session properties
 }
+export interface RenameSession{
+  id:string;
+  name:string;
+  org_id:string;
+  status:string;
+  chat_metadata:{
+    archived_at:string,
+    archive_reason:string,
+    previous_status:string,
+    redis_session_status:string,
+  },
+  is_updated:number,
+  created_at:string,
+  updated_at:string,
+  uuid_changed:false,
+  original_uuid:number | string,
+}
 
 export interface CreateSessionRequest {
   name: string;
   chat_metadata?: any;
 }
-
+export interface renameSessionRequest {
+  new_name: string;
+ 
+}
 export interface ChatHistory {
   data: {
     items: Array<any>;

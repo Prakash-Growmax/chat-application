@@ -16,6 +16,7 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
   const [processing, setProcessing] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [s3Key, setS3Key] = useState("");
+
   const addToQueue = useCallback((message: Message) => {
     setQueue((prev: Message[]) => [...prev, message]);
   }, []);
@@ -24,7 +25,7 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
     setQueue([]);
     // setS3Key("");
   };
- 
+  const [tokenExpired,setTokenExpired] = useState(false);
  
   const processQueue = useCallback(
     async (handler: (message: Message) => Promise<void>) => {
@@ -44,7 +45,13 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
     },
     [queue, processing]
   );
- 
+  useEffect(()=>{
+    if(profile?.tokens_remaining === 0 || profile?.tokens_remaining === null){
+      setTokenExpired(true)
+    }
+
+  },[profile])
+
   useEffect(() => {
     const loadChatHistory = async () => {
       if (!chatId || !profile) return;
@@ -154,7 +161,9 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
         isLoading,
         setIsLoading,
         analyze,
-        setAnalyze
+        setAnalyze,
+        tokenExpired,
+        setTokenExpired
       }}
     >
       {children}

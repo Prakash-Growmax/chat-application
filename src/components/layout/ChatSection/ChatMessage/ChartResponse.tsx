@@ -3,6 +3,7 @@ import Plot from "react-plotly.js";
 import Typewriter from "typewriter-effect";
 import SwitchIcon from "./SwitchIcon";
 import TableResponse from "./tableResponse";
+import { ListItemHeaderText } from "@/Theme/Typography";
 
 const cleanSummaryText = (text) => {
   if (!text) return '';
@@ -204,7 +205,10 @@ const ChartResponse = ({
                 className="w-full"
               />
             </div>) : (
-              <div className="w-full overflow-x-auto">
+              <div className="flex flex-col w-full overflow-x-auto">
+                <ListItemHeaderText className="flex justify-center items-center mb-2">
+                     {layout?.title?.text}
+                </ListItemHeaderText>
                 <TableResponse data={data}/>
 
               </div>

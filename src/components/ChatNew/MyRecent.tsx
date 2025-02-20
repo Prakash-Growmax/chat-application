@@ -13,6 +13,8 @@ import AppContext from "../context/AppContext";
 import LucideIcon from "../Custom-UI/LucideIcon";
 import DeleteIcon from "../ui/delete-icon";
 import Spinner from "../ui/Spinner";
+import { FilePenLine } from 'lucide-react';
+import { Input } from "../ui/input";
 
 // Utility function for safe date handling
 const getSafeDate = (dateString: string | number | Date | null | undefined): Date => {
@@ -74,13 +76,17 @@ interface ChatItemProps {
   index: number;
   isActive: boolean;
   isHovered: boolean;
-  hoveredIndex:number;
+  hoveredIndex: number;
   isDeleting: boolean;
   deleteIndex: number;
+  activeDropdownIndex:number;
   onHover: () => void;
   onLeave: () => void;
   onClick: () => void;
   onToggleDropdown: (e: React.MouseEvent) => void;
+  renamingChatId: string;
+  setRenamingChatId: (name: string) => void;
+  onRename: (chatId: string, newName: string) => void;
 }
 
 const ChatItem: React.FC<ChatItemProps> = React.memo(({
@@ -91,13 +97,29 @@ const ChatItem: React.FC<ChatItemProps> = React.memo(({
   hoveredIndex,
   isDeleting,
   deleteIndex,
+  activeDropdownIndex,
   onHover,
   onLeave,
   onToggleDropdown,
   onClick,
+  renamingChatId,
+  setRenamingChatId,
+  onRename,
 }) => {
   const chatDate = getSafeDate(chat.created_at);
+  const [tempName, setTempName] = useState(chat.name || "Untitled Chat");
+  console.log(tempName);
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTempName(e.target.value);
+  };
 
+  const handleRenameSubmit = () => {
+    if (tempName.trim() && tempName !== chat.name) {
+      onRename(renamingChatId, tempName); 
+    }
+    setRenamingChatId(null);
+  };
+ 
   return (
     <motion.div
       initial="hidden"
@@ -114,17 +136,27 @@ const ChatItem: React.FC<ChatItemProps> = React.memo(({
     >
       <div
         className={`flex items-center rounded-lg px-1.5 py-1.5 w-[95%] transition-colors duration-200 hover:bg-gray-200 rounded-lg ${
-          (isActive || hoveredIndex == index) ? "bg-gray-200" : ""
+          (isActive || hoveredIndex === index || activeDropdownIndex == index )  ? "bg-gray-200" : ""
         }`}
       >
         <div className="flex justify-between w-full items-center justify-center">
           <div onClick={onClick} className="flex-1 min-w-0 cursor-pointer">
             <div className="flex flex-col">
-              
-              <ListItemText className="leading-5 truncate">
-                {chat.name || "Untitled Chat"}
-              </ListItemText>
-             
+              {renamingChatId === chat?.id ? (
+                <Input
+                  type="text"
+                  value={tempName}
+                  onChange={handleNameChange}
+                  onBlur={handleRenameSubmit}
+                  onKeyDown={(e) => e.key === "Enter" && handleRenameSubmit()}
+                  autoFocus
+                  placeholder="Rename"
+                />
+              ) : (
+                <ListItemText className="leading-5 truncate">
+                  {chat.name || "Untitled Chat"}
+                </ListItemText>
+              )}
             </div>
           </div>
           {Boolean(deleteIndex === index) && isDeleting ? (
@@ -135,7 +167,7 @@ const ChatItem: React.FC<ChatItemProps> = React.memo(({
               animate={{ opacity: isHovered ? 1 : 0 }}
               exit={{ opacity: 0 }}
               onClick={onToggleDropdown}
-              className="p-1 "
+              className="p-1"
             >
               <LucideIcon name="EllipsisVertical" size={12} />
             </motion.button>
@@ -153,7 +185,7 @@ interface CategoryHeaderProps {
 
 const CategoryHeader: React.FC<CategoryHeaderProps> = ({ title, count }) => (
   <div className="px-4 py-2 text-sm font-semibold text-gray-500 bg-gray-50 border-b border-gray-100 ml-4">
-    {title} 
+    {title}
   </div>
 );
 
@@ -176,7 +208,7 @@ export default function MyRecent({
   const sevenDaysAgo = subDays(today, 7);
   const { id } = useParams();
   const { profile } = useProfile();
-  const { setSideDrawerOpen,historyList,setHistoryList } = useContext(AppContext);
+  const { setSideDrawerOpen, historyList, setHistoryList } = useContext(AppContext);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [activeDropdownIndex, setActiveDropdownIndex] = useState<number | null>(null);
@@ -188,13 +220,14 @@ export default function MyRecent({
   const navigate = useNavigate();
   const { emptyQueue, setPrevMessage } = useChatContext();
   const queryClient = useQueryClient();
+  const [renamingChatId, setRenamingChatId] = useState<string | null>(null);
 
   const getCategorizedChats = useCallback((sessions: any[]) => {
     if (!sessions) return { today: [], last7Days: [], older: [] };
 
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Set to start of today
-    
+
     const sevenDaysAgo = new Date(today);
     sevenDaysAgo.setDate(today.getDate() - 7);
 
@@ -214,27 +247,9 @@ export default function MyRecent({
     }, {
       today: [],
       last7Days: [],
-      older: []
+      older: [],
     });
   }, []);
-  const fetchSessions = async (orgId: string) => {
-    if (!orgId) throw new Error("Organization ID is required");
-  
-    const token = getAccessToken();
-    const response = await chatService.getSession({
-      headers: {
-        "Content-Type": "application/json",
-        "x-organization-id": orgId,
-        Authorization: `Bearer ${token}`,
-      },
-    });
-     setHistoryList(false);
-    if (response?.status !== 200) {
-      throw new Error("Error while fetching sessions");
-    }
-  
-    return response;
-  };
 
   const { data: sessionList, isLoading } = useQuery({
     queryKey: queryKeys.sessions(profile?.organization_id),
@@ -243,17 +258,20 @@ export default function MyRecent({
     staleTime: 1000 * 60 * 5,
     cacheTime: 1000 * 60 * 30,
   });
+
   useEffect(() => {
     if (historyList && profile?.organization_id) {
       queryClient.invalidateQueries(queryKeys.sessions(profile.organization_id));
     }
   }, [historyList, profile?.organization_id, queryClient]);
-   useEffect(()=>{
-     if(sessionList){
+
+  useEffect(() => {
+    if (sessionList) {
       queryClient.invalidateQueries(queryKeys.sessions(profile.organization_id));
-     }
-   },[sessionList])
-  const categorizedChats = React.useMemo(() => 
+    }
+  }, [sessionList]);
+
+  const categorizedChats = React.useMemo(() =>
     getCategorizedChats(sessionList?.data || []),
     [sessionList?.data, getCategorizedChats]
   );
@@ -270,11 +288,43 @@ export default function MyRecent({
           ),
         })
       );
-      if(isMobile || isTab){
-        setSideDrawerOpen(false)
+      if (isMobile || isTab) {
+        setSideDrawerOpen(false);
       }
       navigate("/chat/new");
       toast.success("Thread deleted successfully");
+    },
+  });
+
+  const renameMutation = useMutation({
+    mutationFn: async ({ chatId, newName }: { chatId: string; newName: string }) => {
+      const token = getAccessToken();
+      const requestBody = {
+        new_name: newName,
+      };
+      const response = await chatService.renameSession(chatId, requestBody, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-organization-id": profile?.organization_id,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.setQueryData(
+        queryKeys.sessions(profile?.organization_id),
+        (old: any) => ({
+          ...old,
+          data: old.data.map((session: any) =>
+            session.id === variables.chatId
+              ? { ...session, name: variables.newName }
+              : session
+          ),
+        })
+      );
+      setRenamingChatId(null);
+      toast.success("Chat renamed successfully");
     },
   });
 
@@ -341,34 +391,43 @@ export default function MyRecent({
     }
   }, [deleteMutation, profile?.organization_id]);
 
-  const renderChatList = useCallback((chats: { chat: any; index: number }[], categoryTitle: string) => {
+  const handleRename = (chatId: string, newName: string) => {
+    if (newName.trim() && newName !== "") {
+      renameMutation.mutate({ chatId, newName });
+    }
+  };
+
+  const renderChatList = useCallback((chats: { chat: any; index: number }[], categoryTitle: string, renamingChatId: string, setRenamingChatId: (name: string) => void, handleRename: (sessionId: string, newName: string) => void) => {
     if (chats.length === 0) return null;
 
     return (
       <div className="mb-2">
-      <CategoryHeader title={categoryTitle} count={chats.length} />
-      {/* Added a scrollable div for each category */}
-      <div className="max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-        <div className="space-y-1 ml-6">
-          {chats.map(({ chat, index }) => (
-            <ChatItem
-              key={chat.id}
-              chat={chat}
-              index={index}
-              isActive={id === chat.id}
-              isHovered={hoveredIndex === index}
-              hoveredIndex={hoveredIndex}
-              isDeleting={isDeleting}
-              deleteIndex={deleteIndex}
-              onHover={() => setHoveredIndex(index)}
-              onLeave={() => setHoveredIndex(null)}
-              onClick={() => handleClickRoute(chat.id)}
-              onToggleDropdown={(e) => toggleDropdown(index, e)}
-            />
-          ))}
+        <CategoryHeader title={categoryTitle} count={chats.length} />
+        <div className="max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          <div className="space-y-1 ml-6">
+            {chats.map(({ chat, index }) => (
+              <ChatItem
+                key={chat.id}
+                chat={chat}
+                index={index}
+                isActive={id === chat.id}
+                isHovered={hoveredIndex === index}
+                hoveredIndex={hoveredIndex}
+                isDeleting={isDeleting}
+                deleteIndex={deleteIndex}
+                activeDropdownIndex={activeDropdownIndex}
+                onHover={() => setHoveredIndex(index)}
+                onLeave={() => setHoveredIndex(null)}
+                onClick={() => handleClickRoute(chat.id)}
+                onToggleDropdown={(e) => toggleDropdown(index, e)}
+                renamingChatId={renamingChatId}
+                setRenamingChatId={setRenamingChatId}
+                onRename={handleRename}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
     );
   }, [id, activeDropdownIndex, hoveredIndex, isDeleting, deleteIndex, setPrevMessage, emptyQueue, handleClickRoute, toggleDropdown]);
 
@@ -383,12 +442,12 @@ export default function MyRecent({
           <ListItemText>My Threads</ListItemText>
         </div>
         <div className="mr-3">
-          <LucideIcon 
-            name="ChevronDown" 
+          <LucideIcon
+            name="ChevronDown"
             size={13}
             style={{
               transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-              transition: 'transform 0.2s ease-in-out'
+              transition: 'transform 0.2s ease-in-out',
             }}
           />
         </div>
@@ -396,10 +455,10 @@ export default function MyRecent({
 
       {isDropdownOpen && (
         <div
-          className="absolute z-10 w-full bg-transparent  overflow-hidden"
+          className="absolute z-10 w-full bg-transparent overflow-hidden"
           style={{
             maxHeight: '520px',
-            overflowY: 'auto'
+            overflowY: 'auto',
           }}
         >
           <AnimatePresence>
@@ -414,13 +473,13 @@ export default function MyRecent({
             ) : (
               <div className="divide-y divide-gray-100">
                 {categorizedChats.today.length > 0 && (
-                  renderChatList(categorizedChats.today, "Today")
+                  renderChatList(categorizedChats.today, "Today", renamingChatId, setRenamingChatId, handleRename)
                 )}
                 {categorizedChats.last7Days.length > 0 && (
-                  renderChatList(categorizedChats.last7Days, "Last 7 Days")
+                  renderChatList(categorizedChats.last7Days, "Last 7 Days", renamingChatId, setRenamingChatId, handleRename)
                 )}
                 {categorizedChats.older.length > 0 && (
-                  renderChatList(categorizedChats.older, "Older")
+                  renderChatList(categorizedChats.older, "Older", renamingChatId, setRenamingChatId, handleRename)
                 )}
               </div>
             )}
@@ -437,6 +496,18 @@ export default function MyRecent({
           onClick={(e) => e.stopPropagation()}
         >
           <ul className="py-1">
+          <li>
+              <button
+                className="flex items-center gap-3 w-full px-4 py-2 text-sm text-black hover:bg-gray-50"
+                onClick={()=>{ 
+                  const sessionId= sessionList?.data[activeDropdownIndex]?.id;
+                  setRenamingChatId(sessionId)
+                  setActiveDropdownIndex(null)}}
+              >
+                <FilePenLine size={18}/>
+                Rename
+              </button>
+            </li>
             <li>
               <button
                 className="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-50"

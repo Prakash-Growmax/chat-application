@@ -5,6 +5,8 @@ interface ChatContextType {
   isUploading: boolean;
   setIsUploading: (value: boolean) => void;
   isLoading:boolean;
+  tokenExpired:boolean
+  setTokenExpired:(token:boolean)=>void;
   setIsLoading:(value: boolean) => void;
   queue: Message[];
   setQueue: (value: (prev: Message[]) => Message[]) => void;

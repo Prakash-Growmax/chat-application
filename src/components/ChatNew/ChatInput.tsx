@@ -38,7 +38,8 @@ export function ChatInput({
     setPrevMessage,
     isUploading,
     analyze,
-    setAnalyze
+    setAnalyze,
+    tokenExpired
   } = useChatContext();
   const [input, setInput] = useState("");
   const location = useLocation();
@@ -80,7 +81,8 @@ export function ChatInput({
     if (!Boolean(input.trim())) return;
     const value = input.trim() || "";
     setInput("");
-    if (isNewChat && profile && (!isUploading || !analyze)) {
+    if (isNewChat && profile && ((!isUploading || !analyze) && !tokenExpired)) {
+     
      try {
         setProcessing(true);
         addUserQueue(value);
@@ -93,11 +95,12 @@ export function ChatInput({
         return;
       }
     } else {
-      if(!isUploading && !analyze){
+      if(!isUploading && !analyze && !tokenExpired){
+      
         addUserQueue(value);
       }
       else{
-        toast("Please wait while we process your query", {
+        toast((isUploading || analyze) ? "Please wait while we process your query" : "Your session has expired", {
           position: (isMobile || isTab) ? "top-center" : "bottom-center", // Display at the top for mobile, bottom for others
         });
       }
@@ -229,7 +232,7 @@ export function ChatInput({
                     <button
                       type="submit"
                       className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
-                        input && !isUploading && !analyze
+                        input && !isUploading && !analyze && !tokenExpired
                           ? "bg-black text-white hover:opacity-70"
                           : "bg-[#D7D7D7] text-[#f4f4f4]"
                       }`}
