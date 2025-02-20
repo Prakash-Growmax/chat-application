@@ -14,6 +14,7 @@ export const InviteDialog = () => {
   const handleInvite = async () => {
     try {
       const { data: user } = await supabase.auth.getUser();
+      
       if (!user?.user) return;
 
       const { data: org_id } = await supabase
