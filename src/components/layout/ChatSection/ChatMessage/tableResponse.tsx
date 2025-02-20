@@ -66,7 +66,7 @@ export default function TableResponse({ data }: TableResponseProps) {
       </Table>
 
       <div className="flex justify-between items-center mt-4">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <button
             className="px-4 py-2 flex items-center border-none disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={previousPage}
@@ -86,10 +86,14 @@ export default function TableResponse({ data }: TableResponseProps) {
           </button>
         </div>
         <div>
-         <p className="text-sm font-semibold"> Page {currentPage} of {totalPages}</p>
+        <p className="text-xs sm:text-sm font-semibold">
+          
+  Page {currentPage} of {totalPages}
+</p>
+
         </div>
         <div className="flex items-center gap-2">
-  <p className="text-sm">Rows per page:</p>
+  <p className="text-xs sm:text-sm">Rows per page:</p>
   <select
       className="border border-gray-300 rounded p-1 text-sm focus:outline-none"
     value={pageSize}
