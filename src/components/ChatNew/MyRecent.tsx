@@ -108,7 +108,7 @@ const ChatItem: React.FC<ChatItemProps> = React.memo(({
 }) => {
   const chatDate = getSafeDate(chat.created_at);
   const [tempName, setTempName] = useState(chat.name || "Untitled Chat");
-  console.log(tempName);
+  
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTempName(e.target.value);
   };
