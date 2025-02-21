@@ -10,8 +10,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import LucideIcon from "../Custom-UI/LucideIcon";
+import { useMediaQuery, useTheme } from "@mui/material";
+import AppContext from "../context/AppContext";
 
 interface EditOrgDialogProps {
   organizationId?: string;
@@ -29,6 +31,10 @@ export function EditOrgDialog({
   const [name, setName] = useState(currentName);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
+  const {setSideDrawerOpen} = useContext(AppContext);
 
   const handleSubmit = async () => {
     if (!name.trim()) return;
@@ -51,6 +57,21 @@ export function EditOrgDialog({
   };
 
   if (!isOwner) return null;
+   useEffect(()=>{
+      if((!isMobile || !isTab) && open){
+        setSideDrawerOpen(false)
+      }
+      else{
+        if(!isMobile || !isTab){
+          setSideDrawerOpen(true)
+        }
+        else{
+          setSideDrawerOpen(false)
+        }
+      
+      }
+  
+    },[open])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -59,7 +80,7 @@ export function EditOrgDialog({
           <LucideIcon name={"PencilLine"} className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-white">
+      <DialogContent className="w-[330px] lg:w-full md:w-full rounded-lg bg-white">
         <DialogHeader>
           <DialogTitle>Edit Organization Name</DialogTitle>
           <DialogDescription>
@@ -82,25 +103,29 @@ export function EditOrgDialog({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            disabled={isLoading || !name.trim() || name === currentName}
-          >
-            {isLoading ? (
-              <>
-                <LucideIcon
-                  name={"Loader2"}
-                  className="mr-2 h-4 w-4 animate-spin"
-                />
-                Updating...
-              </>
-            ) : (
-              "Save Changes"
-            )}
-          </Button>
+        <div className="flex gap-x-4">
+  <Button variant="outline" onClick={() => setOpen(false)}>
+    Cancel
+  </Button>
+  <Button
+    onClick={handleSubmit}
+    disabled={isLoading || !name.trim() || name === currentName}
+  >
+    {isLoading ? (
+      <>
+        <LucideIcon
+          name={"Loader2"}
+          className="mr-2 h-4 w-4 animate-spin"
+        />
+        Updating...
+      </>
+    ) : (
+      "Save Changes"
+    )}
+  </Button>
+</div>
+
+      
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -13,7 +13,7 @@ function WelcomePage() {
               <LucideIcon name="Building2" />
               <span className="text-sm font-medium">CSV Insight AI</span>
             </div>
-            <h1 className="max-w-3xl text-4xl font-bold md:text-6xl">
+            <h1 className="max-w-3xl text-xl lg:text-4xl md:text-2xl font-bold">
               Analyze your CSV data with{" "}
               <span className="text-primary">AI-powered insights</span>
             </h1>
@@ -30,7 +30,7 @@ function WelcomePage() {
             </Button>
           </div>
 
-          <div className="grid w-full max-w-5xl gap-6 md:grid-cols-3">
+          <div className="grid w-full max-w-5xl gap-6 md:grid-cols-3 px-4 md:px-3 lg:px-0">
             {features.map((feature) => (
               <div
                 key={feature.title}

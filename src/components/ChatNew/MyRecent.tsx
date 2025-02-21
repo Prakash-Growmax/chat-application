@@ -457,7 +457,7 @@ export default function MyRecent({
         <div
           className="absolute z-10 w-full bg-transparent overflow-hidden"
           style={{
-            maxHeight: '520px',
+            maxHeight:isTab ? "1400px" :"530px",
             overflowY: 'auto',
           }}
         >

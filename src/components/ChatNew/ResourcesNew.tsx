@@ -10,15 +10,19 @@ import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import UserResource from "../auth/UserResource";
 import LucideIcon from "../Custom-UI/LucideIcon";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import AppContext from "../context/AppContext";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 const ResourcesNew = () => {
   const navigate = useNavigate();
   const { signOut, resetAuth } = useAuth();
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const { toast } = useToast();
-
+  const {setSideDrawerOpen} = useContext(AppContext);
   // const handleLogout = async () => {
     
 
@@ -46,14 +50,19 @@ const ResourcesNew = () => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="w-56 z-[1400] bg-white border-gray-200 rounded-lg shadow-xl"
+          className="w-[330px] lg:w-56 md:w-48 z-[1400] bg-white border-gray-200 rounded-lg shadow-xl"
           side="top"
           align="center"
         >
           <DropdownMenuGroup>
             <DropdownMenuItem
               className="gap-3 hover:bg-gray-200 cursor-pointer"
-              onClick={() => navigate(`/plans`)}
+              onClick={() =>{  navigate(`/plans`)
+                if(isMobile || isTab){
+                 setSideDrawerOpen(false)
+                }} 
+              
+              }
             >
               <LucideIcon name="Wallet" size={14} color="black" />
               <span>Subscription</span>
@@ -63,7 +72,12 @@ const ResourcesNew = () => {
           <DropdownMenuGroup>
             <DropdownMenuItem
               className="gap-3 hover:bg-gray-200 cursor-pointer"
-              onClick={() => navigate(`/teams`)}
+              onClick={() => {
+                navigate(`/teams`)
+                if(isMobile || isTab){
+                  setSideDrawerOpen(false)
+                 }
+              }}
             >
               <LucideIcon name="Users" size={14} color="black" />
               <span>Teams</span>
@@ -73,7 +87,11 @@ const ResourcesNew = () => {
           <DropdownMenuGroup>
             <DropdownMenuItem
               className="gap-3 hover:bg-gray-200 cursor-pointer"
-              onClick={() => navigate(`/settings`)}
+              onClick={() => {navigate(`/settings`)
+                if(isMobile || isTab){
+                  setSideDrawerOpen(false)
+                 }
+              }}
             >
               <LucideIcon name="SquareUser" size={14} color="black" />
               <span>Profile</span>

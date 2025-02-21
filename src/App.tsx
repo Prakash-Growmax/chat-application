@@ -51,6 +51,7 @@ function App() {
     const savedState = localStorage.getItem(DrawerOpen_LocalKey);
     return savedState ? JSON.parse(savedState) : !(isMobile || isTab);
   });
+
   const [historyList,setHistoryList] = useState(false);
   // Manage responsive drawer width
   const [sideDrawerWidth, setSideDrawerWidth] = useState<number>(drawerWidth);

@@ -66,18 +66,18 @@ export default function Sidebar() {
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, [activeDropdownIndex]);
-
+  console.log(sideDrawerOpen)
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      {sideDrawerOpen && (isMobile || isTab) && (
+      {sideDrawerOpen && isTab && (
         <Backdrop onClick={handleDrawerClose} />
       )}
       <Drawer
         sx={{
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: sideDrawerWidth,
+            width: isMobile ? "100%" : sideDrawerWidth,
             backgroundColor: "#F9F9F9",
             display: "flex",
             flexDirection: "column",
