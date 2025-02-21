@@ -209,7 +209,7 @@ const ChartResponse = ({
                 <ListItemHeaderText className="flex justify-center items-center mb-2">
                      {layout?.title?.text}
                 </ListItemHeaderText>
-                <TableResponse data={data}/>
+                <TableResponse data={data} layout={layout}/>
 
               </div>
             )}

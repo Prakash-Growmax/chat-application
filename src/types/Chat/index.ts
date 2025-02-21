@@ -62,6 +62,25 @@ export interface CreateChatResponse {
 
   // Add other session properties
 }
+export interface LayoutResponse{
+  annotations:any;
+  bargap:number;
+  bargroupgap:number;
+  height:number;
+  hovermode:string;
+  margin:any;
+  paper_bgcolor:string;
+  plot_bgcolor:string;
+  showlegend:boolean;
+  subtitle:string;
+  title:any;
+  uniformtext:any;
+  width:number;
+  xaxis:any;
+  yaxis:any;
+
+
+}
 
 export interface UploadDatasetResponse {
   error?: string;
