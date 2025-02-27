@@ -1,14 +1,11 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./pages/ProtectedRoute"; // ✅ Keep it simple
 
 const Chat = lazy(() => import("./components/ChatNew/Chat"));
 const Team = lazy(() => import("./components/Teams/Team"));
-
 const LoginPage = lazy(() => import("./pages/auth/LoginPage"));
-const CancelPayment = lazy(
-  () => import("./pages/Cancel-Payment/CancelPayment")
-);
-
+const CancelPayment = lazy(() => import("./pages/Cancel-Payment/CancelPayment"));
 const ChatLayout = lazy(() => import("./pages/Chat/ChatWrapper/ChatLayout"));
 const NewChat = lazy(() => import("./pages/Chat/NewChat/NewChat"));
 const NotFoundPage = lazy(() => import("./pages/error/NotFoundPage"));
@@ -16,7 +13,6 @@ const WelcomePage = lazy(() => import("./pages/home/WelcomePage"));
 const InviteAcceptedPage = lazy(() => import("./pages/InviteAcceptedPage"));
 const SuccessPayment = lazy(() => import("./pages/Payments/SuccessPayment"));
 const PlansPage = lazy(() => import("./pages/plans/PlansPage"));
-const ProtectedRoute = lazy(() => import("./pages/ProtectedRoute"));
 const SettingsPage = lazy(() => import("./pages/settings/SettingsPage"));
 
 const AppRoutes = () => {
@@ -25,32 +21,31 @@ const AppRoutes = () => {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<WelcomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+
+        {/* Protected Routes */}
         <Route
           path="/chat/new"
           element={
             <ProtectedRoute>
               <ChatLayout>
-                <NewChat />
+              <NewChat />
               </ChatLayout>
+          
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/chat/:id"
           element={
             <ProtectedRoute>
               <ChatLayout>
-                <Chat />
+              <Chat /> 
               </ChatLayout>
+           
             </ProtectedRoute>
           }
         />
-
-        <Route path="/login" element={<LoginPage />} />
-
-        {/* Protected Routes */}
-
         <Route
           path="/teams"
           element={

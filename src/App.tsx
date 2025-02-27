@@ -1,24 +1,21 @@
-/**
- * @file App.tsx
- * @description Root component of the application that sets up the main providers,
- * routing, and layout configuration. Handles responsive drawer sizing and initial
- * app loading states.
- */
+import { BrowserRouter } from "react-router-dom";
+import { Suspense } from "react";
 
+import AppRoutes from "./AppRoutes";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import AppRoutes from "./AppRoutes";
 import AppContext from "./components/context/AppContext";
+import { useMemo, useState, useEffect } from "react";
 import { drawerWidth } from "./constants/general.constant";
 import { DrawerOpen_LocalKey } from "./constants/storage.constant";
 import { useMediaQuery, useTheme } from "@mui/material";
+import ChatLayout from "./pages/Chat/ChatWrapper/ChatLayout";
+import MainLayout from "./pages/Mainlayout";
 
-// Types for drawer configuration and context
+// **Drawer Config Interface**
 interface DrawerConfig {
   sideDrawerOpen: boolean;
   setSideDrawerOpen: (open: boolean) => void;
@@ -28,7 +25,7 @@ interface DrawerConfig {
   MainLayout_MarginLeft: number;
 }
 
-// Initialize query client for React Query
+// **Query Client for React Query**
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -38,60 +35,38 @@ const queryClient = new QueryClient({
   },
 });
 
-/**
- * Root Application Component
- * Manages the application's global state and provider hierarchy
- */
 function App() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
-  // Initialize drawer state from localStorage or default to true
+
+  // **Persistent Sidebar State**
   const [sideDrawerOpen, setSideDrawerOpen] = useState(() => {
     const savedState = localStorage.getItem(DrawerOpen_LocalKey);
     return savedState ? JSON.parse(savedState) : !(isMobile || isTab);
   });
 
-  const [historyList,setHistoryList] = useState(false);
-  // Manage responsive drawer width
+  const [historyList, setHistoryList] = useState(false);
   const [sideDrawerWidth, setSideDrawerWidth] = useState<number>(drawerWidth);
 
-  // Calculate main layout margin based on drawer width
+  // **Main Content Margin Based on Sidebar**
   const MainLayout_MarginLeft = useMemo(
     () => sideDrawerWidth + 16,
     [sideDrawerWidth]
   );
 
-  /**
-   * Remove initial loading skeleton
-   */
-  useEffect(() => {
-    const skeleton = document.querySelector(".chat-skeleton");
-    if (skeleton) {
-      skeleton.classList.add("hidden");
-      setTimeout(() => {
-        skeleton.remove();
-      }, 300);
-    }
-  }, []);
-
-  /**
-   * Handle responsive drawer width calculations
-   */
   useEffect(() => {
     const updateWidth = () => {
       const width = window.innerWidth;
-      setSideDrawerWidth(Math.max(width * 0.175, 200)); // Minimum width of 200px
+      setSideDrawerWidth(Math.max(width * 0.175, 200));
     };
 
-    updateWidth(); // Initial calculation
+    updateWidth();
     window.addEventListener("resize", updateWidth);
-
-    // Cleanup listener on component unmount
     return () => window.removeEventListener("resize", updateWidth);
   }, []);
 
-  // Memoize drawer configuration to prevent unnecessary re-renders
+  // **Provide Sidebar Context Globally**
   const drawerConfig = useMemo<DrawerConfig>(
     () => ({
       sideDrawerOpen,
@@ -101,24 +76,7 @@ function App() {
       sideDrawerWidth,
       MainLayout_MarginLeft,
     }),
-    [sideDrawerOpen,historyList, sideDrawerWidth, MainLayout_MarginLeft]
-  );
-
-  // Memoize router configuration
-  const router = useMemo(
-    () =>
-      createBrowserRouter([
-        {
-          path: "*",
-          element: (
-            <div className="flex flex-col min-h-screen">
-              <AppRoutes />
-              <Toaster />
-            </div>
-          ),
-        },
-      ]),
-    []
+    [sideDrawerOpen, historyList, sideDrawerWidth, MainLayout_MarginLeft]
   );
 
   return (
@@ -127,7 +85,17 @@ function App() {
         <AuthProvider>
           <QueryClientProvider client={queryClient}>
             <AppContext.Provider value={drawerConfig}>
-              <RouterProvider router={router} />
+              <BrowserRouter>
+              <ChatLayout>
+              <MainLayout> {/* ✅ Sidebar & Header stay persistent */}
+                  <Suspense>
+                    <AppRoutes /> {/* ✅ Only this part updates on route change */}
+                  </Suspense>
+                </MainLayout>
+              </ChatLayout>
+               
+              </BrowserRouter>
+              <Toaster />
             </AppContext.Provider>
           </QueryClientProvider>
         </AuthProvider>
@@ -137,3 +105,4 @@ function App() {
 }
 
 export default App;
+
