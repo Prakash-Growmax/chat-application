@@ -110,7 +110,7 @@ export async function uploadDocumentToChat(
 
     const result = await chatService.uploadDataset(
       {
-        s3_path: s3Key,
+        s3_path: `s3://growmax-dev-app-assets/analytics/${s3Key}`,
         org_id: profile.organization_id,
         type: "sales",
       },

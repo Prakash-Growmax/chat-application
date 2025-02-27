@@ -5,7 +5,7 @@ interface PublicLayoutProps {
 }
 
 const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
-  return <MainLayout hideHeader>{children}</MainLayout>;
+  return <>{children}</>;
 };
 
 export default PublicLayout;

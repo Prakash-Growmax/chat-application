@@ -1,4 +1,4 @@
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, useLocation } from "react-router-dom";
 import { Suspense } from "react";
 
 import AppRoutes from "./AppRoutes";
@@ -15,15 +15,17 @@ import { useMediaQuery, useTheme } from "@mui/material";
 import ChatLayout from "./pages/Chat/ChatWrapper/ChatLayout";
 import MainLayout from "./pages/Mainlayout";
 
-// **Drawer Config Interface**
-interface DrawerConfig {
-  sideDrawerOpen: boolean;
-  setSideDrawerOpen: (open: boolean) => void;
-  historyList: boolean;
-  setHistoryList: (his: boolean) => void;
-  sideDrawerWidth: number;
-  MainLayout_MarginLeft: number;
-}
+// Function to determine if a route needs the main layout
+const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
+  const location = useLocation();
+  const noLayoutRoutes = ["/", "/login"]; // Routes without MainLayout
+
+  return noLayoutRoutes.includes(location.pathname) ? (
+    <>{children}</> // Render without MainLayout
+  ) : (
+    <MainLayout>{children}</MainLayout> // Wrap other routes in MainLayout
+  );
+};
 
 // **Query Client for React Query**
 const queryClient = new QueryClient({
@@ -67,7 +69,7 @@ function App() {
   }, []);
 
   // **Provide Sidebar Context Globally**
-  const drawerConfig = useMemo<DrawerConfig>(
+  const drawerConfig = useMemo(
     () => ({
       sideDrawerOpen,
       setSideDrawerOpen,
@@ -86,14 +88,13 @@ function App() {
           <QueryClientProvider client={queryClient}>
             <AppContext.Provider value={drawerConfig}>
               <BrowserRouter>
-              <ChatLayout>
-              <MainLayout> {/* ✅ Sidebar & Header stay persistent */}
-                  <Suspense>
-                    <AppRoutes /> {/* ✅ Only this part updates on route change */}
-                  </Suspense>
-                </MainLayout>
-              </ChatLayout>
-               
+                <ChatLayout>
+                  <LayoutWrapper> {/* ✅ Conditional Layout Wrapping */}
+                    <Suspense>
+                      <AppRoutes /> {/* ✅ Only AppRoutes updates on route change */}
+                    </Suspense>
+                  </LayoutWrapper>
+                </ChatLayout>
               </BrowserRouter>
               <Toaster />
             </AppContext.Provider>
@@ -105,4 +106,3 @@ function App() {
 }
 
 export default App;
-

@@ -26,32 +26,30 @@ export default function ChatBox({
 
   const scrollToTop = useCallback(() => {
     if (scrollAreaRef.current) {
-      // Force a re-layout update before scrolling
       setTimeout(() => {
         scrollAreaRef.current!.scrollTop = 0;
-      }, 0); // Use a minimal delay to ensure the DOM is updated
+      }, 0);
     }
   }, []);
 
-  // Scroll to bottom when queue or processing changes
+  // Handle scroll behavior when queue or processing changes
   useEffect(() => {
-    scrollToBottom();
-  }, [queue, processing, scrollToBottom]);
-
-  // Scroll to bottom when processing is complete and it's not a new chat
-  useEffect(() => {
-    if (!isNewChat && !processing) {
+    if (isNewChat || !processing) {
+      // Fix scroll at the top when isNewChat is true or processing is false
+      scrollToTop();
+    } else {
+      // Otherwise, scroll to bottom for normal chat updates
       scrollToBottom();
     }
-  }, [processing, isNewChat, scrollToBottom]);
+  }, [queue, processing, isNewChat, scrollToTop, scrollToBottom]);
 
-  // Scroll to top when the id changes
+  // Scroll to top when the chat ID changes
   useEffect(() => {
     scrollToTop();
   }, [id, scrollToTop]);
 
   return (
-    <div className="flex-1 overflow-y-auto" key={id}> {/* Force re-render when id changes */}
+    <div className="flex-1 overflow-y-auto" key={id}>
       <div className="max-w-4xl mx-auto px-2 sm:px-4">
         <div className="min-h-screen">
           <div className="flex h-screen">

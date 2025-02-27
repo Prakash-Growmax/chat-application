@@ -33,28 +33,30 @@ function ChatUploadBtn({
         return;
       }
       setIsUploading(true);
-      await uploadToS3(file, (progress) => {
-       
-      });
+      setS3Key(file.name);
+     
       if (!profile) return true;
      
       let ID = chatId;
-      const s3_key = `s3://growmax-dev-app-assets/analytics/${file.name}`;
+      // const s3_key = `s3://growmax-dev-app-assets/analytics/${file.name}`;
 
       try {
         if (!ID) {
           setProcessing(true);
           ID = await createChatId(profile,setHistoryList);
-          setS3Key(s3_key);
+          // setS3Key(s3_key);
           setProcessing(false);
           navigate(`/chat/${ID}`);
           return;
         } else {
-          setS3Key(s3_key);
+          // setS3Key(s3_key);
         }
       } catch (error) {
         toast.error("Error occurred while uploading. Try again");
       }
+      await uploadToS3(file, (progress) => {
+       
+      });
     },
     [onFileUploaded, setS3Key, profile, chatId, token, addToQueue]
   );
