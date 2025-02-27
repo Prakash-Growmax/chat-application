@@ -66,7 +66,7 @@ export default function Sidebar() {
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, [activeDropdownIndex]);
-  console.log(sideDrawerOpen)
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />

@@ -38,12 +38,12 @@ export function ChatMessage({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
-
+  const {queue} = useChatContext();
  
   const timeStamp = message?.timestamp
     ? message?.timestamp
     : message?.messageObject?.timestamp || "";
-    
+  console.log(queue);
   return (
     <>
       <div className="mx-auto max-w-4xl h-full">
@@ -132,7 +132,7 @@ const RenderContent = ({
   if (message?.messageObject?.content?.type === "text") {
     return (
       <GreetingResponse
-        message={message?.messageObject?.content?.data?.response}
+        message={message?.messageObject?.content?.data?.response ? message?.messageObject?.content?.data?.response : message?.messageObject?.content?.content?.analysis?.key_insight }
         isTyping={message?.messageObject?.isTyping}
         isAssistant={message?.messageObject?.role}
         onContentChange={onContentChange}
@@ -159,12 +159,12 @@ const RenderContent = ({
       />
     );
   }
-  if (message?.messageObject?.content?.type === "chart") {
+  if (message?.messageObject?.content?.charts?.type === "chart" || message?.messageObject?.content?.type === "chart") {
     return (
       <ChartResponse
-        data={message?.messageObject.content.data}
-        layout={message?.messageObject.content.layout}
-        summary={message?.messageObject.content.summary}
+        data={message?.messageObject.content.charts ? message?.messageObject.content.charts.data :  message?.messageObject.content.data  }
+        layout={message?.messageObject.content.charts ? message?.messageObject.content.charts.layout : message?.messageObject.content.layout}
+        summary={message?.messageObject.content.charts ? message?.messageObject.content.charts.analysis : message?.messageObject.content.analysis}
         isTyping={message?.messageObject?.isTyping}
         isAssistant={message?.messageObject?.role}
         onContentChange={onContentChange}
