@@ -93,7 +93,7 @@ const ChartResponse = ({
       },
       xaxis: {
         ...layout.xaxis,
-        tickangle: isMobile ? -45 : 0,
+     
         tickfont: { size: isMobile ? 6 : 11 },
       },
       yaxis: {

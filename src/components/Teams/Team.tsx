@@ -23,6 +23,7 @@ const Team = () => {
     );
   }
   const { sideDrawerOpen } = useContext(AppContext);
+  
   return (
     <div
       className={`container mx-auto py-8 px-8 ${

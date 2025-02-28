@@ -17,6 +17,11 @@ export const useTeamMembers = (): UseTeamMembersReturn => {
   const [teamData, setTeamData] = useState<TeamData | null>(null);
 
   const fetchTeamMembers = async () => {
+    const cachedPlans = localStorage.getItem("teams");
+    if(cachedPlans){
+      setTeamData(cachedPlans);
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -31,7 +36,9 @@ export const useTeamMembers = (): UseTeamMembersReturn => {
 
       // const members = await getTeamMembers(org_id?.organization_id);
       const data = await getTeamData(org_id?.organization_id);
+     
       setTeamData(data);
+      localStorage.setItem("teams",JSON.stringify(data));
       setOrganizationId(org_id?.organization_id);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
