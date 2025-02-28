@@ -54,15 +54,15 @@ export default function TableResponse({ data, layout }: TableResponseProps) {
       <Table className="border border-black border-collapse">
         <TableHeader>
           <TableRow>
-            <TableCell className="border border-black font-bold">{yaxisName}</TableCell>
             <TableCell className="border border-black font-bold">{xaxisName}</TableCell>
+            <TableCell className="border border-black font-bold">{yaxisName}</TableCell>
           </TableRow>
         </TableHeader>
         <TableBody>
           {currentData.map((row, index) => (
             <TableRow key={index}>
-              <TableCell className="border border-black">{row.y}</TableCell>
               <TableCell className="border border-black">{row.x}</TableCell>
+              <TableCell className="border border-black">{row.y}</TableCell>
             </TableRow>
           ))}
         </TableBody>

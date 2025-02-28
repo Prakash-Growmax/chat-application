@@ -84,7 +84,8 @@ const ChartResponse = ({
         l: isMobile ? 40 : Math.max(30, Math.floor(dimensions.width * 0.08)),
         r: isMobile ? 10 : Math.max(20, Math.floor(dimensions.width * 0.05)),
         t: isMobile ? 30 : Math.max(30, Math.floor(dimensions.height * 0.08)),
-        b: isMobile ? 50 : Math.max(30, Math.floor(dimensions.height * 0.08)),
+        // Increase bottom margin to make room for x-axis labels
+        b: isMobile ? 70 : Math.max(60, Math.floor(dimensions.height * 0.15)),
         pad: isMobile ? 2 : 4,
       },
       autosize: true,
@@ -93,8 +94,10 @@ const ChartResponse = ({
       },
       xaxis: {
         ...layout.xaxis,
-     
-        tickfont: { size: isMobile ? 6 : 11 },
+        tickfont: { size: isMobile ? 8 : 11 },
+        // Add these properties to fix x-axis label issues
+        tickangle: -45,  // Rotate labels for better visibility
+        automargin: true // Automatically adjust margins for labels
       },
       yaxis: {
         ...layout.yaxis,
