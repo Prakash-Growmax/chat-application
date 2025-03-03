@@ -10,18 +10,18 @@ import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import UserResource from "../auth/UserResource";
 import LucideIcon from "../Custom-UI/LucideIcon";
-import { useContext, useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { useContext} from "react";
+
 import AppContext from "../context/AppContext";
 import { useMediaQuery, useTheme } from "@mui/material";
 
 const ResourcesNew = () => {
   const navigate = useNavigate();
-  const { signOut, resetAuth } = useAuth();
+  const { signOut} = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
-  const { toast } = useToast();
+
   const {setSideDrawerOpen} = useContext(AppContext);
   // const handleLogout = async () => {
     

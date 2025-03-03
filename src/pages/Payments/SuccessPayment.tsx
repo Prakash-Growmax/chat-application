@@ -95,8 +95,8 @@ function SuccessPayment() {
         }
         //
       })
-      .catch((e) => {
-        e;
+      .catch(() => {
+        
       });
   };
 

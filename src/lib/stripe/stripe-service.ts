@@ -6,7 +6,7 @@ import {
 } from "../subscriptions/subscriptions-service";
 
 export const createSubscriptionCheckoutSession = (
-  price: Number,
+  price: number,
   email: string,
   userId: string
 ) => {
@@ -32,7 +32,9 @@ export const createSubscriptionCheckoutSession = (
         await updateSessionIdInSubscription(subscription?.id, session?.id);
         window.location = session.url;
       })
-      .catch((e) => {});
+      .catch(() => {
+       
+      });
   } catch (error) {
     console.error(error);
   }

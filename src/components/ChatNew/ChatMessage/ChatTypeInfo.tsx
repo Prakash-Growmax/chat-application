@@ -1,12 +1,12 @@
-import DarkLogo from "@/assets/Logo/DarkLogo";
+
 import { useAuth } from "@/hooks/useAuth";
 import { BodyText } from "@/Theme/Typography";
 import { getInitials } from "@/utils/general.utilis";
 import { Avatar } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
-import { name } from "plotly.js/lib/scatter";
 
-function ChatTypeInfo({ isUser }: { isUser: boolean }) {
+
+function ChatTypeInfo() {
   const { user } = useAuth();
   const userName = user?.name || "";
   return (

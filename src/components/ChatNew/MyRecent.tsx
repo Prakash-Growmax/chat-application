@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { format, subDays } from "date-fns";
+import { subDays } from "date-fns";
 import AppContext from "../context/AppContext";
 import LucideIcon from "../Custom-UI/LucideIcon";
 import DeleteIcon from "../ui/delete-icon";
@@ -106,7 +106,7 @@ const ChatItem: React.FC<ChatItemProps> = React.memo(({
   setRenamingChatId,
   onRename,
 }) => {
-  const chatDate = getSafeDate(chat.created_at);
+
   const [tempName, setTempName] = useState(chat.name || "Untitled Chat");
   
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

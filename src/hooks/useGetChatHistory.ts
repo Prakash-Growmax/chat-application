@@ -97,7 +97,9 @@ export function useGetChatHistory(chatId: string | undefined) {
         loading: false,
         data: response?.data,
       });
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   useEffect(() => {

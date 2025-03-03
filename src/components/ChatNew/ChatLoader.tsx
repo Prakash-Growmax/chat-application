@@ -3,7 +3,7 @@ import { BodySmall } from "@/Theme/Typography";
 import LogoLoader from "../Custom-UI/LogoLoader";
 
 
-function ChatLoader({ fileName = "", progress = 100 }) {
+function ChatLoader() {
   const { processing, isUploading,isLoading,prevMessage,s3Key} = useChatContext();
   return (
     <>

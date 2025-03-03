@@ -28,7 +28,7 @@ export function useSubscription() {
         setLoading(false);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  
     [user]
   );
 
@@ -52,7 +52,7 @@ export function useSubscription() {
     return () => {
       subscription.unsubscribe();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [user?.id]);
 
   return {

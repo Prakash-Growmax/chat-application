@@ -1,6 +1,6 @@
 import DarkLogo from "@/assets/Logo/DarkLogo";
 
-import { Divider, List, useMediaQuery } from "@mui/material";
+import {List, useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 
@@ -9,17 +9,17 @@ import { styled, useTheme } from "@mui/material/styles";
 import * as React from "react";
 
 import MyRecent from "../ChatNew/MyRecent";
-import Resources from "../ChatNew/Resources";
+
 import AppContext from "../context/AppContext";
 import NewChatButton from "../layout/SideBar/NewChatButton";
 import SideBarListItemHeader from "../layout/SideBar/SideBarListItemHeader";
 
 import { DrawerOpen_LocalKey } from "@/constants/storage.constant";
-import LogoutButton from "../auth/LogoutButton";
+
 import LucideIcon from "../Custom-UI/LucideIcon";
 import TooltipNew from "./tooltipnew";
 
-import { useNavigate } from "react-router-dom";
+
 import ResourcesNew from "../ChatNew/ResourcesNew";
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -52,7 +52,7 @@ export default function Sidebar() {
   const [isDropdownOpen, setDropdownOpen] = React.useState(true);
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState(null);
   const [recentData,setRecentData] = React.useState(true);
-  const navigate = useNavigate();
+
   React.useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (

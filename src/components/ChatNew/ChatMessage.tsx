@@ -13,12 +13,12 @@ import ChatTimeStamp from "./ChatMessage/ChatTimeStamp";
 import ChatTypeInfo from "./ChatMessage/ChatTypeInfo";
 import { DataChart } from "./DataChat";
 import GeneralResponse from "../layout/ChatSection/ChatMessage/GeneralResponse";
-import { useChatContext } from "@/context/ChatContext";
+
 import { useMediaQuery, useTheme } from "@mui/material";
 
 interface ChatMessageProps {
   message: Message;
-  onContentChange: (content: any) => void;
+  onContentChange: () => void;
  
 }
 export function ChatMessage({
@@ -38,12 +38,12 @@ export function ChatMessage({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
-  const {queue} = useChatContext();
+  
  
   const timeStamp = message?.timestamp
     ? message?.timestamp
     : message?.messageObject?.timestamp || "";
-  console.log(queue);
+ 
   return (
     <>
       <div className="mx-auto max-w-4xl h-full">
@@ -113,7 +113,7 @@ const RenderContent = ({
 }: {
   message: Message;
   isAssistant?: boolean;
-  onContentChange: (content: any) => void;
+  onContentChange: () => void;
 }) => {
   if (message?.type === "text") {
     return <TextResponse message={message} isAssistant={isAssistant} />;

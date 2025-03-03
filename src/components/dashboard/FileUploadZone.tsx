@@ -41,6 +41,7 @@ export function FileUploadZone({ onFileUpload }: FileUploadZoneProps) {
         onFileUpload(file);
         toast.success("File uploaded successfully");
       } catch (error) {
+        console.error(error);
         toast.error("Failed to upload file");
       } finally {
         setUploading(false);

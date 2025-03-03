@@ -28,7 +28,7 @@ function LoginPage() {
   const {
     loading,
     sendOTP: handleSendOTP,
-    verifyOTP: handleVerifyOTP,
+    // verifyOTP: handleVerifyOTP,
     timeLeft,
     canResend,
     attemptsLeft,
@@ -57,6 +57,7 @@ function LoginPage() {
       await verifyAuthOTP(email, otp);
       await clearPersistedState();
     } catch (error) {
+      console.error(error)
       setOtp("");
     }
   };

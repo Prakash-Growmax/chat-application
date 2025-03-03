@@ -1,7 +1,7 @@
 import { supabase } from './supabase';
 import { ChatMessage, User } from '@/types';
 import { calculateTokenCost, hasEnoughTokens } from './token-manager';
-import { toast } from 'sonner';
+
 
 export async function saveChat(
   userId: string,

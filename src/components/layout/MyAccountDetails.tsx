@@ -8,23 +8,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
 import { useTokenUsage } from "@/hooks/useTokenUsage";
-import { Caption, Label, ListItemHeaderText } from "@/Theme/Typography";
+import {Label, ListItemHeaderText } from "@/Theme/Typography";
 import { capitalizeFirstName, getInitials } from "@/utils/general.utilis";
 import { Avatar } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
-import LogoutButton from "../auth/LogoutButton";
+
 import LucideIcon from "../Custom-UI/LucideIcon";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
 export default function MyAccountDetails() {
-  const { user, signOut,resetAuth } = useAuth();
-  const tokens = useTokenUsage();
-  const tokens_used = tokens?.data?.current_token_usage;
-  const tokens_remaining = tokens?.data?.tokens_remaining;
+  const { user, signOut} = useAuth();
+
+
   const userName = user?.name || "";
   const navigate = useNavigate();
-  const { toast } = useToast();
+
   // const handleLogout = async () => {
     
 

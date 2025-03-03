@@ -126,7 +126,7 @@ export const Caption = ({
 }: {
   children: ReactNode;
   className?: string;
-  props?: any;
+  props?: string | number | boolean;
 }) => (
   // 0.75rem = 12px, line-height: 1.4
   <p

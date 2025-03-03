@@ -32,6 +32,7 @@ export function useTokenUsage() {
           });
         }
       } catch (err) {
+        console.error(err)
         if (mounted) {
           setState({
             data: null,

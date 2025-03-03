@@ -1,5 +1,5 @@
 import React from "react";
-import MainLayout from "./Mainlayout";
+
 interface PublicLayoutProps {
   children: React.ReactNode; // Type for children
 }

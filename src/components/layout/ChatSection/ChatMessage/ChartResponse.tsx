@@ -3,9 +3,8 @@ import Plot from "react-plotly.js";
 import Typewriter from "typewriter-effect";
 import SwitchIcon from "./SwitchIcon";
 import TableResponse from "./tableResponse";
-import { ListItemHeaderText } from "@/Theme/Typography";
-import { useChatContext } from "@/context/ChatContext";
-import { toast } from "sonner";
+
+
 import { useMediaQuery, useTheme } from "@mui/material";
 
 const cleanSummaryText = (summaryObj) => {
@@ -25,20 +24,20 @@ const ChartResponse = ({
   data = [],
   layout = {},
   summary = {},
-  onContentChange,
+
   isTyping = false,
   isAssistant = false,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTab = useMediaQuery(theme.breakpoints.down("md"));
+
   const chatBoxRef = useRef(null);
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [shouldStartTyping, setShouldStartTyping] = useState(false);
   const [isPlotRendered, setIsPlotRendered] = useState(false);
   const [checked, setChecked] = useState(true);
-  const { queue, analyze, addToQueue } = useChatContext();
+
 
   const showTyping = isTyping && isAssistant;
   const summaryEntries = cleanSummaryText(summary);

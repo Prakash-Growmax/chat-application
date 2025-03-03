@@ -29,6 +29,7 @@ export function PlansPage() {
   const { sideDrawerOpen } = useContext(AppContext);
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState<string | null>(null);
+  console.log(loading);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
  
@@ -64,6 +65,7 @@ export function PlansPage() {
   }, [user?.id, loadOrganizations]);
 
   const handleSubscribe = async (plan: any) => {
+
     if (!user?.id) {
       return null;
     }

@@ -17,7 +17,7 @@ export function SettingsPage() {
   const { organization, updateOrganizationName } = useOrganization(
     profile?.organization_id
   );
-  console.log("🚀 ~ SettingsPage ~ organization:", organization);
+
   const { sideDrawerOpen } = useContext(AppContext);
   const [activeTab, setActiveTab] = useState("subscription");
 

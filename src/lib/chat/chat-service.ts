@@ -96,7 +96,9 @@ export async function createChatId(profile: Profile , setHistoryList) {
       console.error("Organization ID is missing.");
       throw new Error("Organization ID is required");
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function uploadDocumentToChat(
@@ -144,5 +146,7 @@ export async function uploadDocumentToChat(
     assistantMessage = formQueueMessage(response || "", true,true,"datasetres");
 
     return assistantMessage;
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 }

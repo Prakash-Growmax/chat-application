@@ -5,7 +5,7 @@ import { Message } from "@/types";
 import { useChatContext } from "@/context/ChatContext";
 import { BodySmall } from "@/Theme/Typography";
 import TooltipNew from "@/components/ui/tooltipnew";
-import { CSVPreview } from "@/components/CSVPreview/CSVPreview";
+
 import { cleanFilename } from "@/utils/s3.utils";
 import { CSVPreviewData, FileMetadata, PreviewError } from "@/lib/types/csv";
 import AppContext from "@/components/context/AppContext";
@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { useMediaQuery, useTheme } from "@mui/material";
 const DatasetUploadResponse = ({ message, isTyping, isAssistant, onContentChange }: { message: Message; isTyping: boolean; isAssistant: boolean; onContentChange?: () => void }) => {
 
-  const { addToQueue, queue, setS3Key, s3Key,analyze } = useChatContext();
+  const { addToQueue,analyze } = useChatContext();
   const [showHeading, setShowHeading] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -43,21 +43,20 @@ const DatasetUploadResponse = ({ message, isTyping, isAssistant, onContentChange
     addToQueue(userMessage);
   }
 
-  const [showPreview, setShowPreview] = useState(true);
-  const [selectedFile, setSelectedFile] = useState(null);
+
   const showTyping = isAssistant && isTyping;
-  const [isLoading, setIsLoading] = useState(false);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [error, setError] = useState<PreviewError | null>(null);
+
   const [previewData, setPreviewData] = useState<CSVPreviewData | null>(null);
   const [metadata, setMetadata] = useState<FileMetadata | null>(null);
   const { setSideDrawerOpen } = useContext(AppContext);
-  const [openSnackbar, setOpenSnackBar] = useState(true);
+
     const handlePreviewClick = async (s3Key) => {
     
-      setIsLoading(true);
-      setError(null);
-      setOpenSnackBar(true);
+
+     
+    
       try {
         const { data, metadata } = await fetchCSVPreview(env_BUCKETNAME, s3Key);
      
@@ -65,9 +64,9 @@ const DatasetUploadResponse = ({ message, isTyping, isAssistant, onContentChange
         setMetadata(metadata);
         setIsModalOpen(true);
       } catch (err) {
-        setError(err as PreviewError);
+        console.error(err)
       } finally {
-        setIsLoading(false);
+       
       }
       setSideDrawerOpen(false);
     };

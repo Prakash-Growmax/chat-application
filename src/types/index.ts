@@ -20,6 +20,7 @@ export interface Message {
   text?: string;
   suggested_questions?: string[];
 }
+
 export interface Organization {
   id: string;
   name: string;

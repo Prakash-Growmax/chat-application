@@ -60,7 +60,7 @@ export function ChatInput({
     textarea.style.height = `${newHeight}px`;
   }, [s3Key]);
  
-  function addUserQueue(value: any) {
+  function addUserQueue(value: string | number) {
     const userMessage: Message = {
       id: Date.now().toString(),
       content: value,
@@ -75,7 +75,7 @@ export function ChatInput({
     }
   }
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: string | number) => {
    
     e.preventDefault();
     if (!Boolean(input.trim())) return;
@@ -91,6 +91,7 @@ export function ChatInput({
         navigate(`/chat/${ChatId}`);
         return;
       } catch (error) {
+        console.error(error);
         setProcessing(false);
         return;
       }

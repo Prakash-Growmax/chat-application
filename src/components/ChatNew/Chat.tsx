@@ -7,8 +7,8 @@ import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import ChatBox from "./ChatBox";
 import { ChatInput } from "./ChatInput";
-import { CardHeader } from "../ui/card";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+
+
 import { TriangleAlert } from "lucide-react";
 
 function Chat() {
@@ -60,9 +60,14 @@ function Chat() {
       addToQueue(message_res);
       toast.success("File uploaded successfully.");
       setIsUploading(false);
-    } catch (error) {
+    } 
+    catch (error) {
+      console.error("Upload error:", error);
       setIsUploading(false);
     }
+    
+    
+    
   }
 
   useEffect(() => {

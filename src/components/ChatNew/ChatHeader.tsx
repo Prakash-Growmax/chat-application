@@ -9,7 +9,7 @@ interface ChatHeaderProps {
 }
 
 export default function ChatHeader({
-  open,
+
   createNewChat,
   state,
 }: ChatHeaderProps) {
