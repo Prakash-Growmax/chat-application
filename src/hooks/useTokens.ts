@@ -11,7 +11,7 @@ export function useTokens() {
     chatId: string,
     actionType: string,
     content: string,
-    metadata?: Record<string, any>
+    metadata?: Record<string,unknown>
   ): Promise<number> => {
     if (!user) {
       throw new Error('User not authenticated');

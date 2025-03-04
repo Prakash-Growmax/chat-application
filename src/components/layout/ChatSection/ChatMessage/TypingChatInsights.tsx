@@ -5,7 +5,7 @@ const TypingChatInsights = ({
   isAssistant = true,
   isTyping = true,
 }: {
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   isAssistant?: boolean;
   isTyping?: boolean;
 }) => {

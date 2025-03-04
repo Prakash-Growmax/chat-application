@@ -29,7 +29,7 @@ export function PlansPage() {
   const { sideDrawerOpen } = useContext(AppContext);
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState<string | null>(null);
-  console.log(loading);
+
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
  
@@ -37,6 +37,7 @@ export function PlansPage() {
     if (!user?.id) return;
   
     try {
+     
       const cachedPlans = localStorage.getItem("plans");
       if (cachedPlans) {
         setPlans(JSON.parse(cachedPlans));
@@ -64,17 +65,26 @@ export function PlansPage() {
     };
   }, [user?.id, loadOrganizations]);
 
-  const handleSubscribe = async (plan: any) => {
-
+  const handleSubscribe = async (plan: unknown) => {
     if (!user?.id) {
       return null;
     }
-    createSubscriptionCheckoutSession(
-      Number(plan?.price),
-      user?.email,
-      user?.id
-    );
+  
+    setLoading(plan?.name); 
+  
+    try {
+      await createSubscriptionCheckoutSession(
+        Number(plan?.price),
+        user?.email,
+        user?.id
+      );
+    } catch (error) {
+      console.error("Subscription failed:", error);
+    } finally {
+      setLoading(null); 
+    }
   };
+  
  
   return (
     <div className="fixed inset-0 overflow-y-auto bg-white from-slate-50 to-white pt-96 lg:pt-0 md:pt-40">

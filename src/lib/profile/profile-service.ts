@@ -17,7 +17,7 @@ export const updateProfile_stripeCustomerId = async (
     }
 
     return data;
-  } catch (error: any) {
+  } catch (error:unknown) {
     console.error("Error updating stripe_customer_id:", error.message);
     throw error;
   }
@@ -39,7 +39,7 @@ export const getProfileById = async (profileId: string) => {
       throw new Error("Profile not found");
     }
     return data;
-  } catch (error: any) {
+  } catch (error:unknown) {
     throw error;
   }
 };

@@ -19,10 +19,17 @@ export interface RenameSession{
   uuid_changed:false,
   original_uuid:number | string,
 }
-
+export interface ChatMetadata{
+created_at:string,
+created_from_frontend_uuid:boolean,
+message:string,
+model:string,
+name_manually_set:boolean,
+source:string
+}
 export interface CreateSessionRequest {
   name: string;
-  chat_metadata?: any;
+  chat_metadata?: ChatMetadata;
 }
 export interface renameSessionRequest {
   new_name: string;
@@ -30,7 +37,7 @@ export interface renameSessionRequest {
 }
 export interface ChatHistory {
   data: {
-    items: Array<any>;
+    items: Array<unknown>;
   };
 }
 export interface uploadDataSetRequest {
@@ -62,37 +69,19 @@ export interface CreateChatResponse {
 
   // Add other session properties
 }
-export interface LayoutResponse{
-  annotations:any;
-  bargap:number;
-  bargroupgap:number;
-  height:number;
-  hovermode:string;
-  margin:any;
-  paper_bgcolor:string;
-  plot_bgcolor:string;
-  showlegend:boolean;
-  subtitle:string;
-  title:any;
-  uniformtext:any;
-  width:number;
-  xaxis:any;
-  yaxis:any;
 
-
-}
 
 export interface UploadDatasetResponse {
   error?: string;
   response?: string;
   id: string;
   status: string | "failed";
-  token_usage: any;
+  token_usage:string | number;
 }
 export interface AnalyzeChatResponse {
   error?: string;
   response?: string;
   id: string;
   status: string | "failed";
-  token_usage: any;
+  token_usage: string | number;
 }

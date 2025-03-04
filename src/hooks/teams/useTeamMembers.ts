@@ -13,7 +13,7 @@ export const useTeamMembers = (): UseTeamMembersReturn => {
   const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [organizationId, setOrganizationId] = useState<string | null>();
-  const [error, setError] = useState<any | null>(null);
+  const [error, setError] = useState<string| number | null>(null);
   const [teamData, setTeamData] = useState<TeamData | null>(null);
 
   const fetchTeamMembers = async () => {
@@ -92,7 +92,7 @@ export const useTeamMembers = (): UseTeamMembersReturn => {
 
   useEffect(() => {
     fetchTeamMembers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+ 
   }, []);
 
   return {

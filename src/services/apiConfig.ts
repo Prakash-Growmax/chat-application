@@ -70,7 +70,7 @@ export class ApiClient {
 
   async post<T>(
     endpoint: string,
-    data?: any,
+    data?:unknown,
     options: Omit<RequestOptions, "method"> = {}
   ): Promise<ApiResponse<T>> {
     return this.executeRequest<T>(endpoint, {
@@ -82,7 +82,7 @@ export class ApiClient {
 
   async put<T>(
     endpoint: string,
-    data?: any,
+    data?:unknown,
     options: Omit<RequestOptions, "method"> = {}
   ): Promise<ApiResponse<T>> {
     return this.executeRequest<T>(endpoint, {
@@ -101,7 +101,7 @@ export class ApiClient {
 
   async patch<T>(
     endpoint: string,
-    data?: any,
+    data?:unknown,
     options: Omit<RequestOptions, "method"> = {}
   ): Promise<ApiResponse<T>> {
     return this.executeRequest<T>(endpoint, {
@@ -137,7 +137,7 @@ export class ApiError extends Error {
   constructor(
     public status: number,
     public statusText: string,
-    public data: any
+    public data: unknown
   ) {
     super(`${status}: ${statusText}`);
     this.name = "ApiError";

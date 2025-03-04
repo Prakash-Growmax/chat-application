@@ -6,14 +6,59 @@ export interface User {
   plan: "single" | "team" | "pro";
   tokenUsage: number;
 }
+export interface MessageObject{
+  content:{
+    charts:{
+      analysis:{
+        key_insight:string,
+        pandas_result:"",
+        recommendation:string,
+        trend:string
+      },
+    chart_type?:string
+    data:{
+      0:{
+        type:string,
+        x:string[],
+        y:string[]
+      }
+    },
+    layout:{
+      colors:string[],
+      title:string,
+      xaxis:string,
+      yaxis:string,
+    }
+    type:string,
+    metadata:{
+    data_type:string,
+    timestamp:string,
+    token_usage:{
+      completion_tokens:number,
+      prompt_tokens:number,
+      total_tokens:number
+    }
+}
+id:string,
+isTyping:boolean,
+role:string,
+timestamp?:string | number,
+
+
+
+
+
+    }
+  }
+}
 export interface Message {
   id: string;
   content: string | object;
   role: "user" | "assistant";
   timestamp: Date;
   type: "text" | "chart" | "table";
-  messageObject?: any;
-  data?: any;
+  messageObject?: MessageObject;
+  data?: MessageObject;
   error?: boolean;
   isTyping?: boolean;
   file_path?: string;
@@ -31,7 +76,7 @@ export interface Organization {
 export interface ChatState {
   messages: Message[];
   isLoading: boolean;
-  csvData: any[] | null;
+  csvData: null;
   error: string | null;
   s3Key: string | null;
 }

@@ -141,10 +141,10 @@ export const fetchCSVPreview = async (
       parseResult = await new Promise<Papa.ParseResult<string[]>>(
         (resolve, reject) => {
           Papa.parse(csvString, {
-            complete: (results: any) => {
+            complete: (results:unknown) => {
               resolve(results);
             },
-            error: (error: any) => {
+            error: (error: unknown) => {
               reject(new Error(`CSV parsing failed: ${error.message}`));
             },
             delimiter: ",", // Auto-detect delimiter
@@ -225,7 +225,7 @@ export const fetchCSVPreview = async (
     console.error("Detailed error:", error);
     const previewError: PreviewError = {
       message: `Failed to fetch CSV preview: ${(error as Error).message}`,
-      code: (error as any).code || "UNKNOWN_ERROR",
+      code: (error as unknown).code || "UNKNOWN_ERROR",
     };
     throw previewError;
   }

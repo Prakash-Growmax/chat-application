@@ -2,7 +2,7 @@ import LogoIcon from "@/assets/Logo/LogoIcon";
 import { useCallback, useEffect, useState, useTransition } from "react";
 
 function ChatStarterText() {
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [mounted, setMounted] = useState(false);
   const [animationState, setAnimationState] = useState("initial");
 

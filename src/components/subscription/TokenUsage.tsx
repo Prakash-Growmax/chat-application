@@ -1,9 +1,9 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 // import { plans } from '@/config/plans';
-import { useAuth } from "@/hooks/useAuth";
+
 
 export function TokenUsage() {
-  const { user } = useAuth();
+
   // const currentPlan = plans.find((p) => p.name === user?.plan) || plans[0];
   // const usagePercentage = (user?.tokenUsage / currentPlan.tokenLimit) * 100;
 

@@ -76,7 +76,7 @@ export async function getOrCreateSubscription(userId: string) {
   }
 }
 
-export async function buildUserProfile(supabaseUser: any): Promise<User> {
+export async function buildUserProfile(supabaseUser:unknown): Promise<User> {
   try {
     const subscription = await getOrCreateSubscription(supabaseUser.id);
     const userProfile = {
@@ -91,6 +91,7 @@ export async function buildUserProfile(supabaseUser: any): Promise<User> {
     };
     return userProfile;
   } catch (error) {
+    console.error(error);
     toast.error("Error loading user profile");
 
     return {

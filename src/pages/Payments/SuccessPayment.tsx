@@ -19,7 +19,7 @@ function SuccessPayment() {
   };
 
   useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((_, session: any) => {
+    const { data } = supabase.auth.onAuthStateChange((_, session:unknown) => {
       if (session) {
         setUserId(session?.user?.id);
         fetchUserSubscription(session.user.id);
@@ -71,7 +71,7 @@ function SuccessPayment() {
             .duration(durationInSeconds, "seconds")
             .asDays();
 
-          const { data: updatedSubscription, error } = await supabase
+            const { error } = await supabase
             .from("subscriptions")
             .update({
               strip_plan_id: planId,
@@ -86,6 +86,7 @@ function SuccessPayment() {
               plan_duration: durationInDays,
             })
             .eq("user_id", userId);
+          
 
           if (error) throw new Error("Error while updating Subscriptions");
           updateSubscription(

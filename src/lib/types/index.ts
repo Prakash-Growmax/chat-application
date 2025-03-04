@@ -1,17 +1,19 @@
+import { MessageObject } from "@/types";
+
 export interface Message {
     id: string;
     content: string;
     role: 'user' | 'assistant';
     timestamp: Date;
     type: 'text' | 'chart' | 'table';
-    data?: any;
+    data?:MessageObject;
     error?: boolean;
   }
   
   export interface ChatState {
     messages: Message[];
     isLoading: boolean;
-    csvData: any[] | null;
+    csvData: null;
     error: string | null;
     s3Key: string | null;
   }
@@ -28,7 +30,7 @@ export interface Message {
   
   export interface TableData {
     headers: string[];
-    rows: any[];
+    rows: string[];
   }
   
   export interface ChartProps {

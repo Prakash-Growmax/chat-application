@@ -1,11 +1,12 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell,TableHeader, TableRow } from "@/components/ui/table";
 import { useState, useEffect } from "react";
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react';
-import { LayoutResponse } from "@/types/Chat";
+import { MessageObject } from "@/types";
+
 
 interface TableResponseProps {
   data: { x: (number | string)[]; y: (number | string)[] }[] | undefined;
-  layout: LayoutResponse;
+  layout:MessageObject;
 }
 
 export default function TableResponse({ data, layout }: TableResponseProps) {

@@ -10,14 +10,14 @@ export function useGetChatHistory(chatId: string | undefined) {
   const [fetchingId, setFetchingId] = useState(true);
   const [chatHistory, setChatHistory] = useState<{
     loading: boolean;
-    data: any;
+    data:unknown;
   }>({
     loading: true,
     data: [],
   });
   const { getChatId } = useCreateChatId();
 
-  async function fetchChatId(): Promise<any> {
+  async function fetchChatId(): Promise<unknown> {
     const chatId = await getChatId();
     if (!chatId) return null;
     localStorage.setItem("chatId", chatId);

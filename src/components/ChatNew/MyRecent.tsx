@@ -8,13 +8,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { subDays } from "date-fns";
+
 import AppContext from "../context/AppContext";
 import LucideIcon from "../Custom-UI/LucideIcon";
 import DeleteIcon from "../ui/delete-icon";
 import Spinner from "../ui/Spinner";
 import { FilePenLine } from 'lucide-react';
 import { Input } from "../ui/input";
+import { RenameSession } from "@/types/Chat";
 
 // Utility function for safe date handling
 const getSafeDate = (dateString: string | number | Date | null | undefined): Date => {
@@ -72,7 +73,7 @@ const deleteSession = async ({
 };
 
 interface ChatItemProps {
-  chat: any;
+  chat:RenameSession;
   index: number;
   isActive: boolean;
   isHovered: boolean;
@@ -180,10 +181,10 @@ const ChatItem: React.FC<ChatItemProps> = React.memo(({
 
 interface CategoryHeaderProps {
   title: string;
-  count: number;
+
 }
 
-const CategoryHeader: React.FC<CategoryHeaderProps> = ({ title, count }) => (
+const CategoryHeader: React.FC<CategoryHeaderProps> = ({ title}) => (
   <div className="px-4 py-2 text-sm font-semibold text-gray-500 bg-gray-50 border-b border-gray-100 ml-4">
     {title}
   </div>
@@ -204,11 +205,11 @@ export default function MyRecent({
   isTab,
   setRecentData,
 }: MyRecentProps) {
-  const today = new Date();
-  const sevenDaysAgo = subDays(today, 7);
+  // const today = new Date();
+  // const sevenDaysAgo = subDays(today, 7);
   const { id } = useParams();
   const { profile } = useProfile();
-  const { setSideDrawerOpen, historyList, setHistoryList } = useContext(AppContext);
+  const { setSideDrawerOpen, historyList} = useContext(AppContext);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [activeDropdownIndex, setActiveDropdownIndex] = useState<number | null>(null);
@@ -222,7 +223,7 @@ export default function MyRecent({
   const queryClient = useQueryClient();
   const [renamingChatId, setRenamingChatId] = useState<string | null>(null);
 
-  const getCategorizedChats = useCallback((sessions: any[]) => {
+  const getCategorizedChats = useCallback((sessions:RenameSession[]) => {
     if (!sessions) return { today: [], last7Days: [], older: [] };
 
     const today = new Date();
@@ -231,7 +232,7 @@ export default function MyRecent({
     const sevenDaysAgo = new Date(today);
     sevenDaysAgo.setDate(today.getDate() - 7);
 
-    return sessions.reduce((acc: any, chat: any, index: number) => {
+    return sessions.reduce((acc:unknown, chat:RenameSession, index: number) => {
       const chatDate = getSafeDate(chat.created_at);
       const chatDateStart = new Date(chatDate);
       chatDateStart.setHours(0, 0, 0, 0); // Set to start of chat date
@@ -281,10 +282,10 @@ export default function MyRecent({
     onSuccess: (_, variables) => {
       queryClient.setQueryData(
         queryKeys.sessions(profile?.organization_id),
-        (old: any) => ({
+        (old:unknown) => ({
           ...old,
           data: old.data.filter(
-            (session: any) => session.id !== variables.sessionId
+            (session:unknown) => session.id !== variables.sessionId
           ),
         })
       );
@@ -314,9 +315,9 @@ export default function MyRecent({
     onSuccess: (_, variables) => {
       queryClient.setQueryData(
         queryKeys.sessions(profile?.organization_id),
-        (old: any) => ({
+        (old:unknown) => ({
           ...old,
-          data: old.data.map((session: any) =>
+          data: old.data.map((session:unknown) =>
             session.id === variables.chatId
               ? { ...session, name: variables.newName }
               : session
@@ -397,7 +398,7 @@ export default function MyRecent({
     }
   };
 
-  const renderChatList = useCallback((chats: { chat: any; index: number }[], categoryTitle: string, renamingChatId: string, setRenamingChatId: (name: string) => void, handleRename: (sessionId: string, newName: string) => void) => {
+  const renderChatList = useCallback((chats: { chat:RenameSession; index: number }[], categoryTitle: string, renamingChatId: string, setRenamingChatId: (name: string) => void, handleRename: (sessionId: string, newName: string) => void) => {
     if (chats.length === 0) return null;
 
     return (

@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 interface UseOTPReturn {
   loading: boolean;
   sendOTP: (email: string) => Promise<boolean>;
-  verifyOTP: (email: string, token: string) => Promise<{ success: boolean; session?: any }>;
+  verifyOTP: (email: string, token: string) => Promise<{ success: boolean; session?:unknown }>;
   timeLeft: number;
   canResend: boolean;
   attemptsLeft: number;

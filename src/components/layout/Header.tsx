@@ -10,7 +10,7 @@ import MyAccountDetails from "./MyAccountDetails";
 
 export function Header() {
   const { user } = useAuth();
-  const { sideDrawerOpen, setSideDrawerOpen } = useContext(AppContext);
+  const {setSideDrawerOpen } = useContext(AppContext);
 
   const handleDrawer = () => {
     setSideDrawerOpen(true);

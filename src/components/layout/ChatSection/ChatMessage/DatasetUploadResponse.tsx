@@ -7,7 +7,7 @@ import { BodySmall } from "@/Theme/Typography";
 import TooltipNew from "@/components/ui/tooltipnew";
 
 import { cleanFilename } from "@/utils/s3.utils";
-import { CSVPreviewData, FileMetadata, PreviewError } from "@/lib/types/csv";
+import { CSVPreviewData, FileMetadata} from "@/lib/types/csv";
 import AppContext from "@/components/context/AppContext";
 import { fetchCSVPreview } from "@/lib/s3-client";
 import { env_BUCKETNAME } from "@/constants/env.constant";

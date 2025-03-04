@@ -58,7 +58,8 @@ export async function createInitialSubscription(userId: string) {
   }
 }
 
-export async function buildUserProfile(supabaseUser: any): Promise<User> {
+export async function buildUserProfile(supabaseUser:unknown): Promise<User> {
+
   try {
     let subscription = await getUserSubscription(supabaseUser.id);
     

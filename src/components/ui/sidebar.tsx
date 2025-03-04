@@ -54,7 +54,7 @@ export default function Sidebar() {
   const [recentData,setRecentData] = React.useState(true);
 
   React.useEffect(() => {
-    const handleClickOutside = (event: any) => {
+    const handleClickOutside = (event:unknown) => {
       if (
         activeDropdownIndex !== null &&
         !event.target.closest(".dropdown-container")
@@ -137,11 +137,11 @@ export default function Sidebar() {
                   isTab={isTab}
                   setRecentData={setRecentData}
                 />
-                {/* <div
+                <div
                   className={`overflow-hidden transition-all duration-100 ease-in-out ${
                     isDropdownOpen && !recentData ? "mt-40" : "mt-8"
                   }`}
-                ></div> */}
+                ></div>
               </div>
             </List>
             <div>

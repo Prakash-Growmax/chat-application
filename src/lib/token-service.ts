@@ -4,7 +4,7 @@ import { User } from '@/types';
 interface TokenCost {
   actionType: string;
   contentLength: number;
-  contextData?: Record<string, any>;
+  contextData?: Record<string,unknown>;
 }
 
 export async function deductTokens(
@@ -34,7 +34,7 @@ export async function getTokenUsageHistory(
   userId: string,
   startDate?: Date,
   endDate?: Date
-): Promise<any[]> {
+): Promise<unknown[]> {
   let query = supabase
     .from('token_usage_details')
     .select(`

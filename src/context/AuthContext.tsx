@@ -3,6 +3,7 @@ import { buildUserProfile } from "@/lib/auth/subscription-service";
 import { loadingState } from "@/lib/loading-state";
 import { supabase } from "@/lib/supabase";
 import { clearAllTokens } from "@/lib/token-storage";
+import { AuthSession } from "@/lib/types/session";
 import { User } from "@/types";
 import { createContext, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -40,7 +41,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
 
-    const handleAuthStateChange = async (event: string, session: any) => {
+    const handleAuthStateChange = async (event: string, session:AuthSession) => {
+     
       if (!mounted) return;
 
       try {

@@ -28,6 +28,7 @@ export const InviteDialog = () => {
       await inviteTeamMember(user.user.id, org_id.organization_id, email, role);
       toast.success("Invitation sent successfully!");
     } catch (error) {
+      console.error(error)
       toast.error("Failed to send invitation");
     }
   };

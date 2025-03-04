@@ -3,7 +3,7 @@ import { supabase } from "../supabase";
 export interface OTPResponse {
   success: boolean;
   error?: string;
-  session?: any;
+  session?:unknown;
 }
 
 export async function sendOTP(email: string): Promise<OTPResponse> {

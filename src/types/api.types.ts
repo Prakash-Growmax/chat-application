@@ -2,14 +2,15 @@
 export interface RequestOptions extends RequestInit {
   headers?: Record<string, string>;
   params?: Record<string, string>;
-  body?: any;
+  body;
 }
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   data: T;
   status: number;
   statusText: string;
 }
+
 
 export interface AuthHeaders {
   Authorization?: string;

@@ -83,7 +83,7 @@ export function subscribeToChanges(userId: string, onUpdate: () => void) {
         table: "subscriptions",
         filter: `user_id=eq.${userId}`,
       },
-      async (payload) => {
+      async () => {
         await onUpdate();
       }
     )

@@ -7,7 +7,7 @@ import { createChatId } from "@/lib/chat/chat-service";
 import { uploadToS3 } from "@/lib/s3-client";
 import { getAccessToken } from "@/utils/storage.utils";
 import { Tooltip } from "@mui/material";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -52,9 +52,10 @@ function ChatUploadBtn({
           // setS3Key(s3_key);
         }
       } catch (error) {
+        console.error(error)
         toast.error("Error occurred while uploading. Try again");
       }
-      await uploadToS3(file, (progress) => {
+      await uploadToS3(file, () => {
        
       });
     },

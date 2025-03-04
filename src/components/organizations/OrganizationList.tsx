@@ -23,6 +23,7 @@ export function OrganizationList() {
       const orgs = await getUserOrganizations(user.id);
       setOrganizations(orgs);
     } catch (error) {
+      console.error(error);
       toast.error("Failed to load organizations");
     } finally {
       setLoading(false);
@@ -30,7 +31,7 @@ export function OrganizationList() {
   };
   useEffect(() => {
     loadOrganizations();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [user]);
 
   const handleDelete = async (orgId: string) => {
@@ -40,6 +41,7 @@ export function OrganizationList() {
       await deleteOrganization(orgId);
       setOrganizations((orgs) => orgs.filter((org) => org.id !== orgId));
     } catch (error) {
+      console.error(error);
       toast.error("Failed to delete organization");
     }
   };

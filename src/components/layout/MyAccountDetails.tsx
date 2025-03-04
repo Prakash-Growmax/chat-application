@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
-import { useTokenUsage } from "@/hooks/useTokenUsage";
+
 import {Label, ListItemHeaderText } from "@/Theme/Typography";
 import { capitalizeFirstName, getInitials } from "@/utils/general.utilis";
 import { Avatar } from "@mui/material";
@@ -15,7 +15,7 @@ import { deepOrange } from "@mui/material/colors";
 
 import LucideIcon from "../Custom-UI/LucideIcon";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
+
 
 export default function MyAccountDetails() {
   const { user, signOut} = useAuth();
