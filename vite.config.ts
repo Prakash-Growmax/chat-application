@@ -1,7 +1,8 @@
-import federation from "@originjs/vite-plugin-federation";
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
-import { defineConfig } from "vite";
+import federation from "@originjs/vite-plugin-federation";
+import { configDefaults } from "vitest/config";
 
 export default defineConfig({
   plugins: [
@@ -10,18 +11,15 @@ export default defineConfig({
       name: "ansight",
       filename: "remoteEntry.js",
       exposes: {
-        // Expose main components that the host will import
         "./AnsightApp": "./src/App.tsx",
-        "./ChatInterface": "./src/components/Chat/ChatInterface.tsx", // Adjust path as needed
-        "./ProfileModule": "./src/components/Profile/ProfileModule.tsx", // Adjust path as needed
-        "./TeamModule": "./src/components/Team/TeamModule.tsx", // Adjust path as needed
+        "./ChatInterface": "./src/components/Chat/ChatInterface.tsx",
+        "./ProfileModule": "./src/components/Profile/ProfileModule.tsx",
+        "./TeamModule": "./src/components/Team/TeamModule.tsx",
       },
       shared: {
-        // Share dependencies with host to avoid duplication
         react: { singleton: true, requiredVersion: "^18.0.0" },
         "react-dom": { singleton: true, requiredVersion: "^18.0.0" },
         "react-router-dom": { singleton: true, requiredVersion: "^6.0.0" },
-        // Add other shared dependencies as needed
       },
     }),
   ],
@@ -36,5 +34,11 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./setupTests.ts",
+    exclude: [...configDefaults.exclude, "node_modules"],
   },
 });
