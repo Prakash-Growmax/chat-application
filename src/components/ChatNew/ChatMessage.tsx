@@ -15,7 +15,7 @@ import { DataChart } from "./DataChat";
 import GeneralResponse from "../layout/ChatSection/ChatMessage/GeneralResponse";
 
 import { useMediaQuery, useTheme } from "@mui/material";
-import { useChatContext } from "@/context/ChatContext";
+
 
 
 interface ChatMessageProps {
@@ -40,8 +40,7 @@ export function ChatMessage({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
-  const {queue} = useChatContext();
-  console.log(queue);
+ 
  
   const timeStamp = message?.timestamp
     ? message?.timestamp
