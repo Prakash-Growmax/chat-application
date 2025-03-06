@@ -16,6 +16,7 @@ import GeneralResponse from "../layout/ChatSection/ChatMessage/GeneralResponse";
 
 import { useMediaQuery, useTheme } from "@mui/material";
 
+
 interface ChatMessageProps {
   message: Message;
   onContentChange: () => void;
@@ -39,6 +40,7 @@ export function ChatMessage({
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
   
+
  
   const timeStamp = message?.timestamp
     ? message?.timestamp
@@ -129,10 +131,10 @@ const RenderContent = ({
     )
    
   }
-  if (message?.messageObject?.content?.type === "text") {
+  if (message?.messageObject?.content?.type === "text" || message?.messageObject?.type === "text" ) {
     return (
       <GreetingResponse
-        message={message?.messageObject?.content?.data?.response ? message?.messageObject?.content?.data?.response : message?.messageObject?.content?.content?.analysis?.key_insight }
+        message={message?.messageObject?.content?.data?.response ? message?.messageObject?.content?.data?.response : message?.messageObject?.content?.charts ?  message?.messageObject?.content?.charts?.content?.analysis?.key_insight : message?.messageObject?.content?.content?.analysis?.key_insight }
         isTyping={message?.messageObject?.isTyping}
         isAssistant={message?.messageObject?.role}
         onContentChange={onContentChange}
