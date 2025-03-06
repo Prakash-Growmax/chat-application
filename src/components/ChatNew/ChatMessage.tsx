@@ -15,6 +15,7 @@ import { DataChart } from "./DataChat";
 import GeneralResponse from "../layout/ChatSection/ChatMessage/GeneralResponse";
 
 import { useMediaQuery, useTheme } from "@mui/material";
+import { useChatContext } from "@/context/ChatContext";
 
 
 interface ChatMessageProps {
@@ -39,8 +40,8 @@ export function ChatMessage({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
-  
-
+  const {queue} = useChatContext();
+  console.log(queue);
  
   const timeStamp = message?.timestamp
     ? message?.timestamp
@@ -131,6 +132,18 @@ const RenderContent = ({
     )
    
   }
+  if (message?.messageObject?.content?.charts?.type === "chart" || message?.messageObject?.content?.type === "chart") {
+    return (
+      <ChartResponse
+        data={message?.messageObject.content.charts ? message?.messageObject.content.charts.data :  message?.messageObject.content.data  }
+        layout={message?.messageObject.content.charts ? message?.messageObject.content.charts.layout : message?.messageObject.content.layout}
+        summary={message?.messageObject.content.charts ? message?.messageObject.content.charts.analysis : message?.messageObject.content.analysis}
+        isTyping={message?.messageObject?.isTyping}
+        isAssistant={message?.messageObject?.role}
+        onContentChange={onContentChange}
+      />
+    );
+  }
   if (message?.messageObject?.content?.type === "text" || message?.messageObject?.type === "text" ) {
     return (
       <GreetingResponse
@@ -161,16 +174,5 @@ const RenderContent = ({
       />
     );
   }
-  if (message?.messageObject?.content?.charts?.type === "chart" || message?.messageObject?.content?.type === "chart") {
-    return (
-      <ChartResponse
-        data={message?.messageObject.content.charts ? message?.messageObject.content.charts.data :  message?.messageObject.content.data  }
-        layout={message?.messageObject.content.charts ? message?.messageObject.content.charts.layout : message?.messageObject.content.layout}
-        summary={message?.messageObject.content.charts ? message?.messageObject.content.charts.analysis : message?.messageObject.content.analysis}
-        isTyping={message?.messageObject?.isTyping}
-        isAssistant={message?.messageObject?.role}
-        onContentChange={onContentChange}
-      />
-    );
-  }
+ 
 };

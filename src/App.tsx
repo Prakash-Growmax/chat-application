@@ -18,7 +18,7 @@ import MainLayout from "./pages/Mainlayout";
 // Function to determine if a route needs the main layout
 const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
-  const noLayoutRoutes = ["/", "/login"]; // Routes without MainLayout
+  const noLayoutRoutes = ["/", "/login","/chat"]; // Routes without MainLayout
 
   return noLayoutRoutes.includes(location.pathname) ? (
     <>{children}</> // Render without MainLayout
