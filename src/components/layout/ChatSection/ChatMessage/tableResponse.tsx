@@ -39,69 +39,56 @@ export default function TableResponse({ tableDatas }) {
 
   return (
     <div className="w-full">
-      {/* Responsive table wrapper with horizontal scroll */}
-      <div className="overflow-x-auto border border-black rounded">
-        <Table className="min-w-full">
-          <TableHeader>
-            <TableRow>
-              {tableDatas.headers.map((header, index) => (
-                <TableCell 
-                  key={index} 
-                  className="border-b border-r border-black font-bold whitespace-nowrap px-4 py-2"
-                >
-                  {header}
+      <Table className="border border-black border-collapse">
+        <TableHeader>
+          <TableRow>
+            {tableDatas.headers.map((header, index) => (
+              <TableCell key={index} className="border border-black font-bold">
+                {header}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {currentData.map((row, rowIndex) => (
+            <TableRow key={rowIndex}>
+              {tableDatas.headers.map((header, colIndex) => (
+                <TableCell key={colIndex} className="border border-black">
+                  {row[header]}
                 </TableCell>
               ))}
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {currentData.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
-                {tableDatas.headers.map((header, colIndex) => (
-                  <TableCell 
-                    key={colIndex} 
-                    className="border-b border-r border-black px-4 py-2"
-                  >
-                    {row[header]}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+          ))}
+        </TableBody>
+      </Table>
 
-      {/* Pagination Controls - Made more responsive */}
-      <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-4">
+      {/* Pagination Controls */}
+      <div className="flex justify-between items-center mt-4">
         <div className="flex items-center">
           <button
-            className="px-2 py-2 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-2 sm:px-4 py-2 flex items-center border-none disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={previousPage}
             disabled={currentPage === 1}
-            aria-label="Previous page"
           >
-            <ChevronFirst className="w-4 h-4" />
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronFirst color="black" className="w-4 h-4 sm:w-5 sm:h-5" />
+            <ChevronLeft color="black" className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
           <button
-            className="px-2 py-2 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-2 sm:px-4 py-2 flex items-center border-none disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={nextPage}
             disabled={currentPage === totalPages || totalPages === 0}
-            aria-label="Next page"
           >
-            <ChevronRight className="w-4 h-4" />
-            <ChevronLast className="w-4 h-4" />
+            <ChevronRight color="black" className="w-4 h-4 sm:w-5 sm:h-5" />
+            <ChevronLast color="black" className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
-        
         <div>
-          <p className="text-sm font-semibold">
+          <p className="text-xs sm:text-sm font-semibold">
             Page {totalPages > 0 ? currentPage : 0} of {totalPages}
           </p>
         </div>
-        
         <div className="flex items-center gap-2">
-          <p className="text-sm">Rows per page:</p>
+          <p className="text-xs sm:text-sm">Rows per page:</p>
           <select
             className="border border-gray-300 rounded p-1 text-sm focus:outline-none"
             value={pageSize}
