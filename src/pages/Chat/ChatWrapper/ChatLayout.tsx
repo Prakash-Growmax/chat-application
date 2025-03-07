@@ -117,9 +117,7 @@ function ChatLayout({ children }: { children: React.ReactNode }) {
   
           if (item?.results?.results?.response) {
             const assistantMessage = formQueueMessage(
-              item.results.results.response.charts
-                ? item.results.results.response.charts
-                : item.results.results.response || "",
+              item.results.results.response && item.results.results.response,
               true,
               false,
               item?.results?.results?.response?.data?.file_path && "datasetres" ,

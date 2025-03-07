@@ -148,9 +148,7 @@ export function ChatInput({
     
         let assistantMessage;
         assistantMessage = formQueueMessage(
-          result?.data?.results?.response?.charts?.charts
-            ? result?.data?.results?.response?.charts?.charts
-            : result?.data?.results?.response || "",
+          result?.data?.results?.response && result?.data?.results?.response,
           true
         );
         addToQueue(assistantMessage);

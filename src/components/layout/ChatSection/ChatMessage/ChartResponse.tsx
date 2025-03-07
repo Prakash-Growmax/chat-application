@@ -10,7 +10,7 @@ import { useMediaQuery, useTheme } from "@mui/material";
 const cleanSummaryText = (summaryObj) => {
   if (typeof summaryObj !== "object" || summaryObj === null) return [];
 
-  const excludedKeys = ["currency"];
+  const excludedKeys = ["currency","pandas_result"];
 
   return Object.entries(summaryObj)
     .filter(([key]) => !excludedKeys.includes(key))
@@ -24,10 +24,40 @@ const ChartResponse = ({
   data = [],
   layout = {},
   summary = {},
-
+  analysis ="",
   isTyping = false,
   isAssistant = false,
 }) => {
+  const [tableData, setTableData] = useState({ headers: [], rows: [] });
+  
+  useEffect(() => {
+    let rows = analysis.trim().split("\n").map(row => row.trim());
+    
+    // Ignore the first row if it contains "Dataset"
+    if (rows[0].startsWith("Dataset")) {
+      rows = rows.slice(1);
+    }
+  
+    // Extract headers dynamically
+    const headers = rows[0].match(/(\S.*?\S)(?=\s{2,}|\n|$)/g); // Extract headers using double spaces as separators
+  
+    // Extract table rows dynamically
+    const dataRows = rows.slice(1).map(row => {
+      const values = row.match(/(\S.*?\S)(?=\s{2,}|\n|$)/g); // Match data fields using double spaces as separators
+  
+      let rowData = {};
+      headers.forEach((header, index) => {
+        rowData[header] = values ? values[index] || "" : "";
+      });
+  
+      return rowData;
+    });
+  
+    setTableData({ headers, rows: dataRows });
+  }, []);
+  
+ 
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -167,29 +197,33 @@ const ChartResponse = ({
 
   return (
     <div className="relative w-full flex flex-col items-center flexible-container">
-      <div className="absolute top-2 right-2 z-50 -mt-12">
-        <SwitchIcon checked={checked} setChecked={setChecked} />
-      </div>
+      {tableData.rows.length !== 0 && (
+         <div className="absolute top-2 right-2 z-50 -mt-12">
+         <SwitchIcon checked={checked} setChecked={setChecked} />
+       </div>
+      )}
+     
       <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flexible-container">
         <div className="flex flex-col w-full py-2 flexible-container">
           <div ref={containerRef} className="relative w-full flex justify-center mb-4 chart-container">
-            {checked ? (
-              <Plot
-                data={data}
-                layout={getDynamicLayout(dimensions)}
-                onInitialized={handlePlotRender}
-                onUpdate={handlePlotRender}
-                config={{
-                  responsive: true,
-                  displaylogo: false,
-                  modeBarButtonsToRemove: ["zoom2d", "pan2d"],
-                  modeBarButtonsToAdd: ["toImage"],
-                }}
-                className="w-full"
-              />
-            ) : (
-              <TableResponse data={data} layout={layout} />
-            )}
+          {checked ? (
+  <Plot
+    data={data}
+    layout={getDynamicLayout(dimensions)}
+    onInitialized={handlePlotRender}
+    onUpdate={handlePlotRender}
+    config={{
+      responsive: true,
+      displaylogo: false,
+      modeBarButtonsToRemove: ["zoom2d", "pan2d"],
+      modeBarButtonsToAdd: ["toImage"],
+    }}
+    className="w-full"
+  />
+) : tableData.rows.length !== 0 ? (
+  <TableResponse tableDatas={tableData} />
+) : null}
+
           </div>
           <div ref={chatBoxRef} className="prose w-full px-2 sm:px-0 text-container">
   {completedEntries.map((entry, index) => (

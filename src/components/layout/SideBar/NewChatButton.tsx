@@ -12,11 +12,13 @@ function NewChatButton({
 }) {
   const navigate = useNavigate();
   const { setSideDrawerOpen } = useContext(AppContext);
+  const {setHistoryList} = useContext(AppContext)
   return (
     <div className="flex items-center justify-center">
       <button
         className="group bg-white w-full py-2 px-1 border border-gray-200 rounded-md text-sm flex items-center justify-center hover:border-gray-300 hover:shadow-md transition duration-200 ease-in-out"
         onClick={async () => {
+          setHistoryList(false);
           navigate(`/chat/new`);
           if (isMobile || isTab) {
             setSideDrawerOpen(false);

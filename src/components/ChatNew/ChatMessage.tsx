@@ -18,6 +18,7 @@ import { useMediaQuery, useTheme } from "@mui/material";
 
 
 
+
 interface ChatMessageProps {
   message: Message;
   onContentChange: () => void;
@@ -131,12 +132,13 @@ const RenderContent = ({
     )
    
   }
-  if (message?.messageObject?.content?.charts?.type === "chart" || message?.messageObject?.content?.type === "chart") {
+  if (message?.messageObject?.content?.charts?.charts?.type === "chart" || message?.messageObject?.content?.type === "chart") {
     return (
       <ChartResponse
-        data={message?.messageObject.content.charts ? message?.messageObject.content.charts.data :  message?.messageObject.content.data  }
-        layout={message?.messageObject.content.charts ? message?.messageObject.content.charts.layout : message?.messageObject.content.layout}
-        summary={message?.messageObject.content.charts ? message?.messageObject.content.charts.analysis : message?.messageObject.content.analysis}
+        data={message?.messageObject.content.charts.charts ? message?.messageObject.content.charts.charts.data :  message?.messageObject.content.data  }
+        layout={message?.messageObject.content.charts.charts ? message?.messageObject.content.charts.charts.layout : message?.messageObject.content.layout}
+        summary={message?.messageObject.content.charts.charts ? message?.messageObject.content.charts.charts.analysis : message?.messageObject.content.analysis}
+        analysis = {message?.messageObject?.content?.analysis?.result}
         isTyping={message?.messageObject?.isTyping}
         isAssistant={message?.messageObject?.role}
         onContentChange={onContentChange}
@@ -147,6 +149,7 @@ const RenderContent = ({
     return (
       <GreetingResponse
         message={message?.messageObject?.content?.data?.response ? message?.messageObject?.content?.data?.response : message?.messageObject?.content?.charts ?  message?.messageObject?.content?.charts?.content?.analysis?.key_insight : message?.messageObject?.content?.content?.analysis?.key_insight }
+      
         isTyping={message?.messageObject?.isTyping}
         isAssistant={message?.messageObject?.role}
         onContentChange={onContentChange}

@@ -1,37 +1,24 @@
-import { Table, TableBody, TableCell,TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 import { useState, useEffect } from "react";
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react';
-import { MessageObject } from "@/types";
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from "lucide-react";
 
-
-interface TableResponseProps {
-  data: { x: (number | string)[]; y: (number | string)[] }[] | undefined;
-  layout:MessageObject;
-}
-
-export default function TableResponse({ data, layout }: TableResponseProps) {
+export default function TableResponse({ tableDatas }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const [tableData, setTableData] = useState<{ x: number | string; y: number | string }[]>([]);
+  const [tableData, setTableData] = useState([]);
 
-  // Prepare table data
+  // Update table data when tableDatas changes
   useEffect(() => {
-    if (data) {
-      const formatted = data[0].x.map((xValue, index) => ({
-        x: xValue,
-        y: data[0].y[index],
-      }));
-      setTableData(formatted);
+    if (tableDatas?.rows) {
+      setTableData(tableDatas.rows);
     }
-  }, [data]);
+  }, [tableDatas]);
 
   // Calculate pagination
   const totalPages = Math.ceil(tableData.length / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
   const currentData = tableData.slice(startIndex, endIndex);
-  const yaxisName = layout?.yaxis?.title?.replace(/_/g, ' ') || '';
-  const xaxisName = layout?.xaxis?.title?.replace(/_/g, ' ') || '';
 
   const nextPage = () => {
     if (currentPage < totalPages) {
@@ -45,64 +32,83 @@ export default function TableResponse({ data, layout }: TableResponseProps) {
     }
   };
 
-  const handlePageSizeChange = (newSize: number) => {
+  const handlePageSizeChange = (newSize) => {
     setPageSize(newSize);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reset to first page
   };
 
   return (
     <div className="w-full">
-      <Table className="border border-black border-collapse">
-        <TableHeader>
-          <TableRow>
-            <TableCell className="border border-black font-bold">{xaxisName}</TableCell>
-            <TableCell className="border border-black font-bold">{yaxisName}</TableCell>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {currentData.map((row, index) => (
-            <TableRow key={index}>
-              <TableCell className="border border-black">{row.x}</TableCell>
-              <TableCell className="border border-black">{row.y}</TableCell>
+      {/* Responsive table wrapper with horizontal scroll */}
+      <div className="overflow-x-auto border border-black rounded">
+        <Table className="min-w-full">
+          <TableHeader>
+            <TableRow>
+              {tableDatas.headers.map((header, index) => (
+                <TableCell 
+                  key={index} 
+                  className="border-b border-r border-black font-bold whitespace-nowrap px-4 py-2"
+                >
+                  {header}
+                </TableCell>
+              ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {currentData.map((row, rowIndex) => (
+              <TableRow key={rowIndex}>
+                {tableDatas.headers.map((header, colIndex) => (
+                  <TableCell 
+                    key={colIndex} 
+                    className="border-b border-r border-black px-4 py-2"
+                  >
+                    {row[header]}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
-      <div className="flex justify-between items-center mt-4">
+      {/* Pagination Controls - Made more responsive */}
+      <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-4">
         <div className="flex items-center">
           <button
-            className="px-1 sm:px-4 py-2 flex items-center border-none disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-2 py-2 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={previousPage}
             disabled={currentPage === 1}
+            aria-label="Previous page"
           >
-            <ChevronFirst color="black" className="w-3 h-3 sm:w-5 sm:h-5"/>
-            <ChevronLeft color="black" className="w-3 h-3 sm:w-5 sm:h-5"/>
+            <ChevronFirst className="w-4 h-4" />
+            <ChevronLeft className="w-4 h-4" />
           </button>
           <button
-            className="px-1 sm:px-4 py-2 flex items-center border-none disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-2 py-2 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={nextPage}
-            disabled={currentPage === totalPages}
+            disabled={currentPage === totalPages || totalPages === 0}
+            aria-label="Next page"
           >
-            <ChevronRight color="black" className="w-3 h-3 sm:w-5 sm:h-5" />
-            <ChevronLast color="black" className="w-3 h-3 sm:w-5 sm:h-5"/>
+            <ChevronRight className="w-4 h-4" />
+            <ChevronLast className="w-4 h-4" />
           </button>
         </div>
+        
         <div>
-          <p className="text-xs sm:text-sm font-semibold">
-            Page {currentPage} of {totalPages}
+          <p className="text-sm font-semibold">
+            Page {totalPages > 0 ? currentPage : 0} of {totalPages}
           </p>
         </div>
+        
         <div className="flex items-center gap-2">
-          <p className="text-xs sm:text-sm">Rows per page:</p>
+          <p className="text-sm">Rows per page:</p>
           <select
             className="border border-gray-300 rounded p-1 text-sm focus:outline-none"
             value={pageSize}
             onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-            style={{ position: 'relative' }}
           >
             {[5, 10, 20].map((size) => (
-              <option key={size} value={size} className="absolute left-0">
+              <option key={size} value={size}>
                 {size}
               </option>
             ))}

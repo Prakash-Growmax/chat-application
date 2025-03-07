@@ -35,10 +35,10 @@ export default function ChatBox({
   // Handle scroll behavior when queue or processing changes
   useEffect(() => {
     if (isNewChat || !processing) {
-      // Fix scroll at the top when isNewChat is true or processing is false
+  
       scrollToTop();
     } else {
-      // Otherwise, scroll to bottom for normal chat updates
+    
       scrollToBottom();
     }
   }, [queue, processing, isNewChat, scrollToTop, scrollToBottom]);
