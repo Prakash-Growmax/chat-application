@@ -8,16 +8,29 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "preview": "vite preview",
-    "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "start": "npx serve -s dist",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+  
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test": "playwright test —-project=chromium",
+    "ui": "playwright test —-project=webkit -ui",
+    "test:safari": "playwright test --project=webkit",
+    "test:chrome": "playwright test --project=chromium",
+    "test:mobile": "playwright test --project=MobileSafari",
+    "report": "yarn playwright show-report",
+    "debug": "playwright test --debug",
+    "update": "yarn add --dev @playwright/test@latest",
+    "updateBrowsers": "yarn playwright install --with-deps",
+    "code": "yarn playwright codegen"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.741.0",
@@ -73,6 +86,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^8.57.0",
+    "@playwright/test": "^1.51.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
@@ -85,10 +99,11 @@
     "@typescript-eslint/eslint-plugin": "^8.25.0",
     "@typescript-eslint/parser": "^8.25.0",
     "@vitejs/plugin-react": "^4.2.1",
-  
+    "@vitest/coverage-v8": "^1.6.1",
+    "@vitest/ui": "^1.6.1",
     "autoprefixer": "^10.4.20",
-    "eslint": "^9.21.0",
-    "eslint-config-prettier": "^10.0.2",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
@@ -99,13 +114,11 @@
     "lint-staged": "^15.4.3",
     "postcss": "^8.4.49",
     "prettier": "^3.5.3",
+    "react-scripts": "^5.0.1",
     "tailwindcss": "^3.4.17",
-   "typescript": "5.7.3",
+    "typescript": "5.7.3",
     "vite": "^5.1.6",
-    "vitest": "^1.6.1",
-     "@vitest/ui": "^1.6.1",
-  "@vitest/coverage-v8": "^1.6.1"
-    
+    "vitest": "^1.6.1"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --fix"
