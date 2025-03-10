@@ -1,13 +1,13 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
-import { vi, describe, test, expect } from "vitest";
-import AppContext from "@/components/context/AppContext";
-import NewChatButton from "@/components/layout/SideBar/NewChatButton";
+import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { vi, describe, test, expect } from 'vitest';
+import AppContext from '@/components/context/AppContext';
+import NewChatButton from '@/components/layout/SideBar/NewChatButton';
 
 // Mock the navigate function
 const mockNavigate = vi.fn();
-vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
     useNavigate: () => mockNavigate,
@@ -15,51 +15,71 @@ vi.mock("react-router-dom", async () => {
 });
 
 // Mock the LucideIcon component
-vi.mock("@/components/Custom-UI/LucideIcon", () => ({
+vi.mock('@/components/Custom-UI/LucideIcon', () => ({
   default: ({ name, size }: { name: string; size: number }) => (
     <svg data-testid="lucide-icon" data-name={name} data-size={size} />
   ),
 }));
 
-describe("NewChatButton", () => {
-  test("renders the button with correct text", () => {
+describe('NewChatButton', () => {
+  test('renders the button with correct text', () => {
     render(
       <MemoryRouter>
-        <AppContext.Provider value={{ setSideDrawerOpen: vi.fn() }}>
+        <AppContext.Provider
+          value={{ setSideDrawerOpen: vi.fn(), setHistoryList: vi.fn() }} // ✅ Added setHistoryList
+        >
           <NewChatButton isMobile={false} isTab={false} />
         </AppContext.Provider>
       </MemoryRouter>
     );
 
-    expect(screen.getByText("New Thread")).toBeInTheDocument();
-    expect(screen.getByTestId("lucide-icon")).toBeInTheDocument();
+    expect(screen.getByText('New Thread')).toBeInTheDocument();
+    expect(screen.getByTestId('lucide-icon')).toBeInTheDocument();
   });
 
-  test("navigates to /chat/new when clicked", () => {
+  test('navigates to /chat/new when clicked', () => {
+    const mockSetHistoryList = vi.fn(); // ✅ Added mock function
+
     render(
       <MemoryRouter>
-        <AppContext.Provider value={{ setSideDrawerOpen: vi.fn() }}>
+        <AppContext.Provider
+          value={{
+            setSideDrawerOpen: vi.fn(),
+            setHistoryList: mockSetHistoryList,
+          }} // ✅ Added setHistoryList
+        >
           <NewChatButton isMobile={false} isTab={false} />
         </AppContext.Provider>
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByRole("button"));
-    expect(mockNavigate).toHaveBeenCalledWith("/chat/new");
+    fireEvent.click(screen.getByRole('button'));
+
+    expect(mockSetHistoryList).toHaveBeenCalledWith(false); // ✅ Ensure it's called
+    expect(mockNavigate).toHaveBeenCalledWith('/chat/new');
   });
 
-  test("closes the side drawer when clicked on mobile or tablet", () => {
+  test('closes the side drawer when clicked on mobile or tablet', () => {
     const mockSetSideDrawerOpen = vi.fn();
+    const mockSetHistoryList = vi.fn(); // ✅ Added mock function
+
     render(
       <MemoryRouter>
-        <AppContext.Provider value={{ setSideDrawerOpen: mockSetSideDrawerOpen }}>
+        <AppContext.Provider
+          value={{
+            setSideDrawerOpen: mockSetSideDrawerOpen,
+            setHistoryList: mockSetHistoryList, // ✅ Added setHistoryList
+          }}
+        >
           <NewChatButton isMobile={true} isTab={false} />
         </AppContext.Provider>
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByRole("button"));
-    expect(mockNavigate).toHaveBeenCalledWith("/chat/new");
+    fireEvent.click(screen.getByRole('button'));
+
+    expect(mockSetHistoryList).toHaveBeenCalledWith(false); // ✅ Ensure it's called
+    expect(mockNavigate).toHaveBeenCalledWith('/chat/new');
     expect(mockSetSideDrawerOpen).toHaveBeenCalledWith(false);
   });
 });
