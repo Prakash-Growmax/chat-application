@@ -1,14 +1,14 @@
-import LucideIcon from "@/components/Custom-UI/LucideIcon";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from "@/lib/supabase";
-import { acceptInvitation } from "@/lib/team/teams-service";
-import { useEffect, useState } from "react";
+import LucideIcon from '@/components/Custom-UI/LucideIcon';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { supabase } from '@/lib/supabase';
+import { acceptInvitation } from '@/lib/team/teams-service';
+import { useEffect, useState } from 'react';
 
 export function InviteAcceptedPage() {
-  const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading"
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>(
+    'loading'
   );
   const [error, setError] = useState<string | null>(null);
 
@@ -18,16 +18,16 @@ export function InviteAcceptedPage() {
         const {
           data: { user },
         } = await supabase.auth.getUser();
-        if (!user) throw new Error("No user found");
+        if (!user) throw new Error('No user found');
 
         await acceptInvitation(user.id);
-        setStatus("success");
+        setStatus('success');
       } catch (err) {
-        console.error("Error accepting invitation:", err);
+        console.error('Error accepting invitation:', err);
         setError(
-          err instanceof Error ? err.message : "Failed to accept invitation"
+          err instanceof Error ? err.message : 'Failed to accept invitation'
         );
-        setStatus("error");
+        setStatus('error');
       }
     };
 
@@ -36,13 +36,13 @@ export function InviteAcceptedPage() {
 
   const renderContent = () => {
     switch (status) {
-      case "loading":
+      case 'loading':
         return (
           <>
             <CardHeader className="text-center pb-4">
               <div className="flex justify-center mb-6">
                 <LucideIcon
-                  name={"Loader2"}
+                  name={'Loader2'}
                   className="h-12 w-12 animate-spin text-primary"
                 />
               </div>
@@ -58,13 +58,13 @@ export function InviteAcceptedPage() {
           </>
         );
 
-      case "error":
+      case 'error':
         return (
           <>
             <CardHeader className="text-center pb-4">
               <div className="flex justify-center mb-6">
                 <LucideIcon
-                  name={"XCircle"}
+                  name={'XCircle'}
                   className="h-12 w-12 text-destructive"
                 />
               </div>
@@ -89,7 +89,7 @@ export function InviteAcceptedPage() {
           </>
         );
 
-      case "success":
+      case 'success':
         return (
           <>
             <CardHeader className="text-center pb-4">
@@ -97,7 +97,7 @@ export function InviteAcceptedPage() {
                 <div className="relative">
                   <div className="absolute -inset-1 rounded-full bg-green-100 animate-pulse" />
                   <LucideIcon
-                    name={"CheckCircle2"}
+                    name={'CheckCircle2'}
                     className="relative h-12 w-12 text-green-500"
                   />
                 </div>
@@ -118,11 +118,11 @@ export function InviteAcceptedPage() {
                   </p>
                 </div>
                 <Button
-                  onClick={() => (window.location.href = "/chat")}
+                  onClick={() => (window.location.href = '/chat')}
                   className="mt-4 gap-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
                 >
                   Go to Chat
-                  <LucideIcon name={"ArrowRight"} className="h-4 w-4" />
+                  <LucideIcon name={'ArrowRight'} className="h-4 w-4" />
                 </Button>
               </div>
             </CardContent>

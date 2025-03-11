@@ -3,8 +3,11 @@ import { User } from '@/types';
 
 export async function getCurrentUser(): Promise<User | null> {
   try {
-    const { data: { user: supabaseUser }, error: authError } = await supabase.auth.getUser();
-    
+    const {
+      data: { user: supabaseUser },
+      error: authError,
+    } = await supabase.auth.getUser();
+
     if (authError || !supabaseUser) {
       return null;
     }

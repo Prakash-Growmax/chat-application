@@ -1,6 +1,17 @@
-import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
-import { useState, useEffect } from "react";
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { useState, useEffect } from 'react';
+import {
+  ChevronFirst,
+  ChevronLast,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 
 export default function TableResponse({ tableDatas }) {
   const [currentPage, setCurrentPage] = useState(1);

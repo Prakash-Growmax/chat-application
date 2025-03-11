@@ -1,11 +1,11 @@
-import { Invitation, TeamData, TeamMember } from "@/types/team";
-import { supabase } from "../supabase";
+import { Invitation, TeamData, TeamMember } from '@/types/team';
+import { supabase } from '../supabase';
 
 export const getTeamMembers = async (
   organizationId: string
 ): Promise<TeamMember[]> => {
   const { data: teamMembers, error } = await supabase
-    .from("profiles")
+    .from('profiles')
     .select(
       `
       id,
@@ -17,8 +17,8 @@ export const getTeamMembers = async (
       tokens_remaining
     `
     )
-    .eq("organization_id", organizationId)
-    .order("created_at", { ascending: false });
+    .eq('organization_id', organizationId)
+    .order('created_at', { ascending: false });
 
   if (error) {
     throw new Error(`Failed to fetch team members: ${error.message}`);
@@ -30,17 +30,17 @@ export const getTeamMembers = async (
 export async function getTeamData(organizationId: string): Promise<TeamData> {
   const [membersResponse, invitesResponse] = await Promise.all([
     supabase
-      .from("profiles")
-      .select("*")
-      .eq("organization_id", organizationId)
-      .order("created_at", { ascending: false }),
+      .from('profiles')
+      .select('*')
+      .eq('organization_id', organizationId)
+      .order('created_at', { ascending: false }),
 
     supabase
-      .from("invitations")
-      .select("*")
-      .eq("organization_id", organizationId)
-      .eq("status", "pending")
-      .order("created_at", { ascending: false }),
+      .from('invitations')
+      .select('*')
+      .eq('organization_id', organizationId)
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false }),
   ]);
 
   if (membersResponse.error) throw membersResponse.error;
@@ -55,19 +55,19 @@ export async function getTeamData(organizationId: string): Promise<TeamData> {
 export async function inviteMember(
   organizationId: string,
   email: string,
-  role: "admin" | "member"
+  role: 'admin' | 'member'
 ): Promise<Invitation> {
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + 7);
 
   // 1. Create invitation record
   const { data: invitation, error: inviteError } = await supabase
-    .from("invitations")
+    .from('invitations')
     .insert({
       organization_id: organizationId,
       email,
       role,
-      status: "pending",
+      status: 'pending',
       expires_at: expiresAt.toISOString(),
     })
     .select()
@@ -90,7 +90,7 @@ export async function inviteMember(
 
   if (emailError) {
     // Rollback invitation if email fails
-    await supabase.from("invitations").delete().eq("id", invitation.id);
+    await supabase.from('invitations').delete().eq('id', invitation.id);
     throw emailError;
   }
 
@@ -102,10 +102,10 @@ export async function removeMember(
   memberId: string
 ): Promise<void> {
   const { error } = await supabase
-    .from("profiles")
+    .from('profiles')
     .delete()
-    .eq("id", memberId)
-    .eq("organization_id", organizationId);
+    .eq('id', memberId)
+    .eq('organization_id', organizationId);
 
   if (error) throw error;
 }
@@ -115,10 +115,10 @@ export async function cancelInvitation(
   invitationId: string
 ): Promise<void> {
   const { error } = await supabase
-    .from("invitations")
-    .update({ status: "expired" })
-    .eq("id", invitationId)
-    .eq("organization_id", organizationId);
+    .from('invitations')
+    .update({ status: 'expired' })
+    .eq('id', invitationId)
+    .eq('organization_id', organizationId);
 
   if (error) throw error;
 }
@@ -129,9 +129,9 @@ export async function acceptInvitation() {
   } = await supabase.auth.getUser();
 
   const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user?.id)
+    .from('profiles')
+    .select('*')
+    .eq('id', user?.id)
     .single();
   if (profileError) throw profileError;
 
@@ -140,11 +140,11 @@ export async function acceptInvitation() {
   const role = profile?.role;
 
   if (!invitationId || !organizationId || !role) {
-    throw new Error("Invalid invitation data");
+    throw new Error('Invalid invitation data');
   }
 
   // Start a transaction using RPC
-  const { error } = await supabase.rpc("accept_invitation", {
+  const { error } = await supabase.rpc('accept_invitation', {
     user_id: user?.id,
     invitation_id: invitationId,
     p_organization_id: organizationId,

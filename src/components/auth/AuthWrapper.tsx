@@ -1,7 +1,7 @@
-import { LoadingScreen } from "@/components/layout/LoadingScreen";
-import { useAuth } from "@/hooks/useAuth";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { LoadingScreen } from '@/components/layout/LoadingScreen';
+import { useAuth } from '@/hooks/useAuth';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -13,7 +13,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
 
   useEffect(() => {
     if (!loading && user) {
-      navigate("/chat");
+      navigate('/chat');
     }
   }, [user, loading, navigate]);
 

@@ -1,4 +1,4 @@
-import { toast } from "sonner";
+import { toast } from 'sonner';
 
 interface LoadingState {
   isLoading: boolean;
@@ -21,7 +21,7 @@ class LoadingManager {
       isLoading: false,
       error: null,
       progress: 0,
-      message: "Loading...",
+      message: 'Loading...',
     };
     this.retryCount = 0;
     this.maxRetries = 3;
@@ -89,8 +89,8 @@ class LoadingManager {
   }
 
   private handleTimeout(): void {
-    this.state.error = new Error("Loading timed out");
-    toast.error("Loading timed out. Please refresh the page.");
+    this.state.error = new Error('Loading timed out');
+    toast.error('Loading timed out. Please refresh the page.');
     this.stopLoading();
   }
 

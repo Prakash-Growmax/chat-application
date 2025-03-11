@@ -1,4 +1,4 @@
-import { supabase } from "../supabase";
+import { supabase } from '../supabase';
 
 export const updateProfile_stripeCustomerId = async (
   profileId: string,
@@ -7,9 +7,9 @@ export const updateProfile_stripeCustomerId = async (
   if (!profileId || !stripeCustomerId) return null;
   try {
     const { data, error } = await supabase
-      .from("profiles")
+      .from('profiles')
       .update({ stripe_customer_id: stripeCustomerId })
-      .eq("id", profileId)
+      .eq('id', profileId)
       .select();
 
     if (error) {
@@ -17,8 +17,8 @@ export const updateProfile_stripeCustomerId = async (
     }
 
     return data;
-  } catch (error:unknown) {
-    console.error("Error updating stripe_customer_id:", error.message);
+  } catch (error: unknown) {
+    console.error('Error updating stripe_customer_id:', error.message);
     throw error;
   }
 };
@@ -26,9 +26,9 @@ export const updateProfile_stripeCustomerId = async (
 export const getProfileById = async (profileId: string) => {
   try {
     const { data, error } = await supabase
-      .from("profiles")
-      .select("*") // Select all columns - you can specify specific columns if needed
-      .eq("id", profileId)
+      .from('profiles')
+      .select('*') // Select all columns - you can specify specific columns if needed
+      .eq('id', profileId)
       .single(); // Expects a single row result
 
     if (error) {
@@ -36,10 +36,10 @@ export const getProfileById = async (profileId: string) => {
     }
 
     if (!data) {
-      throw new Error("Profile not found");
+      throw new Error('Profile not found');
     }
     return data;
-  } catch (error:unknown) {
+  } catch (error: unknown) {
     throw error;
   }
 };
@@ -48,12 +48,12 @@ export async function fetchProfile() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) throw new Error("No user found");
+  if (!user) throw new Error('No user found');
 
   const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
     .single();
 
   if (error) throw error;

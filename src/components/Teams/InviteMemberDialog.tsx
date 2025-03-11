@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -7,78 +7,74 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 
-import { useProfile } from "@/hooks/profile/useProfile";
-import { FC, useContext, useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useProfile } from '@/hooks/profile/useProfile';
+import { FC, useContext, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import AppContext from "../context/AppContext";
-import { useMediaQuery, useTheme } from "@mui/material";
+} from '../ui/select';
+import AppContext from '../context/AppContext';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 interface InviteMemberDialogProps {
-  onInvite: (email: string, role: "admin" | "member") => Promise<void>;
+  onInvite: (email: string, role: 'admin' | 'member') => Promise<void>;
 }
 
 export const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
   onInvite,
 }) => {
   const [open, setOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState<"admin" | "member">("member");
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState<'admin' | 'member'>('member');
   const [isLoading, setIsLoading] = useState(false);
   const { profile } = useProfile();
-  const isOwner = profile?.role === "admin";
+  const isOwner = profile?.role === 'admin';
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTab = useMediaQuery(theme.breakpoints.down("md"));
-  const {setSideDrawerOpen} = useContext(AppContext);
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTab = useMediaQuery(theme.breakpoints.down('md'));
+  const { setSideDrawerOpen } = useContext(AppContext);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
       await onInvite(email, role);
-      toast("An invitation has been sent to ${email}");
+      toast('An invitation has been sent to ${email}');
       setOpen(false);
-      setEmail("");
-      setRole("member");
+      setEmail('');
+      setRole('member');
     } catch (error) {
-      setIsLoading(false)
+      setIsLoading(false);
       toast(
-        error instanceof Error ? error.message : "Failed to send invitation"
+        error instanceof Error ? error.message : 'Failed to send invitation'
       );
     } finally {
       setIsLoading(false);
     }
   };
-  useEffect(()=>{
-    if((!isMobile || !isTab) && open){
-      setSideDrawerOpen(false)
-    }
-    else{
-      if(!isMobile || !isTab){
-        setSideDrawerOpen(true)
+  useEffect(() => {
+    if ((!isMobile || !isTab) && open) {
+      setSideDrawerOpen(false);
+    } else {
+      if (!isMobile || !isTab) {
+        setSideDrawerOpen(true);
+      } else {
+        setSideDrawerOpen(false);
       }
-      else{
-        setSideDrawerOpen(false)
-      }
-    
     }
-
-  },[open])
+  }, [open]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen} >
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {isOwner && <Button >Invite Member</Button>}
+        {isOwner && <Button>Invite Member</Button>}
       </DialogTrigger>
       <DialogContent className="h-[300px]  bg-white w-[330px] rounded-lg lg:w-full md:w-full">
         <DialogHeader>
@@ -100,7 +96,7 @@ export const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
           <div>
             <Select
               value={role}
-              onValueChange={(value: "admin" | "member") => setRole(value)}
+              onValueChange={(value: 'admin' | 'member') => setRole(value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select role" />
@@ -113,7 +109,7 @@ export const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
           </div>
           <DialogFooter>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? "Sending..." : "Send Invitation"}
+              {isLoading ? 'Sending...' : 'Send Invitation'}
             </Button>
           </DialogFooter>
         </form>

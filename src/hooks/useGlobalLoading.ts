@@ -6,7 +6,7 @@ export function useGlobalLoading() {
     isLoading: false,
     message: '',
     progress: 0,
-    error: null
+    error: null,
   });
 
   useEffect(() => {
@@ -17,6 +17,6 @@ export function useGlobalLoading() {
     ...state,
     startLoading: (message: string) => loadingState.startLoading(message),
     stopLoading: () => loadingState.stopLoading(),
-    setError: (error: Error) => loadingState.setError(error)
+    setError: (error: Error) => loadingState.setError(error),
   };
 }

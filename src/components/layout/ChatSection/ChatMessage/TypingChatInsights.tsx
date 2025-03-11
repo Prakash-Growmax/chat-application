@@ -1,4 +1,4 @@
-import Typewriter from "typewriter-effect";
+import Typewriter from 'typewriter-effect';
 
 const TypingChatInsights = ({
   data,
@@ -20,10 +20,10 @@ const TypingChatInsights = ({
               <h3 className="font-bold capitalize">
                 <Typewriter
                   options={{
-                    strings: [String(key.replace(/_/g, " "))],
+                    strings: [String(key.replace(/_/g, ' '))],
                     autoStart: true,
                     delay: 30,
-                    cursor: "",
+                    cursor: '',
                     deleteSpeed: 9999999,
                   }}
                 />
@@ -32,13 +32,13 @@ const TypingChatInsights = ({
                 <ul className="list-disc pl-6">
                   {value.map((item, index) => (
                     <li key={index}>
-                      {" "}
+                      {' '}
                       <Typewriter
                         options={{
                           strings: [String(item)],
                           autoStart: true,
                           delay: 30,
-                          cursor: "",
+                          cursor: '',
                           deleteSpeed: 9999999,
                         }}
                       />
@@ -51,7 +51,7 @@ const TypingChatInsights = ({
                     strings: [String(value)],
                     autoStart: true,
                     delay: 30,
-                    cursor: "",
+                    cursor: '',
                     deleteSpeed: 9999999,
                   }}
                 />
@@ -63,7 +63,7 @@ const TypingChatInsights = ({
         <div className="p-4">
           {Object.entries(data).map(([key, value]) => (
             <div key={key} className="mb-4">
-              <h3 className="font-bold capitalize">{key.replace(/_/g, " ")}</h3>
+              <h3 className="font-bold capitalize">{key.replace(/_/g, ' ')}</h3>
               {Array.isArray(value) ? (
                 <ul className="list-disc pl-6">
                   {value.map((item, index) => (

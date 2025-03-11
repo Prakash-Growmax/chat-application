@@ -36,7 +36,7 @@ export async function createInitialSubscription(userId: string) {
         user_id: userId,
         plan: 'single',
         token_usage: 0,
-        status: 'active'
+        status: 'active',
       })
       .select()
       .single();
@@ -53,16 +53,15 @@ export async function createInitialSubscription(userId: string) {
     return {
       plan: 'single',
       token_usage: 0,
-      status: 'active'
+      status: 'active',
     };
   }
 }
 
-export async function buildUserProfile(supabaseUser:unknown): Promise<User> {
-
+export async function buildUserProfile(supabaseUser: unknown): Promise<User> {
   try {
     let subscription = await getUserSubscription(supabaseUser.id);
-    
+
     if (!subscription) {
       subscription = await createInitialSubscription(supabaseUser.id);
     }
@@ -74,16 +73,17 @@ export async function buildUserProfile(supabaseUser:unknown): Promise<User> {
     return {
       id: supabaseUser.id,
       email: supabaseUser.email!,
-      name: supabaseUser.user_metadata?.full_name || 
-            supabaseUser.email?.split('@')[0] || 
-            'User',
+      name:
+        supabaseUser.user_metadata?.full_name ||
+        supabaseUser.email?.split('@')[0] ||
+        'User',
       plan,
       tokenUsage,
     };
   } catch (error) {
     console.error('Error building user profile:', error);
     toast.error('Error loading user profile');
-    
+
     // Return a default user profile if there's an error
     return {
       id: supabaseUser.id,
@@ -115,14 +115,14 @@ export async function getSubscriptionStatus(userId: string) {
     return {
       isActive: subscription?.status === 'active',
       plan: subscription?.plan || 'single',
-      tokenUsage: subscription?.token_usage || 0
+      tokenUsage: subscription?.token_usage || 0,
     };
   } catch (error) {
     console.error('Error getting subscription status:', error);
     return {
       isActive: true,
       plan: 'single',
-      tokenUsage: 0
+      tokenUsage: 0,
     };
   }
 }

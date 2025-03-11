@@ -1,9 +1,9 @@
-import { useTeamMembers } from "@/hooks/teams/useTeamMembers";
-import { useContext } from "react";
-import AppContext from "../context/AppContext";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { InviteMemberDialog } from "./InviteMemberDialog";
-import EnhancedTeamTable from "./TeamTable";
+import { useTeamMembers } from '@/hooks/teams/useTeamMembers';
+import { useContext } from 'react';
+import AppContext from '../context/AppContext';
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { InviteMemberDialog } from './InviteMemberDialog';
+import EnhancedTeamTable from './TeamTable';
 const Team = () => {
   const {
     loading,
@@ -18,18 +18,18 @@ const Team = () => {
     return (
       <Alert variant="destructive">
         <AlertTitle>Error</AlertTitle>
-        <AlertDescription>{error || ""}</AlertDescription>
+        <AlertDescription>{error || ''}</AlertDescription>
       </Alert>
     );
   }
   const { sideDrawerOpen } = useContext(AppContext);
-  
+
   return (
     <div
       className={`container mx-auto py-8 px-8 ${
         sideDrawerOpen
-          ? "lg:max-w-screen-xl md:max-w-screen-md md:pl-36 lg:pl-14"
-          : ""
+          ? 'lg:max-w-screen-xl md:max-w-screen-md md:pl-36 lg:pl-14'
+          : ''
       }`}
     >
       <div className="flex justify-between items-center mb-8 pt-16">

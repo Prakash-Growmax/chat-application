@@ -1,52 +1,47 @@
-import { Message } from "@/types";
-import { useState } from "react";
+import { Message } from '@/types';
+import { useState } from 'react';
 
-import PaperCard from "../Custom-UI/PaperCard";
-import ChartResponse from "../layout/ChatSection/ChatMessage/ChartResponse";
-import DatasetUploadResponse from "../layout/ChatSection/ChatMessage/DatasetUploadResponse";
-import GreetingResponse from "../layout/ChatSection/ChatMessage/GreatingResponse";
-import InsighttResponse from "../layout/ChatSection/ChatMessage/InsightResponse";
-import TextResponse from "../layout/ChatSection/ChatMessage/TextResponse";
-import { Dialog, DialogContent } from "../ui/dialog";
-import ChatAssistantHeader from "./ChatMessage/ChatAssistantHeader";
-import ChatTimeStamp from "./ChatMessage/ChatTimeStamp";
-import ChatTypeInfo from "./ChatMessage/ChatTypeInfo";
-import { DataChart } from "./DataChat";
-import GeneralResponse from "../layout/ChatSection/ChatMessage/GeneralResponse";
+import PaperCard from '../Custom-UI/PaperCard';
+import ChartResponse from '../layout/ChatSection/ChatMessage/ChartResponse';
+import DatasetUploadResponse from '../layout/ChatSection/ChatMessage/DatasetUploadResponse';
+import GreetingResponse from '../layout/ChatSection/ChatMessage/GreatingResponse';
+import InsighttResponse from '../layout/ChatSection/ChatMessage/InsightResponse';
+import TextResponse from '../layout/ChatSection/ChatMessage/TextResponse';
+import { Dialog, DialogContent } from '../ui/dialog';
+import ChatAssistantHeader from './ChatMessage/ChatAssistantHeader';
+import ChatTimeStamp from './ChatMessage/ChatTimeStamp';
+import ChatTypeInfo from './ChatMessage/ChatTypeInfo';
+import { DataChart } from './DataChat';
+import GeneralResponse from '../layout/ChatSection/ChatMessage/GeneralResponse';
 
-import { useMediaQuery, useTheme } from "@mui/material";
-
-
-
+import { useMediaQuery, useTheme } from '@mui/material';
 
 interface ChatMessageProps {
   message: Message;
   onContentChange: () => void;
- 
 }
+
 export function ChatMessage({
   message = {
-    role: "assistant",
+    role: 'assistant',
     timestamp: new Date(),
     messageObject: {
       timeStamp: new Date(),
     },
-    type: "text",
+    type: 'text',
   },
   onContentChange,
 }: ChatMessageProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
-  const isUser = message?.role === "user";
+  const isUser = message?.role === 'user';
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTab = useMediaQuery(theme.breakpoints.down("md"));
- 
- 
-  const timeStamp = message?.timestamp
-    ? message?.timestamp
-    : message?.messageObject?.timestamp || "";
- 
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTab = useMediaQuery(theme.breakpoints.down('md'));
+
+  const timeStamp =
+    message?.timestamp || message?.messageObject?.timestamp || '';
+
   return (
     <>
       <div className="mx-auto max-w-4xl h-full">
@@ -66,12 +61,11 @@ export function ChatMessage({
                     onContentChange={onContentChange}
                   />
                   {(!isMobile || isTab) && (
-                     <ChatTimeStamp
-                     timeStamp={timeStamp || ""}
-                     isHovering={isHovering}
-                   />
+                    <ChatTimeStamp
+                      timeStamp={timeStamp || ''}
+                      isHovering={isHovering}
+                    />
                   )}
-                 
                 </div>
               </div>
             </PaperCard>
@@ -89,11 +83,12 @@ export function ChatMessage({
                   message={message}
                   onContentChange={onContentChange}
                 />
-                {(!isMobile || isTab) && ( <ChatTimeStamp
-                  timeStamp={timeStamp || ""}
-                  isHovering={isHovering}
-                />)}
-               
+                {(!isMobile || isTab) && (
+                  <ChatTimeStamp
+                    timeStamp={timeStamp || ''}
+                    isHovering={isHovering}
+                  />
+                )}
               </div>
             </PaperCard>
           </div>
@@ -102,7 +97,7 @@ export function ChatMessage({
 
       <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
         <DialogContent className="max-w-[90vw] w-[90vw] h-[90vh] overflow-auto">
-          {message?.type === "chart" && <DataChart data={message?.data} />}
+          {message?.type === 'chart' && <DataChart data={message?.data} />}
         </DialogContent>
       </Dialog>
     </>
@@ -118,45 +113,66 @@ const RenderContent = ({
   isAssistant?: boolean;
   onContentChange: () => void;
 }) => {
-  if (message?.type === "text") {
+  if (message?.type === 'text') {
     return <TextResponse message={message} isAssistant={isAssistant} />;
   }
-  if(message?.messageObject?.content?.type == "generic_summary"){
-    return( 
+  if (message?.messageObject?.content?.type === 'generic_summary') {
+    return (
       <GeneralResponse
-      message={message?.messageObject?.content?.analysis}
-      isTyping={message?.messageObject?.isTyping}
-      isAssistant={message?.messageObject?.role}
-      onContentChange={onContentChange}
+        message={message?.messageObject?.content?.analysis}
+        isTyping={message?.messageObject?.isTyping}
+        isAssistant={message?.messageObject?.role}
+        onContentChange={onContentChange}
       />
-    )
-   
+    );
   }
-  if (message?.messageObject?.content?.charts?.charts?.type === "chart" || message?.messageObject?.content?.type === "chart") {
+  if (
+    message?.messageObject?.content?.charts?.charts?.type === 'chart' ||
+    message?.messageObject?.content?.type === 'chart'
+  ) {
     return (
       <ChartResponse
-        data={message?.messageObject.content.charts.charts ? message?.messageObject.content.charts.charts.data :  message?.messageObject.content.data  }
-        layout={message?.messageObject.content.charts.charts ? message?.messageObject.content.charts.charts.layout : message?.messageObject.content.layout}
-        summary={message?.messageObject.content.charts.charts ? message?.messageObject.content.charts.charts.analysis : message?.messageObject.content.analysis}
-        analysis = {message?.messageObject?.content?.analysis?.result}
+        data={
+          message?.messageObject.content.charts.charts
+            ? message?.messageObject.content.charts.charts.data
+            : message?.messageObject.content.data
+        }
+        layout={
+          message?.messageObject.content.charts.charts
+            ? message?.messageObject.content.charts.charts.layout
+            : message?.messageObject.content.layout
+        }
+        summary={
+          message?.messageObject.content.charts.charts
+            ? message?.messageObject.content.charts.charts.analysis
+            : message?.messageObject.content.analysis
+        }
+        analysis={message?.messageObject?.content?.analysis?.result}
         isTyping={message?.messageObject?.isTyping}
         isAssistant={message?.messageObject?.role}
         onContentChange={onContentChange}
       />
     );
   }
-  if (message?.messageObject?.content?.type === "text" || message?.messageObject?.type === "text" ) {
+  if (
+    message?.messageObject?.content?.type === 'text' ||
+    message?.messageObject?.type === 'text'
+  ) {
     return (
       <GreetingResponse
-        message={message?.messageObject?.content?.data?.response ? message?.messageObject?.content?.data?.response : message?.messageObject?.content?.charts ?  message?.messageObject?.content?.charts?.content?.analysis?.key_insight : message?.messageObject?.content?.content?.analysis?.key_insight }
-      
+        message={
+          message?.messageObject?.content?.data?.response ||
+          message?.messageObject?.content?.charts?.content?.analysis
+            ?.key_insight ||
+          message?.messageObject?.content?.content?.analysis?.key_insight
+        }
         isTyping={message?.messageObject?.isTyping}
         isAssistant={message?.messageObject?.role}
         onContentChange={onContentChange}
       />
     );
   }
-  if (message?.messageObject?.type === "datasetres") {
+  if (message?.messageObject?.type === 'datasetres') {
     return (
       <DatasetUploadResponse
         message={message?.messageObject?.content?.data}
@@ -166,7 +182,7 @@ const RenderContent = ({
       />
     );
   }
-  if (message?.messageObject?.content?.type === "insights") {
+  if (message?.messageObject?.content?.type === 'insights') {
     return (
       <InsighttResponse
         data={message?.messageObject.content.data}
@@ -176,5 +192,4 @@ const RenderContent = ({
       />
     );
   }
- 
 };

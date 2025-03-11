@@ -3,11 +3,11 @@ const UserIcon = ({ className }: { className: string }) => {
     <div
       className={className}
       style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "18px", // Explicitly set container size
-        height: "18px", // Explicitly set container size
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '18px', // Explicitly set container size
+        height: '18px', // Explicitly set container size
       }}
     >
       <svg

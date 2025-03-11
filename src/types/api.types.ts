@@ -11,8 +11,7 @@ export interface ApiResponse<T = unknown> {
   statusText: string;
 }
 
-
 export interface AuthHeaders {
   Authorization?: string;
-  "x-organization-id"?: string;
+  'x-organization-id'?: string;
 }

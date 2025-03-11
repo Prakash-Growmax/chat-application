@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/types/api.types";
+import { ApiResponse } from '@/types/api.types';
 import {
   analyseDataset,
   AnalyzeChatRequest,
@@ -10,8 +10,8 @@ import {
   RenameSession,
   renameSessionRequest,
   uploadDataSetRequest,
-} from "@/types/Chat";
-import { ApiClient, apiClient } from "./apiConfig";
+} from '@/types/Chat';
+import { ApiClient, apiClient } from './apiConfig';
 
 class ChatService {
   constructor(private apiClient: ApiClient) {}
@@ -23,7 +23,7 @@ class ChatService {
     }
   ): Promise<ApiResponse<CreateChatResponse>> {
     return this.apiClient.post<CreateChatResponse>(
-      "chat/sessions",
+      'chat/sessions',
       reqBody,
       options
     );
@@ -55,7 +55,7 @@ class ChatService {
   async getSession(options?: {
     headers: Record<string, string>;
   }): Promise<ApiResponse<ChatSession>> {
-    return this.apiClient.get<ChatSession>("chat/users/me/sessions", options);
+    return this.apiClient.get<ChatSession>('chat/users/me/sessions', options);
   }
 
   async deleteSession(
@@ -70,9 +70,9 @@ class ChatService {
     );
   }
   async renameSession(
-    chatId:string,
-    reqBody:renameSessionRequest,
-  
+    chatId: string,
+    reqBody: renameSessionRequest,
+
     options?: {
       headers: Record<string, string>;
     }

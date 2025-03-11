@@ -1,6 +1,6 @@
-import LucideIcon from "@/components/Custom-UI/LucideIcon";
-import { ListItemHeaderText } from "@/Theme/Typography";
-import { Divider } from "@mui/material";
+import LucideIcon from '@/components/Custom-UI/LucideIcon';
+import { ListItemHeaderText } from '@/Theme/Typography';
+import { Divider } from '@mui/material';
 
 function SideBarListItemHeader({
   icon,

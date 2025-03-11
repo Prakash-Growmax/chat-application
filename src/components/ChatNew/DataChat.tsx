@@ -1,17 +1,14 @@
-import { ChartData } from "@/lib/types";
-
-
+import { ChartData } from '@/lib/types';
 
 interface DataChartProps {
   data: ChartData;
 }
 
 export function DataChart({ data }: DataChartProps) {
-
   const renderChart = () => {
     return (
       <div
-        style={{ width: "90%", height: "auto" }}
+        style={{ width: '90%', height: 'auto' }}
         dangerouslySetInnerHTML={{
           __html: data,
         }}
@@ -27,10 +24,10 @@ export function DataChart({ data }: DataChartProps) {
       // default:
       //   return null;
 
-      case "bar":
+      case 'bar':
         return (
           <div
-            style={{ width: "100%", height: "400px" }}
+            style={{ width: '100%', height: '400px' }}
             dangerouslySetInnerHTML={{
               __html: `
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -40,7 +37,7 @@ export function DataChart({ data }: DataChartProps) {
             }}
           />
         );
-      case "pie":
+      case 'pie':
         return <div dangerouslySetInnerHTML={{ __html: data }} />;
       default:
         return null;

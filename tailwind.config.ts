@@ -1,18 +1,18 @@
 /** @type {import('tailwindcss').Config} */
-import tailwindcssanimate from "tailwindcss-animate";
+import tailwindcssanimate from 'tailwindcss-animate';
 export default {
-  darkMode: ["class"],
+  darkMode: ['class'],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
   ],
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"], // Set as default sans font
-        inter: ["Inter", "sans-serif"], // Keep this for explicit usage
+        sans: ['Inter', 'system-ui', 'sans-serif'], // Set as default sans font
+        inter: ['Inter', 'sans-serif'], // Keep this for explicit usage
       },
       fontSize: {
         //existing...
@@ -26,17 +26,17 @@ export default {
         // itemHeader: ["0.8125rem", { lineHeight: "1.25rem" }],
 
         // new....
-        h1: ["2.5rem", { lineHeight: "1.2", fontWeight: "700" }],
-        h2: ["2rem", { lineHeight: "1.3", fontWeight: "600" }],
-        h3: ["1.75rem", { lineHeight: "1.4", fontWeight: "600" }],
-        h4: ["1.5rem", { lineHeight: "1.4", fontWeight: "500" }],
-        h5: ["1.25rem", { lineHeight: "1.5", fontWeight: "500" }],
-        h6: ["1.125rem", { lineHeight: "1.5", fontWeight: "500" }],
+        h1: ['2.5rem', { lineHeight: '1.2', fontWeight: '700' }],
+        h2: ['2rem', { lineHeight: '1.3', fontWeight: '600' }],
+        h3: ['1.75rem', { lineHeight: '1.4', fontWeight: '600' }],
+        h4: ['1.5rem', { lineHeight: '1.4', fontWeight: '500' }],
+        h5: ['1.25rem', { lineHeight: '1.5', fontWeight: '500' }],
+        h6: ['1.125rem', { lineHeight: '1.5', fontWeight: '500' }],
         // Body text sizes
-        "body-lg": ["1.125rem", { lineHeight: "1.6" }],
-        body: ["1rem", { lineHeight: "1.6" }],
-        "body-sm": ["0.875rem", { lineHeight: "1.5" }],
-        caption: ["0.75rem", { lineHeight: "1.4" }],
+        'body-lg': ['1.125rem', { lineHeight: '1.6' }],
+        body: ['1rem', { lineHeight: '1.6' }],
+        'body-sm': ['0.875rem', { lineHeight: '1.5' }],
+        caption: ['0.75rem', { lineHeight: '1.4' }],
       },
       // Rest of your existing configuration
       spacing: {
@@ -48,24 +48,24 @@ export default {
         // xl: "var(--spacing-xl)",
 
         //new
-        "layout-sm": "0.75rem", // 12px
-        layout: "1rem", // 16px
-        "layout-lg": "1.5rem", // 24px
-        "layout-xl": "2rem", // 32px
-        section: "4rem", // 64px
-        "section-lg": "6rem", // 96px
+        'layout-sm': '0.75rem', // 12px
+        layout: '1rem', // 16px
+        'layout-lg': '1.5rem', // 24px
+        'layout-xl': '2rem', // 32px
+        section: '4rem', // 64px
+        'section-lg': '6rem', // 96px
       },
       borderRadius: {
         //old...
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-        chat: "1.5rem", // ChatGPT's rounded corners
-        full: "9999px", // For circular buttons
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+        chat: '1.5rem', // ChatGPT's rounded corners
+        full: '9999px', // For circular buttons
       },
       colors: {
         //old..
-        "custom-color": "rgb(2, 8, 23)",
+        'custom-color': 'rgb(2, 8, 23)',
         // background: "hsl(var(--background))",
         // foreground: "hsl(var(--foreground))",
         // "chat-bg": "#f4f4f4", // ChatGPT's input background
@@ -79,16 +79,16 @@ export default {
 
         //new..
         primary: {
-          50: "#f0f9ff",
-          100: "#e0f2fe",
-          200: "#bae6fd",
-          300: "#7dd3fc",
-          400: "#38bdf8",
-          500: "#0ea5e9",
-          600: "#0284c7",
-          700: "#0369a1",
-          800: "#075985",
-          900: "#0c4a6e",
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          200: '#bae6fd',
+          300: '#7dd3fc',
+          400: '#38bdf8',
+          500: '#0ea5e9',
+          600: '#0284c7',
+          700: '#0369a1',
+          800: '#075985',
+          900: '#0c4a6e',
         },
         secondary: {
           // Add your secondary color scale
@@ -106,9 +106,9 @@ export default {
       // },
       //new...
       maxWidth: {
-        "container-sm": "640px",
-        container: "1024px",
-        "container-lg": "1280px",
+        'container-sm': '640px',
+        container: '1024px',
+        'container-lg': '1280px',
       },
     },
   },

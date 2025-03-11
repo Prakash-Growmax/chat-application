@@ -2,11 +2,11 @@ import {
   getSubscriptionDetails,
   subscribeToChanges,
   updateSubscription,
-} from "@/lib/subscription";
-import { Subscription } from "@/types/subscriptions";
-import { useCallback, useEffect, useState } from "react";
-import { toast } from "sonner";
-import { useAuth } from "./useAuth";
+} from '@/lib/subscription';
+import { Subscription } from '@/types/subscriptions';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import { useAuth } from './useAuth';
 
 export function useSubscription() {
   const { user } = useAuth();
@@ -14,7 +14,7 @@ export function useSubscription() {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
 
   const upgradePlan = useCallback(
-    async (planName: "Single" | "Team" | "Free") => {
+    async (planName: 'Single' | 'Team' | 'Free') => {
       if (!user) return;
       setLoading(true);
       try {
@@ -22,13 +22,13 @@ export function useSubscription() {
         toast.success(`Successfully upgraded to ${planName} plan`);
         await loadSubscription(); // Add immediate refresh
       } catch (error) {
-        console.error("Failed to upgrade plan:", error);
-        toast.error("Failed to upgrade plan");
+        console.error('Failed to upgrade plan:', error);
+        toast.error('Failed to upgrade plan');
       } finally {
         setLoading(false);
       }
     },
-  
+
     [user]
   );
 
@@ -40,7 +40,7 @@ export function useSubscription() {
       const data = await getSubscriptionDetails(user.id);
       setSubscription(data);
     } catch (error) {
-      console.error("Failed to load subscription:", error);
+      console.error('Failed to load subscription:', error);
     } finally {
       setLoading(false);
     }
@@ -52,14 +52,13 @@ export function useSubscription() {
     return () => {
       subscription.unsubscribe();
     };
-   
   }, [user?.id]);
 
   return {
     upgradePlan,
     loading,
     subscription,
-    isActive: subscription?.status === "active",
+    isActive: subscription?.status === 'active',
     planId: subscription?.plan_id,
   };
 }

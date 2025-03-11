@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -6,22 +6,22 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { useAuth } from "@/hooks/useAuth";
-import { useSubscription } from "@/hooks/useSubscription";
-import { getAvailablePlans } from "@/lib/plans/plans-service";
-import { Plan } from "@/types/plans";
-import { useContext, useEffect, useState } from "react";
+} from '@/components/ui/card';
+import { useAuth } from '@/hooks/useAuth';
+import { useSubscription } from '@/hooks/useSubscription';
+import { getAvailablePlans } from '@/lib/plans/plans-service';
+import { Plan } from '@/types/plans';
+import { useContext, useEffect, useState } from 'react';
 
-import AppContext from "@/components/context/AppContext";
-import LucideIcon from "@/components/Custom-UI/LucideIcon";
-import { createSubscriptionCheckoutSession } from "@/lib/stripe/stripe-service";
+import AppContext from '@/components/context/AppContext';
+import LucideIcon from '@/components/Custom-UI/LucideIcon';
+import { createSubscriptionCheckoutSession } from '@/lib/stripe/stripe-service';
 
 const classNames = (...classes: (string | boolean | undefined)[]) => {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(' ');
 };
 
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
 export function PlansPage() {
   const { user } = useAuth();
@@ -32,36 +32,35 @@ export function PlansPage() {
 
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
- 
+
   const loadOrganizations = useCallback(async () => {
     if (!user?.id) return;
-  
+
     try {
-     
-      const cachedPlans = localStorage.getItem("plans");
+      const cachedPlans = localStorage.getItem('plans');
       if (cachedPlans) {
         setPlans(JSON.parse(cachedPlans));
         return;
       }
-  
+
       const orgs = await getAvailablePlans();
       setPlans(orgs);
-      localStorage.setItem("plans", JSON.stringify(orgs)); // Cache plans
+      localStorage.setItem('plans', JSON.stringify(orgs)); // Cache plans
     } catch (error) {
-      console.error("Failed to load plans:", error);
-      setError("Failed to load plans. Please refresh the page.");
+      console.error('Failed to load plans:', error);
+      setError('Failed to load plans. Please refresh the page.');
     }
   }, [user?.id]);
-  
+
   useEffect(() => {
     if (user?.id) {
       loadOrganizations();
     }
-  
+
     // Disable scrolling
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = ""; // Re-enable scrolling
+      document.body.style.overflow = ''; // Re-enable scrolling
     };
   }, [user?.id, loadOrganizations]);
 
@@ -69,9 +68,9 @@ export function PlansPage() {
     if (!user?.id) {
       return null;
     }
-  
-    setLoading(plan?.name); 
-  
+
+    setLoading(plan?.name);
+
     try {
       await createSubscriptionCheckoutSession(
         Number(plan?.price),
@@ -79,19 +78,18 @@ export function PlansPage() {
         user?.id
       );
     } catch (error) {
-      console.error("Subscription failed:", error);
+      console.error('Subscription failed:', error);
     } finally {
-      setLoading(null); 
+      setLoading(null);
     }
   };
-  
- 
+
   return (
     <div className="fixed inset-0 overflow-y-auto bg-white from-slate-50 to-white pt-96 lg:pt-0 md:pt-40">
       <div className="container py-16 h-full flex flex-col justify-center">
         <div
           className={`mx-auto max-w-4xl space-y-12 ${
-            sideDrawerOpen ? "lg:max-w-3xl lg:pt-12" : ""
+            sideDrawerOpen ? 'lg:max-w-3xl lg:pt-12' : ''
           }`}
         >
           <div className="text-center space-y-4">
@@ -116,11 +114,11 @@ export function PlansPage() {
               <Card
                 key={plan.name}
                 className={classNames(
-                  "relative group transition-all duration-300",
-                  "hover:scale-105 hover:shadow-xl",
-                  hoveredCard === plan.name && "scale-105 shadow-xl",
-                  plan.name === "team" &&
-                    "border-primary shadow-lg ring-2 ring-primary/20"
+                  'relative group transition-all duration-300',
+                  'hover:scale-105 hover:shadow-xl',
+                  hoveredCard === plan.name && 'scale-105 shadow-xl',
+                  plan.name === 'team' &&
+                    'border-primary shadow-lg ring-2 ring-primary/20'
                 )}
                 onMouseEnter={() => setHoveredCard(plan.name)}
                 onMouseLeave={() => setHoveredCard(null)}
@@ -163,13 +161,13 @@ export function PlansPage() {
                 <CardFooter className="pt-4">
                   <Button
                     className={classNames(
-                      "w-full transition-all font-medium",
-                      plan.name === "team"
-                        ? "bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
-                        : "hover:border-primary hover:text-primary",
-                      planId === plan.id && "opacity-75"
+                      'w-full transition-all font-medium',
+                      plan.name === 'team'
+                        ? 'bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90'
+                        : 'hover:border-primary hover:text-primary',
+                      planId === plan.id && 'opacity-75'
                     )}
-                    variant={plan.name === "team" ? "default" : "outline"}
+                    variant={plan.name === 'team' ? 'default' : 'outline'}
                     size="lg"
                     disabled={loading === plan.name}
                     onClick={() => handleSubscribe(plan)}
@@ -185,7 +183,7 @@ export function PlansPage() {
                         Current Plan
                       </span>
                     ) : (
-                      "Subscribe Now"
+                      'Subscribe Now'
                     )}
                   </Button>
                 </CardFooter>
@@ -199,4 +197,3 @@ export function PlansPage() {
 }
 
 export default PlansPage;
-

@@ -1,15 +1,15 @@
 export interface Invitation {
   id: string;
   email: string;
-  role: "admin" | "member";
-  status: "pending" | "accepted" | "expired" | "cancelled";
+  role: 'admin' | 'member';
+  status: 'pending' | 'accepted' | 'expired' | 'cancelled';
   created_at: string;
 }
 
 export interface User {
   id: string;
   email: string;
-  role: "admin" | "member";
+  role: 'admin' | 'member';
   organization_id: string;
 }
 
@@ -35,7 +35,7 @@ export interface UseTeamMembersReturn {
   error: string | null;
   inviteMemberByEmail: (
     email: string,
-    role: "admin" | "member"
+    role: 'admin' | 'member'
   ) => Promise<void>;
   removeMemberByEmail: (memberId: string) => Promise<void>;
   cancelInvitationByEmail: (invitationId: string) => Promise<void>;

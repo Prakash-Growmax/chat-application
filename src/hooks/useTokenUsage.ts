@@ -1,10 +1,10 @@
 import {
   fetchTokenUsage,
   subscribeToTokenUpdates,
-} from "@/lib/token/token-service";
-import { TokenUsageState } from "@/types/tokens";
-import { useEffect, useState } from "react";
-import { useAuth } from "./useAuth";
+} from '@/lib/token/token-service';
+import { TokenUsageState } from '@/types/tokens';
+import { useEffect, useState } from 'react';
+import { useAuth } from './useAuth';
 
 export function useTokenUsage() {
   const { user } = useAuth();
@@ -32,12 +32,12 @@ export function useTokenUsage() {
           });
         }
       } catch (err) {
-        console.error(err)
+        console.error(err);
         if (mounted) {
           setState({
             data: null,
             loading: false,
-            error: "Failed to fetch token usage",
+            error: 'Failed to fetch token usage',
           });
         }
       }
@@ -46,7 +46,7 @@ export function useTokenUsage() {
     fetchData();
 
     // Set up real-time subscription
-    const channel = subscribeToTokenUpdates(user?.id || "", (newData) => {
+    const channel = subscribeToTokenUpdates(user?.id || '', (newData) => {
       if (mounted) {
         setState((prev) => ({
           ...prev,

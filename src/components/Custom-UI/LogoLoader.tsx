@@ -1,6 +1,6 @@
-import loaderGif from "@/assets/Logo/loader.gif";
+import loaderGif from '@/assets/Logo/loader.gif';
 
-const LogoLoader = ({ alt = "Loading...", className = "" }) => {
+const LogoLoader = ({ alt = 'Loading...', className = '' }) => {
   return (
     <div className="flex items-center justify-center">
       {/* Replace the placeholder with your GIF path */}

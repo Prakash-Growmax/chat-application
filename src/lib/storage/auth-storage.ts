@@ -33,7 +33,7 @@ export async function getOTPState(): Promise<OTPState | null> {
     if (!stateStr) return null;
 
     const state = OTPStateSchema.parse(JSON.parse(stateStr));
-    
+
     // Check if OTP has expired
     if (Date.now() - state.timestamp > OTP_EXPIRY_TIME) {
       await clearOTPState();

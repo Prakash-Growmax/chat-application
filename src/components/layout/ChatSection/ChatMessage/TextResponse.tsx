@@ -1,6 +1,6 @@
-import { Message } from "@/types";
-import { useEffect, useState } from "react";
-import TypingChatMessage from "./TypingChatMessage";
+import { Message } from '@/types';
+import { useEffect, useState } from 'react';
+import TypingChatMessage from './TypingChatMessage';
 
 const TextResponse = ({
   message,
@@ -12,9 +12,12 @@ const TextResponse = ({
   const [isTyping, setIsTyping] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsTyping(false);
-    }, message?.content?.length * 30 + 500);
+    const timer = setTimeout(
+      () => {
+        setIsTyping(false);
+      },
+      message?.content?.length * 30 + 500
+    );
 
     return () => clearTimeout(timer);
   }, [message?.content]);

@@ -1,8 +1,8 @@
-import { ApiError } from "@/services/apiConfig";
-import { chatService } from "@/services/ChatService";
-import { getAccessToken } from "@/utils/storage.utils";
-import { useEffect } from "react";
-import { useProfile } from "./profile/useProfile";
+import { ApiError } from '@/services/apiConfig';
+import { chatService } from '@/services/ChatService';
+import { getAccessToken } from '@/utils/storage.utils';
+import { useEffect } from 'react';
+import { useProfile } from './profile/useProfile';
 
 export function useChatList(setSessionList) {
   const { profile } = useProfile();
@@ -12,14 +12,14 @@ export function useChatList(setSessionList) {
         const token = getAccessToken();
         const response = await chatService.getSession({
           headers: {
-            "Content-Type": "application/json",
-            "x-organization-id": profile.organization_id,
+            'Content-Type': 'application/json',
+            'x-organization-id': profile.organization_id,
             Authorization: `Bearer ${token}`,
           },
         });
 
         if (response?.status !== 200)
-          throw new Error("Error while creating session");
+          throw new Error('Error while creating session');
 
         setSessionList(response);
         return response;
@@ -29,8 +29,8 @@ export function useChatList(setSessionList) {
         }
       }
     } else {
-      console.error("Organization ID is missing.");
-      throw new Error("Organization ID is required");
+      console.error('Organization ID is missing.');
+      throw new Error('Organization ID is required');
     }
   }
 

@@ -1,9 +1,9 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 // Heading Components (with pixel equivalents in comments)
 export const H1 = ({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;
@@ -16,7 +16,7 @@ export const H1 = ({
 
 export const H2 = ({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;
@@ -29,7 +29,7 @@ export const H2 = ({
 
 export const H3 = ({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;
@@ -42,7 +42,7 @@ export const H3 = ({
 
 export const H4 = ({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;
@@ -55,7 +55,7 @@ export const H4 = ({
 
 export const H5 = ({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;
@@ -68,7 +68,7 @@ export const H5 = ({
 
 export const H6 = ({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;
@@ -82,7 +82,7 @@ export const H6 = ({
 // Body Text Components
 export const BodyLarge = ({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;
@@ -95,7 +95,7 @@ export const BodyLarge = ({
 
 export const BodyText = ({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;
@@ -108,7 +108,7 @@ export const BodyText = ({
 
 export const BodySmall = ({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;
@@ -121,7 +121,7 @@ export const BodySmall = ({
 
 export const Caption = ({
   children,
-  className = "",
+  className = '',
   ...props
 }: {
   children: ReactNode;
@@ -140,7 +140,7 @@ export const Caption = ({
 // Helper Text Components with appropriate spacing
 export const Label = ({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;
@@ -155,7 +155,7 @@ export const Label = ({
 
 export const ErrorText = ({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;
@@ -168,7 +168,7 @@ export const ErrorText = ({
 
 export const HelperText = ({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;
@@ -182,7 +182,7 @@ export const HelperText = ({
 // List Item Components
 export const ListItemHeaderText = ({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;
@@ -196,7 +196,7 @@ export const ListItemHeaderText = ({
 
 export const ListItemText = ({
   children,
-  className = "",
+  className = '',
   ...props
 }: {
   children: ReactNode;

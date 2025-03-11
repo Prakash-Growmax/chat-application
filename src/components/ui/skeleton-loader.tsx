@@ -28,7 +28,9 @@ export function ChatSkeleton() {
           key={i}
           className={`flex ${i % 2 === 0 ? 'justify-end' : 'justify-start'}`}
         >
-          <Skeleton className={`h-12 w-2/3 rounded-lg ${i % 2 === 0 ? 'bg-primary/10' : 'bg-muted'}`} />
+          <Skeleton
+            className={`h-12 w-2/3 rounded-lg ${i % 2 === 0 ? 'bg-primary/10' : 'bg-muted'}`}
+          />
         </div>
       ))}
     </div>

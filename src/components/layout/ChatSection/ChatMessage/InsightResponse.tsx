@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import Typewriter from "typewriter-effect";
+import React, { useState, useEffect } from 'react';
+import Typewriter from 'typewriter-effect';
 
 const InsightResponse = ({ data, isTyping, isAssistant, onContentChange }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -7,11 +7,11 @@ const InsightResponse = ({ data, isTyping, isAssistant, onContentChange }) => {
 
   // Break paragraphs into individual lines
   const entries = Object.entries(data).flatMap(([key, value]) => {
-    const formattedKey = key.replace(/_/g, " ").toUpperCase();
+    const formattedKey = key.replace(/_/g, ' ').toUpperCase();
     if (Array.isArray(value)) {
       return [`${formattedKey}:`, ...value.map((item) => `• ${item}`)];
-    } else if (typeof value === "string") {
-      return [`${formattedKey}:`, ...value.split("\n")];
+    } else if (typeof value === 'string') {
+      return [`${formattedKey}:`, ...value.split('\n')];
     } else {
       return [`${formattedKey}:`, `${value}`];
     }
@@ -21,11 +21,14 @@ const InsightResponse = ({ data, isTyping, isAssistant, onContentChange }) => {
 
   useEffect(() => {
     if (currentIndex < entries.length && showTyping) {
-      const timer = setTimeout(() => {
-        setCompletedEntries((prev) => [...prev, entries[currentIndex]]);
-        setCurrentIndex((prevIndex) => prevIndex + 1);
-        onContentChange?.(); // Notify parent of content change
-      }, entries[currentIndex].length * 2 + 50); // Faster timing
+      const timer = setTimeout(
+        () => {
+          setCompletedEntries((prev) => [...prev, entries[currentIndex]]);
+          setCurrentIndex((prevIndex) => prevIndex + 1);
+          onContentChange?.(); // Notify parent of content change
+        },
+        entries[currentIndex].length * 2 + 50
+      ); // Faster timing
       return () => clearTimeout(timer);
     }
   }, [currentIndex, entries, onContentChange, showTyping]);
@@ -45,16 +48,14 @@ const InsightResponse = ({ data, isTyping, isAssistant, onContentChange }) => {
                   autoStart: true,
                   loop: false,
                   delay: 1, // Faster typing speed
-                  cursor: "",
+                  cursor: '',
                 }}
               />
             </div>
           )}
         </>
       ) : (
-        entries.map((entry, index) => (
-          <div key={`entry-${index}`}>{entry}</div>
-        ))
+        entries.map((entry, index) => <div key={`entry-${index}`}>{entry}</div>)
       )}
     </div>
   );

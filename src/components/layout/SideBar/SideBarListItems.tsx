@@ -1,6 +1,6 @@
-import MyRecent from "@/components/ChatNew/MyRecent";
-import MyFiles from "@/components/ui/my-file";
-import { List } from "lucide-react";
+import MyRecent from '@/components/ChatNew/MyRecent';
+import MyFiles from '@/components/ui/my-file';
+import { List } from 'lucide-react';
 
 function SideBarListItems() {
   return (

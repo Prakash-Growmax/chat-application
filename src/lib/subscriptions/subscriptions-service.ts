@@ -1,12 +1,12 @@
-import { supabase } from "../supabase";
+import { supabase } from '../supabase';
 
 export const getSubscriptionByUserId = async (userId: string) => {
   if (!userId) return null;
 
   const { data: subscriptionData, error: fetchError } = await supabase
-    .from("subscriptions")
-    .select("*")
-    .eq("user_id", userId)
+    .from('subscriptions')
+    .select('*')
+    .eq('user_id', userId)
     .single();
 
   if (fetchError) throw new Error(fetchError.message);
@@ -21,12 +21,12 @@ export const updateSessionIdInSubscription = async (
   if (!subscriptionId) return null;
 
   const { data: updatedSubscription, error: updateError } = await supabase
-    .from("subscriptions")
+    .from('subscriptions')
     .update({
       stripe_session_id: sessionId, // Add the stripe session ID here
       updated_at: new Date(), // Update the timestamp
     })
-    .eq("id", subscriptionId);
+    .eq('id', subscriptionId);
 
   if (updateError) throw new Error(updateError.message);
 

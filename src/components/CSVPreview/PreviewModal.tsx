@@ -1,6 +1,6 @@
-import { CSVPreviewData, FileMetadata } from "@/lib/types/csv";
-import React, { useState } from "react";
-import LucideIcon from "../Custom-UI/LucideIcon";
+import { CSVPreviewData, FileMetadata } from '@/lib/types/csv';
+import React, { useState } from 'react';
+import LucideIcon from '../Custom-UI/LucideIcon';
 
 interface PreviewModalProps {
   isOpen: boolean;
@@ -21,7 +21,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   if (!isOpen) return null;
 
   const formatFileSize = (bytes: number): string => {
-    const units = ["B", "KB", "MB", "GB"];
+    const units = ['B', 'KB', 'MB', 'GB'];
     let size = bytes;
     let unitIndex = 0;
 
@@ -34,9 +34,9 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   };
 
   const formatDate = (date: Date): string => {
-    return new Intl.DateTimeFormat("en-US", {
-      dateStyle: "medium",
-      timeStyle: "short",
+    return new Intl.DateTimeFormat('en-US', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
     }).format(date);
   };
 
@@ -99,7 +99,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                 className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 aria-label="Close preview"
               >
-                <LucideIcon name={"X"} className="h-6 w-6" aria-hidden="true" />
+                <LucideIcon name={'X'} className="h-6 w-6" aria-hidden="true" />
               </button>
             </div>
 
@@ -156,10 +156,10 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
 
               <div className="flex items-center gap-2">
                 <p className="text-sm text-gray-700">
-                  Showing{" "}
+                  Showing{' '}
                   <span className="font-medium">
                     {startIndex + 1} - {endIndex}
-                  </span>{" "}
+                  </span>{' '}
                   of <span className="font-medium">{data.rows.length}</span>
                 </p>
 
@@ -170,7 +170,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                     className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <LucideIcon
-                      name={"ChevronLeft"}
+                      name={'ChevronLeft'}
                       className="h-4 w-4"
                       aria-hidden="true"
                     />
@@ -181,7 +181,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                     className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <LucideIcon
-                      name={"ChevronRight"}
+                      name={'ChevronRight'}
                       className="h-4 w-4"
                       aria-hidden="true"
                     />

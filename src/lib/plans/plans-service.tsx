@@ -1,12 +1,12 @@
-import { Plan } from "@/types/plans";
-import { supabase } from "../supabase";
+import { Plan } from '@/types/plans';
+import { supabase } from '../supabase';
 
 export async function getAvailablePlans(): Promise<Plan[]> {
   try {
     const { data, error } = await supabase
-      .from("plans")
-      .select("*")
-      .order("price_usd", { ascending: true });
+      .from('plans')
+      .select('*')
+      .order('price_usd', { ascending: true });
     if (error) throw error;
 
     return data.map((plan) => ({
@@ -19,7 +19,7 @@ export async function getAvailablePlans(): Promise<Plan[]> {
       canInviteTeam: plan.can_invite_team,
     }));
   } catch (error) {
-    console.error("Error fetching plans:", error);
+    console.error('Error fetching plans:', error);
     throw error;
   }
 }

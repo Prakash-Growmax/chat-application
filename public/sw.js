@@ -1,6 +1,6 @@
-const CACHE_NAME = "chat-shell-v1";
+const CACHE_NAME = 'chat-shell-v1';
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
       if (response) {

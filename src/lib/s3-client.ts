@@ -1,14 +1,14 @@
-import { UploadProgress } from "@/types/s3";
-import { cleanKey } from "@/utils/s3.utils";
+import { UploadProgress } from '@/types/s3';
+import { cleanKey } from '@/utils/s3.utils';
 import {
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
-} from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import Papa from "papaparse";
-import * as XLSX from "xlsx";
-import { CSVPreviewData, FileMetadata, PreviewError } from "./types/csv";
+} from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import Papa from 'papaparse';
+import * as XLSX from 'xlsx';
+import { CSVPreviewData, FileMetadata, PreviewError } from './types/csv';
 
 const BUCKET_NAME = import.meta.env.VITE_S3_BUCKET_NAME;
 
@@ -26,9 +26,12 @@ const s3Client = new S3Client({
 });
 
 export class S3UploadError extends Error {
-  constructor(message: string, public code?: string) {
+  constructor(
+    message: string,
+    public code?: string
+  ) {
     super(message);
-    this.name = "S3UploadError";
+    this.name = 'S3UploadError';
   }
 }
 
@@ -69,7 +72,7 @@ export async function uploadToS3(
             total: event.total,
             percentage: Math.round((event.loaded / event.total) * 100),
           };
-        
+
           onProgress(progress);
         }
       };
@@ -85,20 +88,20 @@ export async function uploadToS3(
 
       // Setup error handler
       xhr.onerror = () => {
-        reject(new Error("Upload failed"));
+        reject(new Error('Upload failed'));
       };
 
       // Start the upload
-      xhr.open("PUT", signedUrl);
-      xhr.setRequestHeader("Content-Type", file.type);
+      xhr.open('PUT', signedUrl);
+      xhr.setRequestHeader('Content-Type', file.type);
       xhr.send(file);
     });
 
     // Return the S3 object key
     return Key;
   } catch (error) {
-    console.error("S3 upload error:", error);
-    throw new Error("Failed to upload file to S3");
+    console.error('S3 upload error:', error);
+    throw new Error('Failed to upload file to S3');
   }
 }
 
@@ -110,8 +113,8 @@ export const fetchCSVPreview = async (
   const cleanedKey = cleanKey(key);
 
   const Keys = `${cleanedKey}`;
-  
-  const cacheKey = `${bucket}:${key}:${rowLimit || "all"}`;
+
+  const cacheKey = `${bucket}:${key}:${rowLimit || 'all'}`;
 
   // Clear existing cache to ensure fresh data
   previewCache.delete(cacheKey);
@@ -121,14 +124,14 @@ export const fetchCSVPreview = async (
     const response = await s3Client.send(command);
 
     if (!response.Body) {
-      throw new Error("No data received from S3");
+      throw new Error('No data received from S3');
     }
 
     const fileSize = response.ContentLength || 0;
 
     const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
     if (fileSize > MAX_FILE_SIZE) {
-      throw new Error("File too large for preview");
+      throw new Error('File too large for preview');
     }
 
     const fileBuffer = await response.Body.transformToByteArray();
@@ -141,14 +144,14 @@ export const fetchCSVPreview = async (
       parseResult = await new Promise<Papa.ParseResult<string[]>>(
         (resolve, reject) => {
           Papa.parse(csvString, {
-            complete: (results:unknown) => {
+            complete: (results: unknown) => {
               resolve(results);
             },
             error: (error: unknown) => {
               reject(new Error(`CSV parsing failed: ${error.message}`));
             },
-            delimiter: ",", // Auto-detect delimiter
-            skipEmptyLines: "greedy",
+            delimiter: ',', // Auto-detect delimiter
+            skipEmptyLines: 'greedy',
             worker: false,
             header: false,
             dynamicTyping: false,
@@ -166,20 +169,22 @@ export const fetchCSVPreview = async (
       const workbook = XLSX.read(fileBuffer, { type: 'array' });
       parseResult = workbook;
     } else {
-      throw new Error("Unsupported file type");
+      throw new Error('Unsupported file type');
     }
 
     let headers: string[] = [];
     let rows: string[][] = [];
 
     if (fileType === 'csv') {
-      const filteredData = (parseResult as Papa.ParseResult<string[]>).data.filter((row) => {
-        return row.length > 0 && row.some((cell) => cell.trim() !== "");
+      const filteredData = (
+        parseResult as Papa.ParseResult<string[]>
+      ).data.filter((row) => {
+        return row.length > 0 && row.some((cell) => cell.trim() !== '');
       });
 
       if (filteredData.length < 2) {
         // At least headers and one data row
-        throw new Error("CSV file contains no valid data rows");
+        throw new Error('CSV file contains no valid data rows');
       }
 
       headers = filteredData[0];
@@ -188,10 +193,12 @@ export const fetchCSVPreview = async (
     } else if (fileType === 'xlsx') {
       const sheetName = (parseResult as XLSX.WorkBook).SheetNames[0];
       const worksheet = (parseResult as XLSX.WorkBook).Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as string[][];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+        header: 1,
+      }) as string[][];
 
       if (jsonData.length < 2) {
-        throw new Error("XLSX file contains no valid data rows");
+        throw new Error('XLSX file contains no valid data rows');
       }
 
       headers = jsonData[0];
@@ -212,20 +219,20 @@ export const fetchCSVPreview = async (
     });
 
     const metadata: FileMetadata = {
-      filename: cleanedKey.split("/").pop() || cleanedKey,
+      filename: cleanedKey.split('/').pop() || cleanedKey,
       size: fileSize,
       lastModified: response.LastModified || new Date(),
-      contentType: response.ContentType || "text/csv",
+      contentType: response.ContentType || 'text/csv',
       rowCount: rows.length,
       columnCount: headers.length,
     };
 
     return { data: previewData, metadata };
   } catch (error) {
-    console.error("Detailed error:", error);
+    console.error('Detailed error:', error);
     const previewError: PreviewError = {
       message: `Failed to fetch CSV preview: ${(error as Error).message}`,
-      code: (error as unknown).code || "UNKNOWN_ERROR",
+      code: (error as unknown).code || 'UNKNOWN_ERROR',
     };
     throw previewError;
   }

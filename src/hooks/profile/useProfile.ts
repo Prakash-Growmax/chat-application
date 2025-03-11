@@ -1,8 +1,8 @@
-import { PROFILE_QUERY_KEY } from "@/constants/reactQuery.constants";
-import { fetchProfile } from "@/lib/profile/profile-service";
-import { supabase } from "@/lib/supabase";
-import { Profile } from "@/types/profile";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { PROFILE_QUERY_KEY } from '@/constants/reactQuery.constants';
+import { fetchProfile } from '@/lib/profile/profile-service';
+import { supabase } from '@/lib/supabase';
+import { Profile } from '@/types/profile';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function useProfile() {
   const queryClient = useQueryClient();
@@ -20,9 +20,9 @@ export function useProfile() {
   const { mutateAsync: updateProfile } = useMutation({
     mutationFn: async (updates: Partial<Profile>) => {
       const { error: updateError } = await supabase
-        .from("profiles")
+        .from('profiles')
         .update(updates)
-        .eq("id", profile?.id);
+        .eq('id', profile?.id);
 
       if (updateError) throw updateError;
       return updates;
@@ -41,11 +41,11 @@ export function useProfile() {
         await updateProfile(updates);
         return { success: true };
       } catch (err) {
-        console.error("Error updating profile:", err);
+        console.error('Error updating profile:', err);
         return {
           success: false,
           error:
-            err instanceof Error ? err.message : "Failed to update profile",
+            err instanceof Error ? err.message : 'Failed to update profile',
         };
       }
     },

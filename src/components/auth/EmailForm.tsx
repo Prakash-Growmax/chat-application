@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import LucideIcon from "../Custom-UI/LucideIcon";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import LucideIcon from '../Custom-UI/LucideIcon';
 
 interface EmailFormProps {
   email: string;
@@ -33,11 +33,11 @@ export function EmailForm({
         disabled={loading}
       >
         {loading ? (
-          <LucideIcon name={"Loader2"} />
+          <LucideIcon name={'Loader2'} />
         ) : (
           <>
             <span>Continue with Email</span>
-            <LucideIcon name={"ArrowRight"} />
+            <LucideIcon name={'ArrowRight'} />
           </>
         )}
       </Button>

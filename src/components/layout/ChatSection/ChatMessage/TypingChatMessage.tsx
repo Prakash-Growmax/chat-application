@@ -1,5 +1,5 @@
-import { Message } from "@/types";
-import Typewriter from "typewriter-effect";
+import { Message } from '@/types';
+import Typewriter from 'typewriter-effect';
 
 const TypingChatMessage = ({
   message,
@@ -18,7 +18,7 @@ const TypingChatMessage = ({
             strings: [message.content],
             autoStart: true,
             delay: 30,
-            cursor: "",
+            cursor: '',
             deleteSpeed: 9999999,
           }}
         />

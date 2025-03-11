@@ -1,5 +1,5 @@
-import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
-import * as React from "react";
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import * as React from 'react';
 
 export default function SnackbarUi({ open, setOpen }) {
   //   const [open, setOpen] = React.useState(false);
@@ -12,7 +12,7 @@ export default function SnackbarUi({ open, setOpen }) {
     event: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason
   ) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
 

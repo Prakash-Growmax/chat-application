@@ -4,7 +4,7 @@ import { User } from '@/types';
 interface TokenCost {
   actionType: string;
   contentLength: number;
-  contextData?: Record<string,unknown>;
+  contextData?: Record<string, unknown>;
 }
 
 export async function deductTokens(
@@ -22,7 +22,9 @@ export async function deductTokens(
 
   if (error) {
     if (error.message.includes('Insufficient tokens')) {
-      throw new Error('You have insufficient tokens. Please upgrade your plan to continue.');
+      throw new Error(
+        'You have insufficient tokens. Please upgrade your plan to continue.'
+      );
     }
     throw new Error('Failed to process token deduction');
   }
@@ -37,7 +39,8 @@ export async function getTokenUsageHistory(
 ): Promise<unknown[]> {
   let query = supabase
     .from('token_usage_details')
-    .select(`
+    .select(
+      `
       id,
       action_type,
       tokens_used,
@@ -46,7 +49,8 @@ export async function getTokenUsageHistory(
       chats (
         content
       )
-    `)
+    `
+    )
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -66,7 +70,9 @@ export async function getTokenUsageHistory(
   return data;
 }
 
-export async function getTokenCosts(): Promise<Record<string, { base: number; multiplier: number }>> {
+export async function getTokenCosts(): Promise<
+  Record<string, { base: number; multiplier: number }>
+> {
   const { data, error } = await supabase
     .from('token_costs')
     .select('action_type, base_cost, multiplier');
@@ -75,10 +81,13 @@ export async function getTokenCosts(): Promise<Record<string, { base: number; mu
     throw new Error('Failed to fetch token costs');
   }
 
-  return data.reduce((acc, { action_type, base_cost, multiplier }) => ({
-    ...acc,
-    [action_type]: { base: base_cost, multiplier },
-  }), {});
+  return data.reduce(
+    (acc, { action_type, base_cost, multiplier }) => ({
+      ...acc,
+      [action_type]: { base: base_cost, multiplier },
+    }),
+    {}
+  );
 }
 
 export async function estimateTokenCost(

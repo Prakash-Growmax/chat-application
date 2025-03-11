@@ -1,7 +1,7 @@
-import { Progress } from "@/components/ui/progress";
-import { useGlobalLoading } from "@/hooks/useGlobalLoading";
-import { cn } from "@/lib/utils";
-import LucideIcon from "../Custom-UI/LucideIcon";
+import { Progress } from '@/components/ui/progress';
+import { useGlobalLoading } from '@/hooks/useGlobalLoading';
+import { cn } from '@/lib/utils';
+import LucideIcon from '../Custom-UI/LucideIcon';
 
 interface GlobalLoadingIndicatorProps {
   fullScreen?: boolean;
@@ -17,10 +17,10 @@ export function GlobalLoadingIndicator({
   return (
     <div
       className={cn(
-        "flex items-center justify-center bg-background/80 backdrop-blur-sm",
+        'flex items-center justify-center bg-background/80 backdrop-blur-sm',
         fullScreen
-          ? "fixed inset-0 z-50 min-h-screen"
-          : "h-full w-full min-h-[200px]"
+          ? 'fixed inset-0 z-50 min-h-screen'
+          : 'h-full w-full min-h-[200px]'
       )}
     >
       <div className="rounded-lg bg-card p-8 shadow-lg w-full max-w-md mx-4">
@@ -28,7 +28,7 @@ export function GlobalLoadingIndicator({
           <div className="flex items-center justify-center">
             <div className="rounded-full bg-primary/10 p-3">
               <LucideIcon
-                name={"Building2"}
+                name={'Building2'}
                 className="h-6 w-6 animate-pulse"
               />
             </div>

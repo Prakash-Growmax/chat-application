@@ -1,7 +1,7 @@
 const LogoIcon = ({
   className,
-  width = "20px",
-  height = "20px",
+  width = '20px',
+  height = '20px',
 }: {
   className?: string;
   width?: string;
@@ -12,9 +12,9 @@ const LogoIcon = ({
       style={{
         width,
         height,
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
       className={className}
     >

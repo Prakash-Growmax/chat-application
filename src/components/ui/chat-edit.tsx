@@ -1,6 +1,6 @@
 export default function ChatEdit({ className }: { className: string }) {
   return (
-    <div className={"text-gray-500 group-hover:text-black" + className}>
+    <div className={'text-gray-500 group-hover:text-black' + className}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"

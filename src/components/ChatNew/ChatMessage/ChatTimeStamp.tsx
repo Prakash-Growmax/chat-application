@@ -1,8 +1,8 @@
-import { Caption } from "@/Theme/Typography";
-import { formatTimestamp } from "@/utils/general.utilis";
+import { Caption } from '@/Theme/Typography';
+import { formatTimestamp } from '@/utils/general.utilis';
 
 function ChatTimeStamp({
-  timeStamp = "",
+  timeStamp = '',
   isHovering,
 }: {
   timeStamp: string;
@@ -10,15 +10,11 @@ function ChatTimeStamp({
 }) {
   return (
     <Caption
-      className={`flex items-center justify-end mr-4   
-                  transition-opacity 
-            ${isHovering ? "opacity-100" : "opacity-0"}
-              whitespace-nowrap
-        `}
+      className={`flex items-center justify-end mr-4 transition-opacity 
+        ${isHovering ? 'opacity-100' : 'opacity-0'} whitespace-nowrap`}
     >
       {formatTimestamp(timeStamp)}
     </Caption>
   );
 }
-
 export default ChatTimeStamp;

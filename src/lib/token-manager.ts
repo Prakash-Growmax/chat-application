@@ -12,7 +12,10 @@ export const PLAN_LIMITS = {
   pro: Infinity,
 } as const;
 
-export function calculateTokenCost(text: string, isComplexQuery: boolean = false): number {
+export function calculateTokenCost(
+  text: string,
+  isComplexQuery: boolean = false
+): number {
   const wordCount = text.trim().split(/\s+/).length;
   const baseCost = wordCount * TOKEN_COSTS.TEXT_WORD;
   return isComplexQuery ? baseCost + TOKEN_COSTS.COMPLEX_QUERY : baseCost;

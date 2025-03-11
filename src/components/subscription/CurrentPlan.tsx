@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAuth } from "@/hooks/useAuth";
-import { Link } from "react-router-dom";
-import LucideIcon from "../Custom-UI/LucideIcon";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAuth } from '@/hooks/useAuth';
+import { Link } from 'react-router-dom';
+import LucideIcon from '../Custom-UI/LucideIcon';
 
 export function CurrentPlan() {
   const { user } = useAuth();
@@ -17,17 +17,17 @@ export function CurrentPlan() {
           <div>
             <p className="font-medium capitalize">{user?.plan}</p>
             <p className="text-sm text-muted-foreground">
-              {user?.plan === "single"
-                ? "Basic features for personal use"
-                : user?.plan === "team"
-                ? "Advanced features for teams"
-                : "Enterprise features for large organizations"}
+              {user?.plan === 'single'
+                ? 'Basic features for personal use'
+                : user?.plan === 'team'
+                  ? 'Advanced features for teams'
+                  : 'Enterprise features for large organizations'}
             </p>
           </div>
           <Button variant="outline" asChild>
             <Link to="/plans" className="gap-2">
               <span>Upgrade</span>
-              <LucideIcon name={"ArrowRight"} className="h-4 w-4" />
+              <LucideIcon name={'ArrowRight'} className="h-4 w-4" />
             </Link>
           </Button>
         </div>

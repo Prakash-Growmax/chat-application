@@ -1,11 +1,11 @@
-import { TokenUsageData } from "@/types/tokens";
-import { supabase } from "../supabase";
+import { TokenUsageData } from '@/types/tokens';
+import { supabase } from '../supabase';
 
 export const fetchTokenUsage = async (userId: string) => {
   const { data, error } = await supabase
-    .from("profiles")
-    .select("*, subscriptions(plans(monthly_token_limit))")
-    .eq("id", userId)
+    .from('profiles')
+    .select('*, subscriptions(plans(monthly_token_limit))')
+    .eq('id', userId)
     .single();
 
   if (error) throw error;
@@ -22,15 +22,15 @@ export const subscribeToTokenUpdates = (
   userId: string,
   callback: (payload: TokenUsageData) => void
 ) => {
-  const channel = supabase.channel("subscription-updates");
+  const channel = supabase.channel('subscription-updates');
 
   // Listen for profile changes
   channel.on(
-    "postgres_changes",
+    'postgres_changes',
     {
-      event: "UPDATE",
-      schema: "public",
-      table: "profiles",
+      event: 'UPDATE',
+      schema: 'public',
+      table: 'profiles',
       filter: `id=eq.${userId}`,
     },
     handleUpdate
@@ -38,11 +38,11 @@ export const subscribeToTokenUpdates = (
 
   // Listen for subscription changes
   channel.on(
-    "postgres_changes",
+    'postgres_changes',
     {
-      event: "*", // Listen for INSERT, UPDATE, and DELETE
-      schema: "public",
-      table: "subscriptions",
+      event: '*', // Listen for INSERT, UPDATE, and DELETE
+      schema: 'public',
+      table: 'subscriptions',
       filter: `user_id=eq.${userId}`, // Adjust this to match your schema
     },
     handleUpdate
@@ -51,9 +51,9 @@ export const subscribeToTokenUpdates = (
   async function handleUpdate() {
     // Fetch fresh data whenever either table changes
     const { data, error } = await supabase
-      .from("profiles")
-      .select("*, subscriptions(plan(monthly_token_limit))")
-      .eq("id", userId)
+      .from('profiles')
+      .select('*, subscriptions(plan(monthly_token_limit))')
+      .eq('id', userId)
       .single();
 
     if (!error && data) {

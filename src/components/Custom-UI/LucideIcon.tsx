@@ -1,10 +1,10 @@
-import { loadIcon } from "@/utils/icons.utils";
-import { Suspense, useEffect, useState } from "react";
+import { loadIcon } from '@/utils/icons.utils';
+import { Suspense, useEffect, useState } from 'react';
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
   // Extend SVGProps for icon props
-  name: keyof typeof import("lucide-react"); // Type for the icon name
-  [key: string]:unknown;
+  name: keyof typeof import('lucide-react'); // Type for the icon name
+  [key: string]: unknown;
 }
 
 function Icon({ name, ...props }: IconProps) {

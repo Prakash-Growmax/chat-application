@@ -1,23 +1,23 @@
-import LucideIcon from "@/components/Custom-UI/LucideIcon";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useAuth } from "@/hooks/useAuth";
-import { useDebounce } from "@/hooks/useDebounce";
-import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import LucideIcon from '@/components/Custom-UI/LucideIcon';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useAuth } from '@/hooks/useAuth';
+import { useDebounce } from '@/hooks/useDebounce';
+import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const REDIRECT_DELAY = 5000;
 const suggestedLinks = [
-  { title: "Chat", path: "/chat/new" },
-  { title: "Settings", path: "/settings" },
-  { title: "Plans", path: "/plans" },
+  { title: 'Chat', path: '/chat/new' },
+  { title: 'Settings', path: '/settings' },
+  { title: 'Plans', path: '/plans' },
 ];
 
 function NotFoundPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [countdown, setCountdown] = useState(REDIRECT_DELAY / 1000);
   const debouncedSearch = useDebounce(searchQuery, 300);
 
@@ -27,7 +27,7 @@ function NotFoundPage() {
     }, 1000);
 
     const redirect = setTimeout(() => {
-      navigate(user ? "/chat/new" : "/login", { replace: true });
+      navigate(user ? '/chat/new' : '/login', { replace: true });
     }, REDIRECT_DELAY);
 
     return () => {
@@ -81,8 +81,8 @@ function NotFoundPage() {
             variant="outline"
             onClick={() => navigate(link.path)}
             className={cn(
-              "transition-colors hover:bg-primary hover:text-primary-foreground",
-              !user && "pointer-events-none opacity-50"
+              'transition-colors hover:bg-primary hover:text-primary-foreground',
+              !user && 'pointer-events-none opacity-50'
             )}
           >
             {link.title}
@@ -95,7 +95,7 @@ function NotFoundPage() {
           size="lg"
           className="gap-2"
           onClick={() =>
-            navigate(user ? "/chat/new" : "/login", { replace: true })
+            navigate(user ? '/chat/new' : '/login', { replace: true })
           }
         >
           {user ? (

@@ -12,9 +12,6 @@ type ToasterToast = ToastProps & {
   action?: ToastActionElement;
 };
 
-
-
-
 let count = 0;
 
 function genId() {
@@ -27,8 +24,6 @@ type ActionType = {
   DISMISS_TOAST: 'DISMISS_TOAST';
   REMOVE_TOAST: 'REMOVE_TOAST';
 };
-
-
 
 type Action =
   | {

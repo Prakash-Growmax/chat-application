@@ -1,16 +1,16 @@
-import AppContext from "@/components/context/AppContext";
-import LucideIcon from "@/components/Custom-UI/LucideIcon";
-import { EditOrgDialog } from "@/components/organizations/EditOrganizationDialog";
-import { CurrentPlan } from "@/components/subscription/CurrentPlan";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useOrganization } from "@/hooks/organization/useOrganization";
-import { useProfile } from "@/hooks/profile/useProfile";
-import Main from "@/Theme/MainAnimation";
-import { useContext, useState } from "react";
+import AppContext from '@/components/context/AppContext';
+import LucideIcon from '@/components/Custom-UI/LucideIcon';
+import { EditOrgDialog } from '@/components/organizations/EditOrganizationDialog';
+import { CurrentPlan } from '@/components/subscription/CurrentPlan';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useOrganization } from '@/hooks/organization/useOrganization';
+import { useProfile } from '@/hooks/profile/useProfile';
+import Main from '@/Theme/MainAnimation';
+import { useContext, useState } from 'react';
 
 export function SettingsPage() {
   const { profile, loading, error } = useProfile();
@@ -19,7 +19,7 @@ export function SettingsPage() {
   );
 
   const { sideDrawerOpen } = useContext(AppContext);
-  const [activeTab, setActiveTab] = useState("subscription");
+  const [activeTab, setActiveTab] = useState('subscription');
 
   const handleUpdateOrgName = async (newName: string) => {
     await updateOrganizationName(newName);
@@ -36,7 +36,7 @@ export function SettingsPage() {
     );
   }
 
-  const isOwner = profile?.role === "admin";
+  const isOwner = profile?.role === 'admin';
 
   return (
     <Main
@@ -46,7 +46,7 @@ export function SettingsPage() {
       <div className="container py-4">
         <div
           className={`mx-auto max-w-6xl space-y-8 ${
-            sideDrawerOpen ? "lg:max-w-5xl" : ""
+            sideDrawerOpen ? 'lg:max-w-5xl' : ''
           }`}
         >
           <div className="space-y-2">
@@ -108,7 +108,7 @@ export function SettingsPage() {
                       <Input
                         id="email"
                         type="email"
-                        value={profile?.email || ""}
+                        value={profile?.email || ''}
                         disabled
                         className="bg-muted"
                       />
@@ -120,7 +120,7 @@ export function SettingsPage() {
                       <Label htmlFor="role">Role</Label>
                       <Input
                         id="role"
-                        value={profile?.role || ""}
+                        value={profile?.role || ''}
                         disabled
                         className="bg-muted"
                       />
@@ -129,7 +129,7 @@ export function SettingsPage() {
                       <Label>Organization</Label>
                       <div className="flex items-center gap-2">
                         <Input
-                          value={organization?.name || "No Organization"}
+                          value={organization?.name || 'No Organization'}
                           disabled
                           className="bg-muted"
                         />
@@ -151,7 +151,7 @@ export function SettingsPage() {
                         value={
                           profile?.last_login
                             ? new Date(profile.last_login)?.toLocaleString()
-                            : "Never"
+                            : 'Never'
                         }
                         disabled
                         className="bg-muted"
@@ -161,7 +161,7 @@ export function SettingsPage() {
                       <Label>Tokens Remaining</Label>
                       <Input
                         value={
-                          profile?.tokens_remaining?.toLocaleString() || "0"
+                          profile?.tokens_remaining?.toLocaleString() || '0'
                         }
                         disabled
                         className="bg-muted"
@@ -171,7 +171,7 @@ export function SettingsPage() {
                       <Label>Current Usage</Label>
                       <Input
                         value={
-                          profile?.current_token_usage?.toLocaleString() || "0"
+                          profile?.current_token_usage?.toLocaleString() || '0'
                         }
                         disabled
                         className="bg-muted"

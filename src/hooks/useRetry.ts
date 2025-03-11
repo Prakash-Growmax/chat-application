@@ -20,7 +20,7 @@ export function useRetry<T>({
         return result;
       } catch (error) {
         setAttempts((prev) => prev + 1);
-        
+
         if (attempts + 1 >= maxAttempts) {
           toast.error('Operation failed after multiple attempts');
           throw error;

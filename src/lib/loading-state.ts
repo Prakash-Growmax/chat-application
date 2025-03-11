@@ -14,7 +14,7 @@ class LoadingStateManager {
   private constructor() {
     this.state = {
       isLoading: false,
-      message: "",
+      message: '',
       progress: 0,
       error: null,
     };
@@ -66,7 +66,7 @@ class LoadingStateManager {
     this.cleanup();
     this.state = {
       isLoading: false,
-      message: "",
+      message: '',
       progress: 100,
       error: null,
     };

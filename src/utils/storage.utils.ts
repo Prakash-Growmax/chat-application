@@ -1,9 +1,9 @@
 import {
   AccessToken_LocalKey,
   ChatId_LocalKey,
-} from "@/constants/storage.constant";
+} from '@/constants/storage.constant';
 
-export const tokenType = "Bearer";
+export const tokenType = 'Bearer';
 
 export function getAccessToken(): string | null {
   try {
@@ -14,7 +14,7 @@ export function getAccessToken(): string | null {
     }
     return null;
   } catch (error) {
-    console.error("Failed to get stored token:", error);
+    console.error('Failed to get stored token:', error);
     return null;
   }
 }
@@ -25,9 +25,9 @@ export function getChatId(): string {
     if (chatId) {
       return chatId;
     }
-    return "";
+    return '';
   } catch (error) {
-    console.error("Failed to get chatId:", error);
-    return "";
+    console.error('Failed to get chatId:', error);
+    return '';
   }
 }

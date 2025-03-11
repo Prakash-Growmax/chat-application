@@ -1,6 +1,6 @@
-import { Organization } from "@/types";
-import { toast } from "sonner";
-import { supabase } from "../supabase";
+import { Organization } from '@/types';
+import { toast } from 'sonner';
+import { supabase } from '../supabase';
 
 export async function createOrganization(
   name: string,
@@ -9,20 +9,20 @@ export async function createOrganization(
   try {
     // First, get user's subscription
     const { data: subscription, error: subError } = await supabase
-      .from("subscriptions")
-      .select("plan")
-      .eq("user_id", userId)
+      .from('subscriptions')
+      .select('plan')
+      .eq('user_id', userId)
       .single();
 
-    if (subError) throw new Error("Failed to fetch subscription");
+    if (subError) throw new Error('Failed to fetch subscription');
 
     // Get existing organizations count
     const { data: existingOrgs, error: countError } = await supabase
-      .from("organizations")
-      .select("id")
-      .eq("owner_id", userId);
+      .from('organizations')
+      .select('id')
+      .eq('owner_id', userId);
 
-    if (countError) throw new Error("Failed to check existing organizations");
+    if (countError) throw new Error('Failed to check existing organizations');
 
     // Check plan limits
     const planLimits = {
@@ -36,13 +36,13 @@ export async function createOrganization(
     if (existingOrgs && existingOrgs.length >= limit) {
       throw new Error(
         `Your ${subscription.plan} plan allows only ${limit} organization${
-          limit === 1 ? "" : "s"
+          limit === 1 ? '' : 's'
         }`
       );
     }
     // Create organization
     const { data: org, error: createError } = await supabase
-      .from("organizations")
+      .from('organizations')
       .insert({
         name,
         owner_id: userId,
@@ -52,7 +52,7 @@ export async function createOrganization(
       .select()
       .single();
 
-    if (createError) throw new Error("Failed to create organization");
+    if (createError) throw new Error('Failed to create organization');
     return {
       id: org.id,
       name: org.name,
@@ -65,7 +65,7 @@ export async function createOrganization(
     if (error instanceof Error) {
       toast.error(error.message);
     } else {
-      toast.error("Failed to create organization");
+      toast.error('Failed to create organization');
     }
     throw error;
   }
@@ -76,9 +76,9 @@ export async function getUserOrganizations(
 ): Promise<Organization[]> {
   try {
     const { data, error } = await supabase
-      .from("organizations")
-      .select("*")
-      .eq("owner_id", userId);
+      .from('organizations')
+      .select('*')
+      .eq('owner_id', userId);
 
     if (error) throw error;
 
@@ -94,7 +94,7 @@ export async function getUserOrganizations(
       return [];
     }
   } catch (error) {
-    console.error("Failed to fetch organizations:", error);
+    console.error('Failed to fetch organizations:', error);
     return [];
   }
 }
@@ -105,27 +105,27 @@ export async function deleteOrganization(
   try {
     // Delete organization members first due to foreign key constraints
     const { error: membersError } = await supabase
-      .from("organization_members")
+      .from('organization_members')
       .delete()
-      .eq("organization_id", organizationId);
+      .eq('organization_id', organizationId);
 
-    if (membersError) throw new Error("Failed to delete organization members");
+    if (membersError) throw new Error('Failed to delete organization members');
 
     // Delete the organization
     const { error: orgError } = await supabase
-      .from("organizations")
+      .from('organizations')
       .delete()
-      .eq("id", organizationId);
+      .eq('id', organizationId);
 
-    if (orgError) throw new Error("Failed to delete organization");
+    if (orgError) throw new Error('Failed to delete organization');
 
-    toast.success("Organization deleted successfully");
+    toast.success('Organization deleted successfully');
   } catch (error) {
-    console.error("Failed to delete organization:", error);
+    console.error('Failed to delete organization:', error);
     if (error instanceof Error) {
       toast.error(error.message);
     } else {
-      toast.error("Failed to delete organization");
+      toast.error('Failed to delete organization');
     }
     throw error;
   }
@@ -134,25 +134,25 @@ export async function deleteOrganization(
 export async function addMemberToOrganization(
   organizationId: string,
   email: string,
-  role: "admin" | "member" = "member"
+  role: 'admin' | 'member' = 'member'
 ): Promise<void> {
   try {
     // Get user ID from email
     const { data: userData, error: userError } = await supabase
-      .from("users")
-      .select("id")
-      .eq("email", email)
+      .from('users')
+      .select('id')
+      .eq('email', email)
       .single();
 
     if (userError || !userData) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
     // Check member limit
     const { data: org } = await supabase
-      .from("organizations")
-      .select("plan, organization_members(count)")
-      .eq("id", organizationId)
+      .from('organizations')
+      .select('plan, organization_members(count)')
+      .eq('id', organizationId)
       .single();
 
     const memberLimits = {
@@ -172,21 +172,21 @@ export async function addMemberToOrganization(
 
     // Add member
     const { error: memberError } = await supabase
-      .from("organization_members")
+      .from('organization_members')
       .insert({
         organization_id: organizationId,
         user_id: userData.id,
         role,
       });
 
-    if (memberError) throw new Error("Failed to add member");
+    if (memberError) throw new Error('Failed to add member');
 
-    toast.success("Member added successfully");
+    toast.success('Member added successfully');
   } catch (error) {
     if (error instanceof Error) {
       toast.error(error.message);
     } else {
-      toast.error("Failed to add member");
+      toast.error('Failed to add member');
     }
     throw error;
   }
@@ -198,19 +198,19 @@ export async function removeMemberFromOrganization(
 ): Promise<void> {
   try {
     const { error } = await supabase
-      .from("organization_members")
+      .from('organization_members')
       .delete()
-      .eq("organization_id", organizationId)
-      .eq("user_id", userId);
+      .eq('organization_id', organizationId)
+      .eq('user_id', userId);
 
-    if (error) throw new Error("Failed to remove member");
+    if (error) throw new Error('Failed to remove member');
 
-    toast.success("Member removed successfully");
+    toast.success('Member removed successfully');
   } catch (error) {
     if (error instanceof Error) {
       toast.error(error.message);
     } else {
-      toast.error("Failed to remove member");
+      toast.error('Failed to remove member');
     }
     throw error;
   }

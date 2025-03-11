@@ -1,9 +1,9 @@
-import { env_NODE_URL } from "@/constants/env.constant";
-import { updateProfile_stripeCustomerId } from "../profile/profile-service";
+import { env_NODE_URL } from '@/constants/env.constant';
+import { updateProfile_stripeCustomerId } from '../profile/profile-service';
 import {
   getSubscriptionByUserId,
   updateSessionIdInSubscription,
-} from "../subscriptions/subscriptions-service";
+} from '../subscriptions/subscriptions-service';
 
 export const createSubscriptionCheckoutSession = (
   price: number,
@@ -12,11 +12,11 @@ export const createSubscriptionCheckoutSession = (
 ) => {
   try {
     fetch(`${env_NODE_URL}create-subscription-checkout-session`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      mode: "cors",
+      mode: 'cors',
       body: JSON.stringify({ plan: price, email: email }),
     })
       .then((res) => {
@@ -32,9 +32,7 @@ export const createSubscriptionCheckoutSession = (
         await updateSessionIdInSubscription(subscription?.id, session?.id);
         window.location = session.url;
       })
-      .catch(() => {
-       
-      });
+      .catch(() => {});
   } catch (error) {
     console.error(error);
   }

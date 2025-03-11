@@ -14,7 +14,7 @@ interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
-declare module "virtual:pwa-register" {
+declare module 'virtual:pwa-register' {
   export interface RegisterSWOptions {
     immediate?: boolean;
     onNeedRefresh?: () => void;

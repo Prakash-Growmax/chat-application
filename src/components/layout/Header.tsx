@@ -1,16 +1,16 @@
-import { useAuth } from "@/hooks/useAuth";
-import { useContext } from "react";
+import { useAuth } from '@/hooks/useAuth';
+import { useContext } from 'react';
 
-import DarkLogo from "@/assets/Logo/DarkLogo";
-import { DrawerOpen_LocalKey } from "@/constants/storage.constant";
-import AppContext from "../context/AppContext";
-import LucideIcon from "../Custom-UI/LucideIcon";
-import TooltipNew from "../ui/tooltipnew";
-import MyAccountDetails from "./MyAccountDetails";
+import DarkLogo from '@/assets/Logo/DarkLogo';
+import { DrawerOpen_LocalKey } from '@/constants/storage.constant';
+import AppContext from '../context/AppContext';
+import LucideIcon from '../Custom-UI/LucideIcon';
+import TooltipNew from '../ui/tooltipnew';
+import MyAccountDetails from './MyAccountDetails';
 
 export function Header() {
   const { user } = useAuth();
-  const {setSideDrawerOpen } = useContext(AppContext);
+  const { setSideDrawerOpen } = useContext(AppContext);
 
   const handleDrawer = () => {
     setSideDrawerOpen(true);
@@ -28,7 +28,7 @@ export function Header() {
                 className="p-2 hover:bg-gray-100 rounded-md"
                 onClick={handleDrawer}
               >
-                <LucideIcon name={"PanelLeftOpen"} size={24} />
+                <LucideIcon name={'PanelLeftOpen'} size={24} />
               </button>
             </TooltipNew>
           )}

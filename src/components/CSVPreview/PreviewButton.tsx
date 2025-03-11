@@ -1,6 +1,6 @@
-import { Tooltip } from "@mui/material";
-import React from "react";
-import LucideIcon from "../Custom-UI/LucideIcon";
+import { Tooltip } from '@mui/material';
+import React from 'react';
+import LucideIcon from '../Custom-UI/LucideIcon';
 interface PreviewButtonProps {
   onClick: () => void;
   isLoading?: boolean;
@@ -40,7 +40,7 @@ export const PreviewButton: React.FC<PreviewButtonProps> = ({
             </div>
           ) : (
             <LucideIcon
-              name={"Eye"}
+              name={'Eye'}
               className="h-6 w-6 text-black"
               aria-hidden="true"
             />

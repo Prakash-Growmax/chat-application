@@ -1,16 +1,16 @@
-import { AuthLayout } from "@/components/auth/AuthLayout";
-import { EmailForm } from "@/components/auth/EmailForm";
-import { OTPForm } from "@/components/auth/OTPForm";
-import LucideIcon from "@/components/Custom-UI/LucideIcon";
-import { LoadingScreen } from "@/components/layout/LoadingScreen";
-import { useAuth } from "@/hooks/useAuth";
-import { useOTP } from "@/hooks/useOTP";
-import { useOTPPersistence } from "@/hooks/useOTPPersistence";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { AuthLayout } from '@/components/auth/AuthLayout';
+import { EmailForm } from '@/components/auth/EmailForm';
+import { OTPForm } from '@/components/auth/OTPForm';
+import LucideIcon from '@/components/Custom-UI/LucideIcon';
+import { LoadingScreen } from '@/components/layout/LoadingScreen';
+import { useAuth } from '@/hooks/useAuth';
+import { useOTP } from '@/hooks/useOTP';
+import { useOTPPersistence } from '@/hooks/useOTPPersistence';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function LoginPage() {
-  const [otp, setOtp] = useState("");
+  const [otp, setOtp] = useState('');
   const { user, loading: authLoading, verifyOTP: verifyAuthOTP } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,7 +34,7 @@ function LoginPage() {
     attemptsLeft,
   } = useOTP();
 
-  const returnUrl = location.state?.from?.pathname || "/chat/new";
+  const returnUrl = location.state?.from?.pathname || '/chat/new';
 
   useEffect(() => {
     if (user) {
@@ -57,8 +57,8 @@ function LoginPage() {
       await verifyAuthOTP(email, otp);
       await clearPersistedState();
     } catch (error) {
-      console.error(error)
-      setOtp("");
+      console.error(error);
+      setOtp('');
     }
   };
 

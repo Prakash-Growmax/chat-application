@@ -1,7 +1,7 @@
-import AppContext from "@/components/context/AppContext";
-import LucideIcon from "@/components/Custom-UI/LucideIcon";
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import AppContext from '@/components/context/AppContext';
+import LucideIcon from '@/components/Custom-UI/LucideIcon';
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function NewChatButton({
   isMobile,
@@ -12,7 +12,7 @@ function NewChatButton({
 }) {
   const navigate = useNavigate();
   const { setSideDrawerOpen } = useContext(AppContext);
-  const {setHistoryList} = useContext(AppContext)
+  const { setHistoryList } = useContext(AppContext);
   return (
     <div className="flex items-center justify-center">
       <button
@@ -26,7 +26,7 @@ function NewChatButton({
         }}
       >
         <span className="flex items-center gap-2">
-          <LucideIcon name={"MessageSquarePlus"} size={20} />
+          <LucideIcon name={'MessageSquarePlus'} size={20} />
           <span className="lg:text-sm md:text-base text-black text-base">
             New Thread
           </span>

@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import React from "react";
-import LucideIcon from "../Custom-UI/LucideIcon";
+import { Button } from '@/components/ui/button';
+import React from 'react';
+import LucideIcon from '../Custom-UI/LucideIcon';
 
 interface TeamMember {
   id: string;
@@ -40,7 +40,7 @@ const EnhancedTeamTable: React.FC<EnhancedTeamTableProps> = ({
       <div className="bg-white rounded-lg shadow">
         <div className="p-12 flex flex-col items-center justify-center text-center">
           <div className="mb-4 p-4 bg-gray-50 rounded-full">
-            <LucideIcon name={"Lock"} className="h-8 w-8 text-gray-400" />
+            <LucideIcon name={'Lock'} className="h-8 w-8 text-gray-400" />
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
             Team Access Required
@@ -50,7 +50,7 @@ const EnhancedTeamTable: React.FC<EnhancedTeamTableProps> = ({
             collaborate together.
           </p>
           <button
-            onClick={() => (window.location.href = "/settings/billing")}
+            onClick={() => (window.location.href = '/settings/billing')}
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             Upgrade to Team Plan
@@ -67,7 +67,7 @@ const EnhancedTeamTable: React.FC<EnhancedTeamTableProps> = ({
           <td colSpan={5} className="px-6 py-12 text-center">
             <div className="flex flex-col items-center justify-center space-y-3">
               <LucideIcon
-                name={"RotateCw"}
+                name={'RotateCw'}
                 className="h-8 w-8 animate-spin text-gray-400"
               />
               <p className="text-sm text-gray-500">Loading team data...</p>
@@ -82,7 +82,7 @@ const EnhancedTeamTable: React.FC<EnhancedTeamTableProps> = ({
         <tr>
           <td colSpan={5} className="px-6 py-12 text-center">
             <div className="flex flex-col items-center justify-center space-y-3">
-              <LucideIcon name={"Users"} className="h-8 w-8 text-gray-400" />
+              <LucideIcon name={'Users'} className="h-8 w-8 text-gray-400" />
               <div>
                 <p className="text-sm font-medium text-gray-900">
                   No team members yet
@@ -114,14 +114,14 @@ const EnhancedTeamTable: React.FC<EnhancedTeamTableProps> = ({
           <td className="px-6 py-4 whitespace-nowrap">
             <div className="text-sm text-gray-500">
               {member.last_login
-                ? new Date(member.last_login).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
+                ? new Date(member.last_login).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
                   })
-                : "Never"}
+                : 'Never'}
             </div>
           </td>
           <td className="px-6 py-4 whitespace-nowrap">
@@ -141,7 +141,7 @@ const EnhancedTeamTable: React.FC<EnhancedTeamTableProps> = ({
                 />
               </div>
               <span className="ml-2 text-sm text-gray-500">
-                {member?.current_token_usage?.toLocaleString() || 0} /{" "}
+                {member?.current_token_usage?.toLocaleString() || 0} /{' '}
                 {member?.tokens_remaining?.toLocaleString()}
               </span>
             </div>
@@ -206,8 +206,8 @@ const EnhancedTeamTable: React.FC<EnhancedTeamTableProps> = ({
           className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <LucideIcon
-            name={"RotateCw"}
-            className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
+            name={'RotateCw'}
+            className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`}
           />
           Refresh
         </button>
@@ -219,25 +219,25 @@ const EnhancedTeamTable: React.FC<EnhancedTeamTableProps> = ({
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <div className="flex items-center gap-2">
-                  <LucideIcon name={"Mail"} className="h-4 w-4" />
+                  <LucideIcon name={'Mail'} className="h-4 w-4" />
                   Email
                 </div>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <div className="flex items-center gap-2">
-                  <LucideIcon name={"UserCircle"} className="h-4 w-4" />
+                  <LucideIcon name={'UserCircle'} className="h-4 w-4" />
                   Role
                 </div>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <div className="flex items-center gap-2">
-                  <LucideIcon name={"Clock"} className="h-4 w-4" />
+                  <LucideIcon name={'Clock'} className="h-4 w-4" />
                   Last Activity
                 </div>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <div className="flex items-center gap-2">
-                  <LucideIcon name={"Coins"} className="h-4 w-4" />
+                  <LucideIcon name={'Coins'} className="h-4 w-4" />
                   Token Usage
                 </div>
               </th>

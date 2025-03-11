@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
-import Plot from "react-plotly.js";
-import Typewriter from "typewriter-effect";
-import SwitchIcon from "./SwitchIcon";
-import TableResponse from "./tableResponse";
+import React, { useState, useEffect, useRef } from 'react';
+import Plot from 'react-plotly.js';
+import Typewriter from 'typewriter-effect';
+import SwitchIcon from './SwitchIcon';
+import TableResponse from './tableResponse';
 
-
-import { useMediaQuery, useTheme } from "@mui/material";
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const cleanSummaryText = (summaryObj) => {
-  if (typeof summaryObj !== "object" || summaryObj === null) return [];
+  if (typeof summaryObj !== 'object' || summaryObj === null) return [];
 
-  const excludedKeys = ["currency","pandas_result"];
+  const excludedKeys = ['currency', 'pandas_result'];
 
   return Object.entries(summaryObj)
     .filter(([key]) => !excludedKeys.includes(key))
@@ -24,42 +23,43 @@ const ChartResponse = ({
   data = [],
   layout = {},
   summary = {},
-  analysis ="",
+  analysis = '',
   isTyping = false,
   isAssistant = false,
 }) => {
   const [tableData, setTableData] = useState({ headers: [], rows: [] });
-  
+
   useEffect(() => {
-    let rows = analysis.trim().split("\n").map(row => row.trim());
-    
+    let rows = analysis
+      .trim()
+      .split('\n')
+      .map((row) => row.trim());
+
     // Ignore the first row if it contains "Dataset"
-    if (rows[0].startsWith("Dataset")) {
+    if (rows[0].startsWith('Dataset')) {
       rows = rows.slice(1);
     }
-  
+
     // Extract headers dynamically
     const headers = rows[0].match(/(\S.*?\S)(?=\s{2,}|\n|$)/g); // Extract headers using double spaces as separators
-  
+
     // Extract table rows dynamically
-    const dataRows = rows.slice(1).map(row => {
+    const dataRows = rows.slice(1).map((row) => {
       const values = row.match(/(\S.*?\S)(?=\s{2,}|\n|$)/g); // Match data fields using double spaces as separators
-  
+
       let rowData = {};
       headers.forEach((header, index) => {
-        rowData[header] = values ? values[index] || "" : "";
+        rowData[header] = values ? values[index] || '' : '';
       });
-  
+
       return rowData;
     });
-  
+
     setTableData({ headers, rows: dataRows });
   }, []);
-  
- 
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const chatBoxRef = useRef(null);
   const containerRef = useRef(null);
@@ -67,7 +67,6 @@ const ChartResponse = ({
   const [shouldStartTyping, setShouldStartTyping] = useState(false);
   const [isPlotRendered, setIsPlotRendered] = useState(false);
   const [checked, setChecked] = useState(true);
-
 
   const showTyping = isTyping && isAssistant;
   const summaryEntries = cleanSummaryText(summary);
@@ -125,8 +124,8 @@ const ChartResponse = ({
         ...layout.xaxis,
         tickfont: { size: isMobile ? 8 : 11 },
         // Add these properties to fix x-axis label issues
-        tickangle: -45,  // Rotate labels for better visibility
-        automargin: true // Automatically adjust margins for labels
+        tickangle: -45, // Rotate labels for better visibility
+        automargin: true, // Automatically adjust margins for labels
       },
       yaxis: {
         ...layout.yaxis,
@@ -142,12 +141,12 @@ const ChartResponse = ({
     };
 
     handleResize();
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     const resizeObserver = new ResizeObserver(handleResize);
     if (containerRef.current) resizeObserver.observe(containerRef.current);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
       if (containerRef.current) resizeObserver.unobserve(containerRef.current);
     };
   }, []);
@@ -157,11 +156,13 @@ const ChartResponse = ({
       setIsPlotRendered(true);
       setShouldStartTyping(true);
       setTimeout(() => {
-        chatBoxRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        chatBoxRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
       }, 100); // Small delay to ensure UI updates before scrolling
     }
   };
-  
 
   useEffect(() => {
     if (
@@ -173,7 +174,14 @@ const ChartResponse = ({
     ) {
       setIsTypingInProgress(true);
     }
-  }, [showTyping, isPlotRendered, shouldStartTyping, isTypingInProgress, currentIndex, summaryEntries.length]);
+  }, [
+    showTyping,
+    isPlotRendered,
+    shouldStartTyping,
+    isTypingInProgress,
+    currentIndex,
+    summaryEntries.length,
+  ]);
 
   const handleTypingComplete = () => {
     if (currentIndex < summaryEntries.length) {
@@ -184,13 +192,19 @@ const ChartResponse = ({
   };
   useEffect(() => {
     if (completedEntries.length > 0) {
-      chatBoxRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      chatBoxRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
     }
   }, [completedEntries.length]);
-  
 
   useEffect(() => {
-    if (!showTyping && summaryEntries.length > 0 && completedEntries.length === 0) {
+    if (
+      !showTyping &&
+      summaryEntries.length > 0 &&
+      completedEntries.length === 0
+    ) {
       setCompletedEntries(summaryEntries);
     }
   }, [showTyping, summaryEntries, completedEntries.length]);
@@ -198,55 +212,61 @@ const ChartResponse = ({
   return (
     <div className="relative w-full flex flex-col items-center flexible-container">
       {tableData.rows.length !== 0 && (
-         <div className="absolute top-2 right-2 z-50 -mt-12">
-         <SwitchIcon checked={checked} setChecked={setChecked} />
-       </div>
+        <div className="absolute top-2 right-2 z-50 -mt-12">
+          <SwitchIcon checked={checked} setChecked={setChecked} />
+        </div>
       )}
-     
+
       <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flexible-container">
         <div className="flex flex-col w-full py-2 flexible-container">
-          <div ref={containerRef} className="relative w-full flex justify-center mb-4 chart-container">
-          {checked ? (
-  <Plot
-    data={data}
-    layout={getDynamicLayout(dimensions)}
-    onInitialized={handlePlotRender}
-    onUpdate={handlePlotRender}
-    config={{
-      responsive: true,
-      displaylogo: false,
-      modeBarButtonsToRemove: ["zoom2d", "pan2d"],
-      modeBarButtonsToAdd: ["toImage"],
-    }}
-    className="w-full"
-  />
-) : tableData.rows.length !== 0 ? (
-  <TableResponse tableDatas={tableData} />
-) : null}
-
+          <div
+            ref={containerRef}
+            className="relative w-full flex justify-center mb-4 chart-container"
+          >
+            {checked ? (
+              <Plot
+                data={data}
+                layout={getDynamicLayout(dimensions)}
+                onInitialized={handlePlotRender}
+                onUpdate={handlePlotRender}
+                config={{
+                  responsive: true,
+                  displaylogo: false,
+                  modeBarButtonsToRemove: ['zoom2d', 'pan2d'],
+                  modeBarButtonsToAdd: ['toImage'],
+                }}
+                className="w-full"
+              />
+            ) : tableData.rows.length !== 0 ? (
+              <TableResponse tableDatas={tableData} />
+            ) : null}
           </div>
-          <div ref={chatBoxRef} className="prose w-full px-2 sm:px-0 text-container">
-  {completedEntries.map((entry, index) => (
-    <div key={index} className="mb-2">
-      {entry.rawText}
-    </div>
-  ))}
+          <div
+            ref={chatBoxRef}
+            className="prose w-full px-2 sm:px-0 text-container"
+          >
+            {completedEntries.map((entry, index) => (
+              <div key={index} className="mb-2">
+                {entry.rawText}
+              </div>
+            ))}
 
-  {showTyping && isTypingInProgress && currentIndex < summaryEntries.length && (
-    <div className="mb-2">
-      <Typewriter
-        onInit={(typewriter) =>
-          typewriter
-            .typeString(summaryEntries[currentIndex].rawText) // Typing key and value together
-            .callFunction(handleTypingComplete)
-            .start()
-        }
-        options={{ delay:1, cursor: "|" }} // Adjust delay for speed
-      />
-    </div>
-  )}
-</div>
-
+            {showTyping &&
+              isTypingInProgress &&
+              currentIndex < summaryEntries.length && (
+                <div className="mb-2">
+                  <Typewriter
+                    onInit={(typewriter) =>
+                      typewriter
+                        .typeString(summaryEntries[currentIndex].rawText) // Typing key and value together
+                        .callFunction(handleTypingComplete)
+                        .start()
+                    }
+                    options={{ delay: 1, cursor: '|' }} // Adjust delay for speed
+                  />
+                </div>
+              )}
+          </div>
         </div>
       </div>
     </div>
@@ -254,4 +274,3 @@ const ChartResponse = ({
 };
 
 export default ChartResponse;
-

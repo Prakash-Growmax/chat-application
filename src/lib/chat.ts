@@ -2,7 +2,6 @@ import { supabase } from './supabase';
 import { ChatMessage, User } from '@/types';
 import { calculateTokenCost, hasEnoughTokens } from './token-manager';
 
-
 export async function saveChat(
   userId: string,
   csvFileId: string,
@@ -146,10 +145,7 @@ export async function uploadCSV(
   return { fileId };
 }
 
-export async function deleteCSV(
-  fileId: string,
-  userId: string
-): Promise<void> {
+export async function deleteCSV(fileId: string, userId: string): Promise<void> {
   const { data: file } = await supabase
     .from('files')
     .select('path')

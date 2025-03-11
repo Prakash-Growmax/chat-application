@@ -1,7 +1,12 @@
-import React, { useEffect } from "react";
-import Typewriter from "typewriter-effect";
+import React, { useEffect } from 'react';
+import Typewriter from 'typewriter-effect';
 
-const GreetingResponse = ({ message, isTyping, isAssistant, onContentType }) => {
+const GreetingResponse = ({
+  message,
+  isTyping,
+  isAssistant,
+  onContentType,
+}) => {
   const showTyping = isAssistant && isTyping;
 
   useEffect(() => {
@@ -16,8 +21,8 @@ const GreetingResponse = ({ message, isTyping, isAssistant, onContentType }) => 
           options={{
             strings: [String(message)],
             autoStart: true,
-            delay:2,
-            cursor: "",
+            delay: 2,
+            cursor: '',
             deleteSpeed: 9999999,
           }}
         />
@@ -29,4 +34,3 @@ const GreetingResponse = ({ message, isTyping, isAssistant, onContentType }) => 
 };
 
 export default GreetingResponse;
-

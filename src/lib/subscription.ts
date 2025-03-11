@@ -1,7 +1,7 @@
-import { User } from "@/types";
-import { Subscription } from "@/types/subscriptions";
-import { buildUserProfile } from "./auth/subscription-service";
-import { supabase } from "./supabase";
+import { User } from '@/types';
+import { Subscription } from '@/types/subscriptions';
+import { buildUserProfile } from './auth/subscription-service';
+import { supabase } from './supabase';
 
 export async function updateSubscription(
   planName: string
@@ -12,28 +12,28 @@ export async function updateSubscription(
     } = await supabase.auth.getUser();
 
     if (!user) {
-      throw new Error("Not authenticated");
+      throw new Error('Not authenticated');
     }
 
     const { data: plan, error: planError } = await supabase
-      .from("plans")
-      .select("id,monthly_token_limit")
-      .eq("name", planName)
+      .from('plans')
+      .select('id,monthly_token_limit')
+      .eq('name', planName)
       .single();
 
     if (planError || !plan) {
-      throw new Error(", Plan not found");
+      throw new Error(', Plan not found');
     }
 
     // Update subscription
     const { error } = await supabase
-      .from("subscriptions")
+      .from('subscriptions')
       .update({
         plan_id: plan.id,
-        status: "active",
+        status: 'active',
         updated_at: new Date().toISOString(),
       })
-      .eq("user_id", user.id);
+      .eq('user_id', user.id);
     if (error) {
       throw error;
     }
@@ -43,15 +43,15 @@ export async function updateSubscription(
     } = await supabase.auth.getUser();
 
     if (!authUser) {
-      throw new Error("Not authenticated");
+      throw new Error('Not authenticated');
     }
 
     const userData = await buildUserProfile(authUser);
 
     return { user: userData };
   } catch (error) {
-    console.error("Failed to create subscription:", error);
-    throw new Error("Failed to update subscription");
+    console.error('Failed to create subscription:', error);
+    throw new Error('Failed to update subscription');
   }
 }
 
@@ -59,13 +59,13 @@ export async function getSubscriptionDetails(
   userId: string
 ): Promise<Subscription> {
   const { data, error } = await supabase
-    .from("subscriptions")
-    .select("*")
-    .eq("user_id", userId)
+    .from('subscriptions')
+    .select('*')
+    .eq('user_id', userId)
     .single();
 
   if (error) {
-    throw new Error("Failed to fetch subscription details");
+    throw new Error('Failed to fetch subscription details');
   }
 
   return data;
@@ -74,13 +74,13 @@ export async function getSubscriptionDetails(
 //subscribe
 export function subscribeToChanges(userId: string, onUpdate: () => void) {
   return supabase
-    .channel("subscription-changes")
+    .channel('subscription-changes')
     .on(
-      "postgres_changes",
+      'postgres_changes',
       {
-        event: "UPDATE",
-        schema: "public",
-        table: "subscriptions",
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'subscriptions',
         filter: `user_id=eq.${userId}`,
       },
       async () => {

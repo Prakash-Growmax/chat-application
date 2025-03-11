@@ -1,4 +1,4 @@
-import { ApiResponse, AuthHeaders, RequestOptions } from "@/types/api.types";
+import { ApiResponse, AuthHeaders, RequestOptions } from '@/types/api.types';
 
 const baseURL = import.meta.env.VITE_ANALYSIS_URL;
 
@@ -25,7 +25,7 @@ export class ApiClient {
     }
 
     const headers: Record<string, string> = {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       ...this.getAuthHeaders(),
       ...options.headers,
     };
@@ -42,7 +42,7 @@ export class ApiClient {
       if (!response.ok) {
         if (response.status === 404) {
           const errorData = await response.json();
-          console.error(errorData)
+          console.error(errorData);
         }
         throw new ApiError(response.status, response.statusText, data);
       }
@@ -52,61 +52,61 @@ export class ApiClient {
         status: response.status,
         statusText: response.statusText,
       };
-    } catch (error: string | number ) {
+    } catch (error: string | number) {
       if (error instanceof ApiError) {
         throw error;
       }
-      throw new ApiError(500, "Internal Error", error);
+      throw new ApiError(500, 'Internal Error', error);
     }
   }
 
   // HTTP Method Handlers
   async get<T>(
     endpoint: string,
-    options: Omit<RequestOptions, "method" | "body"> = {}
+    options: Omit<RequestOptions, 'method' | 'body'> = {}
   ): Promise<ApiResponse<T>> {
-    return this.executeRequest<T>(endpoint, { ...options, method: "GET" });
+    return this.executeRequest<T>(endpoint, { ...options, method: 'GET' });
   }
 
   async post<T>(
     endpoint: string,
-    data?:unknown,
-    options: Omit<RequestOptions, "method"> = {}
+    data?: unknown,
+    options: Omit<RequestOptions, 'method'> = {}
   ): Promise<ApiResponse<T>> {
     return this.executeRequest<T>(endpoint, {
       ...options,
-      method: "POST",
+      method: 'POST',
       body: data,
     });
   }
 
   async put<T>(
     endpoint: string,
-    data?:unknown,
-    options: Omit<RequestOptions, "method"> = {}
+    data?: unknown,
+    options: Omit<RequestOptions, 'method'> = {}
   ): Promise<ApiResponse<T>> {
     return this.executeRequest<T>(endpoint, {
       ...options,
-      method: "PUT",
+      method: 'PUT',
       body: data,
     });
   }
 
   async delete<T>(
     endpoint: string,
-    options: Omit<RequestOptions, "method" | "body"> = {}
+    options: Omit<RequestOptions, 'method' | 'body'> = {}
   ): Promise<ApiResponse<T>> {
-    return this.executeRequest<T>(endpoint, { ...options, method: "DELETE" });
+    return this.executeRequest<T>(endpoint, { ...options, method: 'DELETE' });
   }
 
   async patch<T>(
     endpoint: string,
-    data?:unknown,
-    options: Omit<RequestOptions, "method"> = {}
+    data?: unknown,
+    options: Omit<RequestOptions, 'method'> = {}
   ): Promise<ApiResponse<T>> {
     return this.executeRequest<T>(endpoint, {
       ...options,
-      method: "PATCH",
+      method: 'PATCH',
       body: data,
     });
   }
@@ -125,7 +125,7 @@ export class ApiClient {
       headers.Authorization = this.authToken;
     }
     if (this.organizationId) {
-      headers["x-organization-id"] = this.organizationId;
+      headers['x-organization-id'] = this.organizationId;
     }
     return headers;
   }
@@ -140,6 +140,6 @@ export class ApiError extends Error {
     public data: unknown
   ) {
     super(`${status}: ${statusText}`);
-    this.name = "ApiError";
+    this.name = 'ApiError';
   }
 }

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -6,10 +6,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { format } from "date-fns";
-import { toast } from "sonner";
-import LucideIcon from "../Custom-UI/LucideIcon";
+} from '@/components/ui/table';
+import { format } from 'date-fns';
+import { toast } from 'sonner';
+import LucideIcon from '../Custom-UI/LucideIcon';
 
 interface UploadedFile {
   id: string;
@@ -27,11 +27,11 @@ interface FileListProps {
 export function FileList({ files, onDelete, onSelect }: FileListProps) {
   const handleDelete = (id: string) => {
     onDelete(id);
-    toast.success("File deleted successfully");
+    toast.success('File deleted successfully');
   };
 
   const formatFileSize = (bytes: number) => {
-    const units = ["B", "KB", "MB", "GB"];
+    const units = ['B', 'KB', 'MB', 'GB'];
     let size = bytes;
     let unitIndex = 0;
 
@@ -59,14 +59,14 @@ export function FileList({ files, onDelete, onSelect }: FileListProps) {
             <TableCell>
               <div className="flex items-center space-x-2">
                 <LucideIcon
-                  name={"FileText"}
+                  name={'FileText'}
                   className="h-4 w-4 text-muted-foreground"
                 />
                 <span className="font-medium">{file.name}</span>
               </div>
             </TableCell>
             <TableCell>{formatFileSize(file.size)}</TableCell>
-            <TableCell>{format(file.uploadedAt, "PPp")}</TableCell>
+            <TableCell>{format(file.uploadedAt, 'PPp')}</TableCell>
             <TableCell>
               <div className="flex space-x-2">
                 <Button
@@ -74,14 +74,14 @@ export function FileList({ files, onDelete, onSelect }: FileListProps) {
                   size="icon"
                   onClick={() => onSelect(file.id)}
                 >
-                  <LucideIcon name={"FileText"} className="h-4 w-4" />
+                  <LucideIcon name={'FileText'} className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => handleDelete(file.id)}
                 >
-                  <LucideIcon name={"Trash2"} className="h-4 w-4" />
+                  <LucideIcon name={'Trash2'} className="h-4 w-4" />
                 </Button>
               </div>
             </TableCell>

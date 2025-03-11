@@ -67,14 +67,19 @@ const columns: ColumnData[] = [
   },
 ];
 
-const rows: Data[] = Array.from({ length: 200 }, (_, index) => createData(index));
+const rows: Data[] = Array.from({ length: 200 }, (_, index) =>
+  createData(index)
+);
 
 const VirtuosoTableComponents: TableComponents<Data> = {
   Scroller: React.forwardRef<HTMLDivElement>((props, ref) => (
     <TableContainer component={Paper} {...props} ref={ref} />
   )),
   Table: (props) => (
-    <Table {...props} sx={{ borderCollapse: 'separate', tableLayout: 'fixed' }} />
+    <Table
+      {...props}
+      sx={{ borderCollapse: 'separate', tableLayout: 'fixed' }}
+    />
   ),
   TableHead: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
     <TableHead {...props} ref={ref} />

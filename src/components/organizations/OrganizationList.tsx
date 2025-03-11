@@ -1,15 +1,15 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAuth } from "@/hooks/useAuth";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAuth } from '@/hooks/useAuth';
 import {
   deleteOrganization,
   getUserOrganizations,
-} from "@/lib/organizations/organization-service";
-import { Organization } from "@/types";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import LucideIcon from "../Custom-UI/LucideIcon";
-import { CreateOrganizationDialog } from "./CreateOrganizationDialog";
+} from '@/lib/organizations/organization-service';
+import { Organization } from '@/types';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import LucideIcon from '../Custom-UI/LucideIcon';
+import { CreateOrganizationDialog } from './CreateOrganizationDialog';
 
 export function OrganizationList() {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -24,25 +24,24 @@ export function OrganizationList() {
       setOrganizations(orgs);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to load organizations");
+      toast.error('Failed to load organizations');
     } finally {
       setLoading(false);
     }
   };
   useEffect(() => {
     loadOrganizations();
-
   }, [user]);
 
   const handleDelete = async (orgId: string) => {
-    if (!confirm("Are you sure you want to delete this organization?")) return;
+    if (!confirm('Are you sure you want to delete this organization?')) return;
 
     try {
       await deleteOrganization(orgId);
       setOrganizations((orgs) => orgs.filter((org) => org.id !== orgId));
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete organization");
+      toast.error('Failed to delete organization');
     }
   };
 
@@ -62,7 +61,7 @@ export function OrganizationList() {
           <Card key={org.id}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <LucideIcon name={"Building2"} className="h-5 w-5" />
+                <LucideIcon name={'Building2'} className="h-5 w-5" />
                 {org.name}
               </CardTitle>
             </CardHeader>
@@ -77,7 +76,7 @@ export function OrganizationList() {
                     size="icon"
                     onClick={() => handleDelete(org.id)}
                   >
-                    <LucideIcon name={"Trash2"} className="h-4 w-4" />
+                    <LucideIcon name={'Trash2'} className="h-4 w-4" />
                   </Button>
                 </div>
               </div>

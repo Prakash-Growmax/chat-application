@@ -1,12 +1,12 @@
-import { fetchCSVPreview } from "@/lib/s3-client";
+import { fetchCSVPreview } from '@/lib/s3-client';
 
-import { env_BUCKETNAME } from "@/constants/env.constant";
-import { CSVPreviewData, FileMetadata, PreviewError } from "@/lib/types/csv";
-import { useContext, useState } from "react";
-import AppContext from "../context/AppContext";
-import SnackbarUi from "../layout/UI/SnackbarUi";
-import { PreviewButton } from "./PreviewButton";
-import { PreviewModal } from "./PreviewModal";
+import { env_BUCKETNAME } from '@/constants/env.constant';
+import { CSVPreviewData, FileMetadata, PreviewError } from '@/lib/types/csv';
+import { useContext, useState } from 'react';
+import AppContext from '../context/AppContext';
+import SnackbarUi from '../layout/UI/SnackbarUi';
+import { PreviewButton } from './PreviewButton';
+import { PreviewModal } from './PreviewModal';
 
 interface CSVPreviewProps {
   s3Key: string;
@@ -21,13 +21,12 @@ export const CSVPreview: React.FC<CSVPreviewProps> = ({ s3Key }) => {
   const [openSnackbar, setOpenSnackBar] = useState(true);
 
   const handlePreviewClick = async () => {
-  
     setIsLoading(true);
     setError(null);
     setOpenSnackBar(true);
     try {
       const { data, metadata } = await fetchCSVPreview(env_BUCKETNAME, s3Key);
-   
+
       setPreviewData(data);
       setMetadata(metadata);
       setIsModalOpen(true);

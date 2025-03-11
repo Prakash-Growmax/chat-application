@@ -1,4 +1,4 @@
-import LogoIcon from "@/assets/Logo/LogoIcon";
+import LogoIcon from '@/assets/Logo/LogoIcon';
 
 function ChatAssistantHeader({
   isGenerating = false,

@@ -10,10 +10,14 @@ export async function clearAllTokens(): Promise<void> {
     localStorage.removeItem(USER_KEY);
     localStorage.removeItem(OTP_STATE_KEY);
     sessionStorage.clear();
-    
+
     const keys = Object.keys(localStorage);
-    keys.forEach(key => {
-      if (key.includes('token') || key.includes('auth') || key.includes('user')) {
+    keys.forEach((key) => {
+      if (
+        key.includes('token') ||
+        key.includes('auth') ||
+        key.includes('user')
+      ) {
         localStorage.removeItem(key);
       }
     });

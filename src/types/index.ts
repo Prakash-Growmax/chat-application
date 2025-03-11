@@ -3,60 +3,55 @@ export interface User {
   email: string;
   name: string;
   organizationId?: string;
-  plan: "single" | "team" | "pro";
+  plan: 'single' | 'team' | 'pro';
   tokenUsage: number;
 }
-export interface MessageObject{
-  content:{
-    charts:{
-      analysis:{
-        key_insight:string,
-        pandas_result:"",
-        recommendation:string,
-        trend:string
-      },
-    chart_type?:string
-    data:{
-      0:{
-        type:string,
-        x:string[],
-        y:string[]
-      }
-    },
-    layout:{
-      colors:string[],
-      title:string,
-      xaxis:string,
-      yaxis:string,
-    }
-    type:string,
-    metadata:{
-    data_type:string,
-    timestamp:string,
-    token_usage:{
-      completion_tokens:number,
-      prompt_tokens:number,
-      total_tokens:number
-    }
-}
-id:string,
-isTyping:boolean,
-role:string,
-timestamp?:string | number,
-
-
-
-
-
-    }
-  }
+export interface MessageObject {
+  content: {
+    charts: {
+      analysis: {
+        key_insight: string;
+        pandas_result: '';
+        recommendation: string;
+        trend: string;
+      };
+      chart_type?: string;
+      data: {
+        0: {
+          type: string;
+          x: string[];
+          y: string[];
+        };
+      };
+      layout: {
+        colors: string[];
+        title: string;
+        xaxis: string;
+        yaxis: string;
+      };
+      type: string;
+      metadata: {
+        data_type: string;
+        timestamp: string;
+        token_usage: {
+          completion_tokens: number;
+          prompt_tokens: number;
+          total_tokens: number;
+        };
+      };
+      id: string;
+      isTyping: boolean;
+      role: string;
+      timestamp?: string | number;
+    };
+  };
 }
 export interface Message {
   id: string;
   content: string | object;
-  role: "user" | "assistant";
+  role: 'user' | 'assistant';
   timestamp: Date;
-  type: "text" | "chart" | "table";
+  type: 'text' | 'chart' | 'table';
   messageObject?: MessageObject;
   data?: MessageObject;
   error?: boolean;
@@ -71,7 +66,7 @@ export interface Organization {
   name: string;
   ownerId: string;
   tokenUsage: number;
-  plan: "single" | "team" | "pro";
+  plan: 'single' | 'team' | 'pro';
 }
 export interface ChatState {
   messages: Message[];
@@ -93,13 +88,13 @@ export interface Chat {
 export interface ChatMessage {
   id: string;
   content: string;
-  role: "user" | "assistant";
+  role: 'user' | 'assistant';
   tokenUsage: number;
   timestamp: Date;
 }
 
 export interface PlanDetails {
-  name: "single" | "team" | "pro";
+  name: 'single' | 'team' | 'pro';
   price: number;
   tokenLimit: number;
   features: string[];

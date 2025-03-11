@@ -1,12 +1,12 @@
-import * as AuthService from "@/lib/auth/auth-service";
-import { buildUserProfile } from "@/lib/auth/subscription-service";
-import { loadingState } from "@/lib/loading-state";
-import { supabase } from "@/lib/supabase";
-import { clearAllTokens } from "@/lib/token-storage";
-import { AuthSession } from "@/lib/types/session";
-import { User } from "@/types";
-import { createContext, useEffect, useState } from "react";
-import { toast } from "sonner";
+import * as AuthService from '@/lib/auth/auth-service';
+import { buildUserProfile } from '@/lib/auth/subscription-service';
+import { loadingState } from '@/lib/loading-state';
+import { supabase } from '@/lib/supabase';
+import { clearAllTokens } from '@/lib/token-storage';
+import { AuthSession } from '@/lib/types/session';
+import { User } from '@/types';
+import { createContext, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 /**
  * Interface representing the authentication context type.
@@ -14,7 +14,7 @@ import { toast } from "sonner";
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  loadingSet:boolean;
+  loadingSet: boolean;
   error: Error | null;
   signIn: (email: string) => Promise<void>;
   verifyOTP: (email: string, otp: string) => Promise<void>;
@@ -35,29 +35,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [loadingSet,setLoadingSet] = useState(false);
+  const [loadingSet, setLoadingSet] = useState(false);
 
   useEffect(() => {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
 
-    const handleAuthStateChange = async (event: string, session:AuthSession) => {
-     
+    const handleAuthStateChange = async (
+      event: string,
+      session: AuthSession
+    ) => {
       if (!mounted) return;
 
       try {
         switch (event) {
-          case "SIGNED_IN":
+          case 'SIGNED_IN':
             if (session?.user) {
-              loadingState.startLoading("Loading your profile...");
+              loadingState.startLoading('Loading your profile...');
               const userData = await buildUserProfile(session.user);
               setUser(userData);
             }
             break;
-          case "SIGNED_OUT":
+          case 'SIGNED_OUT':
             setUser(null);
             break;
-          case "TOKEN_REFRESHED":
+          case 'TOKEN_REFRESHED':
             if (session?.user) {
               const userData = await buildUserProfile(session.user);
               setUser(userData);
@@ -77,10 +79,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const initAuth = async () => {
       try {
-        loadingState.startLoading("Initializing authentication...");
-        
+        loadingState.startLoading('Initializing authentication...');
+
         // First, check for an existing session
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
 
         // If a session exists, build and set user profile
         if (session?.user) {
@@ -91,13 +95,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         // Set up auth state change listener
-        const authStateChangeResult = supabase.auth.onAuthStateChange(async (event, session) => {
-          await handleAuthStateChange(event, session);
-        });
-        
+        const authStateChangeResult = supabase.auth.onAuthStateChange(
+          async (event, session) => {
+            await handleAuthStateChange(event, session);
+          }
+        );
+
         subscription = authStateChangeResult.data.subscription;
       } catch (error) {
-        console.error("Authentication initialization error:", error);
+        console.error('Authentication initialization error:', error);
         if (mounted) {
           if (error instanceof Error) {
             setError(error);
@@ -127,13 +133,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    */
   const signIn = async (email: string) => {
     setLoading(true);
-    loadingState.startLoading("Sending login code...");
+    loadingState.startLoading('Sending login code...');
     try {
       await AuthService.signInWithOTP(email);
-      toast.success("Login code sent to your email");
+      toast.success('Login code sent to your email');
     } catch (error) {
-      console.error("Sign in error:", error);
-      toast.error("Failed to send login code");
+      console.error('Sign in error:', error);
+      toast.error('Failed to send login code');
       if (error instanceof Error) {
         setError(error);
       }
@@ -151,21 +157,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    */
   const verifyOTP = async (email: string, otp: string) => {
     setLoading(true);
-    setLoadingSet(true)
-    loadingState.startLoading("Verifying login code...");
+    setLoadingSet(true);
+    loadingState.startLoading('Verifying login code...');
     try {
       const { session } = await AuthService.verifyOTP(email, otp);
       if (session?.user) {
         const userData = await buildUserProfile(session.user);
         setUser(userData);
-        toast.success("Successfully verified");
+        toast.success('Successfully verified');
         return;
       }
 
-      throw new Error("Failed to verify login code");
+      throw new Error('Failed to verify login code');
     } catch (error) {
-      console.error("OTP verification error:", error);
-      toast.error("Invalid login code");
+      console.error('OTP verification error:', error);
+      toast.error('Invalid login code');
       if (error instanceof Error) {
         setError(error);
       }
@@ -182,15 +188,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    */
   const signOut = async () => {
     setLoading(true);
-    loadingState.startLoading("Signing out...");
+    loadingState.startLoading('Signing out...');
     try {
       await AuthService.signOut();
       await clearAllTokens();
       setUser(null);
-      toast.success("Signed out successfully");
+      toast.success('Signed out successfully');
     } catch (error) {
-      console.error("Sign out error:", error);
-      toast.error("Failed to sign out");
+      console.error('Sign out error:', error);
+      toast.error('Failed to sign out');
       if (error instanceof Error) {
         setError(error);
       }

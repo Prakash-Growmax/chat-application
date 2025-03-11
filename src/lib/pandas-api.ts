@@ -3,25 +3,25 @@ export async function getResponse(prompt: string, response) {
   try {
     if (true) {
       if (true) {
-        return createImgResponse("bar", response?.charts);
-        return createChartResponse("bar", response?.charts?.bar);
-      } else if (promptLower.includes("line")) {
-        return createChartResponse("line", response?.charts?.line);
-      } else if (promptLower.includes("pie")) {
-        return createChartResponse("pie", response?.charts?.pie);
+        return createImgResponse('bar', response?.charts);
+        return createChartResponse('bar', response?.charts?.bar);
+      } else if (promptLower.includes('line')) {
+        return createChartResponse('line', response?.charts?.line);
+      } else if (promptLower.includes('pie')) {
+        return createChartResponse('pie', response?.charts?.pie);
       }
 
       // Default to bar chart if no specific type mentioned
-      return createChartResponse("bar", response);
+      return createChartResponse('bar', response);
     }
 
-    if (promptLower.includes("table")) {
+    if (promptLower.includes('table')) {
       return {
         id: Date.now().toString(),
         content: "Here's a detailed table of the data:",
-        role: "assistant",
+        role: 'assistant',
         timestamp: new Date(),
-        type: "table",
+        type: 'table',
         data: {
           headers: response?.table?.headers,
           rows: response?.table?.data,
@@ -29,13 +29,13 @@ export async function getResponse(prompt: string, response) {
       };
     }
 
-    if (promptLower.includes("help")) {
+    if (promptLower.includes('help')) {
       return createTextResponse(
-        "You can ask me questions about the data such as:\n" +
-          "- Show me a bar/line/pie/area chart\n" +
-          "- Show me the data in a table\n" +
-          "- What are the total sales?\n" +
-          "- What is the total revenue?"
+        'You can ask me questions about the data such as:\n' +
+          '- Show me a bar/line/pie/area chart\n' +
+          '- Show me the data in a table\n' +
+          '- What are the total sales?\n' +
+          '- What is the total revenue?'
       );
     }
     return createTextResponse(response?.text?.content);
@@ -43,7 +43,7 @@ export async function getResponse(prompt: string, response) {
     return createTextResponse(
       error instanceof Error
         ? error.message
-        : "An error occurred while processing your request."
+        : 'An error occurred while processing your request.'
     );
   }
 }
@@ -52,9 +52,9 @@ function createTextResponse(content: string) {
   return {
     id: Date.now().toString(),
     content,
-    role: "assistant",
+    role: 'assistant',
     timestamp: new Date(),
-    type: "text",
+    type: 'text',
   };
 }
 
@@ -62,9 +62,9 @@ function createChartResponse(type, response) {
   return {
     id: Date.now().toString(),
     content: `Here's a ${type} chart showing the ${response.title.toLowerCase()}:`,
-    role: "assistant",
+    role: 'assistant',
     timestamp: new Date(),
-    type: "chart",
+    type: 'chart',
     data: {
       type: response.type,
       title: response.title,
@@ -79,9 +79,9 @@ function createImgResponse(type, response) {
   return {
     id: Date.now().toString(),
     content: `Here's a ${type} chart showing the response:`,
-    role: "assistant",
+    role: 'assistant',
     timestamp: new Date(),
-    type: "chart",
+    type: 'chart',
     data: response?.bar,
   };
 }

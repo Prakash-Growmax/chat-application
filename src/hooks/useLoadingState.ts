@@ -8,11 +8,11 @@ interface UseLoadingStateOptions {
   retryCount?: number;
 }
 
-export function useLoadingState({ 
+export function useLoadingState({
   timeout = 30000,
   onTimeout,
   minimumLoadingTime = 300,
-  retryCount = 3
+  retryCount = 3,
 }: UseLoadingStateOptions = {}) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -34,7 +34,7 @@ export function useLoadingState({
 
   const retry = useCallback(async () => {
     if (retries < retryCount) {
-      setRetries(prev => prev + 1);
+      setRetries((prev) => prev + 1);
       setError(null);
       return true;
     }
@@ -48,12 +48,14 @@ export function useLoadingState({
 
     if (timeout > 0) {
       clearTimeouts();
-      
+
       timeoutRef.current = window.setTimeout(() => {
         setIsLoading(false);
         setError(new Error('Operation timed out'));
-        toast.error('The operation is taking longer than expected. Retrying...');
-        retry().then(canRetry => {
+        toast.error(
+          'The operation is taking longer than expected. Retrying...'
+        );
+        retry().then((canRetry) => {
           if (!canRetry) {
             onTimeout?.();
           }
@@ -64,25 +66,28 @@ export function useLoadingState({
     return clearTimeouts;
   }, [timeout, onTimeout, clearTimeouts, retry]);
 
-  const stopLoading = useCallback(async (error?: Error) => {
-    if (error) {
-      setError(error);
-    }
+  const stopLoading = useCallback(
+    async (error?: Error) => {
+      if (error) {
+        setError(error);
+      }
 
-    const elapsedTime = loadingStartTime.current 
-      ? Date.now() - loadingStartTime.current 
-      : 0;
-    
-    if (elapsedTime < minimumLoadingTime) {
-      await new Promise(resolve => 
-        setTimeout(resolve, minimumLoadingTime - elapsedTime)
-      );
-    }
+      const elapsedTime = loadingStartTime.current
+        ? Date.now() - loadingStartTime.current
+        : 0;
 
-    setIsLoading(false);
-    loadingStartTime.current = null;
-    clearTimeouts();
-  }, [minimumLoadingTime, clearTimeouts]);
+      if (elapsedTime < minimumLoadingTime) {
+        await new Promise((resolve) =>
+          setTimeout(resolve, minimumLoadingTime - elapsedTime)
+        );
+      }
+
+      setIsLoading(false);
+      loadingStartTime.current = null;
+      clearTimeouts();
+    },
+    [minimumLoadingTime, clearTimeouts]
+  );
 
   return {
     isLoading,

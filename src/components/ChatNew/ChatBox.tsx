@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef } from "react";
-import { ScrollArea } from "../ui/scroll-area";
-import { useChatContext } from "@/context/ChatContext";
-import ChatLoader from "./ChatLoader";
-import { ChatMessage } from "./ChatMessage";
-import { useParams } from "react-router-dom";
+import { useCallback, useEffect, useRef } from 'react';
+import { ScrollArea } from '../ui/scroll-area';
+import { useChatContext } from '@/context/ChatContext';
+import ChatLoader from './ChatLoader';
+import { ChatMessage } from './ChatMessage';
+import { useParams } from 'react-router-dom';
 
 export default function ChatBox({
   isNewChat = false,
@@ -18,27 +18,26 @@ export default function ChatBox({
   const scrollToBottom = useCallback(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
+        behavior: 'smooth',
+        block: 'nearest',
       });
     }
   }, []);
 
   const scrollToTop = useCallback(() => {
-    if (scrollAreaRef.current) {
-      setTimeout(() => {
-        scrollAreaRef.current!.scrollTop = 0;
-      }, 0);
-    }
+    if (!scrollAreaRef.current) return; // Exit if ref is null
+    setTimeout(() => {
+      if (scrollAreaRef.current) {
+        scrollAreaRef.current.scrollTop = 0;
+      }
+    }, 0);
   }, []);
 
   // Handle scroll behavior when queue or processing changes
   useEffect(() => {
     if (isNewChat || !processing) {
-  
       scrollToTop();
     } else {
-    
       scrollToBottom();
     }
   }, [queue, processing, isNewChat, scrollToTop, scrollToBottom]);

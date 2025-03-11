@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import React from "react";
+import { Button } from '@/components/ui/button';
+import React from 'react';
 
 interface Props {
   children: React.ReactNode;
@@ -21,7 +21,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("Error caught by boundary:", error, errorInfo);
+    console.error('Error caught by boundary:', error, errorInfo);
   }
 
   render() {
@@ -32,7 +32,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
           <div className="space-y-2">
             <h3 className="text-lg font-semibold">Something went wrong</h3>
             <p className="text-sm text-muted-foreground">
-              {this.state.error?.message || "An unexpected error occurred"}
+              {this.state.error?.message || 'An unexpected error occurred'}
             </p>
           </div>
           <Button

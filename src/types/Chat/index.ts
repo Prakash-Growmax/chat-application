@@ -2,30 +2,30 @@ export interface ChatSession {
   id: string;
   // Add other session properties
 }
-export interface RenameSession{
-  id:string;
-  name:string;
-  org_id:string;
-  status:string;
-  chat_metadata:{
-    archived_at:string,
-    archive_reason:string,
-    previous_status:string,
-    redis_session_status:string,
-  },
-  is_updated:number,
-  created_at:string,
-  updated_at:string,
-  uuid_changed:false,
-  original_uuid:number | string,
+export interface RenameSession {
+  id: string;
+  name: string;
+  org_id: string;
+  status: string;
+  chat_metadata: {
+    archived_at: string;
+    archive_reason: string;
+    previous_status: string;
+    redis_session_status: string;
+  };
+  is_updated: number;
+  created_at: string;
+  updated_at: string;
+  uuid_changed: false;
+  original_uuid: number | string;
 }
-export interface ChatMetadata{
-created_at:string,
-created_from_frontend_uuid:boolean,
-message:string,
-model:string,
-name_manually_set:boolean,
-source:string
+export interface ChatMetadata {
+  created_at: string;
+  created_from_frontend_uuid: boolean;
+  message: string;
+  model: string;
+  name_manually_set: boolean;
+  source: string;
 }
 export interface CreateSessionRequest {
   name: string;
@@ -33,7 +33,6 @@ export interface CreateSessionRequest {
 }
 export interface renameSessionRequest {
   new_name: string;
- 
 }
 export interface ChatHistory {
   data: {
@@ -70,18 +69,17 @@ export interface CreateChatResponse {
   // Add other session properties
 }
 
-
 export interface UploadDatasetResponse {
   error?: string;
   response?: string;
   id: string;
-  status: string | "failed";
-  token_usage:string | number;
+  status: string | 'failed';
+  token_usage: string | number;
 }
 export interface AnalyzeChatResponse {
   error?: string;
   response?: string;
   id: string;
-  status: string | "failed";
+  status: string | 'failed';
   token_usage: string | number;
 }

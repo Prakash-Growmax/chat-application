@@ -6,7 +6,10 @@ import { toast } from 'sonner';
 interface UseOTPReturn {
   loading: boolean;
   sendOTP: (email: string) => Promise<boolean>;
-  verifyOTP: (email: string, token: string) => Promise<{ success: boolean; session?:unknown }>;
+  verifyOTP: (
+    email: string,
+    token: string
+  ) => Promise<{ success: boolean; session?: unknown }>;
   timeLeft: number;
   canResend: boolean;
   attemptsLeft: number;
@@ -25,7 +28,7 @@ export function useOTP(): UseOTPReturn {
     setLoading(true);
     try {
       const response = await sendOTP(email);
-      
+
       if (response.success) {
         startTimer();
         toast.success('OTP sent to your email');
@@ -52,7 +55,7 @@ export function useOTP(): UseOTPReturn {
     setLoading(true);
     try {
       const response = await verifyOTP(email, token);
-      
+
       if (response.success) {
         toast.success('Successfully verified');
         return { success: true, session: response.session };

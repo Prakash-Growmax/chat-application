@@ -1,6 +1,6 @@
-import LucideIcon from "@/components/Custom-UI/LucideIcon";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import LucideIcon from '@/components/Custom-UI/LucideIcon';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 function WelcomePage() {
   return (
@@ -14,7 +14,7 @@ function WelcomePage() {
               <span className="text-sm font-medium">CSV Insight AI</span>
             </div>
             <h1 className="max-w-3xl text-xl lg:text-4xl md:text-2xl font-bold">
-              Analyze your CSV data with{" "}
+              Analyze your CSV data with{' '}
               <span className="text-primary">AI-powered insights</span>
             </h1>
             <p className="max-w-2xl text-muted-foreground md:text-lg">
@@ -36,7 +36,7 @@ function WelcomePage() {
                 key={feature.title}
                 className="rounded-lg border bg-card p-6 shadow-sm"
               >
-                <LucideIcon name={feature.icon ? feature.icon : ""} />
+                <LucideIcon name={feature.icon ? feature.icon : ''} />
                 <h3 className="mb-2 font-semibold">{feature.title}</h3>
                 <p className="text-sm text-muted-foreground">
                   {feature.description}
@@ -54,21 +54,21 @@ export default WelcomePage;
 
 const features = [
   {
-    title: "CSV Analysis",
+    title: 'CSV Analysis',
     description:
-      "Upload any CSV file and get instant insights through natural language conversations.",
-    icon: "FileSpreadsheet",
+      'Upload any CSV file and get instant insights through natural language conversations.',
+    icon: 'FileSpreadsheet',
   },
   {
-    title: "AI Chat Interface",
+    title: 'AI Chat Interface',
     description:
-      "Ask questions about your data in plain English and get accurate, detailed responses.",
-    icon: "MessageSquare",
+      'Ask questions about your data in plain English and get accurate, detailed responses.',
+    icon: 'MessageSquare',
   },
   {
-    title: "Team Collaboration",
+    title: 'Team Collaboration',
     description:
-      "Share insights and analysis with your team members in real-time.",
-    icon: "Building2",
+      'Share insights and analysis with your team members in real-time.',
+    icon: 'Building2',
   },
 ];

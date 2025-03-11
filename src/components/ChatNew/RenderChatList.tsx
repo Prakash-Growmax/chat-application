@@ -1,4 +1,2 @@
-const RenderChatList = () =>{
-
-}
+const RenderChatList = () => {};
 export default RenderChatList;
